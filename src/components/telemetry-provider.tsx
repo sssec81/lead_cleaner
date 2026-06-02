@@ -1,11 +1,11 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 import { reportClientError, trackPageView } from "@/lib/telemetry";
 
-export function TelemetryProvider() {
+function TelemetryEvents() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -15,6 +15,10 @@ export function TelemetryProvider() {
     trackPageView(pagePath);
   }, [pathname, searchParams]);
 
+  return null;
+}
+
+export function TelemetryProvider() {
   useEffect(() => {
     function handleWindowError(event: ErrorEvent) {
       void reportClientError({
@@ -50,5 +54,9 @@ export function TelemetryProvider() {
     };
   }, []);
 
-  return null;
+  return (
+    <Suspense fallback={null}>
+      <TelemetryEvents />
+    </Suspense>
+  );
 }
