@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
+import { trackToolEvent } from "@/lib/telemetry";
 import { extractDomainsFromEmails } from "@/lib/text-tools";
 
 const SAMPLE_TEXT = `Sales team: sales@leadcleanr.com and support@LeadCleanr.com
@@ -29,6 +30,9 @@ export function DomainExtractorTool() {
       return;
     }
 
+    trackToolEvent("extract-domains-from-emails", "copy_results", {
+      result_count: results.length,
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -73,7 +77,12 @@ export function DomainExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadTextFile("leadcleanr-domains.txt", resultText)}
+            onClick={() => {
+              trackToolEvent("extract-domains-from-emails", "download_txt", {
+                result_count: results.length,
+              });
+              downloadTextFile("leadcleanr-domains.txt", resultText);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -82,9 +91,12 @@ export function DomainExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() =>
-              downloadCsvFile("leadcleanr-domains.csv", results, "domain")
-            }
+            onClick={() => {
+              trackToolEvent("extract-domains-from-emails", "download_csv", {
+                result_count: results.length,
+              });
+              downloadCsvFile("leadcleanr-domains.csv", results, "domain");
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >

@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
+import { trackToolEvent } from "@/lib/telemetry";
 import { extractEmailsFromText } from "@/lib/text-tools";
 
 const SAMPLE_TEXT = `Reach our team at Sales@LeadCleanr.com, support@leadcleanr.com, or sales@leadcleanr.com.
@@ -28,6 +29,9 @@ export function EmailExtractorTool() {
       return;
     }
 
+    trackToolEvent("extract-emails-from-text", "copy_results", {
+      result_count: results.length,
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -76,7 +80,12 @@ export function EmailExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadTextFile("leadcleanr-emails.txt", resultText)}
+            onClick={() => {
+              trackToolEvent("extract-emails-from-text", "download_txt", {
+                result_count: results.length,
+              });
+              downloadTextFile("leadcleanr-emails.txt", resultText);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -85,7 +94,12 @@ export function EmailExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadCsvFile("leadcleanr-emails.csv", results)}
+            onClick={() => {
+              trackToolEvent("extract-emails-from-text", "download_csv", {
+                result_count: results.length,
+              });
+              downloadCsvFile("leadcleanr-emails.csv", results);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >

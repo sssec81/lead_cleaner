@@ -1,13 +1,27 @@
 "use client";
 
-import { Check, Clipboard, Download, FileSpreadsheet, FileText, Upload } from "lucide-react";
-import Papa from "papaparse";
+import {
+  AlertCircle,
+  Check,
+  Clipboard,
+  Download,
+  FileSpreadsheet,
+  FileText,
+  LoaderCircle,
+  Upload,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
+import {
+  type CsvParseProgress,
+  type CsvRow,
+  isLikelyCsvFile,
+  MAX_CSV_FILE_SIZE,
+  parseCsvFile,
+} from "@/lib/csv";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
-
-type CsvRow = Record<string, string>;
+import { trackToolEvent } from "@/lib/telemetry";
 
 type ExtractionSummary = {
   totalRows: number;
@@ -17,9 +31,10 @@ type ExtractionSummary = {
   cleanEmailsReady: number;
 };
 
+type UploadStatus = "idle" | "parsing" | "ready" | "error";
+
 const EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 const PREVIEW_LIMIT = 100;
-const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 export function ExtractEmailsFromCsvTool() {
   const [fileName, setFileName] = useState("");
@@ -28,11 +43,29 @@ export function ExtractEmailsFromCsvTool() {
   const [selectedColumn, setSelectedColumn] = useState("");
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
+  const [warning, setWarning] = useState("");
+  const [status, setStatus] = useState<UploadStatus>("idle");
+  const [progress, setProgress] = useState<CsvParseProgress>({
+    percentage: 0,
+    rowsProcessed: 0,
+  });
 
   const extracted = useMemo(
     () => extractEmailsFromCsvRows(rows, selectedColumn),
     [rows, selectedColumn],
   );
+
+  function resetState(nextFileName = "") {
+    setFileName(nextFileName);
+    setHeaders([]);
+    setRows([]);
+    setSelectedColumn("");
+    setWarning("");
+    setProgress({
+      percentage: 0,
+      rowsProcessed: 0,
+    });
+  }
 
   function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -41,57 +74,78 @@ export function ExtractEmailsFromCsvTool() {
       return;
     }
 
-    if (file.size > MAX_FILE_SIZE) {
+    trackToolEvent("extract-emails-from-csv", "upload_started", {
+      file_size_kb: Math.round(file.size / 1024),
+    });
+
+    if (!isLikelyCsvFile(file)) {
       resetState();
+      setStatus("error");
+      setError("Please upload a real CSV file with a .csv extension.");
+      return;
+    }
+
+    if (file.size > MAX_CSV_FILE_SIZE) {
+      resetState();
+      setStatus("error");
       setError("Please upload a CSV file smaller than 2 MB.");
       return;
     }
 
+    resetState(file.name);
     setError("");
-    setFileName(file.name);
+    setStatus("parsing");
 
-    Papa.parse<CsvRow>(file, {
-      header: true,
-      skipEmptyLines: false,
-      complete: (result) => {
-        const metaFields = (result.meta.fields ?? [])
-          .map((field) => field.trim())
-          .filter(Boolean);
-
-        const normalizedRows = (result.data ?? []).map((row) => {
-          const normalizedRow: CsvRow = {};
-
-          metaFields.forEach((field) => {
-            normalizedRow[field] = String(row[field] ?? "").trim();
-          });
-
-          return normalizedRow;
-        });
-
-        setHeaders(metaFields);
-        setRows(normalizedRows);
-        setSelectedColumn((current) =>
-          current && metaFields.includes(current)
-            ? current
-            : pickDefaultEmailColumn(metaFields),
-        );
-
-        if (!metaFields.length) {
-          setError("We could not detect any CSV columns in that file.");
-        }
+    parseCsvFile({
+      file,
+      onProgress: (nextProgress) => {
+        setProgress(nextProgress);
       },
-      error: () => {
-        resetState();
-        setError("We could not parse that CSV file. Please try another file.");
+      onComplete: (result) => {
+        const nextHeaders = result.headers;
+        const nextRows = result.rows;
+
+        if (!nextHeaders.length) {
+          resetState(file.name);
+          setStatus("error");
+          setError("We could not detect any CSV columns in that file.");
+          trackToolEvent("extract-emails-from-csv", "upload_failed", {
+            reason: "missing_headers",
+          });
+          return;
+        }
+
+        setHeaders(nextHeaders);
+        setRows(nextRows);
+        setSelectedColumn((current) =>
+          current && nextHeaders.includes(current)
+            ? current
+            : pickDefaultEmailColumn(nextHeaders),
+        );
+        setStatus("ready");
+
+        if (!nextRows.length) {
+          setWarning(
+            "We found the header row, but there are no data rows to extract from yet.",
+          );
+        } else if (result.warnings.length) {
+          setWarning(buildWarningSummary(result.warnings));
+        }
+
+        trackToolEvent("extract-emails-from-csv", "upload_completed", {
+          row_count: nextRows.length,
+          warning_count: result.warnings.length,
+        });
+      },
+      onError: (message) => {
+        resetState(file.name);
+        setStatus("error");
+        setError(message);
+        trackToolEvent("extract-emails-from-csv", "upload_failed", {
+          reason: "parse_error",
+        });
       },
     });
-  }
-
-  function resetState() {
-    setFileName("");
-    setHeaders([]);
-    setRows([]);
-    setSelectedColumn("");
   }
 
   async function handleCopy() {
@@ -105,9 +159,14 @@ export function ExtractEmailsFromCsvTool() {
       return;
     }
 
+    trackToolEvent("extract-emails-from-csv", "copy_results", {
+      result_count: extracted.results.length,
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
+
+  const isParsing = status === "parsing";
 
   return (
     <section className="grid items-start gap-6 lg:grid-cols-[1.08fr_0.92fr]">
@@ -131,9 +190,13 @@ export function ExtractEmailsFromCsvTool() {
           htmlFor="csv-email-upload"
           className="flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white/70 px-6 py-8 text-center transition hover:border-[color:var(--brand)] hover:bg-white"
         >
-          <Upload className="h-6 w-6 text-[color:var(--brand-strong)]" />
+          {isParsing ? (
+            <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
+          ) : (
+            <Upload className="h-6 w-6 text-[color:var(--brand-strong)]" />
+          )}
           <span className="mt-3 text-base font-semibold">
-            Upload a CSV file
+            {isParsing ? "Parsing your CSV..." : "Upload a CSV file"}
           </span>
           <span className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
             Up to 2 MB. Parsing stays in your browser for the MVP.
@@ -144,8 +207,31 @@ export function ExtractEmailsFromCsvTool() {
             accept=".csv,text/csv"
             className="sr-only"
             onChange={handleFileUpload}
+            disabled={isParsing}
           />
         </label>
+
+        {isParsing ? (
+          <div className="mt-4 rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+            <div className="flex items-center justify-between gap-3 text-sm">
+              <span className="font-semibold text-[color:var(--foreground)]">
+                Reading rows
+              </span>
+              <span className="tabular-nums text-[color:var(--muted)]">
+                {progress.percentage}%
+              </span>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[color:rgba(17,36,51,0.08)]">
+              <div
+                className="h-full rounded-full bg-[color:var(--brand)] transition-[width]"
+                style={{ width: `${progress.percentage}%` }}
+              />
+            </div>
+            <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+              {progress.rowsProcessed.toLocaleString()} rows processed so far.
+            </p>
+          </div>
+        ) : null}
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
@@ -155,6 +241,11 @@ export function ExtractEmailsFromCsvTool() {
             <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
               {fileName || "No CSV uploaded yet"}
             </p>
+            {rows.length ? (
+              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                {rows.length} rows loaded
+              </p>
+            ) : null}
           </div>
 
           <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
@@ -167,8 +258,13 @@ export function ExtractEmailsFromCsvTool() {
             <select
               id="email-column-select"
               value={selectedColumn}
-              onChange={(event) => setSelectedColumn(event.target.value)}
-              disabled={!headers.length}
+              onChange={(event) => {
+                setSelectedColumn(event.target.value);
+                trackToolEvent("extract-emails-from-csv", "change_column", {
+                  column: event.target.value,
+                });
+              }}
+              disabled={!headers.length || isParsing}
               className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
             >
               {!headers.length ? (
@@ -184,11 +280,8 @@ export function ExtractEmailsFromCsvTool() {
           </div>
         </div>
 
-        {error ? (
-          <p className="mt-4 rounded-xl border border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] px-4 py-3 text-sm text-red-700">
-            {error}
-          </p>
-        ) : null}
+        {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
+        {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
 
         <div className="mt-5 flex flex-wrap gap-3">
           <button
@@ -202,12 +295,15 @@ export function ExtractEmailsFromCsvTool() {
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              trackToolEvent("extract-emails-from-csv", "download_txt", {
+                result_count: extracted.results.length,
+              });
               downloadTextFile(
                 buildExportName(fileName, "txt"),
                 extracted.results.join("\n"),
-              )
-            }
+              );
+            }}
             disabled={!extracted.results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -216,13 +312,16 @@ export function ExtractEmailsFromCsvTool() {
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              trackToolEvent("extract-emails-from-csv", "download_csv", {
+                result_count: extracted.results.length,
+              });
               downloadCsvFile(
                 buildExportName(fileName, "csv"),
                 extracted.results,
                 "email",
-              )
-            }
+              );
+            }}
             disabled={!extracted.results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -280,10 +379,18 @@ export function ExtractEmailsFromCsvTool() {
                 {extracted.results.slice(0, PREVIEW_LIMIT).join("\n")}
               </pre>
             ) : (
-              <p className="text-sm leading-7 text-[color:var(--muted)]">
-                Upload a CSV and choose a column to preview the extracted email
-                list here.
-              </p>
+              <EmptyState
+                title={
+                  status === "ready" && headers.length
+                    ? "No clean emails found"
+                    : "Upload a CSV to start"
+                }
+                description={
+                  status === "ready" && headers.length
+                    ? "This file uploaded successfully, but the chosen column did not contain any valid email addresses yet."
+                    : "Upload a CSV and choose a column to preview the extracted email list here."
+                }
+              />
             )}
           </div>
         </div>
@@ -362,6 +469,54 @@ function pickDefaultEmailColumn(headers: string[]) {
 function buildExportName(fileName: string, extension: "txt" | "csv") {
   const baseName = fileName.replace(/\.csv$/i, "") || "leadcleanr-emails";
   return `${baseName}-emails.${extension}`;
+}
+
+function buildWarningSummary(warnings: string[]) {
+  const preview = warnings.slice(0, 2).join(" ");
+  const suffix =
+    warnings.length > 2 ? ` ${warnings.length - 2} more parsing issues found.` : "";
+  return `We imported the readable rows, but found CSV formatting issues. ${preview}${suffix}`;
+}
+
+function InlineMessage({
+  children,
+  tone,
+}: {
+  children: string;
+  tone: "error" | "warning";
+}) {
+  const palette =
+    tone === "error"
+      ? "border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700"
+      : "border-[color:rgba(217,119,6,0.18)] bg-[color:rgba(255,247,237,0.9)] text-amber-800";
+
+  return (
+    <div className={`mt-4 rounded-xl border px-4 py-3 text-sm ${palette}`}>
+      <div className="flex items-start gap-3">
+        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+        <p>{children}</p>
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div>
+      <p className="text-base font-semibold text-[color:var(--foreground)]">
+        {title}
+      </p>
+      <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
+        {description}
+      </p>
+    </div>
+  );
 }
 
 function StatCard({

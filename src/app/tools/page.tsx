@@ -1,188 +1,269 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, FileSpreadsheet, Globe, Mail, Phone, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  FileSpreadsheet,
+  Globe,
+  Mail,
+  Phone,
+  ScanSearch,
+  Sparkles,
+} from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 
-const tools = [
+const flagshipTools = [
+  {
+    href: "/tools/csv-lead-cleaner",
+    title: "CSV Lead Cleaner",
+    description:
+      "Main workflow for CRM imports, recruiting spreadsheets, agency handoffs, and outreach list cleanup.",
+    accent: "Flagship",
+    bullets: [
+      "Column cleanup + dedupe modes",
+      "Cleaning report before export",
+      "Personal vs business email hints",
+    ],
+  },
+  {
+    href: "/tools/extract-emails-from-csv",
+    title: "Extract Emails from CSV",
+    description:
+      "Pull a clean email list out of a chosen CSV column before uploading into another workflow.",
+    accent: "CSV support",
+    bullets: [
+      "Invalid email filtering",
+      "Duplicate removal",
+      "TXT and CSV export",
+    ],
+  },
+];
+
+const helperTools = [
   {
     href: "/tools/extract-emails-from-text",
     title: "Extract Emails from Text",
-    description: "Find and clean email addresses from copied text blocks.",
-    category: "Extract",
+    description: "Turn copied text blocks into clean email lists.",
     icon: Mail,
-  },
-  {
-    href: "/tools/remove-duplicate-emails",
-    title: "Remove Duplicate Emails",
-    description: "Deduplicate repeated email addresses before export.",
-    category: "Clean",
-    icon: Sparkles,
   },
   {
     href: "/tools/extract-phone-numbers-from-text",
     title: "Extract Phone Numbers from Text",
-    description: "Find and normalize phone numbers from copied text blocks.",
-    category: "Extract",
+    description: "Find phone numbers in notes, profiles, or directories.",
     icon: Phone,
   },
   {
     href: "/tools/extract-urls-from-text",
     title: "Extract URLs from Text",
-    description: "Find and normalize links from copied text blocks.",
-    category: "Extract",
+    description: "Pull links out of messy text before review or export.",
     icon: Globe,
   },
   {
     href: "/tools/extract-domains-from-emails",
     title: "Extract Domains from Emails",
-    description: "Pull domains from email addresses and website links.",
-    category: "Extract",
-    icon: Globe,
+    description: "Generate domain lists from email or website data.",
+    icon: ScanSearch,
   },
   {
     href: "/tools/clean-email-list",
     title: "Clean Email List",
-    description: "Lowercase, trim, and prepare email lists for outreach.",
-    category: "Clean",
+    description: "Normalize and deduplicate email lists quickly.",
     icon: Sparkles,
   },
   {
-    href: "/tools/csv-lead-cleaner",
-    title: "CSV Lead Cleaner",
-    description: "Preview rows and clean lead columns from CSV uploads.",
-    category: "CSV",
-    icon: FileSpreadsheet,
-  },
-  {
-    href: "/tools/extract-emails-from-csv",
-    title: "Extract Emails from CSV",
-    description: "Pull valid email addresses from a selected CSV column.",
-    category: "CSV",
-    icon: FileSpreadsheet,
-  },
-];
-
-const categories = [
-  {
-    name: "Extract",
-    description: "Pull structured data out of copied text fast.",
-  },
-  {
-    name: "Clean",
-    description: "Normalize and deduplicate lists before export.",
-  },
-  {
-    name: "CSV",
-    description: "Upload, preview, clean, and export spreadsheet data.",
+    href: "/tools/remove-duplicate-emails",
+    title: "Remove Duplicate Emails",
+    description: "Keep one clean copy of each valid address.",
+    icon: Sparkles,
   },
 ];
 
 export const metadata: Metadata = {
   title: "All Tools",
-  description: "Explore LeadCleanr browser-first lead cleaning tools.",
+  description:
+    "Explore LeadCleanr CSV-first lead cleaning tools and supporting text extractors.",
 };
 
 export default function ToolsPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-          Free tools
+          Tools
         </p>
-        <h1 className="mt-3 font-display text-4xl font-semibold sm:text-5xl">
-          Pick the cleaner you need
+        <h1 className="mt-3 max-w-4xl font-display text-4xl font-semibold sm:text-5xl">
+          Start with the CSV workflow. Use the extractors when you need them.
         </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-8 text-[color:var(--muted)]">
-          LeadCleanr is built as one focused product with separate SEO-friendly
-          tools for the exact cleanup job you need.
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
+          LeadCleanr is positioned around cleaning messy lead CSV files before
+          CRM import, outreach, recruiting, and agency delivery. The text
+          tools stay here as focused helpers and SEO entry points.
         </p>
-        <div className="mt-10 rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow)] sm:p-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-                Choose the tool by workflow, not by guesswork
-              </h2>
-              <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                Each tool is focused on one cleanup job so you can land on the
-                right route quickly, get the result above the fold, and export
-                without extra setup.
-              </p>
+
+        <div className="mt-10 grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,248,238,0.92))] p-6 shadow-[var(--shadow)] sm:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Recommended path
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
+              Clean the spreadsheet first, then route the clean data where it
+              needs to go.
+            </h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              <PathCard
+                step="1"
+                title="Upload CSV"
+                text="Bring in a CRM export, recruiter sheet, or client handoff."
+              />
+              <PathCard
+                step="2"
+                title="Review report"
+                text="Check duplicates, blanks, invalid values, and email quality hints."
+              />
+              <PathCard
+                step="3"
+                title="Export clean file"
+                text="Leave with a cleaner CSV ready for import or outreach."
+              />
             </div>
-            <Link
-              href="/tools/csv-lead-cleaner"
-              className="btn-primary inline-flex min-h-11 items-center justify-center rounded-full bg-[color:var(--foreground)] px-6 text-sm font-semibold text-white"
-            >
-              Start with CSV cleaner
-            </Link>
           </div>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {categories.map((category) => (
-              <div
-                key={category.name}
-                className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/80 p-5"
+
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/76 p-6 shadow-[var(--shadow)] sm:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--accent)]">
+              Why this order
+            </p>
+            <div className="mt-4 grid gap-4">
+              <ReasonCard
+                title="Higher-value buyer"
+                text="Sales ops, recruiters, agencies, VAs, and marketers usually need spreadsheet cleanup more than one-off text extraction."
+              />
+              <ReasonCard
+                title="Closer to monetization"
+                text="CSV workflows feel like product work, not just a free utility. That makes upgrades, reports, and limits easier to justify later."
+              />
+              <ReasonCard
+                title="Clearer product promise"
+                text="“Clean messy lead CSV files before CRM import” is sharper than a generic email extractor pitch."
+              />
+            </div>
+          </div>
+        </div>
+
+        <section className="mt-12">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+                Flagship tools
+              </p>
+              <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
+                The productized CSV workflow
+              </h2>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            {flagshipTools.map((tool) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow)] transition hover:-translate-y-1"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-                  {category.name}
+                <span className="inline-flex rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                  {tool.accent}
+                </span>
+                <h3 className="mt-4 font-display text-3xl font-semibold">
+                  {tool.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
+                  {tool.description}
                 </p>
-                <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
-                  {category.description}
-                </p>
-              </div>
+                <div className="mt-5 grid gap-2">
+                  {tool.bullets.map((bullet) => (
+                    <div
+                      key={bullet}
+                      className="rounded-xl border border-[color:var(--line)] bg-white/80 px-4 py-3 text-sm font-medium"
+                    >
+                      {bullet}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
+                  Open workflow
+                  <ArrowRight className="h-4 w-4" />
+                </div>
+              </Link>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className="mt-10 space-y-10">
-          {categories.map((category) => (
-            <section key={category.name}>
-              <div className="mb-5 flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                    {category.name}
+        <section className="mt-12">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Supporting helpers
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
+              Use these when the data is still outside a spreadsheet
+            </h2>
+          </div>
+
+          <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {helperTools.map((tool) => {
+              const Icon = tool.icon;
+
+              return (
+                <Link
+                  key={tool.href}
+                  href={tool.href}
+                  className="rounded-[2rem] border border-[color:var(--line)] bg-white/72 p-6 shadow-[var(--shadow)] transition hover:-translate-y-1"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.12)] text-[color:var(--brand-strong)]">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-5 font-display text-2xl font-semibold">
+                    {tool.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
+                    {tool.description}
                   </p>
-                  <h2 className="mt-2 font-display text-3xl font-semibold">
-                    {category.description}
-                  </h2>
-                </div>
-              </div>
-              <div className="grid gap-5 md:grid-cols-2">
-                {tools
-                  .filter((tool) => tool.category === category.name)
-                  .map((tool) => {
-                    const Icon = tool.icon;
-
-                    return (
-                      <Link
-                        key={tool.href}
-                        href={tool.href}
-                        className="surface-card rounded-[2rem] p-6"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.12)] text-[color:var(--brand-strong)]">
-                            <Icon className="h-5 w-5" />
-                          </div>
-                          <div>
-                            <h3 className="font-display text-2xl font-semibold">
-                              {tool.title}
-                            </h3>
-                            <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                              {tool.description}
-                            </p>
-                            <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
-                              Open tool
-                              <ArrowRight className="h-4 w-4" />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-              </div>
-            </section>
-          ))}
-        </div>
+                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
+                    Open tool
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
       </section>
     </PageFrame>
+  );
+}
+
+function PathCard({
+  step,
+  title,
+  text,
+}: {
+  step: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/80 p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+        Step {step}
+      </p>
+      <h3 className="mt-2 text-lg font-semibold">{title}</h3>
+      <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">{text}</p>
+    </div>
+  );
+}
+
+function ReasonCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5">
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">{text}</p>
+    </div>
   );
 }

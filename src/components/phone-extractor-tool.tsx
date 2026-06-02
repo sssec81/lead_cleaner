@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
+import { trackToolEvent } from "@/lib/telemetry";
 import { extractPhoneNumbersFromText } from "@/lib/text-tools";
 
 const SAMPLE_TEXT = `Call sales at +1 (415) 555-0101 or support on 415-555-0101.
@@ -28,6 +29,9 @@ export function PhoneExtractorTool() {
       return;
     }
 
+    trackToolEvent("extract-phone-numbers-from-text", "copy_results", {
+      result_count: results.length,
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -72,7 +76,12 @@ export function PhoneExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadTextFile("leadcleanr-phone-numbers.txt", resultText)}
+            onClick={() => {
+              trackToolEvent("extract-phone-numbers-from-text", "download_txt", {
+                result_count: results.length,
+              });
+              downloadTextFile("leadcleanr-phone-numbers.txt", resultText);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -81,9 +90,12 @@ export function PhoneExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() =>
-              downloadCsvFile("leadcleanr-phone-numbers.csv", results, "phone")
-            }
+            onClick={() => {
+              trackToolEvent("extract-phone-numbers-from-text", "download_csv", {
+                result_count: results.length,
+              });
+              downloadCsvFile("leadcleanr-phone-numbers.csv", results, "phone");
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >

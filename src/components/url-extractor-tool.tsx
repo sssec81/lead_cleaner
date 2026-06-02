@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
+import { trackToolEvent } from "@/lib/telemetry";
 import { extractUrlsFromText } from "@/lib/text-tools";
 
 const SAMPLE_TEXT = `Visit https://leadcleanr.com for the main site, or browse www.leadcleanr.com/tools.
@@ -28,6 +29,9 @@ export function UrlExtractorTool() {
       return;
     }
 
+    trackToolEvent("extract-urls-from-text", "copy_results", {
+      result_count: results.length,
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -72,7 +76,12 @@ export function UrlExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadTextFile("leadcleanr-urls.txt", resultText)}
+            onClick={() => {
+              trackToolEvent("extract-urls-from-text", "download_txt", {
+                result_count: results.length,
+              });
+              downloadTextFile("leadcleanr-urls.txt", resultText);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -81,7 +90,12 @@ export function UrlExtractorTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadCsvFile("leadcleanr-urls.csv", results, "url")}
+            onClick={() => {
+              trackToolEvent("extract-urls-from-text", "download_csv", {
+                result_count: results.length,
+              });
+              downloadCsvFile("leadcleanr-urls.csv", results, "url");
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >

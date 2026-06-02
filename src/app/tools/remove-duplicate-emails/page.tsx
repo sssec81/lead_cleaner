@@ -3,17 +3,31 @@ import Link from "next/link";
 
 import { PageFrame } from "@/components/page-frame";
 import { RemoveDuplicateEmailsTool } from "@/components/remove-duplicate-emails-tool";
+import { buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildToolMetadata({
   title: "Remove Duplicate Emails",
   description:
     "Remove duplicate emails online. Keep one clean copy of each valid address and export the result in your browser.",
-};
+  path: "/tools/remove-duplicate-emails",
+  keywords: [
+    "remove duplicate emails",
+    "deduplicate email list",
+    "email deduper",
+    "clean lead emails",
+  ],
+});
 
 export default function RemoveDuplicateEmailsPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-6xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
+      <ToolJsonLd
+        title="Remove Duplicate Emails"
+        description="Remove duplicate emails online. Keep one clean copy of each valid address and export the result in your browser."
+        path="/tools/remove-duplicate-emails"
+        category="BusinessApplication"
+      />
+      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
           Remove duplicate emails
         </p>

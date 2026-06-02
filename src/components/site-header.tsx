@@ -10,7 +10,7 @@ const navItems = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-20 border-b border-[color:var(--line)] bg-[color:rgba(249,243,235,0.9)] backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:var(--foreground)] text-sm font-semibold uppercase tracking-[0.18em] text-white">
             LC
@@ -42,7 +42,7 @@ export function SiteHeader() {
         </Link>
       </div>
       <div className="border-t border-[color:rgba(17,36,51,0.08)] md:hidden">
-        <nav className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 text-sm font-medium text-[color:var(--muted)] sm:px-6">
+        <nav className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm font-medium text-[color:var(--muted)] sm:px-6 lg:px-8">
           {navItems.map((item) => (
             <Link
               key={item.href}

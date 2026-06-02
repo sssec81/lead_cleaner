@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
+import { trackToolEvent } from "@/lib/telemetry";
 import { cleanEmailList } from "@/lib/text-tools";
 
 const SAMPLE_EMAIL_LIST = ` Sales@LeadCleanr.com
@@ -32,6 +33,9 @@ export function CleanEmailListTool() {
       return;
     }
 
+    trackToolEvent("clean-email-list", "copy_results", {
+      result_count: results.length,
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -80,7 +84,12 @@ export function CleanEmailListTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadTextFile("leadcleanr-clean-emails.txt", resultText)}
+            onClick={() => {
+              trackToolEvent("clean-email-list", "download_txt", {
+                result_count: results.length,
+              });
+              downloadTextFile("leadcleanr-clean-emails.txt", resultText);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -89,7 +98,12 @@ export function CleanEmailListTool() {
           </button>
           <button
             type="button"
-            onClick={() => downloadCsvFile("leadcleanr-clean-emails.csv", results)}
+            onClick={() => {
+              trackToolEvent("clean-email-list", "download_csv", {
+                result_count: results.length,
+              });
+              downloadCsvFile("leadcleanr-clean-emails.csv", results);
+            }}
             disabled={!results.length}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/70 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >

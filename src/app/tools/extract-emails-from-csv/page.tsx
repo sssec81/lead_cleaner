@@ -3,17 +3,31 @@ import Link from "next/link";
 
 import { ExtractEmailsFromCsvTool } from "@/components/extract-emails-from-csv-tool";
 import { PageFrame } from "@/components/page-frame";
+import { buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildToolMetadata({
   title: "Extract Emails from CSV",
   description:
     "Extract emails from a CSV online. Upload a file, choose the email column, remove duplicates, and export the result in your browser.",
-};
+  path: "/tools/extract-emails-from-csv",
+  keywords: [
+    "extract emails from csv",
+    "csv email extractor",
+    "email column cleaner",
+    "lead csv email export",
+  ],
+});
 
 export default function ExtractEmailsFromCsvPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-6xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
+      <ToolJsonLd
+        title="Extract Emails from CSV"
+        description="Extract emails from a CSV online. Upload a file, choose the email column, remove duplicates, and export the result in your browser."
+        path="/tools/extract-emails-from-csv"
+        category="BusinessApplication"
+      />
+      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
           Extract emails from CSV
         </p>

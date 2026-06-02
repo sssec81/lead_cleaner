@@ -3,17 +3,31 @@ import Link from "next/link";
 
 import { CleanEmailListTool } from "@/components/clean-email-list-tool";
 import { PageFrame } from "@/components/page-frame";
+import { buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildToolMetadata({
   title: "Clean Email List",
   description:
     "Clean email lists online. Lowercase addresses, remove duplicates, filter invalid entries, and export the result in your browser.",
-};
+  path: "/tools/clean-email-list",
+  keywords: [
+    "clean email list",
+    "email list cleaner",
+    "dedupe email list",
+    "lead list cleanup",
+  ],
+});
 
 export default function CleanEmailListPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-6xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
+      <ToolJsonLd
+        title="Clean Email List"
+        description="Clean email lists online. Lowercase addresses, remove duplicates, filter invalid entries, and export the result in your browser."
+        path="/tools/clean-email-list"
+        category="BusinessApplication"
+      />
+      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
           Clean email list online
         </p>
