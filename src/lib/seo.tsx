@@ -8,7 +8,25 @@ export type ToolMetadataInput = {
   keywords?: string[];
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://leadcleanr.com";
+const DEFAULT_SITE_URL = "https://leadcleanr.com";
+
+function getSiteUrl() {
+  const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+  if (!rawSiteUrl) {
+    return DEFAULT_SITE_URL;
+  }
+
+  const withProtocol = /^https?:\/\//i.test(rawSiteUrl)
+    ? rawSiteUrl
+    : `https://${rawSiteUrl}`;
+
+  try {
+    return new URL(withProtocol).toString().replace(/\/$/, "");
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
 
 export function buildToolMetadata({
   title,
@@ -16,7 +34,8 @@ export function buildToolMetadata({
   path,
   keywords = [],
 }: ToolMetadataInput): Metadata {
-  const url = `${SITE_URL}${path}`;
+  const siteUrl = getSiteUrl();
+  const url = new URL(path, `${siteUrl}/`).toString();
 
   return {
     title,
@@ -36,12 +55,13 @@ export function buildToolMetadata({
 }
 
 export function ToolJsonLd({ title, description, path, category = "WebApplication" }: ToolMetadataInput) {
+  const siteUrl = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: title,
     description,
-    url: `${SITE_URL}${path}`,
+    url: new URL(path, `${siteUrl}/`).toString(),
     applicationCategory: category,
     operatingSystem: "WebBrowser",
   };

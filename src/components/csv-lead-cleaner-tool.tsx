@@ -601,6 +601,12 @@ function cleanCsvRows(
 
   nonEmptyRows.forEach((row) => {
     const normalizedRow = normalizeCsvRow(row, headers, selectedColumn);
+    const selectedValue = normalizedRow[selectedColumn];
+
+    if (!selectedValue) {
+      invalidRowsRemoved += 1;
+      return;
+    }
 
     const duplicateKey = buildDuplicateKey(
       normalizedRow,

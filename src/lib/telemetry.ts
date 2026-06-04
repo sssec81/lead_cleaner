@@ -34,6 +34,14 @@ function normalizeProps(props: TelemetryProps = {}) {
   );
 }
 
+function sanitizeErrorText(value: string) {
+  return value
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[redacted-email]")
+    .replace(/https?:\/\/\S+/gi, "[redacted-url]")
+    .replace(/www\.\S+/gi, "[redacted-url]")
+    .replace(/\+?\d[\d()\-\s]{6,}\d/g, "[redacted-number]");
+}
+
 export function trackEvent(name: string, props: TelemetryProps = {}) {
   if (typeof window === "undefined") {
     return;
@@ -85,9 +93,14 @@ export async function reportClientError(payload: ErrorPayload) {
     return;
   }
 
+  const sanitizedMessage = sanitizeErrorText(payload.message).slice(0, 120);
+  const sanitizedStack = payload.stack
+    ? sanitizeErrorText(payload.stack).slice(0, 1000)
+    : undefined;
+
   trackEvent("client_error", {
     source: payload.source ?? "unknown",
-    message: payload.message.slice(0, 120),
+    message: sanitizedMessage,
     ...payload.metadata,
   });
 
@@ -97,7 +110,11 @@ export async function reportClientError(payload: ErrorPayload) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        ...payload,
+        message: sanitizedMessage,
+        stack: sanitizedStack,
+      }),
       keepalive: true,
     });
   } catch {

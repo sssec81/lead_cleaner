@@ -34,11 +34,11 @@ export function SiteHeader() {
           ))}
         </nav>
         <Link
-          href="/tools/extract-emails-from-text"
+          href="/tools/csv-lead-cleaner"
           className="btn-primary inline-flex min-h-11 items-center justify-center rounded-full bg-[color:var(--foreground)] px-4 text-sm font-semibold text-white transition hover:-translate-y-0.5 sm:px-5"
         >
           <span className="sm:hidden">Start</span>
-          <span className="hidden sm:inline">Start Free</span>
+          <span className="hidden sm:inline">Open CSV Cleaner</span>
         </Link>
       </div>
       <div className="border-t border-[color:rgba(17,36,51,0.08)] md:hidden">
