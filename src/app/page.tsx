@@ -1,107 +1,92 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  BriefcaseBusiness,
-  CheckCircle2,
-  FileSpreadsheet,
-  Mail,
-  ScanSearch,
-  ShieldCheck,
-  Sparkles,
-  Users,
-} from "lucide-react";
-import type { ReactNode } from "react";
+import { ArrowRight } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 
-const workflowStats = [
-  { label: "Rows uploaded", value: "500" },
-  { label: "Clean rows", value: "412" },
-  { label: "Duplicates removed", value: "43" },
-  { label: "Invalid or blank", value: "45" },
-];
-
-const heroChecklist = [
-  "Choose email, phone, domain, or whole-row deduplication",
-  "Flag personal inboxes like Gmail, Yahoo, and Outlook",
-  "Spot role-based emails like info@, sales@, and support@",
-  "Generate domain values from email addresses before export",
-];
-
-const featureCards = [
+const workflowSteps = [
   {
-    title: "Pre-import CRM cleanup",
-    text: "Clean exports before HubSpot, Close, Apollo, Clay, or your next agency handoff.",
-    icon: FileSpreadsheet,
+    number: "01",
+    title: "Upload the spreadsheet you actually inherited",
+    text: "Not the polished demo version. The value starts with the messy file that would normally cause hesitation before import.",
   },
   {
-    title: "Recruiting and sourcing",
-    text: "Deduplicate candidate lists, isolate work emails, and remove weak contact rows fast.",
-    icon: Users,
+    number: "02",
+    title: "Choose the field that should control cleanup",
+    text: "Work from the column that matters most, then review duplicates, invalid rows, role inboxes, and email type hints.",
   },
   {
-    title: "Agency operations",
-    text: "Turn messy client spreadsheets into consistent, ready-to-upload lists with one pass.",
-    icon: BriefcaseBusiness,
+    number: "03",
+    title: "Export with a report you can defend",
+    text: "The cleaned file matters, but so does the explanation of what changed before the list moves to CRM, outreach, or a client.",
   },
 ];
 
-const supportingTools = [
+const productSignals = [
+  {
+    label: "Catches duplicates before import",
+    text: "Remove repeated rows before they become CRM clutter or agency handoff confusion.",
+  },
+  {
+    label: "Flags email quality signals",
+    text: "Separate personal inboxes, role addresses, and business emails while you are still deciding what survives.",
+  },
+  {
+    label: "Keeps the cleanup visible",
+    text: "The preview and report help people trust the result before they export it.",
+  },
+];
+
+const useCases = [
+  {
+    kicker: "Sales ops",
+    title: "Clean the export before it reaches HubSpot, Apollo, Close, or Clay.",
+    text: "LeadCleanr is for the uncomfortable middle of the job: after a list is captured, before anyone trusts it enough to import, enrich, or hand off.",
+  },
+  {
+    kicker: "Recruiters",
+    title: "Separate work emails from personal inboxes before outreach starts.",
+    text: "Review the rows that matter, spot role-based addresses, and keep the spreadsheet readable instead of bouncing through three other tools.",
+  },
+  {
+    kicker: "Agencies",
+    title: "Turn a client handoff into a file you can actually defend.",
+    text: "The report becomes part of the deliverable. It shows what changed, what was removed, and what is safer to import next.",
+  },
+];
+
+const supportTools = [
   {
     href: "/tools/extract-emails-from-text",
     title: "Extract Emails from Text",
-    text: "SEO-friendly helper for copied text blocks and quick lead scraping cleanup.",
+    text: "Useful when contact data still lives in notes, signatures, or copied directories instead of rows and columns.",
   },
   {
     href: "/tools/extract-phone-numbers-from-text",
     title: "Extract Phone Numbers",
-    text: "Pull phone numbers from copied notes, resumes, and directories before CSV cleanup.",
+    text: "Helpful for recruiter notes, event lists, and pasted pages where phone fields need one fast pass.",
   },
   {
     href: "/tools/extract-domains-from-emails",
     title: "Extract Domains",
-    text: "Create domain lists from emails and URLs when you need a supporting enrichment step.",
+    text: "A supporting enrichment step after the main spreadsheet cleanup work is already under control.",
   },
 ];
 
-const steps = [
+const faqEntries = [
   {
-    eyebrow: "Step 1",
-    title: "Upload the spreadsheet you actually work with",
-    text: "Bring in the CRM export, recruiter list, agency handoff, or VA-built prospect sheet instead of reformatting it somewhere else first.",
-  },
-  {
-    eyebrow: "Step 2",
-    title: "Clean around the field that matters most",
-    text: "Pick the main column, switch dedupe mode, review personal vs business inboxes, and catch role-based emails before export.",
-  },
-  {
-    eyebrow: "Step 3",
-    title: "Export a file you can trust again",
-    text: "Leave with a cleaner CSV and a more believable report before import, outreach, enrichment, or handoff.",
-  },
-];
-
-const faqs = [
-  {
-    question: "What is LeadCleanr really for?",
+    question: "What is LeadCleanr actually for?",
     answer:
-      "LeadCleanr is built for cleaning messy CSV lead lists before CRM import, outreach, recruiting, and agency delivery work. The text extractors help bring traffic and support edge cases, but the main product is CSV cleanup.",
+      "Cleaning messy lead CSVs before CRM import, outreach, recruiting, and agency handoff work. The text tools help with discovery and edge cases, but the main product is the CSV workflow.",
   },
   {
-    question: "Does LeadCleanr store my CSV rows?",
+    question: "Does it process the file on the server?",
     answer:
-      "No for the MVP flow. CSV parsing and cleanup run in your browser, and raw file contents are not stored by default.",
+      "The core cleanup flow runs in your browser for the MVP. Raw file contents are not sent to the app backend for routine processing.",
   },
   {
-    question: "Who benefits most from this?",
+    question: "Who gets value first?",
     answer:
-      "Sales ops teams, recruiters, marketers, agencies, virtual assistants, and freelancers who inherit messy spreadsheets and need them cleaned quickly.",
-  },
-  {
-    question: "What makes the CSV cleaner different from generic extractors?",
-    answer:
-      "It is workflow-first: dedupe modes, invalid row handling, email-type hints, role-based detection, domain generation, and a cleanup report built around real spreadsheet work.",
+      "Sales ops teams, recruiters, agencies, marketers, and assistants who inherit spreadsheets they did not create and still have to make usable.",
   },
 ];
 
@@ -109,336 +94,436 @@ export default function HomePage() {
   return (
     <PageFrame>
       <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
-        <div className="grid gap-8 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
+        <div className="grid gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
           <div>
-            <p className="inline-flex rounded-full border border-[color:rgba(217,119,6,0.18)] bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
-              CSV-first lead cleaning
+            <p className="inline-flex rounded-full border border-[color:rgba(184,106,25,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
+              Browser-first CSV cleanup
             </p>
-            <h1 className="mt-5 max-w-5xl font-display text-5xl font-semibold leading-[0.94] sm:text-6xl xl:text-7xl">
-              Clean the messy lead spreadsheet before it touches your CRM
+            <h1 className="mt-5 max-w-5xl font-display text-5xl font-semibold leading-[0.94] sm:text-6xl xl:text-[5.4rem]">
+              The spreadsheet cleanup pass you do right before you trust the
+              list again.
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-              LeadCleanr is built for the operational moment after lead capture
-              and before import. Upload a CSV, clean the rows that matter,
-              review what changed, and export a file that is easier to trust.
+              LeadCleanr is made for one narrow, high-friction moment: a messy
+              lead file lands in your lap and you need to clean it before
+              import, outreach, enrichment, or handoff.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tools/csv-lead-cleaner"
-                className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--foreground)] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:#153246] px-6 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(21,50,70,0.18)]"
               >
                 Open CSV Lead Cleaner
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-white/80 px-6 text-sm font-semibold transition hover:-translate-y-0.5"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-white/88 px-6 text-sm font-semibold"
               >
-                See pricing
+                Read pricing
               </Link>
             </div>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-2">
-              {heroChecklist.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3 rounded-[1.45rem] border border-[color:var(--line)] bg-white/72 px-4 py-4"
-                >
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--accent)]" />
-                  <p className="text-sm leading-6 text-[color:var(--foreground)]">
-                    {item}
-                  </p>
-                </div>
-              ))}
+            <div className="mt-10 border-t border-[color:rgba(16,37,52,0.12)] pt-6">
+              <p className="max-w-3xl text-sm leading-7 text-[color:var(--foreground)]">
+                <span className="font-semibold">What it handles well:</span>{" "}
+                duplicate rows, weak email fields, personal versus business
+                inboxes, role-based addresses, domain generation, and the
+                general spreadsheet entropy that creeps in before import day.
+              </p>
             </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="rounded-[2.3rem] border border-[color:var(--line)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(255,248,238,0.92))] p-6 shadow-[var(--shadow)] backdrop-blur sm:p-8">
-              <div className="flex items-start justify-between gap-4">
+          <div className="relative mt-10 xl:mt-0 xl:pl-10">
+            <div className="absolute -left-6 top-10 hidden h-[86%] w-[92%] rounded-[2.5rem] bg-[color:rgba(184,106,25,0.08)] blur-3xl lg:block" />
+            <div className="-rotate-[2.7deg] rounded-[2.4rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,244,239,0.96))] p-5 shadow-[0_28px_60px_rgba(15,23,42,0.18)] sm:p-7">
+              <div className="flex items-center justify-between border-b border-[color:rgba(16,37,52,0.1)] pb-5">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                    Sample cleaning report
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+                    Live workspace
                   </p>
-                  <h2 className="mt-3 font-display text-3xl font-semibold leading-tight">
-                    Feels like a working desk tool, not a toy extractor
-                  </h2>
+                  <p className="mt-1 text-sm text-[color:var(--muted)]">
+                    The part people trust first
+                  </p>
                 </div>
-                <div className="hidden h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(15,118,110,0.12)] text-[color:var(--accent)] sm:flex">
-                  <ScanSearch className="h-6 w-6" />
+                <div className="rounded-full border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.1)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                  Local preview
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                {workflowStats.map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/84 p-4"
-                  >
-                    <p className="text-sm text-[color:var(--muted)]">{item.label}</p>
-                    <p className="mt-2 text-4xl font-semibold">{item.value}</p>
-                  </div>
-                ))}
+              <div className="mt-5 space-y-3">
+                <WorkspaceRowMock
+                  index={1}
+                  value="jason.voorhees@campcrystal.com"
+                  source="Current extraction"
+                  locked
+                />
+                <WorkspaceRowMock
+                  index={2}
+                  value="sarah.connor@cyberdyne.sys"
+                  source="Current extraction"
+                />
+                <WorkspaceRowMock
+                  index={3}
+                  value="ellen.ripley@weyland-yutani.corp"
+                  source="Manual edit"
+                />
+                <WorkspaceRowMock
+                  index={4}
+                  value="info@nostromo.shipping"
+                  source="Locked row"
+                  locked
+                />
               </div>
 
-              <div className="mt-5 rounded-[1.6rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] p-5">
-                <div className="flex flex-wrap gap-2">
-                  <Tag>Business emails: 298</Tag>
-                  <Tag>Personal emails: 71</Tag>
-                  <Tag>Role-based inboxes: 18</Tag>
-                  <Tag>Domains generated: 352</Tag>
-                </div>
-                <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
-                  Built around the spreadsheet step before outreach, import,
-                  enrichment, or delivery to a client team.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-[1.05fr_0.95fr]">
-              <div className="rounded-[1.9rem] border border-[color:var(--line)] bg-white/78 p-5 shadow-[var(--shadow)]">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-                  Why people use it
-                </p>
-                <p className="mt-3 text-base leading-7 text-[color:var(--foreground)]">
-                  When the real pain is not finding one email, but fixing an
-                  entire spreadsheet before somebody imports it into a system
-                  that amplifies mistakes.
-                </p>
-              </div>
-
-              <div className="rounded-[1.9rem] border border-[color:var(--line)] bg-[#fffaf3] p-5 shadow-[var(--shadow)]">
-                <div className="grid gap-3 text-sm sm:grid-cols-2">
-                  <MiniMetric label="Duplicate mode" value="Email / Domain / Row" />
-                  <MiniMetric label="Processing" value="Browser-side only" />
-                  <MiniMetric label="Best for" value="CRM imports" />
-                  <MiniMetric label="Export" value="Clean CSV" />
-                </div>
+              <div className="mt-5 grid gap-3 border-t border-[color:rgba(16,37,52,0.1)] pt-5 sm:grid-cols-3">
+                <MetricNote value="412" label="Rows ready" />
+                <MetricNote value="43" label="Duplicates removed" />
+                <MetricNote value="11" label="Role inboxes flagged" />
               </div>
             </div>
           </div>
         </div>
 
-        <section className="mt-16 grid gap-6 lg:grid-cols-3">
-          {featureCards.map((card) => {
-            const Icon = card.icon;
-            return (
+        <section className="mt-14 rounded-[2rem] border border-[color:rgba(16,37,52,0.1)] bg-white/74 p-5 shadow-[var(--shadow)] sm:p-6">
+          <div className="grid gap-5 lg:grid-cols-3">
+            {productSignals.map((signal, index) => (
               <div
-                key={card.title}
-                className="rounded-[2rem] border border-[color:var(--line)] bg-white/76 p-6 shadow-[var(--shadow)]"
+                key={signal.label}
+                className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.08)] pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0"}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.14)] text-[color:var(--brand-strong)]">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h2 className="mt-5 font-display text-2xl font-semibold">
-                  {card.title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                  {card.text}
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+                  {signal.label}
                 </p>
-              </div>
-            );
-          })}
-        </section>
-
-        <section className="mt-16 grid gap-6 lg:grid-cols-[0.94fr_1.06fr]">
-          <div className="rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow)] sm:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              How it works
-            </p>
-            <h2 className="mt-3 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
-              Keep the product centered on the spreadsheet you already have
-            </h2>
-            <div className="mt-6 space-y-4">
-              {steps.map((step) => (
-                <div
-                  key={step.title}
-                  className="rounded-[1.6rem] border border-[color:var(--line)] bg-white/82 p-5"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                    {step.eyebrow}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
-                    {step.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/76 p-6 shadow-[var(--shadow)] sm:p-8">
-            <div className="flex items-start gap-3">
-              <ShieldCheck className="mt-1 h-5 w-5 text-[color:var(--accent)]" />
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--accent)]">
-                  Privacy-first workflow
-                </p>
-                <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
-                  Keep raw lead data inside the browser
-                </h2>
-              </div>
-            </div>
-
-            <div className="mt-6 grid gap-4">
-              <InfoRow
-                title="Browser-side processing"
-                text="Basic cleanup, parsing, deduplication, and report generation run in the browser for the MVP flow."
-              />
-              <InfoRow
-                title="CSV-first reporting"
-                text="Review what changed before import: clean rows, duplicates removed, invalid values, blank rows, and email quality hints."
-              />
-              <InfoRow
-                title="Supporting tools still included"
-                text="Text extractors stay available for discovery and edge cases, but the CSV cleaner remains the main product path."
-              />
-            </div>
-
-            <div className="mt-6 rounded-[1.7rem] border border-[color:var(--line)] bg-[#fffaf3] p-5">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Primary product path
-              </p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <FlowChip
-                  icon={<FileSpreadsheet className="h-4 w-4" />}
-                  text="Upload CSV"
-                />
-                <FlowChip
-                  icon={<Sparkles className="h-4 w-4" />}
-                  text="Clean and review"
-                />
-                <FlowChip
-                  icon={<Mail className="h-4 w-4" />}
-                  text="Import or outreach"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-16">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Supporting SEO tools
-              </p>
-              <h2 className="mt-3 max-w-3xl font-display text-3xl font-semibold sm:text-4xl">
-                Keep the helper tools alive, but let the CSV workflow carry the
-                product story
-              </h2>
-            </div>
-            <Link
-              href="/tools"
-              className="text-sm font-semibold text-[color:var(--brand-strong)]"
-            >
-              Browse all tools
-            </Link>
-          </div>
-
-          <div className="mt-8 grid gap-6 lg:grid-cols-3">
-            {supportingTools.map((tool) => (
-              <Link
-                key={tool.href}
-                href={tool.href}
-                className="rounded-[2rem] border border-[color:var(--line)] bg-white/72 p-6 shadow-[var(--shadow)] transition hover:-translate-y-1"
-              >
-                <h3 className="font-display text-2xl font-semibold">
-                  {tool.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                  {tool.text}
-                </p>
-                <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
-                  Open tool
-                  <ArrowRight className="h-4 w-4" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-16 rounded-[2rem] border border-[color:var(--line)] bg-white/76 p-6 shadow-[var(--shadow)] sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                FAQ
-              </p>
-              <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
-                A few practical questions before you try it
-              </h2>
-            </div>
-            <Link
-              href="/pricing"
-              className="text-sm font-semibold text-[color:var(--brand-strong)]"
-            >
-              See plan details
-            </Link>
-          </div>
-
-          <div className="mt-6 grid gap-4">
-            {faqs.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-[1.45rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5"
-              >
-                <h3 className="text-lg font-semibold">{faq.question}</h3>
-                <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
-                  {faq.answer}
+                <p className="mt-3 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                  {signal.text}
                 </p>
               </div>
             ))}
           </div>
         </section>
       </section>
+
+      <section className="bg-[color:#153246] py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+                Workflow
+              </p>
+              <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
+                A narrow workflow with a visible output, not a vague promise of
+                enrichment later.
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-8 text-[color:rgba(255,255,255,0.76)]">
+                The good version of this product feels closer to a careful ops
+                surface than a generic lead-gen landing page. Open the file,
+                review what changed, and leave with something more believable.
+              </p>
+            </div>
+
+            <div className="grid gap-4">
+              {workflowSteps.map((step) => (
+                <div
+                  key={step.number}
+                  className="grid gap-3 rounded-[1.7rem] border border-[color:rgba(255,255,255,0.12)] bg-[color:rgba(255,255,255,0.04)] p-5 sm:grid-cols-[88px_1fr] sm:items-start"
+                >
+                  <div className="font-display text-5xl leading-none text-[color:#d8a15d] sm:text-6xl">
+                    {step.number}
+                  </div>
+                  <div>
+                    <h3 className="font-display text-2xl font-semibold text-white">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:rgba(255,255,255,0.76)] sm:text-base">
+                      {step.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="rounded-[2.2rem] border border-[color:rgba(16,37,52,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,248,238,0.86))] p-7 shadow-[var(--shadow)] sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
+              Primary use case
+            </p>
+            <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1.02] sm:text-5xl">
+              {useCases[0].title}
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+              {useCases[0].text}
+            </p>
+            <div className="mt-8 grid gap-4 border-t border-[color:rgba(16,37,52,0.1)] pt-6 sm:grid-cols-2">
+              <ValuePill title="Believable report" text="See what changed before anyone else sees the file." />
+              <ValuePill title="CSV-first flow" text="Start where the spreadsheet already exists instead of rebuilding context." />
+            </div>
+          </div>
+
+          <div className="grid gap-6">
+            <UseCasePanel {...useCases[1]} />
+            <UseCasePanel {...useCases[2]} />
+          </div>
+        </div>
+
+        <section className="mt-16 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Product proof
+            </p>
+            <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
+              The report should tell you whether the file feels safer, not just
+              whether the parser finished.
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+              Similar workflow products earn trust by making the next action
+              obvious. Here, that means seeing the clean rows, the removed
+              duplicates, and the email quality signals before export.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/86 p-6 shadow-[var(--shadow)]">
+            <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(16,37,52,0.08)] pb-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+                  Cleaning report
+                </p>
+                <h3 className="mt-2 font-display text-3xl font-semibold">
+                  412 clean rows ready
+                </h3>
+              </div>
+              <div className="rounded-full bg-[color:rgba(15,118,110,0.1)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                Ready to export
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <ReportMiniStat value="43" label="Duplicates removed" />
+              <ReportMiniStat value="11" label="Role inboxes flagged" />
+              <ReportMiniStat value="28" label="Personal emails spotted" />
+            </div>
+
+            <div className="mt-5 space-y-4">
+              <ReportRule text="Make the cleaned count the first thing people see." />
+              <ReportRule text="Keep secondary metrics close enough to support the decision." />
+              <ReportRule text="Let the preview and the report confirm each other before export." />
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section className="bg-[color:rgba(255,255,255,0.46)] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr]">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+                Supporting tools
+              </p>
+              <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
+                The text tools are useful. They just should not pretend to be
+                the whole product.
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                Use them when the data has not reached a spreadsheet yet. Once
+                rows and columns exist, the CSV workflow should take over.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {supportTools.map((tool) => (
+                <SupportLink key={tool.href} {...tool} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
+          <div className="rounded-[2rem] border border-[color:rgba(16,37,52,0.1)] bg-white/82 p-6 shadow-[var(--shadow)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Trust boundary
+            </p>
+            <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl">
+              The file should stay local for routine cleanup.
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+              Core parsing, cleanup, preview, and export run in your browser for
+              the MVP flow. The product should feel specific about that
+              boundary, not vague.
+            </p>
+          </div>
+
+          <div className="space-y-5">
+            {faqEntries.map((faq, index) => (
+              <div
+                key={faq.question}
+                className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.1)] pt-5"}
+              >
+                <h3 className="text-lg font-semibold text-[color:var(--foreground)]">
+                  {faq.question}
+                </h3>
+                <p className="mt-2 max-w-3xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 pt-2 text-sm font-semibold text-[color:var(--brand-strong)]"
+            >
+              Read the pricing philosophy
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
     </PageFrame>
   );
 }
 
-function Tag({ children }: { children: string }) {
+function WorkspaceRowMock({
+  index,
+  value,
+  source,
+  locked = false,
+}: {
+  index: number;
+  value: string;
+  source: string;
+  locked?: boolean;
+}) {
   return (
-    <span className="rounded-full border border-[color:rgba(15,118,110,0.18)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--accent)]">
-      {children}
-    </span>
+    <div className="rounded-[1.2rem] border border-[color:rgba(16,37,52,0.12)] bg-white/94 p-3 shadow-[0_8px_18px_rgba(15,23,42,0.05)]">
+      <div className="flex items-start gap-3">
+        <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full border border-[color:rgba(16,37,52,0.12)] text-[11px] font-semibold text-[color:var(--muted)]">
+          {index}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full border border-[color:rgba(16,37,52,0.08)] bg-[color:rgba(244,247,250,0.96)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:#38586b]">
+              {source}
+            </span>
+            {locked ? (
+              <span className="rounded-full bg-[color:rgba(15,118,110,0.1)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--accent)]">
+                Locked
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-3 rounded-[0.95rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(255,251,246,0.9)] px-3 py-3 text-sm leading-6 text-[color:var(--foreground)]">
+            {value}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
-function MiniMetric({ label, value }: { label: string; value: string }) {
+function MetricNote({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-[color:var(--line)] bg-white/80 px-4 py-3">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
-        {label}
-      </p>
-      <p className="mt-2 text-sm font-semibold text-[color:var(--foreground)]">
+    <div>
+      <p className="text-2xl font-semibold tabular-nums text-[color:var(--foreground)]">
         {value}
+      </p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+        {label}
       </p>
     </div>
   );
 }
 
-function FlowChip({
-  icon,
+function ValuePill({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-[1.4rem] border border-[color:rgba(16,37,52,0.08)] bg-white/72 p-4">
+      <p className="text-sm font-semibold text-[color:var(--foreground)]">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{text}</p>
+    </div>
+  );
+}
+
+function UseCasePanel({
+  kicker,
+  title,
   text,
 }: {
-  icon: ReactNode;
+  kicker: string;
+  title: string;
   text: string;
 }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 py-2 text-sm font-semibold">
-      {icon}
-      {text}
+    <div className="rounded-[2rem] border border-[color:rgba(16,37,52,0.1)] bg-white/8 p-6 shadow-[var(--shadow)] sm:bg-white/76">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
+        {kicker}
+      </p>
+      <h3 className="mt-3 font-display text-2xl font-semibold leading-[1.08] text-[color:var(--foreground)] sm:text-3xl">
+        {title}
+      </h3>
+      <p className="mt-3 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+        {text}
+      </p>
     </div>
   );
 }
 
-function InfoRow({ title, text }: { title: string; text: string }) {
+function ReportMiniStat({
+  value,
+  label,
+}: {
+  value: string;
+  label: string;
+}) {
   return (
-    <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/80 p-5">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
-        {text}
+    <div className="rounded-[1.3rem] border border-[color:rgba(16,37,52,0.08)] bg-[color:rgba(244,247,250,0.92)] p-4">
+      <p className="text-2xl font-semibold tabular-nums text-[color:var(--foreground)]">
+        {value}
+      </p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+        {label}
       </p>
     </div>
+  );
+}
+
+function ReportRule({ text }: { text: string }) {
+  return (
+    <p className="border-t border-[color:rgba(16,37,52,0.08)] pt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+      {text}
+    </p>
+  );
+}
+
+function SupportLink({
+  href,
+  title,
+  text,
+}: {
+  href: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="block rounded-[1.8rem] border border-[color:rgba(16,37,52,0.08)] bg-white/82 p-5 shadow-[var(--shadow)]"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+        Tool
+      </p>
+      <h3 className="mt-2 font-display text-2xl font-semibold text-[color:var(--foreground)]">
+        {title}
+      </h3>
+      <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+        {text}
+      </p>
+      <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
+        Open tool
+        <ArrowRight className="h-4 w-4" />
+      </span>
+    </Link>
   );
 }

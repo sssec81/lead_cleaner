@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { PageFrame } from "@/components/page-frame";
 import { UrlExtractorTool } from "@/components/url-extractor-tool";
+import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
@@ -20,82 +19,53 @@ export const metadata: Metadata = buildToolMetadata({
 
 export default function ExtractUrlsFromTextPage() {
   return (
-    <PageFrame>
+    <>
       <ToolJsonLd
         title="Extract URLs from Text"
         description="Extract URLs from text online. Paste messy text, normalize links, remove duplicates, and export the result in your browser."
         path="/tools/extract-urls-from-text"
         category="BusinessApplication"
       />
-      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-          Extract URLs from text
-        </p>
-        <h1 className="mt-3 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
-          Extract URLs from messy text and export a clean list
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-8 text-[color:var(--muted)]">
-          Paste copied website text, notes, research documents, or lead blocks.
-          LeadCleanr finds links, normalizes them into a cleaner format, removes
-          duplicates, and keeps export simple.
-        </p>
-
-        <div className="mt-6">
-          <UrlExtractorTool />
-        </div>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          <InfoCard
-            title="How to use"
-            text="Paste text, review the clean result, then copy or download as TXT or CSV."
-          />
-          <InfoCard
-            title="Use cases"
-            text="Directory cleanup, research notes, copied landing pages, CRM notes, and messy outreach source documents."
-          />
-          <InfoCard
-            title="Privacy"
-            text="Basic cleaning runs in your browser. We do not store pasted text or uploaded CSV files in the MVP."
-          />
-        </div>
-
-        <div className="mt-10 rounded-[2rem] border border-[color:var(--line)] bg-white/72 p-6 shadow-[var(--shadow)]">
-          <h2 className="font-display text-2xl font-semibold">
-            Related tools
-          </h2>
-          <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">
-            <Link
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 transition hover:bg-white"
-              href="/tools/extract-emails-from-text"
-            >
-              Extract Emails from Text
-            </Link>
-            <Link
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 transition hover:bg-white"
-              href="/tools/extract-phone-numbers-from-text"
-            >
-              Extract Phone Numbers from Text
-            </Link>
-            <Link
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 transition hover:bg-white"
-              href="/tools/csv-lead-cleaner"
-            >
-              CSV Lead Cleaner
-            </Link>
-          </div>
-        </div>
-      </section>
-    </PageFrame>
-  );
-}
-
-function InfoCard({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/72 p-6 shadow-[var(--shadow)]">
-      <h2 className="font-display text-2xl font-semibold">{title}</h2>
-      <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-        {text}
-      </p>
-    </div>
+      <TextToolPageShell
+        eyebrow="Extract URLs from Text"
+        title="Pull the links out of copied text and make the list less chaotic."
+        intro="Paste copied website text, notes, research documents, or lead blocks. This tool isolates URLs, normalizes them into a cleaner shape, removes duplicates, and keeps export simple."
+        quote="The first cleanup step is often just separating the links from everything pretending to be useful around them."
+        narrativeLabel="Where it fits"
+        narrativeIntro="Use it when the links still live inside noisy copied text and the immediate goal is extracting a clean list of destinations."
+        narrativePoints={[
+          "Helpful for directory cleanup, research notes, copied landing pages, and outreach source documents.",
+          "Normalization matters here because tiny inconsistencies make link lists feel worse than they are.",
+          "If the URLs are already part of a spreadsheet that needs broader review, the CSV workflow is the stronger next step.",
+        ]}
+        darkLabel="Supporting role"
+        darkTitle="This page helps when the links are still in pieces, not when the whole dataset needs governing."
+        darkPoints={[
+          "Core link extraction runs in your browser during the MVP flow.",
+          "The result is meant to be cleaner and easier to move, not more complicated than the original text.",
+          "Treat it as a preparation step before the spreadsheet workflow when the job keeps growing.",
+        ]}
+        relatedLabel="Related paths"
+        relatedTitle="Isolate the links, then decide whether the rest of the lead data needs a bigger cleanup pass."
+        relatedLinks={[
+          {
+            href: "/tools/extract-emails-from-text",
+            title: "Extract Emails from Text",
+            text: "Useful when the same copied source contains both addresses and links.",
+          },
+          {
+            href: "/tools/extract-phone-numbers-from-text",
+            title: "Extract Phone Numbers from Text",
+            text: "Another supporting step when contact fields are scattered through copied text.",
+          },
+          {
+            href: "/tools/csv-lead-cleaner",
+            title: "CSV Lead Cleaner",
+            text: "The better workflow when the cleaned links need to live inside a broader lead spreadsheet again.",
+          },
+        ]}
+        tool={<UrlExtractorTool />}
+      />
+    </>
   );
 }

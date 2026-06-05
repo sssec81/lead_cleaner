@@ -1,35 +1,47 @@
 import type { Metadata } from "next";
-import { LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+
+const snapshot = [
+  {
+    label: "Core cleanup",
+    text: "Runs in your browser for the MVP flow.",
+  },
+  {
+    label: "Raw data",
+    text: "Pasted text and uploaded CSV contents are not sent to the app backend for normal processing.",
+  },
+  {
+    label: "Saved state",
+    text: "Workspace persistence can keep current text and results in local browser storage on your device.",
+  },
+  {
+    label: "Accounts",
+    text: "No account is required for the first release.",
+  },
+];
 
 const sections = [
   {
     title: "What we process",
-    text: "LeadCleanr processes text you paste and CSV files you choose to upload so the selected tool can clean, extract, deduplicate, or format the data.",
+    text: "LeadCleanr handles text you paste and CSV files you choose to upload so the selected tool can clean, extract, deduplicate, or format the data.",
   },
   {
-    title: "Browser-first processing",
-    text: "For the MVP, basic cleaning runs in your browser. That keeps processing fast and reduces the need to send raw lead data to a backend service.",
+    title: "What stays local",
+    text: "For the MVP, the core cleanup and extraction flow runs in your browser. That keeps the raw working data on your device during normal use.",
   },
   {
-    title: "Storage",
-    text: "We do not store pasted text or uploaded CSV file contents in the MVP product flow. No login is required for the first release.",
+    title: "What can persist",
+    text: "If you use workspace persistence, current text and results can live in local browser storage on your device until you clear them.",
   },
   {
-    title: "Analytics and tracking",
-    text: "Product usage can be measured without capturing raw lead or contact contents. Any future analytics should stay focused on workflow events, not list data.",
+    title: "What can still transmit",
+    text: "If analytics or client-error reporting are enabled, they should stay focused on workflow events and sanitized error details rather than raw lead or contact contents.",
   },
   {
     title: "Acceptable use",
     text: "LeadCleanr is for cleaning data you own or have permission to process. Do not use it for spam, scraping abuse, or unsolicited outreach.",
   },
-];
-
-const promises = [
-  "Basic cleanup runs in your browser for the MVP flow.",
-  "Raw pasted text and uploaded CSV file contents are not stored by default.",
-  "No account is required to use the first release.",
 ];
 
 export const metadata: Metadata = {
@@ -41,75 +53,104 @@ export default function PrivacyPage() {
   return (
     <PageFrame>
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-start">
+        <div className="grid gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
               Privacy
             </p>
-            <h1 className="mt-3 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              Your raw lead data should stay yours
+            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[0.96] sm:text-5xl lg:text-6xl">
+              A plain-language privacy boundary for a browser-first tool.
             </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-              Lead and contact cleanup often involves sensitive business data.
-              The MVP is built around a simple promise: basic cleaning runs in
-              your browser, no login is required, and we do not store pasted
-              text or uploaded CSV files in the product flow.
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
+              This page should answer one question quickly: what happens to the
+              raw data while you use LeadCleanr? The short version is that the
+              normal cleanup flow runs locally in your browser, while local
+              workspace persistence and optional telemetry are called out
+              directly instead of buried behind vague claims.
             </p>
+          </div>
 
-            <div className="mt-8 rounded-[2rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] p-6 shadow-[var(--shadow)]">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/80 text-[color:var(--accent)]">
-                  <LockKeyhole className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-                    Privacy-first promise
+          <div className="rounded-[2.2rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,236,0.96))] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.12)] sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+              Quick snapshot
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {snapshot.map((item, index) => (
+                <div
+                  key={item.label}
+                  className={`rounded-[1.25rem] border px-4 py-4 ${
+                    index === 0
+                      ? "border-[color:rgba(184,106,25,0.16)] bg-white"
+                      : "border-[color:var(--line)] bg-white/80"
+                  }`}
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
+                    {item.label}
                   </p>
-                  <div className="mt-4 grid gap-3">
-                    {promises.map((item) => (
-                      <div
-                        key={item}
-                        className="rounded-[1.2rem] border border-[color:rgba(15,118,110,0.14)] bg-white/80 px-4 py-3 text-sm font-medium text-[color:var(--foreground)]"
-                      >
-                        {item}
-                      </div>
-                    ))}
-                  </div>
+                  <p className="mt-2 text-sm leading-7 text-[color:var(--foreground)]">
+                    {item.text}
+                  </p>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid gap-5">
-            {sections.map((section, index) => (
-              <div
-                key={section.title}
-                className={`rounded-[2rem] border p-6 shadow-[var(--shadow)] ${
-                  index === 0
-                    ? "border-[color:rgba(217,119,6,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,248,238,0.92))]"
-                    : "border-[color:var(--line)] bg-white/76"
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.12)] text-[color:var(--brand-strong)]">
-                    {index === 0 ? (
-                      <ShieldCheck className="h-5 w-5" />
-                    ) : (
-                      <Sparkles className="h-5 w-5" />
-                    )}
-                  </div>
-                  <div>
-                    <h2 className="font-display text-2xl font-semibold">
-                      {section.title}
-                    </h2>
-                    <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                      {section.text}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
+      <section className="bg-[color:#153246] py-14 text-white">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:items-start">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+              The boundary
+            </p>
+            <h2 className="mt-4 max-w-3xl font-display text-3xl font-semibold leading-[1.06] sm:text-4xl lg:text-5xl">
+              The processing job stays local. Any surrounding product behavior
+              should be described separately.
+            </h2>
           </div>
+          <div className="space-y-4 text-base leading-8 text-[color:rgba(255,255,255,0.82)]">
+            <p>
+              “Local cleanup” should mean something specific, not magical. In
+              LeadCleanr, it means the main text and CSV cleanup work happens
+              on your device during normal use.
+            </p>
+            <p>
+              It does not mean the page can never load analytics, never store
+              anything locally, or never send sanitized error information if
+              those features are enabled.
+            </p>
+            <p>
+              The point of this page is to make that boundary easy to
+              understand.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+            Details
+          </p>
+          <h2 className="mt-4 font-display text-3xl font-semibold leading-tight sm:text-4xl">
+            Specific answers for careful readers.
+          </h2>
+        </div>
+
+        <div className="mt-10 grid gap-x-12 gap-y-8 lg:grid-cols-2">
+          {sections.map((section) => (
+            <div
+              key={section.title}
+              className="border-t border-[color:rgba(16,37,52,0.1)] pt-5"
+            >
+              <h3 className="font-display text-2xl font-semibold text-[color:var(--foreground)] sm:text-3xl">
+                {section.title}
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                {section.text}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
     </PageFrame>

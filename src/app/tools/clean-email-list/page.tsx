@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { CleanEmailListTool } from "@/components/clean-email-list-tool";
-import { PageFrame } from "@/components/page-frame";
+import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
@@ -20,82 +19,53 @@ export const metadata: Metadata = buildToolMetadata({
 
 export default function CleanEmailListPage() {
   return (
-    <PageFrame>
+    <>
       <ToolJsonLd
         title="Clean Email List"
         description="Clean email lists online. Lowercase addresses, remove duplicates, filter invalid entries, and export the result in your browser."
         path="/tools/clean-email-list"
         category="BusinessApplication"
       />
-      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-          Clean email list online
-        </p>
-        <h1 className="mt-3 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
-          Lowercase, deduplicate, and clean your email list for export
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-8 text-[color:var(--muted)]">
-          Paste a messy email list from outreach notes, spreadsheet exports, or
-          copied lead sources. LeadCleanr trims noise, removes invalid entries,
-          and gives you a clean list ready for the next step.
-        </p>
-
-        <div className="mt-6">
-          <CleanEmailListTool />
-        </div>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          <InfoCard
-            title="How to use"
-            text="Paste your list, review the cleaned output, then copy it or download TXT and CSV exports."
-          />
-          <InfoCard
-            title="Use cases"
-            text="Old outreach lists, CRM exports, newsletter prep, recruiter contact lists, and hand-built lead sheets."
-          />
-          <InfoCard
-            title="Privacy"
-            text="Basic cleaning runs in your browser. We do not store pasted text or uploaded CSV files in the MVP."
-          />
-        </div>
-
-        <div className="mt-10 rounded-[2rem] border border-[color:var(--line)] bg-white/72 p-6 shadow-[var(--shadow)]">
-          <h2 className="font-display text-2xl font-semibold">
-            Related tools
-          </h2>
-          <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">
-            <Link
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 transition hover:bg-white"
-              href="/tools/extract-emails-from-text"
-            >
-              Extract Emails from Text
-            </Link>
-            <Link
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 transition hover:bg-white"
-              href="/tools/remove-duplicate-emails"
-            >
-              Remove Duplicate Emails
-            </Link>
-            <Link
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 transition hover:bg-white"
-              href="/tools/csv-lead-cleaner"
-            >
-              CSV Lead Cleaner
-            </Link>
-          </div>
-        </div>
-      </section>
-    </PageFrame>
-  );
-}
-
-function InfoCard({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/72 p-6 shadow-[var(--shadow)]">
-      <h2 className="font-display text-2xl font-semibold">{title}</h2>
-      <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-        {text}
-      </p>
-    </div>
+      <TextToolPageShell
+        eyebrow="Clean Email List"
+        title="Normalize the addresses and make the list usable again."
+        intro="Paste a messy email list from outreach notes, spreadsheet exports, or copied lead sources. This tool trims noise, lowercases the addresses, removes invalid entries, and prepares a cleaner output."
+        quote="The difference between a messy list and a usable one is usually ten small fixes repeated hundreds of times."
+        narrativeLabel="Where this fits"
+        narrativeIntro="Use it when the addresses already exist and the real job is fixing the quality of the list rather than extracting from raw text."
+        narrativePoints={[
+          "Good for old outreach lists, CRM exports, newsletter prep, and hand-built contact sheets.",
+          "This is the tightening step after extraction, not the discovery step before it.",
+          "If the data is already in a CSV with multiple messy columns, jump to the CSV cleaner instead.",
+        ]}
+        darkLabel="Quiet utility"
+        darkTitle="A good cleaner does not need to be dramatic. It just needs to leave fewer bad rows behind."
+        darkPoints={[
+          "Core cleanup runs in your browser for the MVP flow.",
+          "Exports stay simple because the job is about confidence, not novelty.",
+          "This is one of the supporting tools around the broader CSV-first product story.",
+        ]}
+        relatedLabel="Related paths"
+        relatedTitle="Use it after extraction, or skip ahead to the spreadsheet workflow."
+        relatedLinks={[
+          {
+            href: "/tools/extract-emails-from-text",
+            title: "Extract Emails from Text",
+            text: "Start here if the contact data still lives in copied blocks of text.",
+          },
+          {
+            href: "/tools/remove-duplicate-emails",
+            title: "Remove Duplicate Emails",
+            text: "Use the narrower dedupe path when invalid formatting is not the main issue.",
+          },
+          {
+            href: "/tools/csv-lead-cleaner",
+            title: "CSV Lead Cleaner",
+            text: "The better path when the whole spreadsheet needs cleaning instead of just the email list.",
+          },
+        ]}
+        tool={<CleanEmailListTool />}
+      />
+    </>
   );
 }

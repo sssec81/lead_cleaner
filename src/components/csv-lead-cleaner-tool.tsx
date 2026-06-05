@@ -12,7 +12,6 @@ import {
   Undo2,
   Upload,
 } from "lucide-react";
-import Papa from "papaparse";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -26,11 +25,9 @@ import {
   parseCsvFile,
   parseCsvText,
 } from "@/lib/csv";
-import { downloadCsvContent } from "@/lib/export";
+import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import { normalizeUrlValue } from "@/lib/text-tools";
-
-import { LocalProcessingBadge } from "./local-processing-badge";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
@@ -410,405 +407,415 @@ export function CsvLeadCleanerTool() {
   const selectedDetection = detections.find(
     (detection) => detection.header === selectedColumn,
   );
+  const hasLoadedFile = headers.length > 0 && status === "ready";
 
   return (
-    <section className="grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)] xl:items-start">
-      <div className="rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5 shadow-[var(--shadow)] backdrop-blur sm:p-7">
-        <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.14)] text-[color:var(--brand-strong)]">
-            <FileSpreadsheet className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-              Flagship workflow
-            </p>
-            <h2 className="mt-1 font-display text-xl font-semibold sm:text-2xl">
-              Clean lead CSVs before import
-            </h2>
-            <p className="text-sm leading-6 text-[color:var(--muted)]">
-              Upload a spreadsheet, choose the cleanup rule, review the report,
-              and export a cleaner file for CRM, outreach, or agency delivery.
-            </p>
-          </div>
-        </div>
-
-        <LocalProcessingBadge />
-
-        <label
-          htmlFor="csv-upload"
-          className="mt-4 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white px-6 py-6 text-center transition hover:border-[color:var(--brand)]"
-        >
-          {isParsing ? (
-            <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
-          ) : (
-            <Upload className="h-6 w-6 text-[color:var(--brand-strong)]" />
-          )}
-          <span className="mt-3 text-base font-semibold">
-            {isParsing ? "Parsing your CSV..." : "Upload a CSV file"}
-          </span>
-          <span className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
-            Free plan: up to 2 MB per CSV. Processing stays in your browser for
-            the MVP.
-          </span>
-          <input
-            id="csv-upload"
-            type="file"
-            accept=".csv,text/csv"
-            className="sr-only"
-            onChange={handleFileUpload}
-            disabled={isParsing}
-          />
-        </label>
-
-        <div className="mt-3 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={loadDemoCsv}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5"
-          >
-            <FlaskConical className="h-4 w-4" />
-            Try sample CSV
-          </button>
-          <button
-            type="button"
-            onClick={undoConfigChange}
-            disabled={!pastConfigs.length}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Undo2 className="h-4 w-4" />
-            Undo
-          </button>
-          <button
-            type="button"
-            onClick={redoConfigChange}
-            disabled={!futureConfigs.length}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Redo2 className="h-4 w-4" />
-            Redo
-          </button>
-        </div>
-
-        {pendingFile ? (
-          <FileSizeNotice pendingFile={pendingFile} />
-        ) : (
-          <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
-            Need to clean larger files? Pro will unlock bigger CSV uploads for
-            heavier recruiting, agency, and sales ops work.
-          </p>
-        )}
-
-        {isParsing ? (
-          <div className="mt-4 rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
-            <div className="flex items-center justify-between gap-3 text-sm">
-              <span className="font-semibold text-[color:var(--foreground)]">
-                Reading rows
-              </span>
-              <span className="tabular-nums text-[color:var(--muted)]">
-                {progress.percentage}%
-              </span>
+    <section className="rounded-[2.2rem] border border-[color:var(--line)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(246,249,252,0.92))] shadow-[var(--shadow)]">
+      <div className="grid gap-0 xl:grid-cols-[380px_minmax(0,1fr)]">
+        <div className="flex h-full flex-col p-5 sm:p-7">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:rgba(21,50,70,0.08)] text-[color:#153246]">
+              <FileSpreadsheet className="h-5 w-5" />
             </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[color:rgba(17,36,51,0.08)]">
-              <div
-                className="h-full rounded-full bg-[color:var(--brand)] transition-[width]"
-                style={{ width: `${progress.percentage}%` }}
-              />
-            </div>
-            <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
-              {progress.rowsProcessed.toLocaleString()} rows processed so far.
-            </p>
-          </div>
-        ) : null}
-
-        <div className="mt-5 grid gap-4">
-          <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-              File
-            </p>
-            <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
-              {fileName || "No CSV uploaded yet"}
-            </p>
-            {rows.length ? (
-              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
-                {rows.length} rows loaded
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+                CSV Lead Cleaner
               </p>
+              <p className="text-sm leading-6 text-[color:var(--muted)]">
+                Upload, review, export
+              </p>
+            </div>
+          </div>
+
+          <label
+            htmlFor="csv-upload"
+            className="mt-5 flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border-2 border-dashed border-[color:rgba(184,106,25,0.34)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,247,237,0.94))] px-6 py-8 text-center transition hover:border-[color:var(--brand)] hover:shadow-[0_18px_36px_rgba(184,106,25,0.12)]"
+          >
+            {isParsing ? (
+              <LoaderCircle className="h-8 w-8 animate-spin text-[color:var(--brand-strong)]" />
+            ) : (
+              <Upload className="h-8 w-8 text-[color:var(--brand-strong)]" />
+            )}
+            <span className="mt-4 text-lg font-semibold sm:text-xl">
+              {isParsing ? "Parsing your CSV..." : "Upload CSV"}
+            </span>
+            <span className="mt-3 max-w-sm text-sm leading-6 text-[color:var(--muted)]">
+              Drag a file here or click to choose one. Free supports up to 2 MB
+              per CSV.
+            </span>
+            <input
+              id="csv-upload"
+              type="file"
+              accept=".csv,text/csv"
+              className="sr-only"
+              onChange={handleFileUpload}
+              disabled={isParsing}
+            />
+          </label>
+
+          <p className="mt-3 text-xs leading-6 text-[color:var(--muted)]">
+            Core processing happens in your browser on this device. Optional
+            analytics, error reporting, and saved workspace state can still run
+            separately.
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={loadDemoCsv}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5"
+            >
+              <FlaskConical className="h-4 w-4" />
+              Try sample CSV
+            </button>
+            {hasLoadedFile ? (
+              <>
+                <button
+                  type="button"
+                  onClick={undoConfigChange}
+                  disabled={!pastConfigs.length}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Undo2 className="h-4 w-4" />
+                  Undo
+                </button>
+                <button
+                  type="button"
+                  onClick={redoConfigChange}
+                  disabled={!futureConfigs.length}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Redo2 className="h-4 w-4" />
+                  Redo
+                </button>
+              </>
             ) : null}
           </div>
 
-          <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
-            <label
-              htmlFor="column-select"
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
-            >
-              Main cleanup column
-            </label>
-            <select
-              id="column-select"
-              value={selectedColumn}
-              onChange={(event) => {
-                applyConfigChange({
-                  selectedColumn: event.target.value,
-                  duplicateMode,
-                });
-                trackToolEvent("csv-lead-cleaner", "change_column", {
-                  column: event.target.value,
-                });
-              }}
-              disabled={!headers.length || isParsing}
-              className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
-            >
-              {!headers.length ? (
-                <option value="">Upload a CSV first</option>
-              ) : (
-                headers.map((header) => (
-                  <option key={header} value={header}>
-                    {header}
-                  </option>
-                ))
-              )}
-            </select>
-            {selectedDetection ? (
-              <div className="mt-3 rounded-[1rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] px-3 py-3 text-sm">
-                <div className="flex items-center gap-2 font-medium text-[color:var(--foreground)]">
-                  <ScanSearch className="h-4 w-4 text-[color:var(--accent)]" />
-                  Detected as {prettyColumnType(selectedDetection.type)}
-                </div>
-                <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
-                  {selectedDetection.confidence}% confidence
+          {pendingFile ? <FileSizeNotice pendingFile={pendingFile} /> : null}
+
+          {isParsing ? (
+            <div className="mt-4 rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  Reading rows
+                </span>
+                <span className="tabular-nums text-[color:var(--muted)]">
+                  {progress.percentage}%
+                </span>
+              </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-[color:rgba(17,36,51,0.08)]">
+                <div
+                  className="h-full rounded-full bg-[color:var(--brand)] transition-[width]"
+                  style={{ width: `${progress.percentage}%` }}
+                />
+              </div>
+              <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+                {progress.rowsProcessed.toLocaleString()} rows processed so far.
+              </p>
+            </div>
+          ) : null}
+
+          {hasLoadedFile ? (
+            <div className="mt-5 grid gap-4">
+              <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+                  File
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
+                  {fileName || "No CSV uploaded yet"}
+                </p>
+                {rows.length ? (
+                  <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                    {rows.length} rows loaded
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+                <label
+                  htmlFor="column-select"
+                  className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
+                >
+                  Main cleanup column
+                </label>
+                <select
+                  id="column-select"
+                  value={selectedColumn}
+                  onChange={(event) => {
+                    applyConfigChange({
+                      selectedColumn: event.target.value,
+                      duplicateMode,
+                    });
+                    trackToolEvent("csv-lead-cleaner", "change_column", {
+                      column: event.target.value,
+                    });
+                  }}
+                  disabled={!headers.length || isParsing}
+                  className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
+                >
+                  {headers.map((header) => (
+                    <option key={header} value={header}>
+                      {header}
+                    </option>
+                  ))}
+                </select>
+                {selectedDetection ? (
+                  <div className="mt-3 rounded-[1rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] px-3 py-3 text-sm">
+                    <div className="flex items-center gap-2 font-medium text-[color:var(--foreground)]">
+                      <ScanSearch className="h-4 w-4 text-[color:var(--accent)]" />
+                      Detected as {prettyColumnType(selectedDetection.type)}
+                    </div>
+                    <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                      {selectedDetection.confidence}% confidence
+                    </p>
+                  </div>
+                ) : null}
+                {recommendedDetection &&
+                recommendedDetection.header !== selectedColumn ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      applyConfigChange({
+                        selectedColumn: recommendedDetection.header,
+                        duplicateMode,
+                      })
+                    }
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]"
+                  >
+                    Use suggested column: {recommendedDetection.header} (
+                    {recommendedDetection.confidence}%)
+                  </button>
+                ) : null}
+              </div>
+
+              <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+                <label
+                  htmlFor="duplicate-mode"
+                  className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
+                >
+                  Deduplicate by
+                </label>
+                <select
+                  id="duplicate-mode"
+                  value={duplicateMode}
+                  onChange={(event) => {
+                    const nextMode = event.target.value as DuplicateMode;
+                    applyConfigChange({
+                      selectedColumn,
+                      duplicateMode: nextMode,
+                    });
+                    trackToolEvent("csv-lead-cleaner", "change_duplicate_mode", {
+                      mode: nextMode,
+                    });
+                  }}
+                  disabled={!headers.length || isParsing}
+                  className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
+                >
+                  {DUPLICATE_MODE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+                  {
+                    DUPLICATE_MODE_OPTIONS.find(
+                      (option) => option.value === duplicateMode,
+                    )?.description
+                  }
                 </p>
               </div>
-            ) : null}
-            {recommendedDetection &&
-            recommendedDetection.header !== selectedColumn ? (
-              <button
-                type="button"
-                onClick={() =>
-                  applyConfigChange({
-                    selectedColumn: recommendedDetection.header,
-                    duplicateMode,
-                  })
-                }
-                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]"
-              >
-                Use suggested column: {recommendedDetection.header} (
-                {recommendedDetection.confidence}%)
-              </button>
-            ) : null}
-          </div>
-
-          <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
-            <label
-              htmlFor="duplicate-mode"
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
-            >
-              Deduplicate by
-            </label>
-            <select
-              id="duplicate-mode"
-              value={duplicateMode}
-              onChange={(event) => {
-                const nextMode = event.target.value as DuplicateMode;
-                applyConfigChange({
-                  selectedColumn,
-                  duplicateMode: nextMode,
-                });
-                trackToolEvent("csv-lead-cleaner", "change_duplicate_mode", {
-                  mode: nextMode,
-                });
-              }}
-              disabled={!headers.length || isParsing}
-              className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
-            >
-              {DUPLICATE_MODE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
-              {
-                DUPLICATE_MODE_OPTIONS.find((option) => option.value === duplicateMode)
-                  ?.description
-              }
-            </p>
-          </div>
-        </div>
-
-        {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
-        {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
-
-        <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-            What this now reports
-          </p>
-          <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
-            Clean rows, duplicates removed, invalid and blank rows, generated
-            domains, business vs personal inboxes, and role-based email counts
-            when email data is present.
-          </p>
-        </div>
-
-        <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(244,247,250,0.92)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-            Operation transparency
-          </p>
-          <p className="mt-2 text-sm leading-7 text-[color:var(--foreground)]">
-            {selectedColumn
-              ? `Current cleanup on "${selectedColumn}" will leave ${cleaned.summary.cleanRowsReady.toLocaleString()} rows ready for export, remove ${cleaned.summary.duplicatesRemoved.toLocaleString()} duplicates, and drop ${cleaned.summary.invalidRowsRemoved.toLocaleString()} invalid rows plus ${cleaned.summary.emptyRowsRemoved.toLocaleString()} blanks.`
-              : "Upload a CSV and choose a source column to see the expected cleanup effect before you export."}
-          </p>
-        </div>
-
-        <div className="mt-5">
-          <button
-            type="button"
-            onClick={() => {
-              trackToolEvent("csv-lead-cleaner", "export_csv", {
-                row_count: cleaned.rows.length,
-                duplicate_mode: duplicateMode,
-              });
-              downloadCsvContent(
-                buildCleanFileName(fileName),
-                Papa.unparse(cleaned.rows),
-              );
-            }}
-            disabled={!cleaned.rows.length}
-            className="btn-primary inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--foreground)] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Download className="h-4 w-4" />
-            Export Clean CSV
-          </button>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <div className="rounded-[2rem] border border-[color:var(--line)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,248,238,0.92))] p-5 shadow-[var(--shadow)] sm:p-7">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Cleaning report
-              </p>
-              <h3 className="mt-2 font-display text-2xl font-semibold">
-                Review what changed before export
-              </h3>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-              <ScanSearch className="h-4 w-4" />
-              Report
-            </div>
-          </div>
+          ) : null}
 
-          <div className="mt-5 grid gap-3 lg:grid-cols-2">
-            <StatCard label="Rows uploaded" value={cleaned.summary.totalRows} />
-            <StatCard label="Clean rows ready" value={cleaned.summary.cleanRowsReady} accent />
-            <StatCard
-              label="Duplicates removed"
-              value={cleaned.summary.duplicatesRemoved}
-            />
-            <StatCard
-              label="Invalid rows removed"
-              value={cleaned.summary.invalidRowsRemoved}
-            />
-            <StatCard
-              label="Blank rows removed"
-              value={cleaned.summary.emptyRowsRemoved}
-            />
-            <StatCard
-              label="Generated domains"
-              value={cleaned.summary.generatedDomains}
-            />
-          </div>
+          {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
+          {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
 
-          <div className="mt-5 grid gap-3 md:grid-cols-3">
-            <InsightTile
-              label="Business emails"
-              value={cleaned.summary.businessEmails}
-              tone="teal"
-            />
-            <InsightTile
-              label="Personal emails"
-              value={cleaned.summary.personalEmails}
-              tone="amber"
-            />
-            <InsightTile
-              label="Role-based inboxes"
-              value={cleaned.summary.roleBasedEmails}
-              tone="slate"
-            />
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5 shadow-[var(--shadow)] backdrop-blur sm:p-7">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h3 className="font-display text-xl font-semibold">
-                Preview cleaned CSV
-              </h3>
-              <p className="text-sm leading-6 text-[color:var(--muted)]">
-                Showing up to {PREVIEW_LIMIT} rows after cleanup.
-              </p>
-            </div>
-            <span className="rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-              Preview
-            </span>
-          </div>
-
-          <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] bg-white/80">
-            {previewHeaders.length && previewRows.length ? (
-              <div className="max-h-[38rem] overflow-auto">
-                <table className="min-w-[980px] border-collapse text-left text-sm">
-                  <thead className="sticky top-0 bg-[#f6efe5]">
-                    <tr>
-                      <th className="border-b border-[color:var(--line)] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
-                        #
-                      </th>
-                      {previewHeaders.map((header) => (
-                        <th
-                          key={header}
-                          className="border-b border-[color:var(--line)] px-4 py-3 font-semibold text-[color:var(--foreground)]"
-                        >
-                          {prettyHeader(header)}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {previewRows.map((row, index) => (
-                      <tr
-                        key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}`}
-                      >
-                        <td className="border-b border-[color:rgba(17,36,51,0.08)] px-3 py-3 align-top text-xs font-semibold text-[color:var(--muted)]">
-                          {index + 1}
-                        </td>
-                        {previewHeaders.map((header) => (
-                          <td
-                            key={`${index}-${header}`}
-                            className="border-b border-[color:rgba(17,36,51,0.08)] px-4 py-3 align-top text-[color:var(--muted)]"
-                          >
-                            <div className="max-w-[16rem] whitespace-normal break-words">
-                              {row[header] || "—"}
-                            </div>
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+          {hasLoadedFile ? (
+            <>
+              <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                  What this now reports
+                </p>
+                <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
+                  Clean rows, duplicates removed, invalid and blank rows,
+                  generated domains, business vs personal inboxes, and
+                  role-based email counts when email data is present.
+                </p>
               </div>
-            ) : (
-              <EmptyState
-                title={
-                  status === "ready" && headers.length
-                    ? "No clean rows yet"
-                    : "Upload a CSV to start"
-                }
-                description={
-                  status === "ready" && headers.length
-                    ? "This file uploaded successfully, but none of the rows survived the current cleanup and deduplication rules."
-                    : "Upload a CSV to preview rows and review the cleaned spreadsheet here."
-                }
-              />
-            )}
+
+              <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(244,247,250,0.92)] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+                  Operation transparency
+                </p>
+                <p className="mt-2 text-sm leading-7 text-[color:var(--foreground)]">
+                  {selectedColumn
+                    ? `Current cleanup on "${selectedColumn}" will leave ${cleaned.summary.cleanRowsReady.toLocaleString()} rows ready for export, remove ${cleaned.summary.duplicatesRemoved.toLocaleString()} duplicates, and drop ${cleaned.summary.invalidRowsRemoved.toLocaleString()} invalid rows plus ${cleaned.summary.emptyRowsRemoved.toLocaleString()} blanks.`
+                    : "Upload a CSV and choose a source column to see the expected cleanup effect before you export."}
+                </p>
+              </div>
+            </>
+          ) : null}
+
+          <div className="mt-auto pt-5">
+            <button
+              type="button"
+              onClick={() => {
+                trackToolEvent("csv-lead-cleaner", "export_csv", {
+                  row_count: cleaned.rows.length,
+                  duplicate_mode: duplicateMode,
+                });
+                downloadCsvRecords(buildCleanFileName(fileName), cleaned.rows);
+              }}
+              disabled={!cleaned.rows.length}
+              className="btn-primary inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--foreground)] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Download className="h-4 w-4" />
+              Export Clean CSV
+            </button>
+          </div>
+        </div>
+
+        <div className="border-t border-[color:var(--line)] xl:border-l xl:border-t-0">
+          <div className="space-y-6 p-5 sm:p-7">
+            <div className="rounded-[1.7rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(255,248,238,0.92))] p-5">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+                    Cleaning report
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold">
+                    Review what changed before export
+                  </h3>
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                  <ScanSearch className="h-4 w-4" />
+                  Report
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-[1.7rem] border border-[color:rgba(15,118,110,0.14)] bg-[linear-gradient(180deg,rgba(15,118,110,0.1),rgba(255,255,255,0.96))] p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                  Clean rows ready
+                </p>
+                <p className="mt-3 font-display text-6xl font-semibold leading-none tabular-nums text-[color:var(--foreground)] sm:text-7xl">
+                  {cleaned.summary.cleanRowsReady.toLocaleString()}
+                </p>
+                <p className="mt-3 max-w-lg text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                  This is the number that should feel safe enough to move into
+                  the next system after cleanup.
+                </p>
+              </div>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-4">
+                <StatCard label="Rows uploaded" value={cleaned.summary.totalRows} />
+                <StatCard
+                  label="Duplicates removed"
+                  value={cleaned.summary.duplicatesRemoved}
+                />
+                <StatCard
+                  label="Invalid rows removed"
+                  value={cleaned.summary.invalidRowsRemoved}
+                />
+                <StatCard
+                  label="Blank rows removed"
+                  value={cleaned.summary.emptyRowsRemoved}
+                />
+              </div>
+
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                <InsightTile
+                  label="Business emails"
+                  value={cleaned.summary.businessEmails}
+                  tone="teal"
+                />
+                <InsightTile
+                  label="Personal emails"
+                  value={cleaned.summary.personalEmails}
+                  tone="amber"
+                />
+                <InsightTile
+                  label="Role-based inboxes"
+                  value={cleaned.summary.roleBasedEmails}
+                  tone="slate"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-[1.7rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5 backdrop-blur">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-display text-xl font-semibold">
+                    Preview cleaned CSV
+                  </h3>
+                  <p className="text-sm leading-6 text-[color:var(--muted)]">
+                    Showing up to {PREVIEW_LIMIT} rows after cleanup.
+                  </p>
+                </div>
+                <span className="rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
+                  Preview
+                </span>
+              </div>
+
+              <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] bg-white/80">
+                {previewHeaders.length && previewRows.length ? (
+                  <div className="max-h-[38rem] overflow-auto">
+                    <table className="min-w-[980px] border-collapse text-left text-sm">
+                      <thead className="sticky top-0 bg-[#f6efe5]">
+                        <tr>
+                          <th className="border-b border-[color:var(--line)] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                            #
+                          </th>
+                          {previewHeaders.map((header) => (
+                            <th
+                              key={header}
+                              className="border-b border-[color:var(--line)] px-4 py-3 font-semibold text-[color:var(--foreground)]"
+                            >
+                              {prettyHeader(header)}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {previewRows.map((row, index) => (
+                          <tr
+                            key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}`}
+                          >
+                            <td className="border-b border-[color:rgba(17,36,51,0.08)] px-3 py-3 align-top text-xs font-semibold text-[color:var(--muted)]">
+                              {index + 1}
+                            </td>
+                            {previewHeaders.map((header) => (
+                              <td
+                                key={`${index}-${header}`}
+                                className="border-b border-[color:rgba(17,36,51,0.08)] px-4 py-3 align-top text-[color:var(--muted)]"
+                              >
+                                <div className="max-w-[16rem] whitespace-normal break-words">
+                                  {row[header] || "—"}
+                                </div>
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <EmptyState
+                    title={
+                      status === "ready" && headers.length
+                        ? "No clean rows yet"
+                        : "Upload a CSV to start"
+                    }
+                    description={
+                      status === "ready" && headers.length
+                        ? "This file uploaded successfully, but none of the rows survived the current cleanup and deduplication rules."
+                        : "Upload a CSV to preview rows and review the cleaned spreadsheet here."
+                    }
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

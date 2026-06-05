@@ -1,40 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  FileSpreadsheet,
-  Globe,
-  Mail,
-  Phone,
-  ScanSearch,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 
 const flagshipTools = [
   {
     href: "/tools/csv-lead-cleaner",
+    label: "Flagship workflow",
     title: "CSV Lead Cleaner",
     description:
-      "The main workflow for CRM imports, recruiting spreadsheets, agency handoffs, and outreach list cleanup.",
-    accent: "Flagship",
-    bullets: [
+      "The full cleanup pass for CRM imports, recruiter spreadsheets, agency handoffs, and outreach lists that stopped being trustworthy.",
+    notes: [
       "Column cleanup and dedupe modes",
-      "Cleaning report before export",
-      "Personal vs business email hints",
+      "Review report before export",
+      "Business versus personal inbox hints",
     ],
   },
   {
     href: "/tools/extract-emails-from-csv",
+    label: "CSV support",
     title: "Extract Emails from CSV",
     description:
-      "Pull a clean email list out of a chosen CSV column before routing the data somewhere else.",
-    accent: "CSV support",
-    bullets: [
-      "Invalid email filtering",
-      "Duplicate removal",
-      "TXT and CSV export",
+      "When the spreadsheet is mostly fine and you only need the email column cleaned, deduplicated, and ready to move.",
+    notes: [
+      "Pick the email column",
+      "Remove invalid entries and duplicates",
+      "Export as TXT or CSV",
     ],
   },
 ];
@@ -43,72 +35,39 @@ const helperTools = [
   {
     href: "/tools/extract-emails-from-text",
     title: "Extract Emails from Text",
-    description: "Turn copied text blocks into clean email lists.",
-    icon: Mail,
+    description: "For copied blocks that have not made it into a spreadsheet yet.",
   },
   {
     href: "/tools/extract-phone-numbers-from-text",
     title: "Extract Phone Numbers from Text",
-    description: "Find phone numbers in notes, profiles, or directories.",
-    icon: Phone,
+    description: "Useful for notes, sourcing scraps, and messy pasted directories.",
   },
   {
     href: "/tools/extract-urls-from-text",
     title: "Extract URLs from Text",
-    description: "Pull links out of messy text before review or export.",
-    icon: Globe,
+    description: "Pull links out of noisy copied text before you organize the rest.",
   },
   {
     href: "/tools/extract-domains-from-emails",
     title: "Extract Domains from Emails",
-    description: "Generate domain lists from email or website data.",
-    icon: ScanSearch,
+    description: "A supporting step when you need a quick domain list for enrichment.",
   },
   {
     href: "/tools/clean-email-list",
     title: "Clean Email List",
-    description: "Normalize and deduplicate email lists quickly.",
-    icon: Sparkles,
+    description: "Normalize a pasted list when the only job is fixing the addresses.",
   },
   {
     href: "/tools/remove-duplicate-emails",
     title: "Remove Duplicate Emails",
-    description: "Keep one clean copy of each valid address.",
-    icon: Sparkles,
+    description: "Use this when the main problem is repeated addresses and nothing else.",
   },
 ];
 
-const routeSteps = [
-  {
-    step: "1",
-    title: "Start with the spreadsheet",
-    text: "Bring in the CRM export, recruiter sheet, or client handoff that needs cleanup before it creates downstream problems.",
-  },
-  {
-    step: "2",
-    title: "Review what changed",
-    text: "Check duplicates, blanks, invalid values, and email quality hints before you export anything.",
-  },
-  {
-    step: "3",
-    title: "Use helper tools only when needed",
-    text: "The text extractors are still useful, but they should support the workflow rather than replace it.",
-  },
-];
-
-const reasons = [
-  {
-    title: "Higher-value buyer",
-    text: "Sales ops, recruiters, agencies, VAs, and marketers usually need spreadsheet cleanup more than one-off text extraction.",
-  },
-  {
-    title: "Closer to monetization",
-    text: "CSV workflows feel like product work instead of a free utility, which makes larger-file upgrades much easier to justify later.",
-  },
-  {
-    title: "Clearer product promise",
-    text: "“Clean messy lead CSV files before CRM import” is sharper, more believable, and easier to remember than a generic extractor pitch.",
-  },
+const routeNotes = [
+  "Start with the spreadsheet if one already exists.",
+  "Use the helper tools only when the data is still raw text.",
+  "Think of this page as a workflow map, not a feature gallery.",
 ];
 
 export const metadata: Metadata = {
@@ -120,151 +79,132 @@ export const metadata: Metadata = {
 export default function ToolsPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-8 xl:grid-cols-[1.02fr_0.98fr] xl:items-end">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+        <div className="grid gap-8 rounded-[2.25rem] border border-[color:rgba(16,37,52,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,247,250,0.82))] p-6 shadow-[var(--shadow)] lg:grid-cols-[0.9fr_0.08fr_1fr] lg:items-start lg:p-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
               Tools
             </p>
-            <h1 className="mt-4 max-w-5xl font-display text-4xl font-semibold leading-[0.95] sm:text-5xl lg:text-6xl">
-              Start with the CSV workflow.
-              <br />
-              Reach for the helper tools only when the data is still messy text.
+            <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[0.96] sm:text-[3.3rem] lg:text-[4.3rem]">
+              Start with the CSV path. Use the text helpers only before the
+              mess becomes a spreadsheet.
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-              LeadCleanr is built around cleaning messy lead CSV files before
-              CRM import, outreach, recruiting, and agency delivery. The text
-              tools stay here as useful entry points, but they are no longer
-              the center of the product story.
+            <p className="mt-5 max-w-2xl text-base leading-7 text-[color:var(--muted)]">
+              The default answer should appear fast here: if the list already
+              lives in rows and columns, go straight to the cleanup workflow.
             </p>
           </div>
-
-          <div className="rounded-[2rem] border border-[color:rgba(15,118,110,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(236,252,250,0.74))] p-6 shadow-[var(--shadow)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--accent)]">
-              Recommended path
+          <div className="hidden h-full w-px bg-[color:rgba(16,37,52,0.12)] lg:block" />
+          <div className="max-w-3xl space-y-5 text-base leading-8 text-[color:var(--muted)]">
+            <p>
+              LeadCleanr is no longer a bucket of equal tools. The main product
+              is the CSV workflow: clean the file before CRM import, recruiting
+              outreach, enrichment, or agency handoff. The text utilities still
+              matter, but they should support that story instead of replacing it.
             </p>
-            <p className="mt-3 text-base leading-7 text-[color:var(--foreground)]">
-              Clean the spreadsheet first, then route the clean data where it
-              needs to go. The flagship tools should handle the serious work.
-            </p>
+            <div className="rounded-[1.5rem] border border-[color:rgba(16,37,52,0.08)] bg-white/70 p-5">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+                Route notes
+              </p>
+              <div className="mt-3 space-y-3">
+                {routeNotes.map((note) => (
+                  <p
+                    key={note}
+                    className="text-sm leading-7 text-[color:var(--foreground)]"
+                  >
+                    {note}
+                  </p>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        <section className="mt-12 grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow)] sm:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              How to use the toolset
-            </p>
-            <h2 className="mt-3 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
-              Treat this like a workflow map, not a gallery.
-            </h2>
-            <div className="mt-6 space-y-4">
-              {routeSteps.map((step) => (
-                <div
-                  key={step.title}
-                  className="rounded-[1.6rem] border border-[color:var(--line)] bg-white/82 p-5"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-                    Step {step.step}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
-                    {step.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/76 p-6 shadow-[var(--shadow)] sm:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--accent)]">
-              Why this structure
-            </p>
-            <div className="mt-4 grid gap-4">
-              {reasons.map((reason) => (
-                <ReasonCard
-                  key={reason.title}
-                  title={reason.title}
-                  text={reason.text}
-                />
-              ))}
-            </div>
-          </div>
+        <section className="mt-10 grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+          <FlagshipCard tool={flagshipTools[0]} featured />
+          <FlagshipCard tool={flagshipTools[1]} />
         </section>
+      </section>
 
-        <section className="mt-12">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <section className="bg-[color:#153246] py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.88fr_1.12fr]">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Flagship workflows
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+                Working order
               </p>
-              <h2 className="mt-3 max-w-4xl font-display text-3xl font-semibold sm:text-4xl">
-                The productized part of LeadCleanr
+              <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
+                Spreadsheet first. Report second. Helper tools only when the
+                data is still in pieces.
               </h2>
             </div>
+            <div className="space-y-5">
+              <NarrativeRow
+                number="01"
+                text="If the list already lives in a CSV, open the CSV Lead Cleaner first."
+              />
+              <NarrativeRow
+                number="02"
+                text="If you only need one field from the file, the CSV email extractor is the faster side path."
+              />
+              <NarrativeRow
+                number="03"
+                text="If the data is still copied text, use a text helper, then move the cleaned output back into a spreadsheet workflow."
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Helper tools
+            </p>
+            <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
+              Useful, but intentionally secondary.
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+              These tools handle the step before the spreadsheet exists. Paste
+              copied text, pull out what you need, then move it into a CSV for
+              the main cleanup workflow.
+            </p>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--muted)]">
+              6 tools · all browser-side · no login required
+            </p>
             <Link
-              href="/pricing"
-              className="text-sm font-semibold text-[color:var(--brand-strong)]"
+              href="/tools/csv-lead-cleaner"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]"
             >
-              See pricing
+              CSV Lead Cleaner is the main tool
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-            <FlagshipToolCard tool={flagshipTools[0]} featured />
-            <FlagshipToolCard tool={flagshipTools[1]} />
+          <div className="space-y-5 border-t border-[color:rgba(16,37,52,0.12)] pt-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+            {helperTools.map((tool) => (
+              <Link key={tool.href} href={tool.href} className="block">
+                <h3 className="font-display text-2xl font-semibold text-[color:var(--foreground)]">
+                  {tool.title}
+                </h3>
+                <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                  {tool.description}
+                </p>
+                <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
+                  Open tool
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            ))}
           </div>
-        </section>
-
-        <section className="mt-12 rounded-[2rem] border border-[color:var(--line)] bg-white/76 p-6 shadow-[var(--shadow)] sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Supporting helpers
-              </p>
-              <h2 className="mt-3 max-w-4xl font-display text-3xl font-semibold sm:text-4xl">
-                Useful when the data has not made it into a spreadsheet yet
-              </h2>
-            </div>
-            <div className="rounded-full border border-[color:var(--line)] bg-[#fffaf3] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
-              SEO entry points
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {helperTools.map((tool) => {
-              const Icon = tool.icon;
-
-              return (
-                <Link
-                  key={tool.href}
-                  href={tool.href}
-                  className="rounded-[1.8rem] border border-[color:var(--line)] bg-white/84 p-6 shadow-[var(--shadow)] transition hover:-translate-y-1"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.12)] text-[color:var(--brand-strong)]">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-5 font-display text-2xl font-semibold">
-                    {tool.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                    {tool.description}
-                  </p>
-                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
-                    Open tool
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
+        </div>
       </section>
     </PageFrame>
   );
 }
 
-function FlagshipToolCard({
+function FlagshipCard({
   tool,
   featured = false,
 }: {
@@ -274,48 +214,58 @@ function FlagshipToolCard({
   return (
     <Link
       href={tool.href}
-      className={`rounded-[2rem] border p-6 shadow-[var(--shadow)] transition hover:-translate-y-1 sm:p-8 ${
+      className={`rounded-[2.2rem] border p-7 shadow-[var(--shadow)] sm:p-8 ${
         featured
-          ? "border-[color:rgba(15,118,110,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(236,252,250,0.88))]"
-          : "border-[color:var(--line)] bg-[color:var(--surface)]"
+          ? "border-[color:rgba(15,118,110,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(236,252,250,0.86))]"
+          : "border-[color:var(--line)] bg-white/82"
       }`}
     >
-      <span
-        className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
+      <p
+        className={`text-xs font-semibold uppercase tracking-[0.18em] ${
           featured
-            ? "bg-[color:rgba(15,118,110,0.12)] text-[color:var(--accent)]"
-            : "bg-[color:rgba(217,119,6,0.12)] text-[color:var(--brand-strong)]"
+            ? "text-[color:var(--accent)]"
+            : "text-[color:var(--brand-strong)]"
         }`}
       >
-        {tool.accent}
-      </span>
-      <h3 className="mt-4 font-display text-3xl font-semibold">{tool.title}</h3>
-      <p className="mt-3 max-w-2xl text-sm leading-7 text-[color:var(--muted)]">
+        {tool.label}
+      </p>
+      <h2
+        className={`mt-4 font-display font-semibold leading-[1.02] ${
+          featured ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl"
+        }`}
+      >
+        {tool.title}
+      </h2>
+      <p className="mt-4 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
         {tool.description}
       </p>
-      <div className="mt-6 grid gap-2">
-        {tool.bullets.map((bullet) => (
-          <div
-            key={bullet}
-            className="rounded-[1.2rem] border border-[color:var(--line)] bg-white/84 px-4 py-3 text-sm font-medium"
+      <div className="mt-6 grid gap-3">
+        {tool.notes.map((note) => (
+          <p
+            key={note}
+            className="border-t border-[color:rgba(16,37,52,0.1)] pt-3 text-sm leading-7 text-[color:var(--foreground)]"
           >
-            {bullet}
-          </div>
+            {note}
+          </p>
         ))}
       </div>
-      <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
+      <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
         Open workflow
         <ArrowRight className="h-4 w-4" />
-      </div>
+      </span>
     </Link>
   );
 }
 
-function ReasonCard({ title, text }: { title: string; text: string }) {
+function NarrativeRow({ number, text }: { number: string; text: string }) {
   return (
-    <div className="rounded-[1.55rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">{text}</p>
+    <div className="grid gap-3 border-t border-[color:rgba(255,255,255,0.14)] pt-5 sm:grid-cols-[92px_1fr] sm:items-start">
+      <div className="font-display text-5xl leading-none text-[color:#d8a15d] sm:text-6xl">
+        {number}
+      </div>
+      <p className="max-w-2xl text-base leading-8 text-[color:rgba(255,255,255,0.82)]">
+        {text}
+      </p>
     </div>
   );
 }

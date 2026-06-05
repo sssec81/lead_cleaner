@@ -35,11 +35,12 @@ export function LocalProcessingBadge({
             Local Processing
           </p>
           <p className="mt-1 text-sm font-semibold text-[color:#102534]">
-            Processed in your browser. 0 bytes sent to our server.
+            Core processing happens in your browser on this device.
           </p>
           <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">
-            Uploads, extraction, cleanup, and export all stay on your device in
-            this MVP workflow.
+            Uploads, extraction, cleanup, and export stay local in the MVP
+            workflow. Optional analytics, error reporting, and saved workspace
+            state can still run separately.
           </p>
         </div>
       </div>

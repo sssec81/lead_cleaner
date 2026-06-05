@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { BadgeAlert, ClipboardCheck, Scale } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 
@@ -10,7 +9,7 @@ const sections = [
   },
   {
     title: "Tool accuracy",
-    text: "LeadCleanr is designed to help with common cleanup jobs, but extraction and normalization are best-effort. Results may not be perfect for every source format.",
+    text: "LeadCleanr is designed to help with common cleanup jobs, but extraction and normalization are best-effort. Results will not be perfect for every source format.",
   },
   {
     title: "User responsibility",
@@ -22,7 +21,7 @@ const sections = [
   },
   {
     title: "Limitation of liability",
-    text: "LeadCleanr is provided as-is for utility and workflow assistance. Use the product at your own risk and validate results before relying on them operationally.",
+    text: "LeadCleanr is provided as-is for utility and workflow assistance. Use it at your own risk and validate results before relying on them operationally.",
   },
 ];
 
@@ -41,74 +40,87 @@ export default function TermsPage() {
   return (
     <PageFrame>
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-start">
+        <div className="grid gap-10 lg:grid-cols-[0.94fr_0.06fr_1fr] lg:items-start">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Terms
             </p>
-            <h1 className="mt-3 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              Use LeadCleanr responsibly and review your outputs
+            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[0.96] sm:text-5xl lg:text-6xl">
+              Use the tool responsibly and review what it gives back.
             </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-              LeadCleanr is a utility tool for cleaning data, not a guarantee
-              of perfect extraction. These terms keep the product focused on
-              legitimate cleanup work and set clear expectations about how the
-              MVP should be used.
-            </p>
+          </div>
+          <div className="hidden h-full w-px bg-[color:rgba(16,37,52,0.12)] lg:block" />
+          <div className="max-w-3xl text-base leading-8 text-[color:var(--muted)]">
+            LeadCleanr is a utility for cleanup work, not a guarantee of perfect
+            extraction. These terms keep the product tied to legitimate use and
+            make the expectation clear: review the outputs before you rely on
+            them.
+          </div>
+        </div>
 
-            <div className="mt-8 rounded-[2rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] p-6 shadow-[var(--shadow)]">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/80 text-[color:var(--accent)]">
-                  <ClipboardCheck className="h-5 w-5" />
-                </div>
-                <div>
-                  <h2 className="font-display text-2xl font-semibold">
-                    Practical reminders
-                  </h2>
-                  <div className="mt-4 grid gap-3">
-                    {reminders.map((item) => (
-                      <div
-                        key={item}
-                        className="rounded-[1.2rem] border border-[color:rgba(15,118,110,0.14)] bg-white/80 px-4 py-3 text-sm font-medium text-[color:var(--foreground)]"
-                      >
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+        <section className="mt-16">
+          <blockquote className="max-w-5xl font-display text-3xl font-semibold leading-[1.16] text-[color:var(--foreground)] sm:text-4xl lg:text-[3.15rem]">
+            “The safest default is to treat cleaned output as a better draft,
+            not unquestionable truth.”
+          </blockquote>
+        </section>
+
+        <section className="mt-16 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Practical reminders
+            </p>
+            <div className="mt-6 space-y-5">
+              {reminders.map((item) => (
+                <p
+                  key={item}
+                  className="border-t border-[color:rgba(16,37,52,0.1)] pt-4 text-sm leading-7 text-[color:var(--foreground)] sm:text-base"
+                >
+                  {item}
+                </p>
+              ))}
             </div>
           </div>
-
-          <div className="grid gap-5">
+          <div className="space-y-5 border-t border-[color:rgba(16,37,52,0.12)] pt-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
             {sections.map((section, index) => (
               <div
                 key={section.title}
-                className={`rounded-[2rem] border p-6 shadow-[var(--shadow)] ${
-                  index === 0
-                    ? "border-[color:rgba(217,119,6,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,248,238,0.92))]"
-                    : "border-[color:var(--line)] bg-white/76"
-                }`}
+                className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.1)] pt-5"}
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[color:rgba(217,119,6,0.12)] text-[color:var(--brand-strong)]">
-                    {index === 0 ? (
-                      <Scale className="h-5 w-5" />
-                    ) : (
-                      <BadgeAlert className="h-5 w-5" />
-                    )}
-                  </div>
-                  <div>
-                    <h2 className="font-display text-2xl font-semibold">
-                      {section.title}
-                    </h2>
-                    <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                      {section.text}
-                    </p>
-                  </div>
-                </div>
+                <h2 className="font-display text-2xl font-semibold text-[color:var(--foreground)]">
+                  {section.title}
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                  {section.text}
+                </p>
               </div>
             ))}
+          </div>
+        </section>
+      </section>
+
+      <section className="bg-[color:#153246] py-16 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+                Product boundary
+              </p>
+              <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
+                The tool can make messy data more workable. It cannot remove
+                the need for judgment.
+              </h2>
+            </div>
+            <div className="space-y-5">
+              <p className="border-t border-[color:rgba(255,255,255,0.14)] pt-4 text-base leading-8 text-[color:rgba(255,255,255,0.82)]">
+                If a campaign, import, or client delivery depends on the data,
+                review the output before you move it downstream.
+              </p>
+              <p className="border-t border-[color:rgba(255,255,255,0.14)] pt-4 text-base leading-8 text-[color:rgba(255,255,255,0.82)]">
+                The MVP may evolve quickly, so feature limits and supported
+                formats can change as the product matures.
+              </p>
+            </div>
           </div>
         </div>
       </section>
