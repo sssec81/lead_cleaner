@@ -5,23 +5,32 @@ import {
   CheckCircle2,
   Download,
   FileSpreadsheet,
+  FlaskConical,
   LoaderCircle,
+  Redo2,
   ScanSearch,
+  Undo2,
   Upload,
 } from "lucide-react";
 import Papa from "papaparse";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
+  detectCsvColumns,
+  type CsvColumnDetection,
   type CsvParseProgress,
   type CsvRow,
+  inspectCsvFile,
   isLikelyCsvFile,
   MAX_CSV_FILE_SIZE,
   parseCsvFile,
+  parseCsvText,
 } from "@/lib/csv";
 import { downloadCsvContent } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import { normalizeUrlValue } from "@/lib/text-tools";
+
+import { LocalProcessingBadge } from "./local-processing-badge";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
@@ -79,6 +88,12 @@ const ROLE_EMAIL_PREFIXES = new Set([
   "billing",
   "careers",
 ]);
+const DEMO_CSV = `name,email,company,website,phone
+Jane Doe,jane@acme.com,Acme,https://acme.com,+1 (415) 555-0101
+Support Team,support@acme.com,Acme,https://acme.com,415-555-0101
+Broken,not-an-email,Example Co,exampleco.com,
+John Smith,john@northstar.io,Northstar,https://northstar.io,+44 20 7946 0958
+Duplicate,jane@acme.com,Acme,https://acme.com,+1 (415) 555-0101`;
 
 const DUPLICATE_MODE_OPTIONS: Array<{
   value: DuplicateMode;
@@ -116,15 +131,29 @@ export function CsvLeadCleanerTool() {
   const [fileName, setFileName] = useState("");
   const [headers, setHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<CsvRow[]>([]);
+  const [detections, setDetections] = useState<CsvColumnDetection[]>([]);
   const [selectedColumn, setSelectedColumn] = useState("");
   const [duplicateMode, setDuplicateMode] = useState<DuplicateMode>("selected");
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const [status, setStatus] = useState<UploadStatus>("idle");
+  const [pendingFile, setPendingFile] = useState<{
+    name: string;
+    sizeMb: number;
+    exceedsFreeLimit: boolean;
+    estimatedRows: number | null;
+    estimatedRowsWithinFreeLimit: number | null;
+  } | null>(null);
   const [progress, setProgress] = useState<CsvParseProgress>({
     percentage: 0,
     rowsProcessed: 0,
   });
+  const [pastConfigs, setPastConfigs] = useState<
+    Array<{ selectedColumn: string; duplicateMode: DuplicateMode }>
+  >([]);
+  const [futureConfigs, setFutureConfigs] = useState<
+    Array<{ selectedColumn: string; duplicateMode: DuplicateMode }>
+  >([]);
 
   const cleaned = useMemo(
     () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode),
@@ -137,25 +166,60 @@ export function CsvLeadCleanerTool() {
     selectedColumn &&
     (selectedColumn.toLowerCase().includes("email") || cleaned.summary.generatedDomains > 0);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !selectedColumn) {
+      return;
+    }
+
+    window.localStorage.setItem(
+      "leadcleanr:csv-cleaner:preferred-column",
+      selectedColumn,
+    );
+  }, [selectedColumn]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
+      "leadcleanr:csv-cleaner:duplicate-mode",
+      duplicateMode,
+    );
+  }, [duplicateMode]);
+
   function resetState(nextFileName = "") {
     setFileName(nextFileName);
     setHeaders([]);
     setRows([]);
+    setDetections([]);
     setSelectedColumn("");
     setDuplicateMode("selected");
     setWarning("");
+    setPastConfigs([]);
+    setFutureConfigs([]);
     setProgress({
       percentage: 0,
       rowsProcessed: 0,
     });
   }
 
-  function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
 
     if (!file) {
       return;
     }
+
+    const inspection = await inspectCsvFile(file);
+
+    setPendingFile({
+      name: file.name,
+      sizeMb: file.size / (1024 * 1024),
+      exceedsFreeLimit: file.size > MAX_CSV_FILE_SIZE,
+      estimatedRows: inspection.estimatedRows,
+      estimatedRowsWithinFreeLimit: inspection.estimatedRowsWithinFreeLimit,
+    });
 
     trackToolEvent("csv-lead-cleaner", "upload_started", {
       file_size_kb: Math.round(file.size / 1024),
@@ -171,7 +235,9 @@ export function CsvLeadCleanerTool() {
     if (file.size > MAX_CSV_FILE_SIZE) {
       resetState();
       setStatus("error");
-      setError("Please upload a CSV file smaller than 2 MB.");
+      setError(
+        "The free CSV limit is 2 MB. Upgrade to Pro when you need larger file cleanup.",
+      );
       return;
     }
 
@@ -193,9 +259,26 @@ export function CsvLeadCleanerTool() {
           return;
         }
 
+        const nextDetections = detectCsvColumns(result.headers, result.rows);
+        const storedPreferredColumn =
+          typeof window !== "undefined"
+            ? window.localStorage.getItem("leadcleanr:csv-cleaner:preferred-column")
+            : null;
+        const storedDuplicateMode =
+          typeof window !== "undefined"
+            ? window.localStorage.getItem("leadcleanr:csv-cleaner:duplicate-mode")
+            : null;
         setHeaders(result.headers);
         setRows(result.rows);
-        setSelectedColumn(pickDefaultColumn(result.headers));
+        setDetections(nextDetections);
+        setSelectedColumn(
+          storedPreferredColumn && result.headers.includes(storedPreferredColumn)
+            ? storedPreferredColumn
+            : pickDefaultColumn(result.headers, nextDetections),
+        );
+        if (isDuplicateMode(storedDuplicateMode)) {
+          setDuplicateMode(storedDuplicateMode);
+        }
         setStatus("ready");
 
         if (!result.rows.length) {
@@ -222,6 +305,85 @@ export function CsvLeadCleanerTool() {
     });
   }
 
+  function loadDemoCsv() {
+    const result = parseCsvText(DEMO_CSV);
+    const nextDetections = detectCsvColumns(result.headers, result.rows);
+
+    resetState("leadcleanr-demo.csv");
+    setPendingFile({
+      name: "leadcleanr-demo.csv",
+      sizeMb: DEMO_CSV.length / (1024 * 1024),
+      exceedsFreeLimit: false,
+      estimatedRows: result.rows.length,
+      estimatedRowsWithinFreeLimit: result.rows.length,
+    });
+    setError("");
+    setHeaders(result.headers);
+    setRows(result.rows);
+    setDetections(nextDetections);
+    setSelectedColumn(pickDefaultColumn(result.headers, nextDetections));
+    setStatus("ready");
+
+    if (result.warnings.length) {
+      setWarning(buildWarningSummary(result.warnings));
+    }
+
+    trackToolEvent("csv-lead-cleaner", "load_demo");
+  }
+
+  function applyConfigChange(nextConfig: {
+    selectedColumn: string;
+    duplicateMode: DuplicateMode;
+  }) {
+    if (
+      nextConfig.selectedColumn === selectedColumn &&
+      nextConfig.duplicateMode === duplicateMode
+    ) {
+      return;
+    }
+
+    setPastConfigs((current) => [
+      ...current,
+      { selectedColumn, duplicateMode },
+    ]);
+    setFutureConfigs([]);
+    setSelectedColumn(nextConfig.selectedColumn);
+    setDuplicateMode(nextConfig.duplicateMode);
+  }
+
+  function undoConfigChange() {
+    setPastConfigs((current) => {
+      const previous = current.at(-1);
+      if (!previous) {
+        return current;
+      }
+
+      setFutureConfigs((future) => [
+        { selectedColumn, duplicateMode },
+        ...future,
+      ]);
+      setSelectedColumn(previous.selectedColumn);
+      setDuplicateMode(previous.duplicateMode);
+
+      return current.slice(0, -1);
+    });
+  }
+
+  function redoConfigChange() {
+    setFutureConfigs((current) => {
+      const next = current[0];
+      if (!next) {
+        return current;
+      }
+
+      setPastConfigs((past) => [...past, { selectedColumn, duplicateMode }]);
+      setSelectedColumn(next.selectedColumn);
+      setDuplicateMode(next.duplicateMode);
+
+      return current.slice(1);
+    });
+  }
+
   const previewHeaders = useMemo(() => {
     const nextHeaders = [...headers];
     if (!showEmailEnrichment) {
@@ -239,6 +401,15 @@ export function CsvLeadCleanerTool() {
     }
     return nextHeaders;
   }, [headers, showEmailEnrichment]);
+  const recommendedDetection = pickBestDetection(detections, [
+    "email",
+    "phone",
+    "domain",
+    "url",
+  ]);
+  const selectedDetection = detections.find(
+    (detection) => detection.header === selectedColumn,
+  );
 
   return (
     <section className="grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)] xl:items-start">
@@ -261,9 +432,11 @@ export function CsvLeadCleanerTool() {
           </div>
         </div>
 
+        <LocalProcessingBadge />
+
         <label
           htmlFor="csv-upload"
-          className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white/70 px-6 py-6 text-center transition hover:border-[color:var(--brand)] hover:bg-white"
+          className="mt-4 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white px-6 py-6 text-center transition hover:border-[color:var(--brand)]"
         >
           {isParsing ? (
             <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
@@ -274,7 +447,8 @@ export function CsvLeadCleanerTool() {
             {isParsing ? "Parsing your CSV..." : "Upload a CSV file"}
           </span>
           <span className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
-            Up to 2 MB. Processing stays in your browser for the MVP.
+            Free plan: up to 2 MB per CSV. Processing stays in your browser for
+            the MVP.
           </span>
           <input
             id="csv-upload"
@@ -285,6 +459,44 @@ export function CsvLeadCleanerTool() {
             disabled={isParsing}
           />
         </label>
+
+        <div className="mt-3 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={loadDemoCsv}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5"
+          >
+            <FlaskConical className="h-4 w-4" />
+            Try sample CSV
+          </button>
+          <button
+            type="button"
+            onClick={undoConfigChange}
+            disabled={!pastConfigs.length}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Undo2 className="h-4 w-4" />
+            Undo
+          </button>
+          <button
+            type="button"
+            onClick={redoConfigChange}
+            disabled={!futureConfigs.length}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Redo2 className="h-4 w-4" />
+            Redo
+          </button>
+        </div>
+
+        {pendingFile ? (
+          <FileSizeNotice pendingFile={pendingFile} />
+        ) : (
+          <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+            Need to clean larger files? Pro will unlock bigger CSV uploads for
+            heavier recruiting, agency, and sales ops work.
+          </p>
+        )}
 
         {isParsing ? (
           <div className="mt-4 rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
@@ -334,7 +546,10 @@ export function CsvLeadCleanerTool() {
               id="column-select"
               value={selectedColumn}
               onChange={(event) => {
-                setSelectedColumn(event.target.value);
+                applyConfigChange({
+                  selectedColumn: event.target.value,
+                  duplicateMode,
+                });
                 trackToolEvent("csv-lead-cleaner", "change_column", {
                   column: event.target.value,
                 });
@@ -352,6 +567,33 @@ export function CsvLeadCleanerTool() {
                 ))
               )}
             </select>
+            {selectedDetection ? (
+              <div className="mt-3 rounded-[1rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] px-3 py-3 text-sm">
+                <div className="flex items-center gap-2 font-medium text-[color:var(--foreground)]">
+                  <ScanSearch className="h-4 w-4 text-[color:var(--accent)]" />
+                  Detected as {prettyColumnType(selectedDetection.type)}
+                </div>
+                <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                  {selectedDetection.confidence}% confidence
+                </p>
+              </div>
+            ) : null}
+            {recommendedDetection &&
+            recommendedDetection.header !== selectedColumn ? (
+              <button
+                type="button"
+                onClick={() =>
+                  applyConfigChange({
+                    selectedColumn: recommendedDetection.header,
+                    duplicateMode,
+                  })
+                }
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]"
+              >
+                Use suggested column: {recommendedDetection.header} (
+                {recommendedDetection.confidence}%)
+              </button>
+            ) : null}
           </div>
 
           <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
@@ -366,7 +608,10 @@ export function CsvLeadCleanerTool() {
               value={duplicateMode}
               onChange={(event) => {
                 const nextMode = event.target.value as DuplicateMode;
-                setDuplicateMode(nextMode);
+                applyConfigChange({
+                  selectedColumn,
+                  duplicateMode: nextMode,
+                });
                 trackToolEvent("csv-lead-cleaner", "change_duplicate_mode", {
                   mode: nextMode,
                 });
@@ -400,6 +645,17 @@ export function CsvLeadCleanerTool() {
             Clean rows, duplicates removed, invalid and blank rows, generated
             domains, business vs personal inboxes, and role-based email counts
             when email data is present.
+          </p>
+        </div>
+
+        <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(244,247,250,0.92)] p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+            Operation transparency
+          </p>
+          <p className="mt-2 text-sm leading-7 text-[color:var(--foreground)]">
+            {selectedColumn
+              ? `Current cleanup on "${selectedColumn}" will leave ${cleaned.summary.cleanRowsReady.toLocaleString()} rows ready for export, remove ${cleaned.summary.duplicatesRemoved.toLocaleString()} duplicates, and drop ${cleaned.summary.invalidRowsRemoved.toLocaleString()} invalid rows plus ${cleaned.summary.emptyRowsRemoved.toLocaleString()} blanks.`
+              : "Upload a CSV and choose a source column to see the expected cleanup effect before you export."}
           </p>
         </div>
 
@@ -870,7 +1126,20 @@ function extractDomainFromUrl(url: string) {
   }
 }
 
-function pickDefaultColumn(headers: string[]) {
+function pickDefaultColumn(
+  headers: string[],
+  detections: CsvColumnDetection[],
+) {
+  const recommendedDetection = pickBestDetection(detections, [
+    "email",
+    "phone",
+    "domain",
+    "url",
+  ]);
+  if (recommendedDetection) {
+    return recommendedDetection.header;
+  }
+
   return (
     headers.find((header) => header.toLowerCase().includes("email")) ??
     headers.find((header) => header.toLowerCase().includes("phone")) ??
@@ -878,6 +1147,19 @@ function pickDefaultColumn(headers: string[]) {
     headers[0] ??
     ""
   );
+}
+
+function pickBestDetection(
+  detections: CsvColumnDetection[],
+  preferredTypes: Array<CsvColumnDetection["type"]>,
+) {
+  return detections
+    .filter((detection) => preferredTypes.includes(detection.type))
+    .sort((left, right) => right.confidence - left.confidence)[0];
+}
+
+function isDuplicateMode(value: string | null): value is DuplicateMode {
+  return DUPLICATE_MODE_OPTIONS.some((option) => option.value === value);
 }
 
 function buildCleanFileName(fileName: string) {
@@ -927,6 +1209,51 @@ function InlineMessage({
       </div>
     </div>
   );
+}
+
+function FileSizeNotice({
+  pendingFile,
+}: {
+  pendingFile: {
+    name: string;
+    sizeMb: number;
+    exceedsFreeLimit: boolean;
+    estimatedRows: number | null;
+    estimatedRowsWithinFreeLimit: number | null;
+  };
+}) {
+  const toneClasses = pendingFile.exceedsFreeLimit
+    ? "border-[color:rgba(217,119,6,0.2)] bg-[color:rgba(255,247,237,0.92)]"
+    : "border-[color:rgba(15,118,110,0.18)] bg-[color:rgba(240,253,250,0.9)]";
+
+  return (
+    <div className={`mt-3 rounded-[1.3rem] border p-4 ${toneClasses}`}>
+      <p className="text-sm font-semibold text-[color:var(--foreground)]">
+        {pendingFile.name} · {pendingFile.sizeMb.toFixed(1)} MB
+      </p>
+      <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">
+        {pendingFile.exceedsFreeLimit
+          ? `This file is over the 2 MB free limit. It looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows. Free typically fits around ${formatRowEstimate(pendingFile.estimatedRowsWithinFreeLimit)} rows of this density.`
+          : `This file fits inside the free 2 MB limit and looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows for browser-side cleanup.`}
+      </p>
+    </div>
+  );
+}
+
+function formatRowEstimate(value: number | null) {
+  if (!value) {
+    return "a few thousand";
+  }
+
+  return value.toLocaleString();
+}
+
+function prettyColumnType(type: CsvColumnDetection["type"]) {
+  if (type === "url") {
+    return "URL";
+  }
+
+  return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
 function EmptyState({

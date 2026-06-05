@@ -7,21 +7,29 @@ import {
   Download,
   FileSpreadsheet,
   FileText,
+  FlaskConical,
   LoaderCircle,
+  ScanSearch,
   Upload,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
 import {
+  detectCsvColumns,
+  type CsvColumnDetection,
   type CsvParseProgress,
   type CsvRow,
+  inspectCsvFile,
   isLikelyCsvFile,
   MAX_CSV_FILE_SIZE,
   parseCsvFile,
+  parseCsvText,
 } from "@/lib/csv";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+
+import { LocalProcessingBadge } from "./local-processing-badge";
 
 type ExtractionSummary = {
   totalRows: number;
@@ -35,16 +43,30 @@ type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
 const EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 const PREVIEW_LIMIT = 100;
+const DEMO_CSV = `name,email,company
+Jane Doe,jane@acme.com,Acme
+Support Team,support@acme.com,Acme
+Broken,not-an-email,Example Co
+John Smith,john@northstar.io,Northstar
+Duplicate,jane@acme.com,Acme`;
 
 export function ExtractEmailsFromCsvTool() {
   const [fileName, setFileName] = useState("");
   const [headers, setHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<CsvRow[]>([]);
+  const [detections, setDetections] = useState<CsvColumnDetection[]>([]);
   const [selectedColumn, setSelectedColumn] = useState("");
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const [status, setStatus] = useState<UploadStatus>("idle");
+  const [pendingFile, setPendingFile] = useState<{
+    name: string;
+    sizeMb: number;
+    exceedsFreeLimit: boolean;
+    estimatedRows: number | null;
+    estimatedRowsWithinFreeLimit: number | null;
+  } | null>(null);
   const [progress, setProgress] = useState<CsvParseProgress>({
     percentage: 0,
     rowsProcessed: 0,
@@ -59,6 +81,7 @@ export function ExtractEmailsFromCsvTool() {
     setFileName(nextFileName);
     setHeaders([]);
     setRows([]);
+    setDetections([]);
     setSelectedColumn("");
     setWarning("");
     setProgress({
@@ -67,12 +90,33 @@ export function ExtractEmailsFromCsvTool() {
     });
   }
 
-  function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    if (typeof window === "undefined" || !selectedColumn) {
+      return;
+    }
+
+    window.localStorage.setItem(
+      "leadcleanr:extract-csv:preferred-column",
+      selectedColumn,
+    );
+  }, [selectedColumn]);
+
+  async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
 
     if (!file) {
       return;
     }
+
+    const inspection = await inspectCsvFile(file);
+
+    setPendingFile({
+      name: file.name,
+      sizeMb: file.size / (1024 * 1024),
+      exceedsFreeLimit: file.size > MAX_CSV_FILE_SIZE,
+      estimatedRows: inspection.estimatedRows,
+      estimatedRowsWithinFreeLimit: inspection.estimatedRowsWithinFreeLimit,
+    });
 
     trackToolEvent("extract-emails-from-csv", "upload_started", {
       file_size_kb: Math.round(file.size / 1024),
@@ -88,7 +132,9 @@ export function ExtractEmailsFromCsvTool() {
     if (file.size > MAX_CSV_FILE_SIZE) {
       resetState();
       setStatus("error");
-      setError("Please upload a CSV file smaller than 2 MB.");
+      setError(
+        "The free CSV limit is 2 MB. Upgrade to Pro when you need larger file cleanup.",
+      );
       return;
     }
 
@@ -115,12 +161,20 @@ export function ExtractEmailsFromCsvTool() {
           return;
         }
 
+        const nextDetections = detectCsvColumns(nextHeaders, nextRows);
+        const storedPreferredColumn =
+          typeof window !== "undefined"
+            ? window.localStorage.getItem("leadcleanr:extract-csv:preferred-column")
+            : null;
         setHeaders(nextHeaders);
         setRows(nextRows);
+        setDetections(nextDetections);
         setSelectedColumn((current) =>
           current && nextHeaders.includes(current)
             ? current
-            : pickDefaultEmailColumn(nextHeaders),
+            : storedPreferredColumn && nextHeaders.includes(storedPreferredColumn)
+              ? storedPreferredColumn
+            : pickDefaultEmailColumn(nextHeaders, nextDetections),
         );
         setStatus("ready");
 
@@ -148,6 +202,32 @@ export function ExtractEmailsFromCsvTool() {
     });
   }
 
+  function loadDemoCsv() {
+    const result = parseCsvText(DEMO_CSV);
+    const nextDetections = detectCsvColumns(result.headers, result.rows);
+
+    resetState("leadcleanr-demo.csv");
+    setPendingFile({
+      name: "leadcleanr-demo.csv",
+      sizeMb: DEMO_CSV.length / (1024 * 1024),
+      exceedsFreeLimit: false,
+      estimatedRows: result.rows.length,
+      estimatedRowsWithinFreeLimit: result.rows.length,
+    });
+    setError("");
+    setHeaders(result.headers);
+    setRows(result.rows);
+    setDetections(nextDetections);
+    setSelectedColumn(pickDefaultEmailColumn(result.headers, nextDetections));
+    setStatus("ready");
+
+    if (result.warnings.length) {
+      setWarning(buildWarningSummary(result.warnings));
+    }
+
+    trackToolEvent("extract-emails-from-csv", "load_demo");
+  }
+
   async function handleCopy() {
     if (!extracted.results.length) {
       return;
@@ -167,6 +247,10 @@ export function ExtractEmailsFromCsvTool() {
   }
 
   const isParsing = status === "parsing";
+  const recommendedDetection = pickBestDetection(detections, ["email"]);
+  const selectedDetection = detections.find(
+    (detection) => detection.header === selectedColumn,
+  );
 
   return (
     <section className="grid items-start gap-6 lg:grid-cols-[1.08fr_0.92fr]">
@@ -186,9 +270,11 @@ export function ExtractEmailsFromCsvTool() {
           </div>
         </div>
 
+        <LocalProcessingBadge />
+
         <label
           htmlFor="csv-email-upload"
-          className="flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white/70 px-6 py-8 text-center transition hover:border-[color:var(--brand)] hover:bg-white"
+          className="mt-4 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white px-6 py-8 text-center transition hover:border-[color:var(--brand)]"
         >
           {isParsing ? (
             <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
@@ -199,7 +285,8 @@ export function ExtractEmailsFromCsvTool() {
             {isParsing ? "Parsing your CSV..." : "Upload a CSV file"}
           </span>
           <span className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
-            Up to 2 MB. Parsing stays in your browser for the MVP.
+            Free plan: up to 2 MB per CSV. Parsing stays in your browser for
+            the MVP.
           </span>
           <input
             id="csv-email-upload"
@@ -210,6 +297,29 @@ export function ExtractEmailsFromCsvTool() {
             disabled={isParsing}
           />
         </label>
+
+        <div className="mt-3 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={loadDemoCsv}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5"
+          >
+            <FlaskConical className="h-4 w-4" />
+            Try sample CSV
+          </button>
+          <div className="rounded-full border border-[color:var(--line)] bg-[#fffaf3] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
+            Unlimited exports on free
+          </div>
+        </div>
+
+        {pendingFile ? (
+          <FileSizeNotice pendingFile={pendingFile} />
+        ) : (
+          <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+            Larger CSV files will fit the future Pro plan for heavier cleanup
+            and extraction workflows.
+          </p>
+        )}
 
         {isParsing ? (
           <div className="mt-4 rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
@@ -277,11 +387,44 @@ export function ExtractEmailsFromCsvTool() {
                 ))
               )}
             </select>
+            {selectedDetection ? (
+              <div className="mt-3 rounded-[1rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] px-3 py-3 text-sm">
+                <div className="flex items-center gap-2 font-medium text-[color:var(--foreground)]">
+                  <ScanSearch className="h-4 w-4 text-[color:var(--accent)]" />
+                  Detected as {prettyColumnType(selectedDetection.type)}
+                </div>
+                <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                  {selectedDetection.confidence}% confidence
+                </p>
+              </div>
+            ) : null}
+            {recommendedDetection &&
+            recommendedDetection.header !== selectedColumn ? (
+              <button
+                type="button"
+                onClick={() => setSelectedColumn(recommendedDetection.header)}
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]"
+              >
+                Use suggested column: {recommendedDetection.header} (
+                {recommendedDetection.confidence}%)
+              </button>
+            ) : null}
           </div>
         </div>
 
         {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
         {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
+
+        <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(244,247,250,0.92)] p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+            Operation transparency
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
+            {selectedColumn
+              ? `Selected column "${selectedColumn}" will yield ${extracted.summary.cleanEmailsReady.toLocaleString()} valid emails, skip ${extracted.summary.invalidEmailsRemoved.toLocaleString()} malformed rows, and remove ${extracted.summary.duplicatesRemoved.toLocaleString()} duplicates.`
+              : "Upload a CSV and pick a column to see exactly what will be extracted before you export."}
+          </p>
+        </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
           <button
@@ -458,12 +601,29 @@ function extractEmailsFromCsvRows(
   };
 }
 
-function pickDefaultEmailColumn(headers: string[]) {
+function pickDefaultEmailColumn(
+  headers: string[],
+  detections: CsvColumnDetection[],
+) {
+  const recommendedDetection = pickBestDetection(detections, ["email"]);
+  if (recommendedDetection) {
+    return recommendedDetection.header;
+  }
+
   return (
     headers.find((header) => header.toLowerCase().includes("email")) ??
     headers[0] ??
     ""
   );
+}
+
+function pickBestDetection(
+  detections: CsvColumnDetection[],
+  preferredTypes: Array<CsvColumnDetection["type"]>,
+) {
+  return detections
+    .filter((detection) => preferredTypes.includes(detection.type))
+    .sort((left, right) => right.confidence - left.confidence)[0];
 }
 
 function buildExportName(fileName: string, extension: "txt" | "csv") {
@@ -498,6 +658,55 @@ function InlineMessage({
       </div>
     </div>
   );
+}
+
+function FileSizeNotice({
+  pendingFile,
+}: {
+  pendingFile: {
+    name: string;
+    sizeMb: number;
+    exceedsFreeLimit: boolean;
+    estimatedRows: number | null;
+    estimatedRowsWithinFreeLimit: number | null;
+  };
+}) {
+  const toneClasses = pendingFile.exceedsFreeLimit
+    ? "border-[color:rgba(217,119,6,0.2)] bg-[color:rgba(255,247,237,0.92)]"
+    : "border-[color:rgba(15,118,110,0.18)] bg-[color:rgba(240,253,250,0.9)]";
+
+  return (
+    <div className={`mt-3 rounded-[1.3rem] border p-4 ${toneClasses}`}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold text-[color:var(--foreground)]">
+            {pendingFile.name} · {pendingFile.sizeMb.toFixed(1)} MB
+          </p>
+          <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">
+            {pendingFile.exceedsFreeLimit
+              ? `This file is over the 2 MB free limit. It looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows. Free typically fits around ${formatRowEstimate(pendingFile.estimatedRowsWithinFreeLimit)} rows of this density.`
+              : `This file fits inside the free 2 MB limit and looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows for browser-side processing.`}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function formatRowEstimate(value: number | null) {
+  if (!value) {
+    return "a few thousand";
+  }
+
+  return value.toLocaleString();
+}
+
+function prettyColumnType(type: CsvColumnDetection["type"]) {
+  if (type === "url") {
+    return "URL";
+  }
+
+  return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
 function EmptyState({

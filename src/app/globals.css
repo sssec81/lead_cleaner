@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6efe5;
-  --foreground: #112433;
-  --surface: rgba(255, 252, 247, 0.88);
-  --surface-strong: #fffaf3;
-  --line: rgba(17, 36, 51, 0.12);
-  --brand: #d97706;
-  --brand-strong: #b45309;
+  --background: #edf1f4;
+  --foreground: #102534;
+  --surface: rgba(248, 250, 252, 0.92);
+  --surface-strong: #ffffff;
+  --line: rgba(16, 37, 52, 0.12);
+  --brand: #b86a19;
+  --brand-strong: #945111;
   --accent: #0f766e;
-  --muted: #5f6f7c;
-  --shadow: 0 20px 60px rgba(17, 36, 51, 0.1);
+  --muted: #536674;
+  --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, "URW Palladio L", serif;
   --font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -27,9 +27,8 @@ body {
   margin: 0;
   min-height: 100dvh;
   background:
-    radial-gradient(circle at top left, rgba(217, 119, 6, 0.16), transparent 30%),
-    radial-gradient(circle at top right, rgba(15, 118, 110, 0.14), transparent 24%),
-    linear-gradient(180deg, #f9f3eb 0%, #f3ecdf 100%);
+    radial-gradient(circle at top left, rgba(184, 106, 25, 0.08), transparent 26%),
+    linear-gradient(180deg, #f3f6f8 0%, #ebeff3 100%);
   color: var(--foreground);
   font-family: var(--font-body), sans-serif;
   line-height: 1.5;
@@ -53,11 +52,10 @@ input,
 select,
 textarea {
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    color 180ms ease,
-    transform 180ms ease,
-    box-shadow 180ms ease;
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
 }
 
 :focus-visible {
@@ -84,8 +82,8 @@ textarea {
   height: 18rem;
   width: 18rem;
   border-radius: 9999px;
-  background: rgba(217, 119, 6, 0.08);
-  filter: blur(28px);
+  background: rgba(184, 106, 25, 0.04);
+  filter: blur(40px);
   content: "";
 }
 
@@ -96,8 +94,8 @@ textarea {
   height: 20rem;
   width: 20rem;
   border-radius: 9999px;
-  background: rgba(15, 118, 110, 0.08);
-  filter: blur(36px);
+  background: rgba(16, 37, 52, 0.05);
+  filter: blur(48px);
   content: "";
 }
 
@@ -108,7 +106,7 @@ textarea {
 }
 
 .surface-card:hover {
-  transform: translateY(-2px);
+  box-shadow: 0 22px 46px rgba(15, 23, 42, 0.1);
 }
 
 .btn-primary {
