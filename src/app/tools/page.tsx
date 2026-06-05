@@ -183,8 +183,11 @@ export default function ToolsPage() {
           </div>
 
           <div className="space-y-5 border-t border-[color:rgba(16,37,52,0.12)] pt-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
-            {helperTools.map((tool) => (
+            {helperTools.map((tool, index) => (
               <Link key={tool.href} href={tool.href} className="block">
+                {index > 0 && (
+                  <div className="mb-5 h-px w-full bg-[color:rgba(16,37,52,0.1)]" />
+                )}
                 <h3 className="font-display text-2xl font-semibold text-[color:var(--foreground)]">
                   {tool.title}
                 </h3>

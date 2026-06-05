@@ -82,14 +82,12 @@ export function TextProcessingTool({
   emptyMessage,
 }: TextProcessingToolProps) {
   const storageKey = `leadcleanr:text-tool:${trackName}`;
-  const [input, setInput] = useState(sampleInput);
+  const [input, setInput] = useState("");
   const [copied, setCopied] = useState(false);
   const [batchMode, setBatchMode] = useState(false);
   const [showBulkEditor, setShowBulkEditor] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [workspace, setWorkspace] = useState<WorkspaceItem[]>(() =>
-    createWorkspaceFromValues(processInput(sampleInput).results, "Sample"),
-  );
+  const [workspace, setWorkspace] = useState<WorkspaceItem[]>([]);
   const [pastWorkspace, setPastWorkspace] = useState<WorkspaceItem[][]>([]);
   const [futureWorkspace, setFutureWorkspace] = useState<WorkspaceItem[][]>([]);
   const [restoredSession, setRestoredSession] = useState(false);
@@ -136,6 +134,11 @@ export function TextProcessingTool({
             createWorkspaceFromValues(processInput(sampleInput).results, "Sample"),
           );
         }
+      } else {
+        setInput(sampleInput);
+        setWorkspace(
+          createWorkspaceFromValues(processInput(sampleInput).results, "Sample"),
+        );
       }
 
       setIsHydrated(true);

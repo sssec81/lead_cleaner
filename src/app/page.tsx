@@ -155,23 +155,23 @@ export default function HomePage() {
               <div className="mt-5 space-y-3">
                 <WorkspaceRowMock
                   index={1}
-                  value="jason.voorhees@campcrystal.com"
+                  value="michael.chen@acmecorp.com"
                   source="Current extraction"
                   locked
                 />
                 <WorkspaceRowMock
                   index={2}
-                  value="sarah.connor@cyberdyne.sys"
+                  value="sarah.jenkins@techlogistics.net"
                   source="Current extraction"
                 />
                 <WorkspaceRowMock
                   index={3}
-                  value="ellen.ripley@weyland-yutani.corp"
+                  value="robert.williams@globalfinance.org"
                   source="Manual edit"
                 />
                 <WorkspaceRowMock
                   index={4}
-                  value="info@nostromo.shipping"
+                  value="contact@innovatesolutions.io"
                   source="Locked row"
                   locked
                 />

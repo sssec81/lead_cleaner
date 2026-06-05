@@ -309,9 +309,6 @@ export function ExtractEmailsFromCsvTool() {
               <FlaskConical className="h-4 w-4" />
               Try sample CSV
             </button>
-            <div className="rounded-full border border-[color:var(--line)] bg-[#fffaf3] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
-              Unlimited exports on free
-            </div>
           </div>
 
           {pendingFile ? <FileSizeNotice pendingFile={pendingFile} /> : null}
