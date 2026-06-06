@@ -31,6 +31,7 @@ export function CleanEmailListTool() {
       }}
       csvHeader="email"
       copyLabel="Copy clean list"
+      primaryActionLabel="Clean email list"
       resultTitle="Clean result"
       resultDescription="Review the cleaned list before exporting it to outreach tools or a CRM."
       emptyMessage="No valid email addresses detected yet. Paste a raw list to generate a cleaned result."

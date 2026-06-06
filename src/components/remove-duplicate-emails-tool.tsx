@@ -32,6 +32,7 @@ export function RemoveDuplicateEmailsTool() {
       }}
       csvHeader="email"
       copyLabel="Copy deduplicated list"
+      primaryActionLabel="Remove duplicates"
       resultTitle="Deduplicated result"
       resultDescription="Preview the unique list, make quick fixes, and export only what you want to keep."
       emptyMessage="No valid email addresses detected yet. Paste a repeated list to generate a unique result."

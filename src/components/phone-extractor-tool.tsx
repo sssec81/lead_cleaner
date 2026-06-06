@@ -27,6 +27,7 @@ export function PhoneExtractorTool() {
       }}
       csvHeader="phone"
       copyLabel="Copy results"
+      primaryActionLabel="Extract phone numbers"
       resultTitle="Clean result"
       resultDescription="Preview normalized phone numbers before you download or paste them elsewhere."
       emptyMessage="No phone numbers detected yet. Paste text with numbers to generate a clean list."

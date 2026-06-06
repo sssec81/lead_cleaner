@@ -97,16 +97,15 @@ export default function HomePage() {
         <div className="grid gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
           <div>
             <p className="inline-flex rounded-full border border-[color:rgba(37,99,235,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
-              Browser-first CSV cleanup
+              Private CSV cleanup
             </p>
-            <h1 className="mt-5 max-w-5xl font-display text-5xl font-semibold leading-[1.04] sm:text-6xl xl:text-[5.4rem]">
-              The spreadsheet cleanup pass you do right before you trust the
-              list again.
+            <h1 className="mt-5 max-w-4xl font-display text-5xl font-semibold leading-[1.02] sm:text-6xl xl:text-[4.75rem]">
+              Clean messy lead CSVs before import.
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-              LeadCleanr is made for one narrow, high-friction moment: a messy
-              lead file lands in your lap and you need to clean it before
-              import, outreach, enrichment, or handoff.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[color:var(--muted)]">
+              LeadCleanr helps sales, recruiting, and marketing teams clean
+              duplicate rows, weak emails, role inboxes, and messy contact data
+              before the list reaches a CRM or outreach tool.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -135,9 +134,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative mt-10 xl:mt-0 xl:pl-10">
-            <div className="absolute -left-6 top-10 hidden h-[86%] w-[92%] rounded-[2.5rem] bg-[color:rgba(37,99,235,0.08)] blur-3xl lg:block" />
-            <div className="-rotate-[2.7deg] rounded-[2.4rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,244,239,0.96))] p-5 shadow-[0_28px_60px_rgba(15,23,42,0.18)] sm:p-7">
+          <div className="relative mt-10 min-w-0 xl:mt-0 xl:pl-10">
+            <div className="absolute -left-6 top-10 hidden h-[82%] w-[88%] rounded-[1.75rem] bg-[color:rgba(37,99,235,0.08)] blur-3xl lg:block" />
+            <div className="overflow-hidden rounded-[1.75rem] border border-[color:rgba(16,37,52,0.12)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,250,253,0.96))] p-5 shadow-[0_24px_56px_rgba(15,23,42,0.14)] sm:p-7">
               <div className="flex items-center justify-between border-b border-[color:rgba(16,37,52,0.1)] pb-5">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
@@ -147,7 +146,7 @@ export default function HomePage() {
                     The part people trust first
                   </p>
                 </div>
-                <div className="rounded-full border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.1)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                <div className="shrink-0 rounded-full border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.1)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
                   Local preview
                 </div>
               </div>
@@ -205,38 +204,37 @@ export default function HomePage() {
         </section>
       </section>
 
-      <section className="bg-[color:#153246] py-16 text-white">
+      <section className="bg-[color:#153246] py-14 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+          <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
                 Workflow
               </p>
-              <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
-                A narrow workflow with a visible output, not a vague promise of
-                enrichment later.
+              <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.85rem]">
+                Clean, review, export.
               </h2>
-              <p className="mt-5 max-w-xl text-base leading-8 text-[color:rgba(255,255,255,0.76)]">
-                The good version of this product feels closer to a careful ops
-                surface than a generic lead-gen landing page. Open the file,
-                review what changed, and leave with something more believable.
+              <p className="mt-5 max-w-md text-base leading-7 text-[color:rgba(255,255,255,0.72)]">
+                The workflow is intentionally short: load the file, choose the
+                field that matters, then export only after the report makes
+                sense.
               </p>
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               {workflowSteps.map((step) => (
                 <div
                   key={step.number}
-                  className="grid gap-3 rounded-[1.7rem] border border-[color:rgba(255,255,255,0.12)] bg-[color:rgba(255,255,255,0.04)] p-5 sm:grid-cols-[88px_1fr] sm:items-start"
+                  className="grid gap-4 border-t border-[color:rgba(255,255,255,0.14)] py-5 first:border-t-0 first:pt-0 sm:grid-cols-[72px_1fr] sm:items-start"
                 >
-                  <div className="font-display text-5xl leading-none text-[color:#93c5fd] sm:text-6xl">
+                  <div className="font-display text-3xl leading-none text-[color:#93c5fd] sm:text-4xl">
                     {step.number}
                   </div>
                   <div>
-                    <h3 className="font-display text-2xl font-semibold text-white">
+                    <h3 className="font-display text-xl font-semibold text-white sm:text-2xl">
                       {step.title}
                     </h3>
-                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:rgba(255,255,255,0.76)] sm:text-base">
+                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:rgba(255,255,255,0.7)] sm:text-base">
                       {step.text}
                     </p>
                   </div>
@@ -247,53 +245,62 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="panel-strong rounded-[2.2rem] p-7 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-              Primary use case
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-start">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Where it fits
             </p>
-            <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1.02] sm:text-5xl">
-              {useCases[0].title}
+            <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.65rem]">
+              For the messy handoff before import.
             </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-              {useCases[0].text}
+            <p className="mt-5 max-w-lg text-base leading-8 text-[color:var(--muted)]">
+              LeadCleanr earns its place when a file is captured, but not yet
+              safe enough for CRM, outreach, recruiting, or client delivery.
             </p>
-            <div className="mt-8 grid gap-4 border-t border-[color:rgba(16,37,52,0.1)] pt-6 sm:grid-cols-2">
-              <ValuePill title="Believable report" text="See what changed before anyone else sees the file." />
-              <ValuePill title="CSV-first flow" text="Start where the spreadsheet already exists instead of rebuilding context." />
-            </div>
+            <Link
+              href="/tools/csv-lead-cleaner"
+              className="btn-primary mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(21,50,70,0.16)] transition hover:bg-[color:#102534] hover:shadow-[0_18px_36px_rgba(21,50,70,0.2)]"
+            >
+              Start with CSV cleanup
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
 
-          <div className="grid gap-6">
-            <UseCasePanel {...useCases[1]} />
-            <UseCasePanel {...useCases[2]} />
+          <div className="overflow-hidden rounded-[1.35rem] border border-[color:rgba(16,37,52,0.11)] bg-white/74 shadow-[0_24px_70px_rgba(15,23,42,0.07)]">
+            {useCases.map((useCase, index) => (
+              <UseCaseRow
+                key={useCase.kicker}
+                {...useCase}
+                index={index + 1}
+                primary={index === 0}
+              />
+            ))}
           </div>
         </div>
-
       </section>
 
-      <section className="bg-[color:rgba(255,255,255,0.38)] py-16">
+      <section className="border-y border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.42),rgba(239,246,255,0.34))] py-14 lg:py-18">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr]">
+          <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Supporting tools
+                Helper tools
               </p>
-              <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
-                The text tools are useful. They just should not pretend to be
-                the whole product.
+              <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.55rem]">
+                Use the text tools only when the data is not a spreadsheet yet.
               </h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-                Use them when the data has not reached a spreadsheet yet. Once
-                rows and columns exist, the CSV workflow should take over.
+              <p className="mt-5 max-w-lg text-base leading-8 text-[color:var(--muted)]">
+                They are small utility paths for rough inputs: notes, copied
+                directories, pasted pages, and one-off cleanup before the CSV
+                workflow takes over.
               </p>
             </div>
 
-          <div className="space-y-4">
-            {supportTools.map((tool) => (
-              <SupportLink key={tool.href} {...tool} />
-            ))}
+            <div className="overflow-hidden rounded-[1.35rem] border border-[color:rgba(16,37,52,0.1)] bg-white/80 shadow-[0_22px_60px_rgba(15,23,42,0.06)]">
+              {supportTools.map((tool, index) => (
+                <SupportLink key={tool.href} {...tool} index={index + 1} />
+              ))}
             </div>
           </div>
         </div>
@@ -393,35 +400,48 @@ function MetricNote({ value, label }: { value: string; label: string }) {
   );
 }
 
-function ValuePill({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="panel-soft rounded-[1.4rem] p-4">
-      <p className="text-sm font-semibold text-[color:var(--foreground)]">{title}</p>
-      <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{text}</p>
-    </div>
-  );
-}
-
-function UseCasePanel({
+function UseCaseRow({
   kicker,
   title,
   text,
+  index,
+  primary = false,
 }: {
   kicker: string;
   title: string;
   text: string;
+  index: number;
+  primary?: boolean;
 }) {
   return (
-    <div className="rounded-[2rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(244,248,252,0.92))] p-6 shadow-[0_18px_42px_rgba(15,23,42,0.06)]">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-        {kicker}
-      </p>
-      <h3 className="mt-3 font-display text-2xl font-semibold leading-[1.08] text-[color:var(--foreground)] sm:text-3xl">
-        {title}
-      </h3>
-      <p className="mt-3 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-        {text}
-      </p>
+    <div
+      className={`grid gap-4 border-t border-[color:rgba(16,37,52,0.09)] px-5 py-5 first:border-t-0 sm:grid-cols-[4rem_1fr] sm:px-6 sm:py-6 ${
+        primary
+          ? "bg-[linear-gradient(90deg,rgba(37,99,235,0.07),rgba(255,255,255,0.72))]"
+          : ""
+      }`}
+    >
+      <div className="font-display text-3xl font-semibold leading-none tabular-nums text-[color:rgba(29,78,216,0.38)]">
+        {String(index).padStart(2, "0")}
+      </div>
+      <div>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
+            {kicker}
+          </p>
+          {primary ? (
+            <span className="rounded-full border border-[color:rgba(37,99,235,0.16)] bg-white/78 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
+              Main path
+            </span>
+          ) : null}
+        </div>
+        <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)] sm:text-[1.7rem]">
+          {title}
+        </h3>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+          {text}
+        </p>
+      </div>
     </div>
   );
 }
@@ -430,28 +450,32 @@ function SupportLink({
   href,
   title,
   text,
+  index,
 }: {
   href: string;
   title: string;
   text: string;
+  index: number;
 }) {
   return (
     <Link
       href={href}
-      className="panel-soft block rounded-[1.8rem] p-5 transition hover:-translate-y-0.5 hover:border-[color:rgba(37,99,235,0.16)] hover:bg-white/94 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
+      className="group grid gap-4 border-t border-[color:rgba(16,37,52,0.08)] px-5 py-5 transition first:border-t-0 hover:bg-white sm:grid-cols-[3.25rem_1fr_auto] sm:items-center sm:px-6"
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
-        Tool
-      </p>
-      <h3 className="mt-2 font-display text-2xl font-semibold text-[color:var(--foreground)]">
-        {title}
-      </h3>
-      <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-        {text}
-      </p>
-      <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]">
-        Open tool
-        <ArrowRight className="h-4 w-4" />
+      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:rgba(37,99,235,0.16)] bg-[color:rgba(37,99,235,0.06)] text-xs font-semibold tabular-nums text-[color:var(--brand-strong)]">
+        {String(index).padStart(2, "0")}
+      </span>
+      <span>
+        <span className="block font-display text-xl font-semibold text-[color:var(--foreground)] sm:text-2xl">
+          {title}
+        </span>
+        <span className="mt-1 block max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+          {text}
+        </span>
+      </span>
+      <span className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/82 px-4 text-sm font-semibold text-[color:var(--brand-strong)] transition group-hover:border-[color:rgba(37,99,235,0.18)] group-hover:bg-[color:rgba(37,99,235,0.06)]">
+        Open
+        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
       </span>
     </Link>
   );

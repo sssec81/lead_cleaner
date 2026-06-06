@@ -526,7 +526,7 @@ export function ExtractEmailsFromCsvTool() {
                     );
                   }}
                   disabled={!extracted.results.length}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/85 bg-white px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-slate-55 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/85 bg-white px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
                 >
                   <FileText className="h-4 w-4" />
                   Download TXT
@@ -544,7 +544,7 @@ export function ExtractEmailsFromCsvTool() {
                     );
                   }}
                   disabled={!extracted.results.length}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/85 bg-white px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-slate-55 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/85 bg-white px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
                 >
                   <Download className="h-4 w-4" />
                   Download CSV

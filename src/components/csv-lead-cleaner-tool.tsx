@@ -58,9 +58,15 @@ type PreviewRow = CsvRow & {
   leadcleanr_role_email?: string;
 };
 
+type RemovalReason = "duplicate" | "invalid" | "blank";
+
 type CleanedResult = {
   rows: PreviewRow[];
   summary: CleaningSummary;
+  removedRows: Array<PreviewRow & { leadcleanr_reason: RemovalReason }>;
+  invalidRows: Array<PreviewRow & { leadcleanr_reason: "invalid" }>;
+  blankRows: Array<PreviewRow & { leadcleanr_reason: "blank" }>;
+  duplicateRows: Array<PreviewRow & { leadcleanr_reason: "duplicate" }>;
 };
 
 const PREVIEW_LIMIT = 100;
@@ -158,6 +164,9 @@ export function CsvLeadCleanerTool() {
   const [futureConfigs, setFutureConfigs] = useState<
     Array<{ selectedColumn: string; duplicateMode: DuplicateMode }>
   >([]);
+  const [previewMode, setPreviewMode] = useState<"clean" | "removed" | "invalid">(
+    "clean",
+  );
 
   const cleaned = useMemo(
     () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode),
@@ -202,6 +211,7 @@ export function CsvLeadCleanerTool() {
     setWarning("");
     setPastConfigs([]);
     setFutureConfigs([]);
+    setPreviewMode("clean");
     setProgress({
       percentage: 0,
       rowsProcessed: 0,
@@ -388,6 +398,20 @@ export function CsvLeadCleanerTool() {
     });
   }
 
+  function resetCleanupConfig() {
+    if (!headers.length) {
+      return;
+    }
+
+    const nextColumn = pickDefaultColumn(headers, detections);
+    setSelectedColumn(nextColumn);
+    setDuplicateMode("selected");
+    setPreviewMode("clean");
+    setPastConfigs([]);
+    setFutureConfigs([]);
+    trackToolEvent("csv-lead-cleaner", "reset_cleanup");
+  }
+
   const previewHeaders = useMemo(() => {
     const nextHeaders = [...headers];
     if (!showEmailEnrichment) {
@@ -415,10 +439,41 @@ export function CsvLeadCleanerTool() {
     (detection) => detection.header === selectedColumn,
   );
   const hasLoadedFile = headers.length > 0 && status === "ready";
+  const exportReady = hasLoadedFile && cleaned.rows.length > 0;
+  const reportRows =
+    previewMode === "removed"
+      ? cleaned.removedRows
+      : previewMode === "invalid"
+        ? cleaned.invalidRows
+        : cleaned.rows;
+  const reportHeaders =
+    previewMode === "clean"
+      ? previewHeaders
+      : headers;
+  const previewLabel =
+    previewMode === "removed"
+      ? "Preview removed rows"
+      : previewMode === "invalid"
+        ? "Preview invalid rows"
+        : "Preview cleaned CSV";
+  const previewDescription =
+    previewMode === "removed"
+      ? "Rows removed because they were duplicate, blank, or invalid under the current cleanup rules."
+      : previewMode === "invalid"
+        ? "Rows removed because the selected cleanup field was blank or could not be normalized."
+        : `Showing up to ${PREVIEW_LIMIT} rows after cleanup.`;
+  const visiblePreviewRows = reportRows.slice(0, PREVIEW_LIMIT);
 
   return (
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
-      <div className="panel-soft w-full xl:w-[380px] shrink-0 rounded-[2.2rem] p-5 sm:p-7 flex flex-col">
+      <div className="w-full space-y-4 xl:hidden">
+        <WorkflowSteps currentStep={hasLoadedFile ? 2 : 1} exportReady={exportReady} />
+      </div>
+
+      <div className="panel-soft w-full xl:w-[400px] shrink-0 rounded-[2.2rem] p-5 sm:p-7 flex flex-col">
+          <div className="hidden xl:block">
+            <WorkflowSteps currentStep={hasLoadedFile ? 2 : 1} exportReady={exportReady} />
+          </div>
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
               <FileSpreadsheet className="h-5 w-5" />
@@ -435,7 +490,7 @@ export function CsvLeadCleanerTool() {
 
           <label
             htmlFor="csv-upload"
-            className="group mt-5 flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
+            className="group mt-5 flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(240,244,255,0.95))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(235,241,255,0.98))] hover:shadow-[0_16px_30px_rgba(37,99,235,0.08)]"
           >
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
@@ -446,14 +501,14 @@ export function CsvLeadCleanerTool() {
                 )}
               </div>
               <span className="mt-4 text-base font-semibold text-slate-800">
-                {isParsing ? "Parsing your CSV..." : "Drag and drop your lead CSV here"}
+                {isParsing ? "Parsing your CSV..." : "Upload a messy CSV and start cleanup"}
               </span>
               <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
-                or click to browse local files. Free supports spreadsheets up to 2 MB.
+                Drag and drop or click to browse. Free supports CSV files up to 2 MB.
               </span>
               {!isParsing && (
-                <div className="mt-5 inline-flex min-h-9 items-center justify-center rounded-full bg-white border border-[color:var(--line)] px-4 text-xs font-semibold text-slate-800 shadow-xs transition duration-200 hover:bg-slate-100/80 hover:border-slate-300">
-                  Select File
+                <div className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(21,50,70,0.14)] transition duration-200 group-hover:bg-[color:#102534]">
+                  Upload CSV to Start
                 </div>
               )}
             </div>
@@ -467,10 +522,8 @@ export function CsvLeadCleanerTool() {
             />
           </label>
 
-          <p className="mt-3 text-xs leading-5 text-[color:var(--muted)]">
-            Core processing happens in your browser on this device. Optional
-            analytics, error reporting, and saved workspace state can still run
-            separately.
+          <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+            Processed locally in your browser. Your CSV is never uploaded.
           </p>
 
           <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">
@@ -481,7 +534,7 @@ export function CsvLeadCleanerTool() {
               <button
                 type="button"
                 onClick={loadDemoCsv}
-                className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 text-xs font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                className="inline-flex min-h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 text-sm font-semibold transition hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 sm:w-auto"
               >
                 <FlaskConical className="h-3.5 w-3.5" />
                 Try sample CSV
@@ -537,6 +590,47 @@ export function CsvLeadCleanerTool() {
 
           {hasLoadedFile ? (
             <div className="mt-5 grid gap-4">
+              <div className="rounded-2xl border border-[color:rgba(15,118,110,0.12)] bg-[color:rgba(240,253,250,0.74)] p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                  Before export checklist
+                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <ChecklistMetric label="Duplicates reviewed" value={cleaned.summary.duplicatesRemoved} />
+                  <ChecklistMetric label="Invalid rows reviewed" value={cleaned.summary.invalidRowsRemoved} />
+                  <ChecklistMetric label="Blank rows reviewed" value={cleaned.summary.emptyRowsRemoved} />
+                  <ChecklistMetric label="Clean rows ready" value={cleaned.summary.cleanRowsReady} />
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {cleaned.removedRows.length ? (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewMode("removed")}
+                      className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color:var(--line)] bg-white px-4 text-xs font-semibold text-[color:var(--foreground)] hover:border-slate-300 hover:bg-slate-50"
+                    >
+                      View removed rows
+                    </button>
+                  ) : null}
+                  {cleaned.invalidRows.length ? (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewMode("invalid")}
+                      className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color:var(--line)] bg-white px-4 text-xs font-semibold text-[color:var(--foreground)] hover:border-slate-300 hover:bg-slate-50"
+                    >
+                      View invalid rows
+                    </button>
+                  ) : null}
+                  {rows.length ? (
+                    <button
+                      type="button"
+                      onClick={resetCleanupConfig}
+                      className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color:var(--line)] bg-white px-4 text-xs font-semibold text-[color:var(--foreground)] hover:border-slate-300 hover:bg-slate-50"
+                    >
+                      Reset cleanup
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+
               <div className="rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm">
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
                   Active File
@@ -651,48 +745,12 @@ export function CsvLeadCleanerTool() {
           {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
           {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
 
-          {hasLoadedFile ? (
-            <>
-              <div className="mt-4 border-l-4 border-blue-500/80 bg-blue-50/30 rounded-r-2xl p-4 border border-y border-r border-slate-200/40 shadow-xs">
-                <p className="text-xs font-bold uppercase tracking-wider text-blue-800">
-                  What this now reports
-                </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                  Clean rows, duplicates removed, invalid and blank rows,
-                  generated domains, business vs personal inboxes, and
-                  role-based email counts when email data is present.
-                </p>
-              </div>
-
-              <div className="mt-4 border-l-4 border-indigo-500/80 bg-indigo-50/30 rounded-r-2xl p-4 border border-y border-r border-slate-200/40 shadow-xs">
-                <p className="text-xs font-bold uppercase tracking-wider text-indigo-800">
-                  Operation transparency
-                </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                  {selectedColumn
-                    ? `Current cleanup on "${selectedColumn}" will leave ${cleaned.summary.cleanRowsReady.toLocaleString()} rows ready for export, remove ${cleaned.summary.duplicatesRemoved.toLocaleString()} duplicates, and drop ${cleaned.summary.invalidRowsRemoved.toLocaleString()} invalid rows plus ${cleaned.summary.emptyRowsRemoved.toLocaleString()} blanks.`
-                    : "Upload a CSV and choose a source column to see the expected cleanup effect before you export."}
-                </p>
-              </div>
-            </>
-          ) : null}
-
-          <div className="mt-auto pt-5">
-            <button
-              type="button"
-              onClick={() => {
-                trackToolEvent("csv-lead-cleaner", "export_csv", {
-                  row_count: cleaned.rows.length,
-                  duplicate_mode: duplicateMode,
-                });
-                downloadCsvRecords(buildCleanFileName(fileName), cleaned.rows);
-              }}
-              disabled={!cleaned.rows.length}
-              className="btn-primary inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:var(--brand)] px-5 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(37,99,235,0.35)] transition-all hover:bg-[color:var(--brand-strong)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:-translate-y-0"
-            >
-              <Download className="h-4 w-4" />
-              Export Clean CSV
-            </button>
+          <div className="mt-auto hidden pt-5 xl:block">
+            <ExportActions
+              cleanedRows={cleaned.rows}
+              duplicateMode={duplicateMode}
+              fileName={fileName}
+            />
           </div>
         </div>
 
@@ -707,13 +765,13 @@ export function CsvLeadCleanerTool() {
                     Review what changed before export
                   </h3>
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(37,99,235,0.08)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
                   <ScanSearch className="h-4 w-4" />
-                  Report
+                  {hasLoadedFile ? "Step 2 active" : "Waiting for upload"}
                 </div>
               </div>
 
-              <div className="mt-5 rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(37,99,235,0.05),rgba(255,255,255,0.9))] p-6 border border-slate-200/60 shadow-[0_14px_30px_rgba(15,23,42,0.04)] relative overflow-hidden">
+              <div className="mt-5 rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(37,99,235,0.04),rgba(255,255,255,0.94))] p-6 border border-slate-200/60 shadow-[0_12px_24px_rgba(15,23,42,0.03)] relative overflow-hidden">
                 <div className="absolute right-0 top-0 h-40 w-40 bg-[color:rgba(37,99,235,0.04)] rounded-full blur-2xl -mr-10 -mt-10" />
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 relative z-10">
                   Clean rows ready
@@ -722,8 +780,9 @@ export function CsvLeadCleanerTool() {
                   {cleaned.summary.cleanRowsReady.toLocaleString()}
                 </p>
                 <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-500 sm:text-base relative z-10">
-                  This is the number that should feel safe enough to move into
-                  the next system after cleanup.
+                  {hasLoadedFile
+                    ? "This is the cleaned row count that will move forward into CRM, outreach, sales, or recruiting tools."
+                    : "Upload a CSV to see duplicates, invalid rows, blank rows, business emails, personal emails, and role-based inboxes before export."}
                 </p>
               </div>
 
@@ -735,12 +794,12 @@ export function CsvLeadCleanerTool() {
                   icon={<CopyMinus className="h-4 w-4 text-amber-500" />}
                 />
                 <StatCard
-                  label="Invalid rows removed"
+                  label="Invalid rows"
                   value={cleaned.summary.invalidRowsRemoved}
                   icon={<AlertTriangle className="h-4 w-4 text-rose-500" />}
                 />
                 <StatCard
-                  label="Blank rows removed"
+                  label="Blank rows"
                   value={cleaned.summary.emptyRowsRemoved}
                   icon={<FileMinus className="h-4 w-4 text-slate-400" />}
                 />
@@ -772,19 +831,55 @@ export function CsvLeadCleanerTool() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h3 className="font-display text-xl font-semibold">
-                    Preview cleaned CSV
+                    {previewLabel}
                   </h3>
                   <p className="text-sm leading-6 text-[color:var(--muted)]">
-                    Showing up to {PREVIEW_LIMIT} rows after cleanup.
+                    {previewDescription}
                   </p>
                 </div>
-                <span className="rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-                  Preview
-                </span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewMode("clean")}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
+                      previewMode === "clean"
+                        ? "bg-[color:rgba(15,118,110,0.12)] text-[color:var(--accent)]"
+                        : "border border-[color:var(--line)] bg-white text-[color:var(--muted)]"
+                    }`}
+                  >
+                    Clean
+                  </button>
+                  {cleaned.removedRows.length ? (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewMode("removed")}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
+                        previewMode === "removed"
+                          ? "bg-[color:rgba(37,99,235,0.12)] text-[color:var(--brand-strong)]"
+                          : "border border-[color:var(--line)] bg-white text-[color:var(--muted)]"
+                      }`}
+                    >
+                      Removed
+                    </button>
+                  ) : null}
+                  {cleaned.invalidRows.length ? (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewMode("invalid")}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
+                        previewMode === "invalid"
+                          ? "bg-[color:rgba(245,158,11,0.14)] text-amber-700"
+                          : "border border-[color:var(--line)] bg-white text-[color:var(--muted)]"
+                      }`}
+                    >
+                      Invalid
+                    </button>
+                  ) : null}
+                </div>
               </div>
 
               <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-xs">
-                {previewHeaders.length && previewRows.length ? (
+                {reportHeaders.length && visiblePreviewRows.length ? (
                   <div className="max-h-[38rem] overflow-auto">
                     <table className="min-w-[980px] w-full border-collapse text-left text-sm">
                       <thead className="sticky top-0 bg-slate-50">
@@ -792,7 +887,7 @@ export function CsvLeadCleanerTool() {
                           <th className="border-b border-slate-200 px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
                             #
                           </th>
-                          {previewHeaders.map((header) => (
+                          {reportHeaders.map((header) => (
                             <th
                               key={header}
                               className="border-b border-slate-200 px-4 py-3 font-semibold text-slate-800 whitespace-nowrap"
@@ -803,15 +898,15 @@ export function CsvLeadCleanerTool() {
                         </tr>
                       </thead>
                       <tbody>
-                        {previewRows.map((row, index) => (
+                        {visiblePreviewRows.map((row, index) => (
                           <tr
-                            key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}`}
+                            key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}-${previewMode}`}
                             className="hover:bg-slate-50/60 transition-colors"
                           >
                             <td className="border-b border-slate-100 px-3 py-3 align-top text-xs font-semibold text-slate-400">
                               {index + 1}
                             </td>
-                            {previewHeaders.map((header) => {
+                            {reportHeaders.map((header) => {
                               const cellValue = row[header];
                               let displayElement = <>{cellValue || "—"}</>;
 
@@ -871,11 +966,28 @@ export function CsvLeadCleanerTool() {
                     description={
                       status === "ready" && headers.length
                         ? "This file uploaded successfully, but none of the rows survived the current cleanup and deduplication rules."
-                        : "Upload a CSV to preview rows and review the cleaned spreadsheet here."
+                        : "Upload a CSV to see duplicates, invalid rows, blank rows, business emails, personal emails, and role-based inboxes before export."
+                    }
+                    points={
+                      status === "ready" && headers.length
+                        ? undefined
+                        : [
+                            "Duplicate rows removed before import",
+                            "Invalid rows and blank rows flagged early",
+                            "Business, personal, and role-based email signals surfaced",
+                          ]
                     }
                   />
                 )}
               </div>
+            </div>
+
+            <div className="xl:hidden">
+              <ExportActions
+                cleanedRows={cleaned.rows}
+                duplicateMode={duplicateMode}
+                fileName={fileName}
+              />
             </div>
         </div>
       </div>
@@ -904,6 +1016,10 @@ function cleanCsvRows(
     return {
       rows: [],
       summary: emptySummary,
+      removedRows: [],
+      invalidRows: [],
+      blankRows: [],
+      duplicateRows: [],
     };
   }
 
@@ -920,6 +1036,22 @@ function cleanCsvRows(
   let generatedDomains = 0;
   const seen = new Set<string>();
   const cleanedRows: PreviewRow[] = [];
+  const removedRows: Array<PreviewRow & { leadcleanr_reason: RemovalReason }> = [];
+  const invalidRows: Array<PreviewRow & { leadcleanr_reason: "invalid" }> = [];
+  const blankRows: Array<PreviewRow & { leadcleanr_reason: "blank" }> = [];
+  const duplicateRows: Array<PreviewRow & { leadcleanr_reason: "duplicate" }> = [];
+
+  rows.forEach((row) => {
+    const hasValues = headers.some((header) => String(row[header] ?? "").trim() !== "");
+    if (!hasValues) {
+      const nextRow = {
+        ...row,
+        leadcleanr_reason: "blank" as const,
+      };
+      removedRows.push(nextRow);
+      blankRows.push(nextRow);
+    }
+  });
 
   nonEmptyRows.forEach((row) => {
     const normalizedRow = normalizeCsvRow(row, headers, selectedColumn);
@@ -927,6 +1059,12 @@ function cleanCsvRows(
 
     if (!selectedValue) {
       invalidRowsRemoved += 1;
+      const nextRow = {
+        ...normalizedRow,
+        leadcleanr_reason: "invalid" as const,
+      };
+      removedRows.push(nextRow);
+      invalidRows.push(nextRow);
       return;
     }
 
@@ -939,11 +1077,23 @@ function cleanCsvRows(
 
     if (!duplicateKey) {
       invalidRowsRemoved += 1;
+      const nextRow = {
+        ...normalizedRow,
+        leadcleanr_reason: "invalid" as const,
+      };
+      removedRows.push(nextRow);
+      invalidRows.push(nextRow);
       return;
     }
 
     if (seen.has(duplicateKey)) {
       duplicatesRemoved += 1;
+      const nextRow = {
+        ...normalizedRow,
+        leadcleanr_reason: "duplicate" as const,
+      };
+      removedRows.push(nextRow);
+      duplicateRows.push(nextRow);
       return;
     }
 
@@ -979,9 +1129,9 @@ function cleanCsvRows(
     cleanedRows.push(nextRow);
   });
 
-  return {
-    rows: cleanedRows,
-    summary: {
+    return {
+      rows: cleanedRows,
+      summary: {
       totalRows: rows.length,
       emptyRowsRemoved,
       invalidRowsRemoved,
@@ -990,9 +1140,13 @@ function cleanCsvRows(
       personalEmails,
       businessEmails,
       roleBasedEmails,
-      generatedDomains,
-    },
-  };
+        generatedDomains,
+      },
+      removedRows,
+      invalidRows,
+      blankRows,
+      duplicateRows,
+    };
 }
 
 function normalizeCsvRow(
@@ -1238,6 +1392,16 @@ function buildCleanFileName(fileName: string) {
     : `${fileName}-clean.csv`;
 }
 
+function buildOriginalBackupFileName(fileName: string) {
+  if (!fileName) {
+    return "leadcleanr-original-backup.csv";
+  }
+
+  return fileName.toLowerCase().endsWith(".csv")
+    ? fileName.replace(/\.csv$/i, "-original-backup.csv")
+    : `${fileName}-original-backup.csv`;
+}
+
 function buildWarningSummary(warnings: string[]) {
   const preview = warnings.slice(0, 2).join(" ");
   const suffix =
@@ -1325,9 +1489,11 @@ function prettyColumnType(type: CsvColumnDetection["type"]) {
 function EmptyState({
   title,
   description,
+  points,
 }: {
   title: string;
   description: string;
+  points?: string[];
 }) {
   return (
     <div className="p-6">
@@ -1336,6 +1502,134 @@ function EmptyState({
       </p>
       <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
         {description}
+      </p>
+      {points?.length ? (
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {points.map((point) => (
+            <div
+              key={point}
+              className="rounded-2xl border border-slate-200/70 bg-slate-50/70 px-4 py-4 text-sm leading-6 text-[color:var(--foreground)]"
+            >
+              {point}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function WorkflowSteps({
+  currentStep,
+  exportReady,
+}: {
+  currentStep: 1 | 2;
+  exportReady: boolean;
+}) {
+  const steps = [
+    "1 Upload CSV",
+    "2 Review cleanup",
+    "3 Export clean file",
+  ];
+
+  return (
+    <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/72 p-3">
+      <div className="grid gap-2 sm:grid-cols-3">
+        {steps.map((step, index) => {
+          const stepNumber = index + 1;
+          const isCurrent = stepNumber === currentStep;
+          const isReady = stepNumber === 3 && exportReady;
+
+          return (
+            <div
+              key={step}
+              className={`rounded-[1.1rem] border px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] ${
+                isCurrent
+                  ? "border-[color:rgba(37,99,235,0.16)] bg-[color:rgba(37,99,235,0.07)] text-[color:var(--brand-strong)]"
+                  : isReady
+                    ? "border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.07)] text-[color:var(--accent)]"
+                    : "border-[color:var(--line)] bg-white text-[color:var(--muted)]"
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span>{step}</span>
+                {isReady ? (
+                  <span className="rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-bold tracking-[0.14em] text-[color:var(--accent)]">
+                    Ready
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ExportActions({
+  cleanedRows,
+  duplicateMode,
+  fileName,
+}: {
+  cleanedRows: PreviewRow[];
+  duplicateMode: DuplicateMode;
+  fileName: string;
+}) {
+  return (
+    <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+            Export clean file
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
+            Export becomes active when clean rows are ready.
+          </p>
+        </div>
+        <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(37,99,235,0.08)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+          Local only
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => {
+          trackToolEvent("csv-lead-cleaner", "export_csv", {
+            row_count: cleanedRows.length,
+            duplicate_mode: duplicateMode,
+          });
+          downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
+        }}
+        disabled={!cleanedRows.length}
+        className="btn-primary mt-5 inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(21,50,70,0.2)] transition-all hover:bg-[color:#102534] hover:shadow-[0_6px_18px_rgba(21,50,70,0.24)] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+      >
+        <Download className="h-4 w-4" />
+        Export Clean CSV
+      </button>
+      <p className="mt-3 text-xs leading-6 text-[color:var(--muted)]">
+        {cleanedRows.length
+          ? "Processed in your browser. CSV never uploaded."
+          : "Export unlocks after upload."}
+      </p>
+    </div>
+  );
+}
+
+function ChecklistMetric({
+  label,
+  value,
+}: {
+  label: string;
+  value: number;
+}) {
+  return (
+    <div className="rounded-[1rem] border border-[color:rgba(15,118,110,0.1)] bg-white/82 px-3 py-3">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+        {label}
+      </p>
+      <p className="mt-1 text-xl font-semibold tabular-nums text-[color:var(--foreground)]">
+        {value.toLocaleString()}
       </p>
     </div>
   );

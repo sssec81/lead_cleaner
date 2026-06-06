@@ -27,6 +27,7 @@ export function EmailExtractorTool() {
       }}
       csvHeader="email"
       copyLabel="Copy results"
+      primaryActionLabel="Extract emails"
       resultTitle="Clean result"
       resultDescription="Preview, edit, and export the extracted list before it leaves the page."
       emptyMessage="No email addresses detected yet. Paste text with emails to generate a clean list."

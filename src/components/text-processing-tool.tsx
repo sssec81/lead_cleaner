@@ -42,6 +42,7 @@ type TextProcessingToolProps = {
   };
   csvHeader?: string;
   copyLabel: string;
+  primaryActionLabel: string;
   resultTitle: string;
   resultDescription: string;
   emptyMessage: string;
@@ -77,6 +78,7 @@ export function TextProcessingTool({
   statLabels,
   csvHeader = "value",
   copyLabel,
+  primaryActionLabel,
   resultTitle,
   resultDescription,
   emptyMessage,
@@ -87,6 +89,9 @@ export function TextProcessingTool({
   const [batchMode, setBatchMode] = useState(false);
   const [showBulkEditor, setShowBulkEditor] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [resultDensity, setResultDensity] = useState<"comfortable" | "compact">(
+    "comfortable",
+  );
   const [workspace, setWorkspace] = useState<WorkspaceItem[]>([]);
   const [pastWorkspace, setPastWorkspace] = useState<WorkspaceItem[][]>([]);
   const [futureWorkspace, setFutureWorkspace] = useState<WorkspaceItem[][]>([]);
@@ -555,7 +560,7 @@ export function TextProcessingTool({
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-                  Current extraction preview
+                  Step 2 review extraction
                 </p>
                 <p className="mt-1 text-sm font-semibold text-[color:var(--foreground)]">
                   {processed.results.length} match
@@ -567,15 +572,15 @@ export function TextProcessingTool({
                 <button
                   type="button"
                   onClick={replaceWorkspaceFromCurrentInput}
-                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                  className="btn-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white transition hover:bg-[color:#102534]"
                 >
                   <RefreshCw className="h-4 w-4" />
-                  Replace workspace
+                  {primaryActionLabel}
                 </button>
                 <button
                   type="button"
                   onClick={appendCurrentExtraction}
-                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
                 >
                   <Plus className="h-4 w-4" />
                   Append to workspace
@@ -639,9 +644,30 @@ export function TextProcessingTool({
                     {resultDescription}
                   </p>
                 </div>
-                <span className="rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-                  Live workspace
-                </span>
+                <div className="flex items-center gap-2 rounded-full border border-[color:var(--line)] bg-white p-1">
+                  <button
+                    type="button"
+                    onClick={() => setResultDensity("comfortable")}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
+                      resultDensity === "comfortable"
+                        ? "bg-[color:#153246] text-white"
+                        : "text-[color:var(--muted)]"
+                    }`}
+                  >
+                    Comfortable
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setResultDensity("compact")}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
+                      resultDensity === "compact"
+                        ? "bg-[color:#153246] text-white"
+                        : "text-[color:var(--muted)]"
+                    }`}
+                  >
+                    Compact
+                  </button>
+                </div>
               </div>
 
               <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">
@@ -698,6 +724,50 @@ export function TextProcessingTool({
 
               <div className="mt-4 min-h-[22rem] rounded-[1.5rem] border border-[color:rgba(16,37,52,0.06)] bg-white/60 p-4 shadow-xs">
                 {workspaceValues.length ? (
+                  <div className="sticky top-0 z-10 -mx-1 mb-4 rounded-[1.1rem] border border-[color:rgba(16,37,52,0.08)] bg-white/92 p-3 backdrop-blur">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+                          Step 3 export clean results
+                        </p>
+                        <p className="mt-1 text-sm text-[color:var(--muted)]">
+                          {workspaceValues.length.toLocaleString()} rows ready to copy or download.
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => void handleCopy()}
+                          disabled={!workspaceValues.length}
+                          className="btn-primary inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-4 text-sm font-semibold text-white transition hover:bg-[color:#102534] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
+                          {copied ? "Copied" : copyLabel}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleDownloadTxt}
+                          disabled={!workspaceValues.length}
+                          className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300"
+                        >
+                          <FileText className="h-4 w-4" />
+                          Download TXT
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleDownloadCsv}
+                          disabled={!workspaceValues.length}
+                          className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300"
+                        >
+                          <Download className="h-4 w-4" />
+                          Download CSV
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {workspaceValues.length ? (
                   showBulkEditor ? (
                     <textarea
                       value={resultText}
@@ -713,11 +783,11 @@ export function TextProcessingTool({
                       {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
                         <div
                           key={item.id}
-                          className={`rounded-[1rem] border px-3 py-3 ${
+                          className={`rounded-[1rem] border px-3 ${
                             item.selected
                               ? "border-[color:rgba(15,118,110,0.2)] bg-[color:rgba(240,253,250,0.9)]"
                               : "border-[color:var(--line)] bg-white"
-                          }`}
+                          } ${resultDensity === "compact" ? "py-2" : "py-3"}`}
                         >
                           <div className="flex items-start gap-3">
                             <button
@@ -751,7 +821,9 @@ export function TextProcessingTool({
                                 onChange={(event) =>
                                   updateWorkspaceItem(item.id, event.target.value)
                                 }
-                                className="mt-3 min-h-10 w-full rounded-lg border border-[color:var(--line)] bg-transparent px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
+                                className={`mt-3 w-full rounded-lg border border-[color:var(--line)] bg-transparent px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] ${
+                                  resultDensity === "compact" ? "min-h-9" : "min-h-10"
+                                }`}
                               />
                             </div>
                             <div className="flex items-center gap-2">
@@ -786,36 +858,6 @@ export function TextProcessingTool({
                     {emptyMessage}
                   </p>
                 )}
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => void handleCopy()}
-                  disabled={!workspaceValues.length}
-                  className="btn-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white transition hover:bg-[color:#1e4763] hover:shadow-xs active:bg-[color:#102534] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[color:#153246]"
-                >
-                  {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
-                  {copied ? "Copied" : copyLabel}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDownloadTxt}
-                  disabled={!workspaceValues.length}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
-                >
-                  <FileText className="h-4 w-4" />
-                  Download TXT
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDownloadCsv}
-                  disabled={!workspaceValues.length}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
-                >
-                  <Download className="h-4 w-4" />
-                  Download CSV
-                </button>
               </div>
 
               {showShortcuts ? (

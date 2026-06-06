@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { PageHero } from "@/components/page-hero";
+import { PageSectionHeading } from "@/components/page-section-heading";
 
 const flagshipTools = [
   {
@@ -73,39 +75,39 @@ export const metadata: Metadata = {
 export default function ToolsPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-            Tools
-          </p>
-          <h1 className="mt-3 font-display text-3xl font-semibold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-            Start with the CSV path.
-          </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-            If your lead list already lives in rows and columns, go straight to the CSV Lead Cleaner. Use the helper tools only when the data is still raw text.
-          </p>
-        </div>
+      <PageHero
+        eyebrow="Tools"
+        title="Start with the CSV path."
+        intro="If your lead list already lives in rows and columns, go straight to the CSV Lead Cleaner. Use the helper tools only when the data is still raw text."
+        aside={(
+          <div className="panel-strong rounded-[1.9rem] p-6 sm:p-7">
+            <p className="section-eyebrow">Recommended route</p>
+            <p className="mt-4 font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)] sm:text-[2rem]">
+              Use the helper tools to extract. Use the CSV workflow to finish.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+              The supporting tools are there to rescue raw text. The flagship workflow is where lead cleanup becomes reviewable and export-ready.
+            </p>
+          </div>
+        )}
+        className="pt-10 lg:pt-12"
+      />
 
+      <section className="page-section">
         <div className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
           <FlagshipCard tool={flagshipTools[0]} featured />
           <FlagshipCard tool={flagshipTools[1]} />
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <section className="page-section pb-16 lg:pb-20">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Helper tools
-            </p>
-            <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
-              Useful, but secondary.
-            </h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-[color:var(--muted)]">
-              These tools handle the step before the spreadsheet exists. Paste
-              copied text, pull out what you need, then move it into a CSV for
-              the main cleanup workflow.
-            </p>
+            <PageSectionHeading
+              eyebrow="Helper tools"
+              title="Useful, but secondary."
+              intro="These tools handle the step before the spreadsheet exists. Paste copied text, pull out what you need, then move it into a CSV for the main cleanup workflow."
+            />
             <div className="panel-soft mt-6 rounded-[1.6rem] p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
                 Workflow guide
@@ -204,18 +206,5 @@ function FlagshipCard({
         <ArrowRight className="h-4 w-4" />
       </span>
     </Link>
-  );
-}
-
-function NarrativeRow({ number, text }: { number: string; text: string }) {
-  return (
-    <div className="grid gap-3 border-t border-[color:rgba(255,255,255,0.14)] pt-5 sm:grid-cols-[92px_1fr] sm:items-start">
-      <div className="font-display text-5xl leading-none text-[color:#d8a15d] sm:text-6xl">
-        {number}
-      </div>
-      <p className="max-w-2xl text-base leading-8 text-[color:rgba(255,255,255,0.82)]">
-        {text}
-      </p>
-    </div>
   );
 }

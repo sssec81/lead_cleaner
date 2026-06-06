@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight, Check, Info, Zap } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { PageHero } from "@/components/page-hero";
+import { PageSectionHeading } from "@/components/page-section-heading";
 
 const freePoints = [
   "Text tools stay open.",
@@ -64,46 +66,27 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-10 xl:grid-cols-[1.05fr_0.95fr] xl:items-start">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
-              Pricing
+      <PageHero
+        eyebrow="Pricing"
+        title="Free should feel useful on purpose."
+        intro="LeadCleanr is not priced like a trap. The free tier is supposed to let someone test the product honestly. Pro starts only when the spreadsheet work gets heavier and the larger files create real operational friction."
+        aside={(
+          <div className="panel-strong relative rounded-[1.75rem] p-6 sm:p-8">
+            <p className="section-eyebrow">Pricing note</p>
+            <p className="mt-4 font-display text-3xl font-semibold leading-[1.08] text-[color:var(--foreground)] sm:text-4xl">
+              “People do not mind paying for heavier use. They mind feeling tricked into it.”
             </p>
-            <h1 className="mt-4 max-w-5xl font-display text-5xl font-semibold leading-[1.02] sm:text-6xl xl:text-[5.2rem]">
-              Free should feel
-              <br />
-              useful on purpose.
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
-              LeadCleanr is not priced like a trap. The free tier is supposed
-              to let someone test the product honestly. Pro starts only when
-              the spreadsheet work gets heavier and the larger files create
-              real operational friction.
+            <p className="mt-6 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+              That is the whole model here. Free is for trust. Pro is for larger files and repeat cleanup work. Nothing else needs to be more complicated than that right now.
             </p>
           </div>
+        )}
+        className="pt-10 lg:pt-12"
+      />
 
-          <div className="relative pt-2 xl:pt-10">
-            <div className="absolute left-8 top-0 h-32 w-32 rounded-full bg-[color:rgba(37,99,235,0.12)] blur-3xl" />
-            <div className="panel-strong relative rotate-[2deg] rounded-[2.3rem] p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-                Pricing note
-              </p>
-              <p className="mt-4 font-display text-3xl font-semibold leading-[1.08] text-[color:var(--foreground)] sm:text-4xl">
-                “People do not mind paying for heavier use. They mind feeling
-                tricked into it.”
-              </p>
-              <p className="mt-6 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-                That is the whole model here. Free is for trust. Pro is for
-                larger files and repeat cleanup work. Nothing else needs to be
-                more complicated than that right now.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <section className="mt-16 grid gap-8 xl:grid-cols-[0.98fr_1.02fr] xl:items-stretch">
-          <div className="panel-strong rounded-[2.4rem] p-7 sm:p-9">
+      <section className="page-section">
+        <div className="grid gap-8 xl:grid-cols-[0.98fr_1.02fr] xl:items-stretch">
+          <div className="panel-strong rounded-[1.75rem] p-7 sm:p-9">
             <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(16,37,52,0.1)] pb-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
@@ -157,8 +140,8 @@ export default function PricingPage() {
           </div>
 
           <div className="relative">
-            <div className="absolute inset-x-6 top-6 -z-10 h-full rounded-[2.4rem] bg-[color:rgba(21,50,70,0.08)] blur-2xl" />
-            <div className="rounded-[2.4rem] bg-[color:#153246] p-7 text-white shadow-[0_30px_60px_rgba(15,23,42,0.2)] sm:p-9">
+            <div className="absolute inset-x-6 top-6 -z-10 h-full rounded-[1.75rem] bg-[color:rgba(21,50,70,0.08)] blur-2xl" />
+            <div className="rounded-[1.75rem] bg-[color:#153246] p-7 text-white shadow-[0_30px_60px_rgba(15,23,42,0.18)] sm:p-9">
               <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(255,255,255,0.12)] pb-6">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#93c5fd]">
@@ -217,15 +200,16 @@ export default function PricingPage() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-18">
+      <section className="page-section pb-16 lg:pb-20">
         <div className="grid gap-12 xl:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              How to choose
-            </p>
+            <PageSectionHeading
+              eyebrow="How to choose"
+              title="Choose the plan based on the weight of the spreadsheet job."
+            />
             <div className="mt-6 space-y-4">
               {decisionRules.map((rule, index) => {
                 const Icon = [Check, Zap, Info][index] || Info;
@@ -257,7 +241,7 @@ export default function PricingPage() {
             </div>
           </div>
 
-          <div className="panel-soft rounded-[2.2rem] p-7 sm:p-9">
+          <div className="panel-soft rounded-[1.75rem] p-7 sm:p-9">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Side-by-side only where it helps
             </p>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CsvLeadCleanerTool } from "@/components/csv-lead-cleaner-tool";
-import { PageFrame } from "@/components/page-frame";
+import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
@@ -18,32 +18,53 @@ export const metadata: Metadata = buildToolMetadata({
 
 export default function CsvLeadCleanerPage() {
   return (
-    <PageFrame>
+    <>
       <ToolJsonLd
         title="CSV Lead Cleaner"
         description="Clean messy lead CSV files before CRM import. Upload a CSV, choose a cleanup rule, review the report, and export a cleaner file in your browser."
         path="/tools/csv-lead-cleaner"
         category="BusinessApplication"
       />
-
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-            Primary Workflow
-          </p>
-          <h1 className="mt-3 font-display text-3xl font-semibold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-            Clean, deduplicate, and enrich your lead spreadsheets.
-          </h1>
-          <p className="mt-4 max-w-3xl text-sm leading-6 text-[color:var(--muted)]">
-            Upload any messy CSV of prospects or leads. Select a primary key column to guide deduplication, flag business versus personal email types, isolate role-based support or sales addresses, and export a cleaned copy in seconds—fully processed in your browser.
-          </p>
-        </div>
-
-        <div className="mt-6">
-          <CsvLeadCleanerTool />
-        </div>
-      </section>
-    </PageFrame>
+      <TextToolPageShell
+        eyebrow="Primary workflow"
+        title="Clean, deduplicate, and review your lead spreadsheets in one pass."
+        intro="Upload a messy CSV, choose the column that should guide cleanup, inspect duplicate and quality signals, and export a cleaner file without leaving the browser."
+        quote="This is the main workflow when the spreadsheet itself has stopped feeling trustworthy."
+        narrativeLabel="What this page handles"
+        narrativeIntro="Use it when the file already exists and the job is making that spreadsheet safe enough to import or hand off."
+        narrativePoints={[
+          "Best for CRM imports, recruiter handoffs, agency delivery files, and sales ops cleanup.",
+          "The preview and report matter because this workflow is about trust, not only about deleting rows.",
+          "If the data is still unstructured copied text, start with one of the extraction tools first.",
+        ]}
+        darkLabel="Why it feels central"
+        darkTitle="The product works best when the whole CSV can be reviewed with one consistent cleanup logic."
+        darkPoints={[
+          "Core parsing, cleanup, and export stay in the browser during the MVP flow.",
+          "The page is intentionally broader than the helper tools because the file itself needs judgment.",
+          "Use the supporting text tools only before or around this workflow, not instead of it.",
+        ]}
+        relatedLabel="Related paths"
+        relatedTitle="Use the supporting tools when the source is still messy, then return here for the final spreadsheet pass."
+        relatedLinks={[
+          {
+            href: "/tools/extract-emails-from-csv",
+            title: "Extract Emails from CSV",
+            text: "Use the narrower email-column workflow when the sheet is mostly fine and only the address list needs cleanup.",
+          },
+          {
+            href: "/tools/extract-emails-from-text",
+            title: "Extract Emails from Text",
+            text: "Start here when the contact data still lives in copied notes or pasted lead blocks.",
+          },
+          {
+            href: "/tools/extract-domains-from-emails",
+            title: "Extract Domains from Emails",
+            text: "Helpful after cleanup when you need account-level domain lists for enrichment or segmentation.",
+          },
+        ]}
+        tool={<CsvLeadCleanerTool />}
+      />
+    </>
   );
 }
-

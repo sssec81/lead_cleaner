@@ -28,6 +28,7 @@ export function DomainExtractorTool() {
       }}
       csvHeader="domain"
       copyLabel="Copy results"
+      primaryActionLabel="Extract domains"
       resultTitle="Clean result"
       resultDescription="Preview the extracted domains, remove noise, and export only what is useful."
       emptyMessage="No domains detected yet. Paste emails or URLs to generate a clean list."

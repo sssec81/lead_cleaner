@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
 import { PageFrame } from "@/components/page-frame";
+import { PageHero } from "@/components/page-hero";
+import { PageSectionHeading } from "@/components/page-section-heading";
 
 const sections = [
   {
@@ -39,37 +41,27 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-10 lg:grid-cols-[0.94fr_0.06fr_1fr] lg:items-start">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Terms
-            </p>
-            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[1.06] sm:text-5xl lg:text-6xl">
-              Use the tool responsibly and review what it gives back.
-            </h1>
-          </div>
-          <div className="hidden h-full w-px bg-[color:rgba(16,37,52,0.12)] lg:block" />
-          <div className="max-w-3xl text-base leading-8 text-[color:var(--muted)]">
-            LeadCleanr is a utility for cleanup work, not a guarantee of perfect
-            extraction. These terms keep the product tied to legitimate use and
-            make the expectation clear: review the outputs before you rely on
-            them.
-          </div>
-        </div>
+      <PageHero
+        eyebrow="Terms"
+        title="Use the tool responsibly and review what it gives back."
+        intro="LeadCleanr is a utility for cleanup work, not a guarantee of perfect extraction. These terms keep the product tied to legitimate use and make the expectation clear: review the outputs before you rely on them."
+        className="pt-10 lg:pt-12"
+      />
 
-        <section className="mt-16">
+      <section className="page-section">
           <blockquote className="max-w-5xl font-display text-3xl font-semibold leading-[1.16] text-[color:var(--foreground)] sm:text-4xl lg:text-[3.15rem]">
             “The safest default is to treat cleaned output as a better draft,
             not unquestionable truth.”
           </blockquote>
-        </section>
+      </section>
 
-        <section className="mt-16 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="page-section pb-16 lg:pb-20">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Practical reminders
-            </p>
+            <PageSectionHeading
+              eyebrow="Practical reminders"
+              title="Keep the product useful by keeping expectations honest."
+            />
             <div className="mt-6 space-y-5">
               {reminders.map((item) => (
                 <p
@@ -96,7 +88,7 @@ export default function TermsPage() {
               </div>
             ))}
           </div>
-        </section>
+        </div>
       </section>
 
       <section className="bg-[color:#153246] py-16 text-white">

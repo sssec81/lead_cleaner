@@ -27,6 +27,7 @@ export function UrlExtractorTool() {
       }}
       csvHeader="url"
       copyLabel="Copy results"
+      primaryActionLabel="Extract URLs"
       resultTitle="Clean result"
       resultDescription="Preview the cleaned links before they become a download or a spreadsheet paste."
       emptyMessage="No URLs detected yet. Paste text with links to generate a clean list."
