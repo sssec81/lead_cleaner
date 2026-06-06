@@ -116,27 +116,40 @@ Positioning:
 
 `Free for lightweight browser-side cleanup. Pro for larger CSV files and heavier operational use.`
 
-## Phase 2 Execution Roadmap
+## Phase 2 Execution Roadmap (14-Week Plan)
 
-Based on the V1 MVP completion, the following 4-sprint roadmap has been defined to drive the product to $10k+ MRR.
+**Locked Stack for Phase 2:**
+- Next.js + Tailwind (existing)
+- Supabase (auth + db + edge functions)
+- Stripe (payments)
+- Resend (email)
 
-**Sprint 1: Auth + Accounts (3-4 weeks)**
-- **Goal:** Start building a user base and unblock paywalls.
-- **Implementation:** Integrate NextAuth or Clerk for fast Google/Email login.
-- **Scope:** Free tier users can create accounts; no payment walls yet.
+### Features by Tier
 
-**Sprint 2: Stripe + Paywall (2-3 weeks)**
-- **Goal:** First revenue generation.
-- **Implementation:** Stripe Checkout integration with a single ~$19/month plan.
-- **Gated Features:** Larger CSV file limit (50MB) + saved workspace history.
+**Free (Stays as-is)**
+- All existing text tools (extract emails, phones, URLs, domains)
+- CSV cleaning up to 2MB
+- Browser-side only, no account needed
 
-**Sprint 3: Email Verification (4-6 weeks)**
-- **Goal:** The major value-add upsell.
-- **Implementation:** Server-side MX lookup + SMTP ping per email.
-- **Pricing:** Offer 100 free verifications/month to drive hook, then require Pro/Credits for bulk verification.
-- **Constraint:** Requires strict abuse prevention and rate-limiting on the DigitalOcean backend to prevent spam-checkers from draining resources.
+**Pro — $19/mo**
+- CSV up to 50MB
+- Email verification (MX + SMTP) — 500/mo included
+- Saved workspaces (access across devices)
+- Export presets (HubSpot, Apollo, CSV formats)
+- Workspace history (last 30 days)
 
-**Sprint 4: API Access**
-- **Goal:** Capture developers, agencies, and automation pipelines.
-- **Implementation:** REST API with key management.
-- **Timing:** Only begin after capturing user feedback and revenue from Sprints 1-3.
+**Pro+ / Credits Expansion**
+- Extra verification credits ($5 per 1000) — pay as you go on top of Pro
+- Drives expansion revenue without raising the base subscription price
+
+### Build Order & Sprints
+
+| Sprint | Goal | Duration |
+|--------|------|----------|
+| **1** | Supabase auth (Google + magic link) + basic account page | 3 weeks |
+| **2** | Stripe checkout + paywall (file size gate first, easiest) | 2 weeks |
+| **3** | Saved workspaces (biggest retention driver) | 3 weeks |
+| **4** | Email verification via Edge Functions | 4 weeks |
+| **5** | Export presets | 2 weeks |
+
+*(Total expected timeline: ~14 weeks to a fully monetizable product)*
