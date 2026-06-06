@@ -116,68 +116,27 @@ Positioning:
 
 `Free for lightweight browser-side cleanup. Pro for larger CSV files and heavier operational use.`
 
-## Future Paid Features
+## Phase 2 Execution Roadmap
 
-Once users start using the CSV workflow repeatedly, expand Pro or later Business features with:
+Based on the V1 MVP completion, the following 4-sprint roadmap has been defined to drive the product to $10k+ MRR.
 
-- saved workflows
-- saved cleanup history
-- reusable presets
-- downloadable reports
-- verification credits
-- CRM exports
-- API access
+**Sprint 1: Auth + Accounts (3-4 weeks)**
+- **Goal:** Start building a user base and unblock paywalls.
+- **Implementation:** Integrate NextAuth or Clerk for fast Google/Email login.
+- **Scope:** Free tier users can create accounts; no payment walls yet.
 
-These should come after proving the core CSV cleanup demand.
+**Sprint 2: Stripe + Paywall (2-3 weeks)**
+- **Goal:** First revenue generation.
+- **Implementation:** Stripe Checkout integration with a single ~$19/month plan.
+- **Gated Features:** Larger CSV file limit (50MB) + saved workspace history.
 
-## What Not To Do Early
+**Sprint 3: Email Verification (4-6 weeks)**
+- **Goal:** The major value-add upsell.
+- **Implementation:** Server-side MX lookup + SMTP ping per email.
+- **Pricing:** Offer 100 free verifications/month to drive hook, then require Pro/Credits for bulk verification.
+- **Constraint:** Requires strict abuse prevention and rate-limiting on the DigitalOcean backend to prevent spam-checkers from draining resources.
 
-Avoid:
-
-- ads on the tool pages
-- popups everywhere
-- charging for tiny actions that cost nothing
-- too many pricing tiers
-- pretending Business/API is available before it exists
-
-## Go-To-Market Logic
-
-The traffic and conversion motion should be:
-
-1. SEO pages and free tools bring users in
-2. users try the browser-side CSV workflow
-3. users hit heavier use cases
-4. larger file support becomes the upgrade trigger
-5. later workflow features deepen retention
-
-## Revenue Reality
-
-This is best treated initially as:
-
-- a niche SaaS
-- an SEO-led utility product
-- a micro-business with workflow upside
-
-It can make money if:
-
-- positioning stays focused
-- upgrade logic feels fair
-- the paid trigger maps to real user value
-
-## Immediate Product Decisions
-
-These are the current recommended decisions:
-
-- keep exports unlimited
-- keep text tools free
-- keep free CSV limit at `2 MB`
-- make larger uploads Pro
-- use freemium + Pro, not ads
-
-## Next Implementation Tasks
-
-1. Update pricing page copy to reflect unlimited exports and 2 MB free limit
-2. Enforce free upload limit clearly in product messaging
-3. Add a Pro upgrade path for larger files
-4. Add auth and billing later
-5. Add premium retention features after paid demand appears
+**Sprint 4: API Access**
+- **Goal:** Capture developers, agencies, and automation pipelines.
+- **Implementation:** REST API with key management.
+- **Timing:** Only begin after capturing user feedback and revenue from Sprints 1-3.
