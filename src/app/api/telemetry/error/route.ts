@@ -19,6 +19,11 @@ export async function POST(request: Request) {
     );
   }
 
+  const secret = request.headers.get("x-telemetry-secret");
+  if (process.env.TELEMETRY_SECRET && secret !== process.env.TELEMETRY_SECRET) {
+    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!body.message) {
     return NextResponse.json(
       { ok: false, error: "Error message is required." },

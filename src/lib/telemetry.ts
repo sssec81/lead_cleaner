@@ -109,6 +109,7 @@ export async function reportClientError(payload: ErrorPayload) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-telemetry-secret": process.env.NEXT_PUBLIC_TELEMETRY_SECRET ?? "",
       },
       body: JSON.stringify({
         ...payload,

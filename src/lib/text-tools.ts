@@ -103,29 +103,7 @@ export function cleanEmailList(input: string) {
 }
 
 export function removeDuplicateEmails(input: string) {
-  const items = input.split(/[\n\r,\t; ]+/).map((entry) => entry.trim());
-  const blankRemoved = items.filter((entry) => entry === "").length;
-  const candidates = items.filter((entry) => entry !== "");
-
-  const validEmails = candidates.filter((entry) => SINGLE_EMAIL_REGEX.test(entry));
-  const invalidRemoved = candidates.length - validEmails.length;
-
-  const cleaned = validEmails.map((entry) => entry.toLowerCase());
-  const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
-    a.localeCompare(b),
-  );
-
-  const stats: CleaningStats = {
-    scanned: items.length,
-    found: candidates.length,
-    valid: validEmails.length,
-    duplicatesRemoved: cleaned.length - deduped.length,
-    invalidRemoved,
-    blankRemoved,
-    finalCount: deduped.length,
-  };
-
-  return { results: deduped, stats };
+  return cleanEmailList(input);
 }
 
 export function extractPhoneNumbersFromText(input: string) {
@@ -251,8 +229,8 @@ export function normalizeUrlValue(input: string) {
 
   const lowerTrimmed = trimmed.toLowerCase();
   const withProtocol = lowerTrimmed.startsWith("www.")
-    ? `https://${trimmed.slice(4)}`
-    : trimmed;
+    ? `https://${lowerTrimmed.slice(4)}`
+    : lowerTrimmed;
 
   if (
     !withProtocol.toLowerCase().startsWith("http://") &&
