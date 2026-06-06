@@ -14,7 +14,7 @@ export function LocalProcessingBadge({
   if (compact) {
     return (
       <div
-        className={`inline-flex items-center gap-2 rounded-full border border-[color:rgba(15,23,42,0.14)] bg-[color:rgba(244,247,250,0.92)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:#244255] ${className}`.trim()}
+        className={`inline-flex items-center gap-2 rounded-full border border-[color:rgba(15,23,42,0.08)] bg-white/82 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:#244255] shadow-[0_8px_18px_rgba(15,23,42,0.05)] ${className}`.trim()}
       >
         <ShieldCheck className="h-3.5 w-3.5" />
         Local only
@@ -24,10 +24,10 @@ export function LocalProcessingBadge({
 
   return (
     <div
-      className={`rounded-[1.35rem] border border-[color:rgba(15,23,42,0.12)] bg-[linear-gradient(180deg,rgba(244,247,250,0.96),rgba(236,242,247,0.92))] p-4 ${className}`.trim()}
+      className={`panel-soft rounded-[1.5rem] p-4 ${className}`.trim()}
     >
       <div className="flex flex-wrap items-start gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[color:#153246] text-white">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[linear-gradient(180deg,#153246,#244255)] text-white shadow-[0_10px_24px_rgba(21,50,70,0.16)]">
           <HardDriveDownload className="h-4 w-4" />
         </div>
         <div>

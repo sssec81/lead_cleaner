@@ -14,7 +14,7 @@ export function PhoneExtractorTool() {
       title="Extract phone numbers from text"
       description="Paste messy text, extract phone numbers, normalize formatting, remove duplicates, and export the clean list."
       icon={Phone}
-      iconToneClassName="bg-[color:rgba(217,119,6,0.14)] text-[color:var(--brand-strong)]"
+      iconToneClassName="bg-[color:rgba(37,99,235,0.08)] text-[color:var(--brand-strong)]"
       sampleInput={SAMPLE_TEXT}
       placeholder="Paste copied profiles, CRM notes, website text, or any messy block with phone numbers."
       trackName="extract-phone-numbers-from-text"

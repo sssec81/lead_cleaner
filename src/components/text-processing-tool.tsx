@@ -454,9 +454,8 @@ export function TextProcessingTool({
   });
 
   return (
-    <section className="rounded-[2.2rem] border border-[color:var(--line)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(246,249,252,0.92))] shadow-[var(--shadow)]">
-      <div className="grid items-start gap-0 lg:grid-cols-[1.02fr_0.98fr]">
-        <div className="flex h-full flex-col p-5 sm:p-7">
+    <div className="grid items-start gap-6 lg:grid-cols-[1.02fr_0.98fr]">
+      <section className="panel-soft rounded-[2.2rem] p-5 sm:p-7 flex h-full flex-col">
           <div className="mb-4 flex items-center gap-3">
             <div
               className={`flex h-12 w-12 items-center justify-center rounded-2xl ${iconToneClassName}`}
@@ -471,39 +470,53 @@ export function TextProcessingTool({
             </div>
           </div>
 
-          <div className="mt-2 flex gap-3 overflow-x-auto pb-1">
-            <button
-              type="button"
-              onClick={loadSampleInput}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold"
-            >
-              <FlaskConical className="h-4 w-4" />
-              Load sample
-            </button>
-            <button
-              type="button"
-              onClick={useSelectedText}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold"
-            >
-              <MousePointerClick className="h-4 w-4" />
-              Use selected text
-            </button>
-            <button
-              type="button"
-              onClick={toggleBatchMode}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold"
-            >
-              <span className="text-base leading-none">#</span>
-              {batchMode ? "Single input mode" : "Batch mode"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowShortcuts((current) => !current)}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold"
-            >
-              <Keyboard className="h-4 w-4" />
-              Shortcuts
-            </button>
+          <div className="mt-2 grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="rounded-[1.35rem] border border-[color:var(--line)] bg-white/72 p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+                Start here
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={loadSampleInput}
+                  className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                >
+                  <FlaskConical className="h-4 w-4" />
+                  Load sample
+                </button>
+                <button
+                  type="button"
+                  onClick={useSelectedText}
+                  className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                >
+                  <MousePointerClick className="h-4 w-4" />
+                  Use selected text
+                </button>
+              </div>
+            </div>
+            <div className="rounded-[1.35rem] border border-[color:var(--line)] bg-white/72 p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+                Working mode
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={toggleBatchMode}
+                  className={`inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 transition-colors ${batchMode ? "border-[color:var(--brand)] bg-[color:var(--brand)]/5 text-[color:var(--brand-strong)] hover:bg-[color:var(--brand)]/10" : "border-[color:var(--line)] bg-white text-[color:var(--foreground)]"}`}
+                >
+                  <span className="text-base leading-none">#</span>
+                  {batchMode ? "Single input mode" : "Batch mode"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowShortcuts((current) => !current)}
+                  className={`inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 transition-colors ${showShortcuts ? "border-[color:var(--brand)] bg-[color:var(--brand)]/5 text-[color:var(--brand-strong)] hover:bg-[color:var(--brand)]/10" : "border-[color:var(--line)] bg-white text-[color:var(--foreground)]"}`}
+                >
+                  <Keyboard className="h-4 w-4" />
+                  Shortcuts
+                </button>
+              </div>
+            </div>
           </div>
 
           {restoredSession ? (
@@ -530,7 +543,7 @@ export function TextProcessingTool({
             id={`${trackName}-input`}
             value={input}
             onChange={(event) => setFreshInput(event.target.value)}
-            className="mt-4 min-h-[18rem] w-full rounded-[1.6rem] border border-[color:var(--line)] bg-white px-4 py-4 text-base text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[color:rgba(184,106,25,0.12)] sm:min-h-[22rem]"
+            className="mt-4 min-h-[18rem] w-full rounded-[1.6rem] border border-[color:var(--line)] bg-white px-4 py-4 text-base text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[color:rgba(37,99,235,0.12)] sm:min-h-[22rem]"
             placeholder={placeholder}
           />
 
@@ -538,7 +551,7 @@ export function TextProcessingTool({
             Processed in your browser. Nothing sent to a server.
           </p>
 
-          <div className="mt-4 rounded-[1.4rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(244,247,250,0.9)] p-4">
+          <div className="mt-4 rounded-[1.4rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(249,251,253,0.96),rgba(241,246,252,0.9))] p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
@@ -554,7 +567,7 @@ export function TextProcessingTool({
                 <button
                   type="button"
                   onClick={replaceWorkspaceFromCurrentInput}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold"
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
                 >
                   <RefreshCw className="h-4 w-4" />
                   Replace workspace
@@ -562,7 +575,7 @@ export function TextProcessingTool({
                 <button
                   type="button"
                   onClick={appendCurrentExtraction}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold"
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
                 >
                   <Plus className="h-4 w-4" />
                   Append to workspace
@@ -587,22 +600,21 @@ export function TextProcessingTool({
               </p>
             )}
           </div>
-        </div>
+        </section>
 
-        <div className="border-t border-[color:var(--line)] lg:border-l lg:border-t-0">
-          <div className="space-y-5 p-5 sm:p-7">
-            <div className="rounded-[1.7rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(255,248,238,0.92))] p-5">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Workspace stats
+        <div className="space-y-6">
+          <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Workspace stats
+            </p>
+            <div className="mt-5 rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(15,118,110,0.06),rgba(255,255,255,0.88))] p-6 border border-[color:rgba(15,118,110,0.08)] shadow-[0_14px_28px_rgba(15,23,42,0.04)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                {statLabels.ready}
               </p>
-              <div className="mt-5 rounded-[1.7rem] border border-[color:rgba(15,118,110,0.14)] bg-[linear-gradient(180deg,rgba(15,118,110,0.1),rgba(255,255,255,0.96))] p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                  {statLabels.ready}
-                </p>
-                <p className="mt-3 font-display text-6xl font-semibold leading-none tabular-nums text-[color:var(--foreground)] sm:text-7xl">
-                  {workspaceValues.length.toLocaleString()}
-                </p>
-              </div>
+              <p className="mt-3 font-display text-6xl font-semibold leading-none tabular-nums text-[color:var(--foreground)] sm:text-7xl">
+                {workspaceValues.length.toLocaleString()}
+              </p>
+            </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <StatCard label={statLabels.total} value={processed.stats.totalFound} />
@@ -619,7 +631,7 @@ export function TextProcessingTool({
               </div>
             </div>
 
-            <div className="rounded-[1.7rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5 backdrop-blur">
+            <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <h3 className="font-display text-xl font-semibold">{resultTitle}</h3>
@@ -632,12 +644,16 @@ export function TextProcessingTool({
                 </span>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+                  Workspace actions
+                </p>
+                <div className="mt-3 flex flex-wrap gap-3">
                 <button
                   type="button"
                   onClick={() => setShowBulkEditor((current) => !current)}
                   disabled={!workspaceValues.length}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none transition-colors ${showBulkEditor ? "border-[color:var(--brand)] bg-[color:var(--brand)]/5 text-[color:var(--brand-strong)] hover:bg-[color:var(--brand)]/10" : "border-[color:var(--line)] bg-white text-[color:var(--foreground)]"}`}
                 >
                   <PencilLine className="h-4 w-4" />
                   {showBulkEditor ? "Close editor" : "Edit all"}
@@ -646,7 +662,7 @@ export function TextProcessingTool({
                   type="button"
                   onClick={toggleSelectAllPreviewed}
                   disabled={!workspaceValues.length}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
                 >
                   Select preview rows
                 </button>
@@ -654,7 +670,7 @@ export function TextProcessingTool({
                   type="button"
                   onClick={deleteSelectedRows}
                   disabled={!selectedCount}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:rgba(153,27,27,0.14)] bg-[color:rgba(254,242,242,0.92)] px-4 text-sm font-semibold text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:rgba(153,27,27,0.14)] bg-[color:rgba(254,242,242,0.92)] px-4 text-sm font-semibold text-red-700 hover:bg-red-50 hover:border-red-200 active:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[color:rgba(254,242,242,0.92)] disabled:hover:border-[color:rgba(153,27,27,0.14)] disabled:hover:shadow-none"
                 >
                   <Trash2 className="h-4 w-4" />
                   Delete selected
@@ -663,7 +679,7 @@ export function TextProcessingTool({
                   type="button"
                   onClick={undoWorkspace}
                   disabled={!pastWorkspace.length}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
                 >
                   <Undo2 className="h-4 w-4" />
                   Undo
@@ -672,20 +688,21 @@ export function TextProcessingTool({
                   type="button"
                   onClick={redoWorkspace}
                   disabled={!futureWorkspace.length}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
                 >
                   <Redo2 className="h-4 w-4" />
                   Redo
                 </button>
+                </div>
               </div>
 
-              <div className="mt-4 min-h-[22rem] rounded-[1.5rem] border border-dashed border-[color:var(--line)] bg-white/80 p-4">
+              <div className="mt-4 min-h-[22rem] rounded-[1.5rem] border border-[color:rgba(16,37,52,0.06)] bg-white/60 p-4 shadow-xs">
                 {workspaceValues.length ? (
                   showBulkEditor ? (
                     <textarea
                       value={resultText}
                       onChange={(event) => applyBulkEditor(event.target.value)}
-                      className="min-h-[20rem] w-full rounded-[1rem] border border-[color:var(--line)] bg-white px-4 py-4 text-sm leading-7 text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[color:rgba(184,106,25,0.12)]"
+                      className="min-h-[20rem] w-full rounded-[1rem] border border-[color:var(--line)] bg-white px-4 py-4 text-sm leading-7 text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[color:rgba(37,99,235,0.12)]"
                     />
                   ) : (
                     <div className="space-y-3">
@@ -706,10 +723,14 @@ export function TextProcessingTool({
                             <button
                               type="button"
                               onClick={() => toggleWorkspaceSelection(item.id)}
-                              className="mt-1 h-5 w-5 rounded border border-[color:var(--line)] bg-white text-xs font-semibold text-[color:var(--muted)]"
+                              className={`mt-1 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded border transition-colors ${
+                                item.selected
+                                  ? "border-[color:var(--brand)] bg-[color:var(--brand)]/10"
+                                  : "border-[color:var(--line)] bg-white hover:border-[color:var(--brand)]"
+                              }`}
                               aria-label={`Select row ${index + 1}`}
                             >
-                              {item.selected ? "x" : ""}
+                              {item.selected && <Check className="h-3 w-3 text-[color:var(--brand)]" />}
                             </button>
                             <div className="flex-1">
                               <div className="flex flex-wrap items-center gap-2">
@@ -737,7 +758,7 @@ export function TextProcessingTool({
                               <button
                                 type="button"
                                 onClick={() => toggleWorkspaceLock(item.id)}
-                                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--line)] bg-white text-[color:var(--muted)]"
+                                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[color:var(--line)] bg-white text-[color:var(--muted)] transition hover:border-[color:var(--brand)]/35 hover:bg-slate-50 hover:text-[color:var(--brand)] active:bg-slate-100"
                                 aria-label={item.locked ? "Unlock row" : "Lock row"}
                               >
                                 {item.locked ? (
@@ -749,7 +770,7 @@ export function TextProcessingTool({
                               <button
                                 type="button"
                                 onClick={() => removeWorkspaceItem(item.id)}
-                                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--line)] bg-white text-[color:var(--muted)]"
+                                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[color:var(--line)] bg-white text-[color:var(--muted)] transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 active:bg-red-100"
                                 aria-label={`Remove row ${index + 1}`}
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -772,7 +793,7 @@ export function TextProcessingTool({
                   type="button"
                   onClick={() => void handleCopy()}
                   disabled={!workspaceValues.length}
-                  className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  className="btn-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white transition hover:bg-[color:#1e4763] hover:shadow-xs active:bg-[color:#102534] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[color:#153246]"
                 >
                   {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
                   {copied ? "Copied" : copyLabel}
@@ -781,7 +802,7 @@ export function TextProcessingTool({
                   type="button"
                   onClick={handleDownloadTxt}
                   disabled={!workspaceValues.length}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
                 >
                   <FileText className="h-4 w-4" />
                   Download TXT
@@ -790,7 +811,7 @@ export function TextProcessingTool({
                   type="button"
                   onClick={handleDownloadCsv}
                   disabled={!workspaceValues.length}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-[color:var(--line)] disabled:hover:shadow-none"
                 >
                   <Download className="h-4 w-4" />
                   Download CSV
@@ -822,10 +843,8 @@ export function TextProcessingTool({
                 </p>
               )}
             </div>
-          </div>
         </div>
       </div>
-    </section>
   );
 }
 
@@ -840,14 +859,14 @@ function StatCard({
 }) {
   return (
     <div
-      className={`rounded-[1.5rem] border p-4 ${
+      className={`rounded-[1.2rem] border p-4 transition-all hover:shadow-xs ${
         accent
-          ? "border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.08)]"
-          : "border-[color:var(--line)] bg-white/75"
+          ? "border-[color:rgba(15,118,110,0.1)] bg-[color:rgba(15,118,110,0.04)]"
+          : "border-[color:rgba(16,37,52,0.05)] bg-white/70"
       }`}
     >
-      <div className="text-sm text-[color:var(--muted)]">{label}</div>
-      <div className="mt-2 text-3xl font-semibold tabular-nums">
+      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)]">{label}</div>
+      <div className="mt-2 text-2xl font-bold tabular-nums text-[color:var(--foreground)]">
         {value.toLocaleString()}
       </div>
     </div>

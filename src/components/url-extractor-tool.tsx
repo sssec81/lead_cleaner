@@ -14,7 +14,7 @@ export function UrlExtractorTool() {
       title="Extract URLs from text"
       description="Paste messy text, pull out website links, normalize the format, remove duplicates, and export the clean list."
       icon={LinkIcon}
-      iconToneClassName="bg-[color:rgba(217,119,6,0.14)] text-[color:var(--brand-strong)]"
+      iconToneClassName="bg-[color:rgba(37,99,235,0.08)] text-[color:var(--brand-strong)]"
       sampleInput={SAMPLE_TEXT}
       placeholder="Paste copied website text, notes, or any messy block with links and URLs."
       trackName="extract-urls-from-text"

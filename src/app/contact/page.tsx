@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { ArrowRight } from "lucide-react";
 import { PageFrame } from "@/components/page-frame";
 
 const contactItems = [
@@ -8,18 +9,21 @@ const contactItems = [
     description:
       "Questions about a tool, confusing output, or a workflow you want to test.",
     value: "support@leadcleanr.com",
+    cta: "Email support",
   },
   {
     label: "Bug reports",
     description:
       "Found a parsing issue, export problem, or route that feels broken on your device.",
     value: "bugs@leadcleanr.com",
+    cta: "Report a bug",
   },
   {
     label: "Business and API interest",
     description:
       "Need larger limits, team workflows, or want to shape future paid features.",
     value: "hello@leadcleanr.com",
+    cta: "Talk about larger use",
   },
 ];
 
@@ -39,7 +43,7 @@ export default function ContactPage() {
   return (
     <PageFrame>
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-        <div className="grid gap-8 rounded-[2.25rem] border border-[color:rgba(16,37,52,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,247,250,0.82))] p-6 shadow-[var(--shadow)] lg:grid-cols-[0.9fr_0.08fr_1fr] lg:items-start lg:p-8">
+        <div className="grid gap-8 rounded-[2.25rem] border border-[color:rgba(16,37,52,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(240,244,255,0.82))] p-6 shadow-[var(--shadow)] lg:grid-cols-[0.9fr_0.08fr_1fr] lg:items-start lg:p-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Contact
@@ -71,26 +75,34 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <section className="mt-10 grid gap-6 lg:grid-cols-[0.64fr_1.36fr]">
-          <div className="rounded-[1.9rem] border border-[color:rgba(16,37,52,0.1)] bg-white/72 p-6 shadow-[var(--shadow)]">
+        <section className="mt-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="rounded-[1.9rem] border border-[color:rgba(16,37,52,0.1)] bg-white/72 p-6 shadow-[var(--shadow)] sm:p-8 flex flex-col justify-center">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               What to include
             </p>
+            <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)]">
+              A short, concrete message beats a long one.
+            </h3>
             <p className="mt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-              A short, concrete message beats a long one. Redacted samples are
-              enough.
+              Sanitized or redacted profiles/spreadsheets are enough. Providing clear context on the problem saves everyone time.
             </p>
           </div>
-          <div className="rounded-[1.9rem] border border-[color:rgba(16,37,52,0.1)] bg-white/72 p-6 shadow-[var(--shadow)]">
-            <div className="space-y-4">
-            {messageTips.map((tip) => (
-              <p
-                key={tip}
-                className="border-t border-[color:rgba(16,37,52,0.1)] pt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base"
-              >
-                {tip}
-              </p>
-            ))}
+          <div className="rounded-[1.9rem] border border-[color:rgba(16,37,52,0.1)] bg-white/72 p-6 shadow-[var(--shadow)] sm:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+              Suggested details
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {messageTips.map((tip, index) => (
+                <div
+                  key={tip}
+                  className="flex items-start gap-3 rounded-2xl border border-[color:var(--line)] bg-white/60 p-4 transition duration-200 hover:bg-white/90 hover:shadow-xs"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:rgba(37,99,235,0.08)] text-xs font-bold text-[color:var(--brand)]">
+                    {index + 1}
+                  </span>
+                  <p className="text-sm leading-6 text-[color:var(--foreground)]">{tip}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -98,9 +110,9 @@ export default function ContactPage() {
 
       <section className="bg-[color:#153246] py-16 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.88fr_1.12fr]">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
                 Direct inboxes
               </p>
               <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
@@ -108,23 +120,28 @@ export default function ContactPage() {
                 maze.
               </h2>
             </div>
-            <div className="space-y-6">
+            <div className="grid gap-5">
               {contactItems.map((item) => (
                 <div
                   key={item.label}
-                  className="border-t border-[color:rgba(255,255,255,0.14)] pt-5"
+                  className="rounded-2xl border border-[color:rgba(255,255,255,0.12)] bg-[color:rgba(255,255,255,0.03)] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[color:rgba(255,255,255,0.2)] hover:bg-[color:rgba(255,255,255,0.06)]"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#d8a15d]">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:#93c5fd]">
                     {item.label}
                   </p>
-                  <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:rgba(255,255,255,0.78)] sm:text-base">
+                  <p className="mt-2 text-sm leading-6 text-[color:rgba(255,255,255,0.76)]">
                     {item.description}
+                  </p>
+                  <p className="mt-4 break-all font-mono text-sm text-white">
+                    {item.value}
                   </p>
                   <a
                     href={`mailto:${item.value}`}
-                    className="mt-3 inline-flex text-sm font-semibold text-white"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.12)] transition hover:bg-slate-100 hover:text-slate-950 active:scale-95"
+                    aria-label={`Email ${item.label} at ${item.value}`}
                   >
-                    {item.value}
+                    {item.cta}
+                    <ArrowRight className="h-4 w-4 text-slate-700" />
                   </a>
                 </div>
               ))}

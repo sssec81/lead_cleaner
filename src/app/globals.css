@@ -1,18 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #edf1f4;
-  --foreground: #102534;
-  --surface: rgba(248, 250, 252, 0.92);
+  --background: #f3f6fb;
+  --foreground: #0f172a;
+  --surface: rgba(255, 255, 255, 0.9);
   --surface-strong: #ffffff;
-  --line: rgba(16, 37, 52, 0.12);
-  --brand: #b86a19;
-  --brand-strong: #945111;
+  --line: rgba(15, 23, 42, 0.08);
+  --brand: #2563eb;
+  --brand-strong: #1d4ed8;
   --accent: #0f766e;
-  --muted: #3f5260;
-  --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, "URW Palladio L", serif;
-  --font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --muted: #526277;
+  --shadow: 0 20px 48px rgba(15, 23, 42, 0.06);
+  --shadow-strong: 0 28px 64px rgba(15, 23, 42, 0.12);
+  --panel: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(246,249,253,0.88));
+  --panel-strong: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,246,252,0.94));
+  --font-display: "Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif;
+  --font-body: "Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif;
 }
 
 * {
@@ -23,12 +27,21 @@ html {
   scroll-behavior: smooth;
 }
 
+body,
+button,
+input,
+select,
+textarea {
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
   margin: 0;
   min-height: 100dvh;
   background:
-    radial-gradient(circle at top left, rgba(184, 106, 25, 0.08), transparent 26%),
-    linear-gradient(180deg, #f3f6f8 0%, #ebeff3 100%);
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 24%),
+    radial-gradient(circle at 85% 10%, rgba(15, 118, 110, 0.06), transparent 22%),
+    linear-gradient(180deg, #f3f6fb 0%, #eef3f8 100%);
   color: var(--foreground);
   font-family: var(--font-body), sans-serif;
   line-height: 1.5;
@@ -59,16 +72,35 @@ textarea {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(217, 119, 6, 0.32);
+  outline: 3px solid rgba(37, 99, 235, 0.30);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(217, 119, 6, 0.2);
+  background: rgba(37, 99, 235, 0.15);
 }
 
 .font-display {
   font-family: var(--font-display), serif;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-180%);
+  border-radius: 9999px;
+  background: #153246;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 .page-shell {
@@ -82,7 +114,7 @@ textarea {
   height: 18rem;
   width: 18rem;
   border-radius: 9999px;
-  background: rgba(184, 106, 25, 0.04);
+  background: rgba(37, 99, 235, 0.05);
   filter: blur(40px);
   content: "";
 }
@@ -101,12 +133,12 @@ textarea {
 
 .surface-card {
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.76);
+  background: var(--panel);
   box-shadow: var(--shadow);
 }
 
 .surface-card:hover {
-  box-shadow: 0 22px 46px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.09);
 }
 
 .btn-primary {
@@ -118,4 +150,38 @@ textarea {
 .btn-primary span {
   color: inherit;
   fill: currentColor;
+}
+
+.panel-soft {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.panel-strong {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: var(--panel-strong);
+  box-shadow: var(--shadow-strong);
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

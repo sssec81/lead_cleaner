@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, Info, Zap } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 
@@ -84,8 +84,8 @@ export default function PricingPage() {
           </div>
 
           <div className="relative pt-2 xl:pt-10">
-            <div className="absolute left-8 top-0 h-32 w-32 rounded-full bg-[color:rgba(184,106,25,0.12)] blur-3xl" />
-            <div className="relative rotate-[2deg] rounded-[2.3rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,236,0.96))] p-6 shadow-[0_28px_60px_rgba(15,23,42,0.14)] sm:p-8">
+            <div className="absolute left-8 top-0 h-32 w-32 rounded-full bg-[color:rgba(37,99,235,0.12)] blur-3xl" />
+            <div className="panel-strong relative rotate-[2deg] rounded-[2.3rem] p-6 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
                 Pricing note
               </p>
@@ -103,7 +103,7 @@ export default function PricingPage() {
         </div>
 
         <section className="mt-16 grid gap-8 xl:grid-cols-[0.98fr_1.02fr] xl:items-stretch">
-          <div className="rounded-[2.4rem] border border-[color:rgba(16,37,52,0.12)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,248,238,0.96))] p-7 shadow-[var(--shadow)] sm:p-9">
+          <div className="panel-strong rounded-[2.4rem] p-7 sm:p-9">
             <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(16,37,52,0.1)] pb-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
@@ -118,7 +118,7 @@ export default function PricingPage() {
                   </span>
                 </div>
               </div>
-              <span className="rounded-full border border-[color:rgba(184,106,25,0.18)] bg-white/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+              <span className="rounded-full border border-[color:rgba(37,99,235,0.18)] bg-white/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
                 Start here
               </span>
             </div>
@@ -136,8 +136,8 @@ export default function PricingPage() {
                   key={point}
                   className={`rounded-[1.5rem] border px-4 py-4 text-sm leading-6 ${
                     index === 0
-                      ? "border-[color:rgba(184,106,25,0.16)] bg-white text-[color:var(--foreground)]"
-                      : "border-[color:var(--line)] bg-white/78 text-[color:var(--muted)]"
+                      ? "border-[color:rgba(37,99,235,0.16)] bg-white text-[color:var(--foreground)] shadow-[0_12px_28px_rgba(15,23,42,0.05)]"
+                      : "border-[color:var(--line)] bg-white/82 text-[color:var(--muted)]"
                   }`}
                 >
                   {point}
@@ -161,7 +161,7 @@ export default function PricingPage() {
             <div className="rounded-[2.4rem] bg-[color:#153246] p-7 text-white shadow-[0_30px_60px_rgba(15,23,42,0.2)] sm:p-9">
               <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(255,255,255,0.12)] pb-6">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#d8a15d]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#93c5fd]">
                     Pro
                   </p>
                   <div className="mt-3 flex items-end gap-2">
@@ -173,7 +173,7 @@ export default function PricingPage() {
                     </span>
                   </div>
                 </div>
-                <span className="rounded-full bg-[color:#d8a15d] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#153246]">
+                <span className="rounded-full bg-[color:#93c5fd] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#153246]">
                   Heavy use
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function PricingPage() {
                     key={point}
                     className={`rounded-[1.45rem] border px-4 py-4 text-sm leading-7 ${
                       index === 0
-                        ? "border-[color:rgba(216,161,93,0.28)] bg-[color:rgba(255,255,255,0.06)] text-white"
+                        ? "border-[color:rgba(147,197,253,0.28)] bg-[color:rgba(255,255,255,0.06)] text-white"
                         : "border-[color:rgba(255,255,255,0.12)] bg-[color:rgba(255,255,255,0.03)] text-[color:rgba(255,255,255,0.78)]"
                     }`}
                   >
@@ -203,7 +203,7 @@ export default function PricingPage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/contact"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:#d8a15d] px-6 text-sm font-semibold text-[color:#153246]"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:#2563eb] hover:bg-[color:#1d4ed8] px-6 text-sm font-semibold text-white transition-colors duration-200"
                 >
                   Ask about Pro
                   <ArrowRight className="h-4 w-4" />
@@ -226,24 +226,38 @@ export default function PricingPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               How to choose
             </p>
-            <div className="mt-6 space-y-6">
-              {decisionRules.map((rule, index) => (
-                <div
-                  key={rule.label}
-                  className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.1)] pt-6"}
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
-                    {rule.label}
-                  </p>
-                  <p className="mt-2 max-w-2xl text-base leading-8 text-[color:var(--foreground)]">
-                    {rule.text}
-                  </p>
-                </div>
-              ))}
+            <div className="mt-6 space-y-4">
+              {decisionRules.map((rule, index) => {
+                const Icon = [Check, Zap, Info][index] || Info;
+                const iconColor = [
+                  "text-emerald-600 bg-emerald-50/80 border-emerald-100/80",
+                  "text-blue-600 bg-blue-50/80 border-blue-100/80",
+                  "text-slate-600 bg-slate-100/80 border-slate-200/80",
+                ][index];
+
+                return (
+                  <div
+                    key={rule.label}
+                    className="panel-soft flex gap-4 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[color:rgba(37,99,235,0.16)] hover:bg-white/92 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
+                  >
+                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${iconColor}`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--foreground)]">
+                        {rule.label}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
+                        {rule.text}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          <div className="rounded-[2.2rem] border border-[color:var(--line)] bg-white/86 p-7 shadow-[var(--shadow)] sm:p-9">
+          <div className="panel-soft rounded-[2.2rem] p-7 sm:p-9">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Side-by-side only where it helps
             </p>

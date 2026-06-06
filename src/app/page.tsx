@@ -96,7 +96,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
         <div className="grid gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
           <div>
-            <p className="inline-flex rounded-full border border-[color:rgba(184,106,25,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
+            <p className="inline-flex rounded-full border border-[color:rgba(37,99,235,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
               Browser-first CSV cleanup
             </p>
             <h1 className="mt-5 max-w-5xl font-display text-5xl font-semibold leading-[1.04] sm:text-6xl xl:text-[5.4rem]">
@@ -136,7 +136,7 @@ export default function HomePage() {
           </div>
 
           <div className="relative mt-10 xl:mt-0 xl:pl-10">
-            <div className="absolute -left-6 top-10 hidden h-[86%] w-[92%] rounded-[2.5rem] bg-[color:rgba(184,106,25,0.08)] blur-3xl lg:block" />
+            <div className="absolute -left-6 top-10 hidden h-[86%] w-[92%] rounded-[2.5rem] bg-[color:rgba(37,99,235,0.08)] blur-3xl lg:block" />
             <div className="-rotate-[2.7deg] rounded-[2.4rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,244,239,0.96))] p-5 shadow-[0_28px_60px_rgba(15,23,42,0.18)] sm:p-7">
               <div className="flex items-center justify-between border-b border-[color:rgba(16,37,52,0.1)] pb-5">
                 <div>
@@ -186,7 +186,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <section className="mt-14 rounded-[2rem] border border-[color:rgba(16,37,52,0.1)] bg-white/74 p-5 shadow-[var(--shadow)] sm:p-6">
+        <section className="panel-soft mt-14 rounded-[2rem] p-5 sm:p-6">
           <div className="grid gap-5 lg:grid-cols-3">
             {productSignals.map((signal, index) => (
               <div
@@ -209,7 +209,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
                 Workflow
               </p>
               <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
@@ -229,7 +229,7 @@ export default function HomePage() {
                   key={step.number}
                   className="grid gap-3 rounded-[1.7rem] border border-[color:rgba(255,255,255,0.12)] bg-[color:rgba(255,255,255,0.04)] p-5 sm:grid-cols-[88px_1fr] sm:items-start"
                 >
-                  <div className="font-display text-5xl leading-none text-[color:#d8a15d] sm:text-6xl">
+                  <div className="font-display text-5xl leading-none text-[color:#93c5fd] sm:text-6xl">
                     {step.number}
                   </div>
                   <div>
@@ -249,7 +249,7 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="rounded-[2.2rem] border border-[color:rgba(16,37,52,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,248,238,0.86))] p-7 shadow-[var(--shadow)] sm:p-8">
+          <div className="panel-strong rounded-[2.2rem] p-7 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
               Primary use case
             </p>
@@ -271,53 +271,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        <section className="mt-16 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Product proof
-            </p>
-            <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold sm:text-4xl">
-              The report should tell you whether the file feels safer, not just
-              whether the parser finished.
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-              Similar workflow products earn trust by making the next action
-              obvious. Here, that means seeing the clean rows, the removed
-              duplicates, and the email quality signals before export.
-            </p>
-          </div>
-
-          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white/86 p-6 shadow-[var(--shadow)]">
-            <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(16,37,52,0.08)] pb-5">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
-                  Cleaning report
-                </p>
-                <h3 className="mt-2 font-display text-3xl font-semibold">
-                  412 clean rows ready
-                </h3>
-              </div>
-              <div className="rounded-full bg-[color:rgba(15,118,110,0.1)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                Ready to export
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <ReportMiniStat value="43" label="Duplicates removed" />
-              <ReportMiniStat value="11" label="Role inboxes flagged" />
-              <ReportMiniStat value="28" label="Personal emails spotted" />
-            </div>
-
-            <div className="mt-5 space-y-4">
-              <ReportRule text="Make the cleaned count the first thing people see." />
-              <ReportRule text="Keep secondary metrics close enough to support the decision." />
-              <ReportRule text="Let the preview and the report confirm each other before export." />
-            </div>
-          </div>
-        </section>
       </section>
 
-      <section className="bg-[color:rgba(255,255,255,0.46)] py-16">
+      <section className="bg-[color:rgba(255,255,255,0.38)] py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr]">
             <div>
@@ -334,10 +290,10 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="space-y-4">
-              {supportTools.map((tool) => (
-                <SupportLink key={tool.href} {...tool} />
-              ))}
+          <div className="space-y-4">
+            {supportTools.map((tool) => (
+              <SupportLink key={tool.href} {...tool} />
+            ))}
             </div>
           </div>
         </div>
@@ -345,7 +301,7 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
-          <div className="rounded-[2rem] border border-[color:rgba(16,37,52,0.1)] bg-white/82 p-6 shadow-[var(--shadow)]">
+          <div className="panel-soft rounded-[2rem] p-6">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Trust boundary
             </p>
@@ -415,7 +371,7 @@ function WorkspaceRowMock({
               </span>
             ) : null}
           </div>
-          <p className="mt-3 rounded-[0.95rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(255,251,246,0.9)] px-3 py-3 text-sm leading-6 text-[color:var(--foreground)]">
+          <p className="mt-3 rounded-[0.95rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(240,244,255,0.9)] px-3 py-3 text-sm leading-6 text-[color:var(--foreground)]">
             {value}
           </p>
         </div>
@@ -439,7 +395,7 @@ function MetricNote({ value, label }: { value: string; label: string }) {
 
 function ValuePill({ title, text }: { title: string; text: string }) {
   return (
-    <div className="rounded-[1.4rem] border border-[color:rgba(16,37,52,0.08)] bg-white/72 p-4">
+    <div className="panel-soft rounded-[1.4rem] p-4">
       <p className="text-sm font-semibold text-[color:var(--foreground)]">{title}</p>
       <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{text}</p>
     </div>
@@ -456,7 +412,7 @@ function UseCasePanel({
   text: string;
 }) {
   return (
-    <div className="rounded-[2rem] border border-[color:rgba(16,37,52,0.1)] bg-white/8 p-6 shadow-[var(--shadow)] sm:bg-white/76">
+    <div className="rounded-[2rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(244,248,252,0.92))] p-6 shadow-[0_18px_42px_rgba(15,23,42,0.06)]">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
         {kicker}
       </p>
@@ -467,33 +423,6 @@ function UseCasePanel({
         {text}
       </p>
     </div>
-  );
-}
-
-function ReportMiniStat({
-  value,
-  label,
-}: {
-  value: string;
-  label: string;
-}) {
-  return (
-    <div className="rounded-[1.3rem] border border-[color:rgba(16,37,52,0.08)] bg-[color:rgba(244,247,250,0.92)] p-4">
-      <p className="text-2xl font-semibold tabular-nums text-[color:var(--foreground)]">
-        {value}
-      </p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
-        {label}
-      </p>
-    </div>
-  );
-}
-
-function ReportRule({ text }: { text: string }) {
-  return (
-    <p className="border-t border-[color:rgba(16,37,52,0.08)] pt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-      {text}
-    </p>
   );
 }
 
@@ -509,7 +438,7 @@ function SupportLink({
   return (
     <Link
       href={href}
-      className="block rounded-[1.8rem] border border-[color:rgba(16,37,52,0.08)] bg-white/82 p-5 shadow-[var(--shadow)]"
+      className="panel-soft block rounded-[1.8rem] p-5 transition hover:-translate-y-0.5 hover:border-[color:rgba(37,99,235,0.16)] hover:bg-white/94 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
         Tool

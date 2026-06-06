@@ -7,9 +7,8 @@ export function PageFrame({ children }: { children: ReactNode }) {
   return (
     <div className="page-shell">
       <SiteHeader />
-      <main>{children}</main>
+      <main id="main-content">{children}</main>
       <SiteFooter />
     </div>
   );
 }
-

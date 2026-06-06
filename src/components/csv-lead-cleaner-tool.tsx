@@ -2,13 +2,20 @@
 
 import {
   AlertCircle,
+  AlertTriangle,
+  Building2,
   CheckCircle2,
+  CopyMinus,
   Download,
+  FileMinus,
   FileSpreadsheet,
   FlaskConical,
   LoaderCircle,
+  Mail,
   Redo2,
   ScanSearch,
+  ShieldAlert,
+  Sparkles,
   Undo2,
   Upload,
 } from "lucide-react";
@@ -410,11 +417,10 @@ export function CsvLeadCleanerTool() {
   const hasLoadedFile = headers.length > 0 && status === "ready";
 
   return (
-    <section className="rounded-[2.2rem] border border-[color:var(--line)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(246,249,252,0.92))] shadow-[var(--shadow)]">
-      <div className="grid gap-0 xl:grid-cols-[380px_minmax(0,1fr)]">
-        <div className="flex h-full flex-col p-5 sm:p-7">
+    <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+      <div className="panel-soft w-full xl:w-[380px] shrink-0 rounded-[2.2rem] p-5 sm:p-7 flex flex-col">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:rgba(21,50,70,0.08)] text-[color:#153246]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
               <FileSpreadsheet className="h-5 w-5" />
             </div>
             <div>
@@ -429,20 +435,28 @@ export function CsvLeadCleanerTool() {
 
           <label
             htmlFor="csv-upload"
-            className="mt-5 flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border-2 border-dashed border-[color:rgba(184,106,25,0.34)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,247,237,0.94))] px-6 py-8 text-center transition hover:border-[color:var(--brand)] hover:shadow-[0_18px_36px_rgba(184,106,25,0.12)]"
+            className="group mt-5 flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
           >
-            {isParsing ? (
-              <LoaderCircle className="h-8 w-8 animate-spin text-[color:var(--brand-strong)]" />
-            ) : (
-              <Upload className="h-8 w-8 text-[color:var(--brand-strong)]" />
-            )}
-            <span className="mt-4 text-lg font-semibold sm:text-xl">
-              {isParsing ? "Parsing your CSV..." : "Upload CSV"}
-            </span>
-            <span className="mt-3 max-w-sm text-sm leading-6 text-[color:var(--muted)]">
-              Drag a file here or click to choose one. Free supports up to 2 MB
-              per CSV.
-            </span>
+            <div className="flex flex-col items-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
+                {isParsing ? (
+                  <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
+                ) : (
+                  <Upload className="h-6 w-6 text-[color:var(--brand-strong)]" />
+                )}
+              </div>
+              <span className="mt-4 text-base font-semibold text-slate-800">
+                {isParsing ? "Parsing your CSV..." : "Drag and drop your lead CSV here"}
+              </span>
+              <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
+                or click to browse local files. Free supports spreadsheets up to 2 MB.
+              </span>
+              {!isParsing && (
+                <div className="mt-5 inline-flex min-h-9 items-center justify-center rounded-full bg-white border border-[color:var(--line)] px-4 text-xs font-semibold text-slate-800 shadow-xs transition duration-200 hover:bg-slate-100/80 hover:border-slate-300">
+                  Select File
+                </div>
+              )}
+            </div>
             <input
               id="csv-upload"
               type="file"
@@ -453,43 +467,48 @@ export function CsvLeadCleanerTool() {
             />
           </label>
 
-          <p className="mt-3 text-xs leading-6 text-[color:var(--muted)]">
+          <p className="mt-3 text-xs leading-5 text-[color:var(--muted)]">
             Core processing happens in your browser on this device. Optional
             analytics, error reporting, and saved workspace state can still run
             separately.
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={loadDemoCsv}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5"
-            >
-              <FlaskConical className="h-4 w-4" />
-              Try sample CSV
-            </button>
-            {hasLoadedFile ? (
-              <>
-                <button
-                  type="button"
-                  onClick={undoConfigChange}
-                  disabled={!pastConfigs.length}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Undo2 className="h-4 w-4" />
-                  Undo
-                </button>
-                <button
-                  type="button"
-                  onClick={redoConfigChange}
-                  disabled={!futureConfigs.length}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/80 px-5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Redo2 className="h-4 w-4" />
-                  Redo
-                </button>
-              </>
-            ) : null}
+          <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+              Quick start
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={loadDemoCsv}
+                className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 text-xs font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+              >
+                <FlaskConical className="h-3.5 w-3.5" />
+                Try sample CSV
+              </button>
+              {hasLoadedFile ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={undoConfigChange}
+                    disabled={!pastConfigs.length}
+                    className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-slate-200/80 bg-white px-4 text-xs font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
+                  >
+                    <Undo2 className="h-3.5 w-3.5" />
+                    Undo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={redoConfigChange}
+                    disabled={!futureConfigs.length}
+                    className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-slate-200/80 bg-white px-4 text-xs font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
+                  >
+                    <Redo2 className="h-3.5 w-3.5" />
+                    Redo
+                  </button>
+                </>
+              ) : null}
+            </div>
           </div>
 
           {pendingFile ? <FileSizeNotice pendingFile={pendingFile} /> : null}
@@ -518,24 +537,24 @@ export function CsvLeadCleanerTool() {
 
           {hasLoadedFile ? (
             <div className="mt-5 grid gap-4">
-              <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-                  File
+              <div className="rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+                  Active File
                 </p>
-                <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
+                <p className="mt-1 text-sm font-semibold truncate text-slate-800">
                   {fileName || "No CSV uploaded yet"}
                 </p>
                 {rows.length ? (
-                  <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
-                    {rows.length} rows loaded
+                  <p className="mt-1 text-[11px] font-medium text-slate-500">
+                    {rows.length.toLocaleString()} raw rows loaded
                   </p>
                 ) : null}
               </div>
 
-              <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+              <div className="rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm">
                 <label
                   htmlFor="column-select"
-                  className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
+                  className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
                 >
                   Main cleanup column
                 </label>
@@ -552,7 +571,7 @@ export function CsvLeadCleanerTool() {
                     });
                   }}
                   disabled={!headers.length || isParsing}
-                  className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
+                  className="mt-2 min-h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 focus:bg-white px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10 transition"
                 >
                   {headers.map((header) => (
                     <option key={header} value={header}>
@@ -561,14 +580,14 @@ export function CsvLeadCleanerTool() {
                   ))}
                 </select>
                 {selectedDetection ? (
-                  <div className="mt-3 rounded-[1rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] px-3 py-3 text-sm">
-                    <div className="flex items-center gap-2 font-medium text-[color:var(--foreground)]">
-                      <ScanSearch className="h-4 w-4 text-[color:var(--accent)]" />
-                      Detected as {prettyColumnType(selectedDetection.type)}
-                    </div>
-                    <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
-                      {selectedDetection.confidence}% confidence
-                    </p>
+                  <div className="mt-2.5 flex items-center justify-between gap-2 rounded-lg bg-teal-50/50 border border-teal-100/50 px-3 py-1.5 text-xs text-teal-800">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <ScanSearch className="h-3.5 w-3.5 text-teal-600" />
+                      Type: {prettyColumnType(selectedDetection.type)}
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-teal-600/80">
+                      {selectedDetection.confidence}% match
+                    </span>
                   </div>
                 ) : null}
                 {recommendedDetection &&
@@ -581,18 +600,18 @@ export function CsvLeadCleanerTool() {
                         duplicateMode,
                       })
                     }
-                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--brand-strong)]"
+                    className="mt-2.5 flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 transition"
                   >
-                    Use suggested column: {recommendedDetection.header} (
-                    {recommendedDetection.confidence}%)
+                    <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+                    Use suggested column: {recommendedDetection.header} ({recommendedDetection.confidence}%)
                   </button>
                 ) : null}
               </div>
 
-              <div className="rounded-[1.5rem] border border-[color:var(--line)] bg-white/75 p-4">
+              <div className="rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm">
                 <label
                   htmlFor="duplicate-mode"
-                  className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
+                  className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
                 >
                   Deduplicate by
                 </label>
@@ -610,7 +629,7 @@ export function CsvLeadCleanerTool() {
                     });
                   }}
                   disabled={!headers.length || isParsing}
-                  className="mt-2 min-h-11 w-full rounded-xl border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)]"
+                  className="mt-2 min-h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 focus:bg-white px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10 transition"
                 >
                   {DUPLICATE_MODE_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -618,7 +637,7 @@ export function CsvLeadCleanerTool() {
                     </option>
                   ))}
                 </select>
-                <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+                <p className="mt-2.5 text-xs leading-relaxed text-slate-500">
                   {
                     DUPLICATE_MODE_OPTIONS.find(
                       (option) => option.value === duplicateMode,
@@ -634,22 +653,22 @@ export function CsvLeadCleanerTool() {
 
           {hasLoadedFile ? (
             <>
-              <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+              <div className="mt-4 border-l-4 border-blue-500/80 bg-blue-50/30 rounded-r-2xl p-4 border border-y border-r border-slate-200/40 shadow-xs">
+                <p className="text-xs font-bold uppercase tracking-wider text-blue-800">
                   What this now reports
                 </p>
-                <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
+                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
                   Clean rows, duplicates removed, invalid and blank rows,
                   generated domains, business vs personal inboxes, and
                   role-based email counts when email data is present.
                 </p>
               </div>
 
-              <div className="mt-5 rounded-[1.5rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(244,247,250,0.92)] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+              <div className="mt-4 border-l-4 border-indigo-500/80 bg-indigo-50/30 rounded-r-2xl p-4 border border-y border-r border-slate-200/40 shadow-xs">
+                <p className="text-xs font-bold uppercase tracking-wider text-indigo-800">
                   Operation transparency
                 </p>
-                <p className="mt-2 text-sm leading-7 text-[color:var(--foreground)]">
+                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
                   {selectedColumn
                     ? `Current cleanup on "${selectedColumn}" will leave ${cleaned.summary.cleanRowsReady.toLocaleString()} rows ready for export, remove ${cleaned.summary.duplicatesRemoved.toLocaleString()} duplicates, and drop ${cleaned.summary.invalidRowsRemoved.toLocaleString()} invalid rows plus ${cleaned.summary.emptyRowsRemoved.toLocaleString()} blanks.`
                     : "Upload a CSV and choose a source column to see the expected cleanup effect before you export."}
@@ -669,7 +688,7 @@ export function CsvLeadCleanerTool() {
                 downloadCsvRecords(buildCleanFileName(fileName), cleaned.rows);
               }}
               disabled={!cleaned.rows.length}
-              className="btn-primary inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--foreground)] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn-primary inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:var(--brand)] px-5 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(37,99,235,0.35)] transition-all hover:bg-[color:var(--brand-strong)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:-translate-y-0"
             >
               <Download className="h-4 w-4" />
               Export Clean CSV
@@ -677,9 +696,8 @@ export function CsvLeadCleanerTool() {
           </div>
         </div>
 
-        <div className="border-t border-[color:var(--line)] xl:border-l xl:border-t-0">
-          <div className="space-y-6 p-5 sm:p-7">
-            <div className="rounded-[1.7rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(255,248,238,0.92))] p-5">
+        <div className="flex-1 min-w-0 space-y-6">
+          <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
@@ -695,32 +713,36 @@ export function CsvLeadCleanerTool() {
                 </div>
               </div>
 
-              <div className="mt-5 rounded-[1.7rem] border border-[color:rgba(15,118,110,0.14)] bg-[linear-gradient(180deg,rgba(15,118,110,0.1),rgba(255,255,255,0.96))] p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
+              <div className="mt-5 rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(37,99,235,0.05),rgba(255,255,255,0.9))] p-6 border border-slate-200/60 shadow-[0_14px_30px_rgba(15,23,42,0.04)] relative overflow-hidden">
+                <div className="absolute right-0 top-0 h-40 w-40 bg-[color:rgba(37,99,235,0.04)] rounded-full blur-2xl -mr-10 -mt-10" />
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 relative z-10">
                   Clean rows ready
                 </p>
-                <p className="mt-3 font-display text-6xl font-semibold leading-none tabular-nums text-[color:var(--foreground)] sm:text-7xl">
+                <p className="mt-3 font-display text-6xl font-bold leading-none tabular-nums text-slate-900 sm:text-7xl relative z-10">
                   {cleaned.summary.cleanRowsReady.toLocaleString()}
                 </p>
-                <p className="mt-3 max-w-lg text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-500 sm:text-base relative z-10">
                   This is the number that should feel safe enough to move into
                   the next system after cleanup.
                 </p>
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-4">
-                <StatCard label="Rows uploaded" value={cleaned.summary.totalRows} />
+                <StatCard label="Rows uploaded" value={cleaned.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
                 <StatCard
                   label="Duplicates removed"
                   value={cleaned.summary.duplicatesRemoved}
+                  icon={<CopyMinus className="h-4 w-4 text-amber-500" />}
                 />
                 <StatCard
                   label="Invalid rows removed"
                   value={cleaned.summary.invalidRowsRemoved}
+                  icon={<AlertTriangle className="h-4 w-4 text-rose-500" />}
                 />
                 <StatCard
                   label="Blank rows removed"
                   value={cleaned.summary.emptyRowsRemoved}
+                  icon={<FileMinus className="h-4 w-4 text-slate-400" />}
                 />
               </div>
 
@@ -729,21 +751,24 @@ export function CsvLeadCleanerTool() {
                   label="Business emails"
                   value={cleaned.summary.businessEmails}
                   tone="teal"
+                  icon={<Building2 className="h-4 w-4 text-teal-600" />}
                 />
                 <InsightTile
                   label="Personal emails"
                   value={cleaned.summary.personalEmails}
                   tone="amber"
+                  icon={<Mail className="h-4 w-4 text-amber-600" />}
                 />
                 <InsightTile
                   label="Role-based inboxes"
                   value={cleaned.summary.roleBasedEmails}
                   tone="slate"
+                  icon={<ShieldAlert className="h-4 w-4 text-slate-500" />}
                 />
               </div>
             </div>
 
-            <div className="rounded-[1.7rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5 backdrop-blur">
+            <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h3 className="font-display text-xl font-semibold">
@@ -758,19 +783,19 @@ export function CsvLeadCleanerTool() {
                 </span>
               </div>
 
-              <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] bg-white/80">
+              <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-xs">
                 {previewHeaders.length && previewRows.length ? (
                   <div className="max-h-[38rem] overflow-auto">
                     <table className="min-w-[980px] w-full border-collapse text-left text-sm">
-                      <thead className="sticky top-0 bg-[#f6efe5]">
+                      <thead className="sticky top-0 bg-slate-50">
                         <tr>
-                          <th className="border-b border-[color:var(--line)] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                          <th className="border-b border-slate-200 px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
                             #
                           </th>
                           {previewHeaders.map((header) => (
                             <th
                               key={header}
-                              className="border-b border-[color:var(--line)] px-4 py-3 font-semibold text-[color:var(--foreground)] whitespace-nowrap"
+                              className="border-b border-slate-200 px-4 py-3 font-semibold text-slate-800 whitespace-nowrap"
                             >
                               {prettyHeader(header)}
                             </th>
@@ -781,20 +806,56 @@ export function CsvLeadCleanerTool() {
                         {previewRows.map((row, index) => (
                           <tr
                             key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}`}
+                            className="hover:bg-slate-50/60 transition-colors"
                           >
-                            <td className="border-b border-[color:rgba(17,36,51,0.08)] px-3 py-3 align-top text-xs font-semibold text-[color:var(--muted)]">
+                            <td className="border-b border-slate-100 px-3 py-3 align-top text-xs font-semibold text-slate-400">
                               {index + 1}
                             </td>
-                            {previewHeaders.map((header) => (
-                              <td
-                                key={`${index}-${header}`}
-                                className="border-b border-[color:rgba(17,36,51,0.08)] px-4 py-3 align-top text-[color:var(--muted)]"
-                              >
-                                <div className="max-w-[16rem] whitespace-normal break-words">
-                                  {row[header] || "—"}
-                                </div>
-                              </td>
-                            ))}
+                            {previewHeaders.map((header) => {
+                              const cellValue = row[header];
+                              let displayElement = <>{cellValue || "—"}</>;
+
+                              if (header === "leadcleanr_email_type" && cellValue) {
+                                const isBusiness = cellValue === "business";
+                                displayElement = (
+                                  <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold border ${
+                                    isBusiness
+                                      ? "bg-teal-50/80 text-teal-700 border-teal-200/50"
+                                      : "bg-amber-50/80 text-amber-700 border-amber-200/50"
+                                  }`}>
+                                    {cellValue}
+                                  </span>
+                                );
+                              } else if (header === "leadcleanr_role_email" && cellValue) {
+                                const isRole = cellValue === "role-based";
+                                displayElement = (
+                                  <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold border ${
+                                    isRole
+                                      ? "bg-purple-50/80 text-purple-700 border-purple-200/50"
+                                      : "bg-slate-50/80 text-slate-600 border-slate-200/50"
+                                  }`}>
+                                    {cellValue}
+                                  </span>
+                                );
+                              } else if (header === "leadcleanr_generated_domain" && cellValue) {
+                                displayElement = (
+                                  <code className="font-mono text-xs text-indigo-700 bg-indigo-50/50 border border-indigo-100/30 px-1.5 py-0.5 rounded">
+                                    {cellValue}
+                                  </code>
+                                );
+                              }
+
+                              return (
+                                <td
+                                  key={`${index}-${header}`}
+                                  className="border-b border-slate-100 px-4 py-3 align-top text-slate-600"
+                                >
+                                  <div className="max-w-[16rem] whitespace-normal break-words">
+                                    {displayElement}
+                                  </div>
+                                </td>
+                              );
+                            })}
                           </tr>
                         ))}
                       </tbody>
@@ -816,10 +877,8 @@ export function CsvLeadCleanerTool() {
                 )}
               </div>
             </div>
-          </div>
         </div>
       </div>
-    </section>
   );
 }
 
@@ -1285,22 +1344,29 @@ function EmptyState({
 function StatCard({
   label,
   value,
+  icon,
   accent = false,
 }: {
   label: string;
   value: number;
+  icon?: React.ReactNode;
   accent?: boolean;
 }) {
   return (
     <div
-      className={`rounded-[1.5rem] border p-4 ${
+      className={`rounded-2xl border p-4 transition-all duration-300 hover:shadow-xs ${
         accent
-          ? "border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.08)]"
-          : "border-[color:var(--line)] bg-white/80"
+          ? "border-emerald-100 bg-emerald-50/40"
+          : "border-slate-200/60 bg-white/70 hover:border-slate-300"
       }`}
     >
-      <div className="text-sm text-[color:var(--muted)]">{label}</div>
-      <div className="mt-2 text-3xl font-semibold tabular-nums">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+          {label}
+        </span>
+        {icon && <div className="text-slate-400">{icon}</div>}
+      </div>
+      <div className="mt-3 text-2xl font-bold tabular-nums text-slate-900">
         {value.toLocaleString()}
       </div>
     </div>
@@ -1311,23 +1377,28 @@ function InsightTile({
   label,
   value,
   tone,
+  icon,
 }: {
   label: string;
   value: number;
   tone: "teal" | "amber" | "slate";
+  icon?: React.ReactNode;
 }) {
   const palette = {
-    teal: "border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.08)] text-[color:var(--accent)]",
-    amber:
-      "border-[color:rgba(217,119,6,0.18)] bg-[color:rgba(255,247,237,0.9)] text-[color:var(--brand-strong)]",
-    slate:
-      "border-[color:rgba(17,36,51,0.1)] bg-[color:rgba(17,36,51,0.05)] text-[color:var(--foreground)]",
+    teal: "border-teal-100 bg-teal-50/30 text-teal-800 hover:border-teal-200",
+    amber: "border-amber-100 bg-amber-50/30 text-amber-800 hover:border-amber-200",
+    slate: "border-slate-200 bg-slate-50/40 text-slate-700 hover:border-slate-300",
   }[tone];
 
   return (
-    <div className={`rounded-[1.4rem] border px-4 py-4 ${palette}`}>
-      <p className="text-xs font-semibold uppercase tracking-[0.18em]">{label}</p>
-      <p className="mt-2 text-2xl font-semibold tabular-nums">
+    <div className={`rounded-2xl border px-4 py-4 transition-all duration-300 hover:shadow-xs ${palette}`}>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-semibold uppercase tracking-[0.14em]">
+          {label}
+        </span>
+        {icon && <div className="opacity-80">{icon}</div>}
+      </div>
+      <p className="mt-3 text-2xl font-bold tabular-nums">
         {value.toLocaleString()}
       </p>
     </div>

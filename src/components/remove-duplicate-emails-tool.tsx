@@ -19,7 +19,7 @@ export function RemoveDuplicateEmailsTool() {
       title="Remove duplicate emails"
       description="Paste a repeated email list to keep one clean copy of each valid address and drop the rest."
       icon={CopyMinus}
-      iconToneClassName="bg-[color:rgba(217,119,6,0.14)] text-[color:var(--brand-strong)]"
+      iconToneClassName="bg-[color:rgba(37,99,235,0.08)] text-[color:var(--brand-strong)]"
       sampleInput={SAMPLE_EMAIL_LIST}
       placeholder="Paste one email per line or a mixed list separated by commas, spaces, or tabs."
       trackName="remove-duplicate-emails"

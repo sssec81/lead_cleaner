@@ -70,7 +70,7 @@ export default function PrivacyPage() {
             </p>
           </div>
 
-          <div className="rounded-[2.2rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,236,0.96))] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.12)] sm:p-8">
+          <div className="rounded-[2.2rem] border border-[color:rgba(16,37,52,0.14)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.96))] p-6 shadow-[0_24px_50px_rgba(15,23,42,0.12)] sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
               Quick snapshot
             </p>
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
                   key={item.label}
                   className={`rounded-[1.25rem] border px-4 py-4 ${
                     index === 0
-                      ? "border-[color:rgba(184,106,25,0.16)] bg-white"
+                      ? "border-[color:rgba(37,99,235,0.16)] bg-white"
                       : "border-[color:var(--line)] bg-white/80"
                   }`}
                 >
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
       <section className="bg-[color:#153246] py-14 text-white">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:items-start">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#d8a15d]">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
               The boundary
             </p>
             <h2 className="mt-4 max-w-3xl font-display text-3xl font-semibold leading-[1.06] sm:text-4xl lg:text-5xl">
