@@ -84,11 +84,11 @@ export function SiteHeader() {
             </div>
             <Link
               href="/tools/csv-lead-cleaner"
-              className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:shadow-md"
+              className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 px-6 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:from-blue-700 hover:to-sky-600 hover:-translate-y-0.5"
             >
               <span className="sm:hidden">Open</span>
               <span className="hidden sm:inline">Open App</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 text-sky-100 transition-transform group-hover:translate-x-1 group-hover:text-white" />
             </Link>
           </div>
         </div>

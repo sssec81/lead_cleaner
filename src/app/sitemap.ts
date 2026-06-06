@@ -19,6 +19,7 @@ const staticRoutes = [
   "/tools/count-words-characters-text",
   "/tools/convert-csv-to-json",
   "/tools/merge-csv-files",
+  "/tools/split-csv-files",
   "/pricing",
   "/privacy",
   "/terms",

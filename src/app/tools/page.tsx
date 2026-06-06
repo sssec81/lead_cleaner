@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck, CheckCircle2, Rows3, Combine, FileJson, Type } from "lucide-react";
+import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck, CheckCircle2, Rows3, Combine, FileJson, Type, Scissors } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 import { BreadcrumbJsonLd } from "@/lib/seo";
@@ -74,6 +74,20 @@ const flagshipTools = [
       "Keeps all unique columns",
     ],
     icon: Combine,
+    featured: false,
+  },
+  {
+    href: "/tools/split-csv-files",
+    label: "CSV Support",
+    title: "Split CSV Files",
+    description:
+      "Break large CSV files into smaller chunks to bypass CRM import limits and download them as a ZIP.",
+    notes: [
+      "Select rows per file",
+      "Optionally keep header rows",
+      "Instant ZIP download",
+    ],
+    icon: Scissors,
     featured: false,
   },
   {

@@ -41,6 +41,8 @@ type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
 type DuplicateMode = "selected" | "email" | "phone" | "domain" | "entire_row";
 
+type EmailFilterMode = "all" | "business_only" | "personal_only";
+
 type CleaningSummary = {
   totalRows: number;
   emptyRowsRemoved: number;
@@ -59,7 +61,7 @@ type PreviewRow = CsvRow & {
   leadcleanr_role_email?: string;
 };
 
-type RemovalReason = "duplicate" | "invalid" | "blank";
+type RemovalReason = "duplicate" | "invalid" | "blank" | "personal_email" | "business_email";
 
 type CleanedResult = {
   rows: PreviewRow[];
@@ -145,6 +147,7 @@ export function CsvLeadCleanerTool() {
   const [detections, setDetections] = useState<CsvColumnDetection[]>([]);
   const [selectedColumn, setSelectedColumn] = useState("");
   const [duplicateMode, setDuplicateMode] = useState<DuplicateMode>("selected");
+  const [emailFilter, setEmailFilter] = useState<EmailFilterMode>("all");
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const [status, setStatus] = useState<UploadStatus>("idle");
@@ -160,18 +163,18 @@ export function CsvLeadCleanerTool() {
     rowsProcessed: 0,
   });
   const [pastConfigs, setPastConfigs] = useState<
-    Array<{ selectedColumn: string; duplicateMode: DuplicateMode }>
+    Array<{ selectedColumn: string; duplicateMode: DuplicateMode; emailFilter: EmailFilterMode }>
   >([]);
   const [futureConfigs, setFutureConfigs] = useState<
-    Array<{ selectedColumn: string; duplicateMode: DuplicateMode }>
+    Array<{ selectedColumn: string; duplicateMode: DuplicateMode; emailFilter: EmailFilterMode }>
   >([]);
   const [previewMode, setPreviewMode] = useState<"clean" | "removed" | "invalid">(
     "clean",
   );
 
   const cleaned = useMemo(
-    () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode),
-    [duplicateMode, headers, rows, selectedColumn],
+    () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode, emailFilter),
+    [duplicateMode, headers, rows, selectedColumn, emailFilter],
   );
 
   const previewRows = cleaned.rows.slice(0, PREVIEW_LIMIT);
@@ -209,6 +212,7 @@ export function CsvLeadCleanerTool() {
     setDetections([]);
     setSelectedColumn("");
     setDuplicateMode("selected");
+    setEmailFilter("all");
     setWarning("");
     setPastConfigs([]);
     setFutureConfigs([]);
@@ -349,21 +353,25 @@ export function CsvLeadCleanerTool() {
   function applyConfigChange(nextConfig: {
     selectedColumn: string;
     duplicateMode: DuplicateMode;
+    emailFilter?: EmailFilterMode;
   }) {
+    const nextEmailFilter = nextConfig.emailFilter ?? emailFilter;
     if (
       nextConfig.selectedColumn === selectedColumn &&
-      nextConfig.duplicateMode === duplicateMode
+      nextConfig.duplicateMode === duplicateMode &&
+      nextEmailFilter === emailFilter
     ) {
       return;
     }
 
     setPastConfigs((current) => [
       ...current,
-      { selectedColumn, duplicateMode },
+      { selectedColumn, duplicateMode, emailFilter },
     ]);
     setFutureConfigs([]);
     setSelectedColumn(nextConfig.selectedColumn);
     setDuplicateMode(nextConfig.duplicateMode);
+    setEmailFilter(nextEmailFilter);
   }
 
   function undoConfigChange() {
@@ -374,11 +382,12 @@ export function CsvLeadCleanerTool() {
       }
 
       setFutureConfigs((future) => [
-        { selectedColumn, duplicateMode },
+        { selectedColumn, duplicateMode, emailFilter },
         ...future,
       ]);
       setSelectedColumn(previous.selectedColumn);
       setDuplicateMode(previous.duplicateMode);
+      setEmailFilter(previous.emailFilter);
 
       return current.slice(0, -1);
     });
@@ -391,9 +400,10 @@ export function CsvLeadCleanerTool() {
         return current;
       }
 
-      setPastConfigs((past) => [...past, { selectedColumn, duplicateMode }]);
+      setPastConfigs((past) => [...past, { selectedColumn, duplicateMode, emailFilter }]);
       setSelectedColumn(next.selectedColumn);
       setDuplicateMode(next.duplicateMode);
+      setEmailFilter(next.emailFilter);
 
       return current.slice(1);
     });
@@ -741,6 +751,41 @@ export function CsvLeadCleanerTool() {
                   }
                 </p>
               </div>
+
+              {showEmailEnrichment ? (
+                <div className="mt-4 rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm">
+                  <label
+                    htmlFor="email-filter"
+                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]"
+                  >
+                    Email Filter
+                  </label>
+                  <select
+                    id="email-filter"
+                    value={emailFilter}
+                    onChange={(event) => {
+                      const nextFilter = event.target.value as EmailFilterMode;
+                      setEmailFilter(nextFilter);
+                      trackToolEvent("csv-lead-cleaner", "change_email_filter", {
+                        filter: nextFilter,
+                      });
+                    }}
+                    disabled={!headers.length || isParsing}
+                    className="mt-2 min-h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 focus:bg-white px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10 transition"
+                  >
+                    <option value="all">Keep all valid emails</option>
+                    <option value="business_only">Keep business emails only</option>
+                    <option value="personal_only">Keep personal emails only</option>
+                  </select>
+                  <p className="mt-2.5 text-xs leading-relaxed text-slate-500">
+                    {emailFilter === "business_only"
+                      ? "Removes free providers like Gmail and Yahoo."
+                      : emailFilter === "personal_only"
+                        ? "Removes corporate and custom domains."
+                        : "Includes both business and free providers."}
+                  </p>
+                </div>
+              ) : null}
             </div>
           ) : null}
 
@@ -750,6 +795,8 @@ export function CsvLeadCleanerTool() {
           <div className="mt-auto hidden pt-5 xl:block space-y-5">
             <ExportActions
               cleanedRows={cleaned.rows}
+              removedRows={cleaned.removedRows}
+              invalidRows={cleaned.invalidRows}
               duplicateMode={duplicateMode}
               fileName={fileName}
             />
@@ -1018,6 +1065,8 @@ export function CsvLeadCleanerTool() {
             <div className="xl:hidden space-y-5">
               <ExportActions
                 cleanedRows={cleaned.rows}
+                removedRows={cleaned.removedRows}
+                invalidRows={cleaned.invalidRows}
                 duplicateMode={duplicateMode}
                 fileName={fileName}
               />
@@ -1037,6 +1086,7 @@ function cleanCsvRows(
   headers: string[],
   selectedColumn: string,
   duplicateMode: DuplicateMode,
+  emailFilter: EmailFilterMode,
 ): CleanedResult {
   const emptySummary: CleaningSummary = {
     totalRows: rows.length,
@@ -1162,6 +1212,18 @@ function cleanCsvRows(
       if (isRoleBased) {
         roleBasedEmails += 1;
       }
+    }
+
+    if (emailFilter === "business_only" && nextRow.leadcleanr_email_type === "personal") {
+      const removedRow = { ...nextRow, leadcleanr_reason: "personal_email" as const };
+      removedRows.push(removedRow);
+      return;
+    }
+
+    if (emailFilter === "personal_only" && nextRow.leadcleanr_email_type === "business") {
+      const removedRow = { ...nextRow, leadcleanr_reason: "business_email" as const };
+      removedRows.push(removedRow);
+      return;
     }
 
     cleanedRows.push(nextRow);
@@ -1626,10 +1688,14 @@ function WorkflowSteps({
 
 function ExportActions({
   cleanedRows,
+  removedRows,
+  invalidRows,
   duplicateMode,
   fileName,
 }: {
   cleanedRows: PreviewRow[];
+  removedRows: PreviewRow[];
+  invalidRows: PreviewRow[];
   duplicateMode: DuplicateMode;
   fileName: string;
 }) {
@@ -1683,26 +1749,55 @@ function ExportActions({
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => {
-          trackToolEvent("csv-lead-cleaner", "export_csv", {
-            row_count: cleanedRows.length,
-            duplicate_mode: duplicateMode,
-          });
-          downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
-        }}
-        disabled={!exportUnlocked}
-        className={`mt-5 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition ${
-          exportUnlocked
-            ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm"
-            : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
-        }`}
-      >
-        <Download className="h-4 w-4" />
-        Export Clean CSV
-      </button>
-      <p className="mt-3 text-xs leading-relaxed text-slate-400 text-center">
+      <div className="mt-5 space-y-3">
+        <button
+          type="button"
+          onClick={() => {
+            trackToolEvent("csv-lead-cleaner", "export_csv", {
+              row_count: cleanedRows.length,
+              duplicate_mode: duplicateMode,
+            });
+            downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
+          }}
+          disabled={!exportUnlocked}
+          className={`inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition ${
+            exportUnlocked
+              ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm"
+              : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+          }`}
+        >
+          <Download className="h-4 w-4" />
+          Export Clean CSV
+        </button>
+
+        {removedRows.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              downloadCsvRecords(fileName.replace(/\.csv$/i, "-removed.csv"), removedRows);
+            }}
+            className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 shadow-xs"
+          >
+            <Download className="h-4 w-4 text-slate-400" />
+            Download Removed Rows
+          </button>
+        )}
+
+        {invalidRows.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              downloadCsvRecords(fileName.replace(/\.csv$/i, "-invalid.csv"), invalidRows);
+            }}
+            className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 shadow-xs"
+          >
+            <Download className="h-4 w-4 text-slate-400" />
+            Download Invalid Rows
+          </button>
+        )}
+      </div>
+
+      <p className="mt-4 text-xs leading-relaxed text-slate-400 text-center">
         {exportUnlocked
           ? "Processed in your browser. CSV never uploaded."
           : "Export unlocks after upload and cleanup."}

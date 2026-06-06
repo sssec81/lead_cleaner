@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import {
   Upload,
@@ -39,7 +39,37 @@ export function MergeCsvFilesTool() {
   const [mergedRows, setMergedRows] = useState<CsvRow[]>([]);
   const [mergedHeaders, setMergedHeaders] = useState<string[]>([]);
   
+  const [duplicateMode, setDuplicateMode] = useState<"none" | "exact_row" | "column">("none");
+  const [selectedColumn, setSelectedColumn] = useState("");
+  
   const [isDragging, setIsDragging] = useState(false);
+
+  const finalRows = useMemo(() => {
+    if (duplicateMode === "none") return mergedRows;
+    
+    if (duplicateMode === "exact_row") {
+      const seen = new Set<string>();
+      return mergedRows.filter(row => {
+        const hash = JSON.stringify(row);
+        if (seen.has(hash)) return false;
+        seen.add(hash);
+        return true;
+      });
+    }
+    
+    if (duplicateMode === "column" && selectedColumn) {
+      const seen = new Set<string>();
+      return mergedRows.filter(row => {
+        const val = String(row[selectedColumn] ?? "").trim().toLowerCase();
+        if (!val) return true; // Don't dedupe empty cells, keep them
+        if (seen.has(val)) return false;
+        seen.add(val);
+        return true;
+      });
+    }
+    
+    return mergedRows;
+  }, [mergedRows, duplicateMode, selectedColumn]);
 
   function resetState() {
     setStatus("idle");
@@ -138,6 +168,14 @@ export function MergeCsvFilesTool() {
     setFileEntries(prev => [...prev, ...newFileEntries]);
     setStatus("ready");
     
+    if (!selectedColumn) {
+      const emailHeader = updatedHeaders.find(h => h.toLowerCase().includes("email"));
+      if (emailHeader) {
+        setSelectedColumn(emailHeader);
+        setDuplicateMode("column");
+      }
+    }
+    
     trackToolEvent("merge-csv-files", "files_added", {
       count: files.length,
       total_rows: normalizedRows.length
@@ -160,10 +198,11 @@ export function MergeCsvFilesTool() {
   }
 
   function handleExport() {
-    downloadCsvRecords("merged-data.csv", mergedRows);
+    downloadCsvRecords("merged-data.csv", finalRows);
     trackToolEvent("merge-csv-files", "download_csv", {
-      result_count: mergedRows.length,
-      file_count: fileEntries.length
+      result_count: finalRows.length,
+      file_count: fileEntries.length,
+      duplicate_mode: duplicateMode
     });
   }
 
@@ -254,6 +293,43 @@ export function MergeCsvFilesTool() {
              </div>
           )}
 
+          {mergedHeaders.length > 0 && (
+             <div className="mt-6 rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm">
+               <label htmlFor="duplicate-mode" className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+                 Deduplicate
+               </label>
+               <select
+                 id="duplicate-mode"
+                 value={duplicateMode}
+                 onChange={(e) => setDuplicateMode(e.target.value as "none" | "exact_row" | "column")}
+                 className="mt-2 min-h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10"
+               >
+                 <option value="none">Do not deduplicate</option>
+                 <option value="exact_row">Exact row match</option>
+                 <option value="column">By specific column</option>
+               </select>
+
+               {duplicateMode === "column" && (
+                 <div className="mt-3">
+                   <label htmlFor="selected-column" className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+                     Column to check
+                   </label>
+                   <select
+                     id="selected-column"
+                     value={selectedColumn}
+                     onChange={(e) => setSelectedColumn(e.target.value)}
+                     className="mt-2 min-h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10"
+                   >
+                     <option value="" disabled>Select a column...</option>
+                     {mergedHeaders.map(h => (
+                       <option key={h} value={h}>{h}</option>
+                     ))}
+                   </select>
+                 </div>
+               )}
+             </div>
+           )}
+
           {error ? <div className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
         </div>
 
@@ -294,8 +370,13 @@ export function MergeCsvFilesTool() {
                   <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-4xl font-display font-bold text-slate-900 tracking-tight">
-                        {mergedRows.length.toLocaleString()} <span className="text-slate-500 font-medium text-lg">merged rows.</span>
+                        {finalRows.length.toLocaleString()} <span className="text-slate-500 font-medium text-lg">merged rows.</span>
                       </p>
+                      {mergedRows.length !== finalRows.length && (
+                        <p className="mt-1 text-xs font-semibold text-amber-600">
+                          {Math.max(0, mergedRows.length - finalRows.length).toLocaleString()} duplicates removed
+                        </p>
+                      )}
                       <p className="mt-1 text-sm text-slate-500">Across {mergedHeaders.length} unique columns.</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
