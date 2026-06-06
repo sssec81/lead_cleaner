@@ -175,7 +175,7 @@ export function TextProcessingTool({
 
   function pushWorkspaceUpdate(nextWorkspace: WorkspaceItem[]) {
     const previous = cloneWorkspace(workspace);
-    setPastWorkspace((current) => [...current, previous]);
+    setPastWorkspace((current) => [...current, previous].slice(-30));
     setFutureWorkspace([]);
     setWorkspace(nextWorkspace);
   }
@@ -347,7 +347,7 @@ export function TextProcessingTool({
     }
 
     setPastWorkspace((current) => current.slice(0, -1));
-    setFutureWorkspace((current) => [cloneWorkspace(workspace), ...current]);
+    setFutureWorkspace((current) => [cloneWorkspace(workspace), ...current].slice(0, 30));
     setWorkspace(cloneWorkspace(previous));
     trackToolEvent(trackName, "undo_result_edit");
   }
@@ -358,7 +358,7 @@ export function TextProcessingTool({
       return;
     }
 
-    setPastWorkspace((current) => [...current, cloneWorkspace(workspace)]);
+    setPastWorkspace((current) => [...current, cloneWorkspace(workspace)].slice(-30));
     setFutureWorkspace((current) => current.slice(1));
     setWorkspace(cloneWorkspace(next));
     trackToolEvent(trackName, "redo_result_edit");

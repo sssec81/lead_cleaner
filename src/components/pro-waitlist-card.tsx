@@ -22,32 +22,28 @@ export function ProWaitlistCard({
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !email.includes("@")) return;
 
     setStatus("submitting");
 
-    // Track waitlist join event
     trackToolEvent("waitlist", "join", {
       source: trackSource,
     });
 
-    // Simulate safe local storage and notify user
-    setTimeout(() => {
-      try {
-        const key = "leadcleanr:waitlist:emails";
-        const existing = JSON.parse(localStorage.getItem(key) || "[]");
-        if (!existing.includes(email)) {
-          existing.push(email);
-          localStorage.setItem(key, JSON.stringify(existing));
-        }
-      } catch (err) {
-        console.error("Local storage waitlist save failed", err);
-      }
-      setStatus("success");
-      setEmail("");
-    }, 800);
+    try {
+      await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: trackSource }),
+      });
+    } catch (err) {
+      console.error("Waitlist submit failed", err);
+    }
+    
+    setStatus("success");
+    setEmail("");
   };
 
   const isDark = theme === "dark";
