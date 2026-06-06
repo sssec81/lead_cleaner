@@ -16,8 +16,8 @@ export function CountWordsCharactersTool() {
   // Line count: number of newlines + 1 (if text is not empty)
   const lines = text ? text.split(/\r?\n/).length : 0;
   
-  // Sentence count
-  const sentences = text.trim() ? text.split(/[.!?]+/).filter(s => s.trim().length > 0).length : 0;
+  // Sentence count (estimate)
+  const sentences = text.trim() ? text.split(/[.!?]+(?:\s+|$)/).filter(s => s.trim().length > 0).length : 0;
   
   // Paragraph count: split on double newlines
   const paragraphs = text.trim() ? text.trim().split(/\r?\n\s*\r?\n/).length : 0;
@@ -90,7 +90,7 @@ export function CountWordsCharactersTool() {
             <StatTile label="Characters" value={characters} icon={Hash} />
             <StatTile label="Characters (no spaces)" value={charactersNoSpaces} icon={Hash} />
             <StatTile label="Lines" value={lines} icon={AlignLeft} />
-            <StatTile label="Sentences" value={sentences} icon={FileText} />
+            <StatTile label="Sentences (est.)" value={sentences} icon={FileText} />
             <StatTile label="Paragraphs" value={paragraphs} icon={Pilcrow} />
           </div>
         </div>
