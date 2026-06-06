@@ -31,8 +31,8 @@ The best initial buyers are professionals doing repeat spreadsheet cleanup work:
 
 **Pro — $19/month**
 - CSV cleaning up to **25 MB**
-- **500** Email Verifications (MX + SMTP) per month included
-- Saved workspaces & cleanup history (Requires Account)
+- **500** Email Verifications (MX + SMTP) per month included (No rollover, resets monthly)
+- Saved workspaces & cleanup history retained for **30 days** (Requires Account)
 - Export presets (HubSpot, Apollo formats)
 
 **Pro+ Expansion (Pay-as-you-go Credits)**
@@ -43,6 +43,12 @@ The best initial buyers are professionals doing repeat spreadsheet cleanup work:
 
 The anchor for retention is **Saved Workspaces**. 
 Users don't stay subscribed month-over-month for a utility tool unless their data and operational history live inside it. By automatically saving their previous CSV cleanups, deduplication rules, and verification states to their account, switching to a competitor becomes a frustrating loss of context. Saved workspaces are the primary mechanism for lowering churn.
+
+## Phase 2 Privacy Shift
+
+The MVP's strongest selling point is "100% browser-side privacy." Once we introduce Supabase and Saved Workspaces for Pro users, that claim fundamentally changes. 
+
+**Requirement:** Before launching Sprint 3 (Saved Workspaces), we must update the Privacy Policy to explicitly state that Pro user data is stored server-side for 30 days to enable history features, while Free tier users remain 100% browser-side. This ensures strict GDPR compliance and maintains trust.
 
 ## Phase 2 Execution Roadmap (14-Week Plan)
 
@@ -56,9 +62,10 @@ Users don't stay subscribed month-over-month for a utility tool unless their dat
 
 | Sprint | Goal | Duration | Success Metric (Go/No-Go) |
 |--------|------|----------|---------------------------|
-| **1: Auth** | Supabase auth (Google + email) + account page | 3 weeks | 100 registered free users |
+| **0: Distribution**| Landing page copy, 3 Reddit communities, PH draft | 1 week | Prep complete & targeted |
+| **1: Auth** | Supabase auth (Google + email) + account page | 3 weeks | 50 registered users who use a tool post-signup |
 | **2: Paywall** | Stripe checkout gating the 25MB file limit | 2 weeks | First 10 paying customers ($190 MRR) |
-| **3: Retention** | Saved workspaces & history UI | 3 weeks | 30% of paid users returning weekly |
+| **3: Retention** | Saved workspaces & 30-day history UI | 3 weeks | 30% of paid users returning weekly |
 | **4: Verification**| Server-side MX/SMTP ping via Edge Functions | 4 weeks | Hit 50 Pro users (~$1k MRR) |
 | **5: Presets** | One-click HubSpot/Apollo CSV exports | 2 weeks | 20% of exports using a preset |
 
