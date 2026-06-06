@@ -140,6 +140,23 @@ const DUPLICATE_MODE_OPTIONS: Array<{
   },
 ];
 
+function getFileSizeBucket(bytes: number): string {
+  if (bytes < 1024 * 1024) return "0-1mb";
+  if (bytes < 2 * 1024 * 1024) return "1-2mb";
+  if (bytes < 5 * 1024 * 1024) return "2-5mb";
+  return "5mb+";
+}
+
+function getRowCountBucket(count: number): string {
+  if (count < 100) return "0-100";
+  if (count < 500) return "100-500";
+  if (count < 1000) return "500-1k";
+  if (count < 5000) return "1k-5k";
+  if (count < 10000) return "5k-10k";
+  if (count < 50000) return "10k-50k";
+  return "50k+";
+}
+
 export function CsvLeadCleanerTool() {
   const [fileName, setFileName] = useState("");
   const [headers, setHeaders] = useState<string[]>([]);
@@ -241,7 +258,7 @@ export function CsvLeadCleanerTool() {
     });
 
     trackToolEvent("csv-lead-cleaner", "upload_started", {
-      file_size_kb: Math.round(file.size / 1024),
+      file_size_bucket: getFileSizeBucket(file.size),
     });
 
     if (!isLikelyCsvFile(file)) {
@@ -309,7 +326,7 @@ export function CsvLeadCleanerTool() {
         }
 
         trackToolEvent("csv-lead-cleaner", "upload_completed", {
-          row_count: result.rows.length,
+          row_count_bucket: getRowCountBucket(result.rows.length),
           warning_count: result.warnings.length,
         });
       },
@@ -1760,7 +1777,7 @@ function ExportActions({
           type="button"
           onClick={() => {
             trackToolEvent("csv-lead-cleaner", "export_csv", {
-              row_count: cleanedRows.length,
+              row_count_bucket: getRowCountBucket(cleanedRows.length),
               duplicate_mode: duplicateMode,
             });
             downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
