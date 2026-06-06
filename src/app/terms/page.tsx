@@ -34,8 +34,12 @@ const reminders = [
 ];
 
 export const metadata: Metadata = {
-  title: "Terms",
-  description: "LeadCleanr terms and acceptable use guidance.",
+  title: "Terms of Service — LeadCleanr",
+  description:
+    "LeadCleanr terms and acceptable use guidance. Learn about data use, accuracy expectations, and product rules.",
+  alternates: {
+    canonical: "https://leadcleanr.com/terms",
+  },
 };
 
 export default function TermsPage() {

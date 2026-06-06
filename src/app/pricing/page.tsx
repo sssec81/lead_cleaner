@@ -5,6 +5,7 @@ import { ArrowRight, Check, Info, Zap } from "lucide-react";
 import { PageFrame } from "@/components/page-frame";
 import { PageHero } from "@/components/page-hero";
 import { PageSectionHeading } from "@/components/page-section-heading";
+import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 const freePoints = [
   "Text tools stay open.",
@@ -58,9 +59,12 @@ const comparisonRows = [
 ];
 
 export const metadata: Metadata = {
-  title: "Pricing",
+  title: "Pricing — LeadCleanr",
   description:
     "LeadCleanr pricing for browser-first CSV lead cleanup workflows, from free discovery to heavier operational use.",
+  alternates: {
+    canonical: "https://leadcleanr.com/pricing",
+  },
 };
 
 export default function PricingPage() {
@@ -183,20 +187,13 @@ export default function PricingPage() {
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:#2563eb] hover:bg-[color:#1d4ed8] px-6 text-sm font-semibold text-white transition-colors duration-200"
-                >
-                  Ask about Pro
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/tools/csv-lead-cleaner"
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color:rgba(255,255,255,0.18)] px-6 text-sm font-semibold text-white"
-                >
-                  Use free first
-                </Link>
+              <div className="mt-8">
+                <ProWaitlistCard
+                  trackSource="pricing_pro_card"
+                  theme="dark"
+                  title="Join the Pro Waitlist"
+                  description="We are currently in private beta. Join the waitlist to get notified when we launch paid limits, saved workflows, and export presets."
+                />
               </div>
             </div>
           </div>

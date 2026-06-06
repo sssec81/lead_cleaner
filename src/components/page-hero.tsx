@@ -20,10 +20,10 @@ export function PageHero({
       <div className={aside ? "page-hero-grid" : ""}>
         <div>
           <p className="tool-hero-kicker">{eyebrow}</p>
-          <h1 className="tool-hero-title mt-4 font-display text-4xl font-semibold leading-[1.06] sm:text-5xl lg:text-[3.85rem]">
+          <h1 className="tool-hero-title mt-4 font-display text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-[2.75rem]">
             {title}
           </h1>
-          <p className="tool-hero-intro mt-5 text-base leading-8 sm:text-lg">
+          <p className="tool-hero-intro mt-4 text-sm leading-relaxed sm:text-base text-[color:var(--muted)]">
             {intro}
           </p>
         </div>

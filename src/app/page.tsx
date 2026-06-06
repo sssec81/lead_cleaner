@@ -1,56 +1,58 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 
 import { PageFrame } from "@/components/page-frame";
+import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 const workflowSteps = [
   {
     number: "01",
-    title: "Upload the spreadsheet you actually inherited",
-    text: "Not the polished demo version. The value starts with the messy file that would normally cause hesitation before import.",
+    title: "Upload Messy Lead CSV",
+    text: "Drop in your raw list. The cleaning begins locally without sending contact records to external servers.",
   },
   {
     number: "02",
-    title: "Choose the field that should control cleanup",
-    text: "Work from the column that matters most, then review duplicates, invalid rows, role inboxes, and email type hints.",
+    title: "Choose Rules & Review",
+    text: "Isolate duplicate rows, filter missing fields, and analyze domain structures directly in the dashboard preview.",
   },
   {
     number: "03",
-    title: "Export with a report you can defend",
-    text: "The cleaned file matters, but so does the explanation of what changed before the list moves to CRM, outreach, or a client.",
+    title: "Export Clean Database",
+    text: "Download a structured list ready for import into HubSpot, Clay, Apollo, or outreach pipelines.",
   },
 ];
 
 const productSignals = [
   {
     label: "Catches duplicates before import",
-    text: "Remove repeated rows before they become CRM clutter or agency handoff confusion.",
+    text: "Scans record fields to deduplicate rows, preventing dirty lists from bloating HubSpot, Salesforce, Apollo, or outreach pipelines.",
   },
   {
     label: "Flags email quality signals",
-    text: "Separate personal inboxes, role addresses, and business emails while you are still deciding what survives.",
+    text: "Filters invalid domains, detects generic role addresses (support@, info@), and separates business vs. personal Gmail accounts.",
   },
   {
-    label: "Keeps the cleanup visible",
-    text: "The preview and report help people trust the result before they export it.",
+    label: "Keeps cleanup visible",
+    text: "Previews your processed records and inspects error reports in real-time so you trust the data before downloading.",
   },
 ];
 
 const useCases = [
   {
     kicker: "Sales ops",
-    title: "Clean the export before it reaches HubSpot, Apollo, Close, or Clay.",
-    text: "LeadCleanr is for the uncomfortable middle of the job: after a list is captured, before anyone trusts it enough to import, enrich, or hand off.",
+    title: "Protect outreach sender scores and clean CRM pipelines.",
+    text: "Clean your raw prospecting exports before importing into Apollo, HubSpot, Close, or Clay. Prevent bounce rates and keep datasets tidy.",
   },
   {
     kicker: "Recruiters",
-    title: "Separate work emails from personal inboxes before outreach starts.",
-    text: "Review the rows that matter, spot role-based addresses, and keep the spreadsheet readable instead of bouncing through three other tools.",
+    title: "Isolate direct work emails from personal inboxes.",
+    text: "Separate candidate personal emails from business addresses. Spot generic inbox prefixes and optimize candidate response rates.",
   },
   {
     kicker: "Agencies",
-    title: "Turn a client handoff into a file you can actually defend.",
-    text: "The report becomes part of the deliverable. It shows what changed, what was removed, and what is safer to import next.",
+    title: "Audit and deliver clean database sheets to clients.",
+    text: "Format unorganized files and hand over clean lead sheets with a clear record audit showing duplicate and invalid counts.",
   },
 ];
 
@@ -81,7 +83,7 @@ const faqEntries = [
   {
     question: "Does it process the file on the server?",
     answer:
-      "The core cleanup flow runs in your browser for the MVP. Raw file contents are not sent to the app backend for routine processing.",
+      "The core cleanup flow runs in your browser. Raw file contents are not sent to the app backend for routine processing.",
   },
   {
     question: "Who gets value first?",
@@ -90,10 +92,19 @@ const faqEntries = [
   },
 ];
 
+export const metadata: Metadata = {
+  title: "LeadCleanr — Private CSV Lead Cleaner for CRM & Outreach Lists",
+  description:
+    "Instantly clean messy lead CSVs before importing into CRM or outreach platforms. Deduplicate rows, filter invalid emails, spot personal vs. business inboxes, and flag role-based addresses—100% locally in your browser with no signup required.",
+  alternates: {
+    canonical: "https://leadcleanr.com",
+  },
+};
+
 export default function HomePage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
+      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
         <div className="grid gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
           <div>
             <p className="inline-flex rounded-full border border-[color:rgba(37,99,235,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
@@ -102,34 +113,30 @@ export default function HomePage() {
             <h1 className="mt-5 max-w-4xl font-display text-5xl font-semibold leading-[1.02] sm:text-6xl xl:text-[4.75rem]">
               Clean messy lead CSVs before import.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[color:var(--muted)]">
-              LeadCleanr helps sales, recruiting, and marketing teams clean
-              duplicate rows, weak emails, role inboxes, and messy contact data
-              before the list reaches a CRM or outreach tool.
+            <p className="mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-[color:var(--muted)]">
+              Instantly clean messy lead CSVs before importing into CRM or outreach platforms. 
+              Deduplicate rows, filter invalid emails, spot personal vs. business inboxes, and flag role-based addresses—100% locally in your browser.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tools/csv-lead-cleaner"
-                className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:#153246] px-6 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(21,50,70,0.18)]"
+                className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition"
               >
-                Open CSV Lead Cleaner
+                Clean a CSV Free
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-white/88 px-6 text-sm font-semibold"
+                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[color:var(--line)] bg-white/88 px-6 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
               >
-                Read pricing
+                View free limits
               </Link>
             </div>
 
-            <div className="mt-10 border-t border-[color:rgba(16,37,52,0.12)] pt-6">
-              <p className="max-w-3xl text-sm leading-7 text-[color:var(--foreground)]">
-                <span className="font-semibold">What it handles well:</span>{" "}
-                duplicate rows, weak email fields, personal versus business
-                inboxes, role-based addresses, domain generation, and the
-                general spreadsheet entropy that creeps in before import day.
+            <div className="mt-8 border-t border-[color:rgba(16,37,52,0.12)] pt-5">
+              <p className="max-w-3xl text-sm leading-relaxed text-[color:var(--foreground)]">
+                <span className="font-semibold">Core Cleanup:</span> Deduplicates row records, matches email syntax, categorizes business vs personal inboxes, highlights role addresses, and structures unformatted database fields before CRM import.
               </p>
             </div>
           </div>
@@ -185,26 +192,26 @@ export default function HomePage() {
           </div>
         </div>
 
-        <section className="panel-soft mt-14 rounded-[2rem] p-5 sm:p-6">
-          <div className="grid gap-5 lg:grid-cols-3">
-            {productSignals.map((signal, index) => (
-              <div
-                key={signal.label}
-                className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.08)] pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0"}
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+        <section className="mt-10 grid gap-4 lg:grid-cols-3">
+          {productSignals.map((signal) => (
+            <div
+              key={signal.label}
+              className="rounded-2xl border border-slate-200/60 bg-white/70 p-5 shadow-2xs flex flex-col justify-between hover:border-slate-350 transition-colors"
+            >
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)] mb-2">
                   {signal.label}
                 </p>
-                <p className="mt-3 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                <p className="text-xs sm:text-sm leading-relaxed text-[color:var(--muted)]">
                   {signal.text}
                 </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </section>
       </section>
 
-      <section className="bg-[color:#153246] py-14 text-white">
+      <section className="bg-[color:#153246] py-10 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
             <div>
@@ -214,11 +221,20 @@ export default function HomePage() {
               <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.85rem]">
                 Clean, review, export.
               </h2>
-              <p className="mt-5 max-w-md text-base leading-7 text-[color:rgba(255,255,255,0.72)]">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-[color:rgba(255,255,255,0.72)]">
                 The workflow is intentionally short: load the file, choose the
                 field that matters, then export only after the report makes
                 sense.
               </p>
+              <div className="mt-6">
+                <Link
+                  href="/tools/csv-lead-cleaner"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-sm"
+                >
+                  Clean a CSV Free
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
 
             <div className="grid gap-3">
@@ -245,7 +261,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-start">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
@@ -254,15 +270,15 @@ export default function HomePage() {
             <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.65rem]">
               For the messy handoff before import.
             </h2>
-            <p className="mt-5 max-w-lg text-base leading-8 text-[color:var(--muted)]">
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-[color:var(--muted)]">
               LeadCleanr earns its place when a file is captured, but not yet
               safe enough for CRM, outreach, recruiting, or client delivery.
             </p>
             <Link
               href="/tools/csv-lead-cleaner"
-              className="btn-primary mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(21,50,70,0.16)] transition hover:bg-[color:#102534] hover:shadow-[0_18px_36px_rgba(21,50,70,0.2)]"
+              className="btn-primary mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition"
             >
-              Start with CSV cleanup
+              Clean a CSV Free
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -280,7 +296,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.42),rgba(239,246,255,0.34))] py-14 lg:py-18">
+      <section className="border-y border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.42),rgba(239,246,255,0.34))] py-10 lg:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
             <div>
@@ -288,12 +304,10 @@ export default function HomePage() {
                 Helper tools
               </p>
               <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.55rem]">
-                Use the text tools only when the data is not a spreadsheet yet.
+                Quick helper utilities for raw text blocks
               </h2>
-              <p className="mt-5 max-w-lg text-base leading-8 text-[color:var(--muted)]">
-                They are small utility paths for rough inputs: notes, copied
-                directories, pasted pages, and one-off cleanup before the CSV
-                workflow takes over.
+              <p className="mt-4 max-w-lg text-sm leading-relaxed text-[color:var(--muted)]">
+                Use these when the data is still copied text, notes, or snippets before the CSV workflow. Perfect for pasting emails, support logs, website snippets, or signatures.
               </p>
             </div>
 
@@ -306,20 +320,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
-          <div className="panel-soft rounded-[2rem] p-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Trust boundary
-            </p>
-            <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl">
-              The file should stay local for routine cleanup.
-            </h2>
-            <p className="mt-4 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-              Core parsing, cleanup, preview, and export run in your browser for
-              the MVP flow. The product should feel specific about that
-              boundary, not vague.
-            </p>
+          <div className="space-y-6">
+            <div className="panel-soft rounded-[2rem] p-6 bg-slate-50 border border-slate-200/60 shadow-2xs">
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
+                Trust boundary
+              </p>
+              <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl text-slate-950">
+                Your data remains on your machine.
+              </h2>
+              <p className="mt-4 text-xs sm:text-sm leading-relaxed text-[color:var(--muted)]">
+                Your raw CSV and pasted text stay in your browser during normal cleanup. All file parsing, cleaning filters, and table preview generation are executed locally.
+              </p>
+            </div>
+            
+            <ProWaitlistCard
+              trackSource="home_bottom"
+              title="Want saved workflows and export presets?"
+              description="Join the Pro waitlist to get notified when we launch saved cleanup presets, advanced domain filters, and custom CRM export options."
+            />
           </div>
 
           <div className="space-y-5">

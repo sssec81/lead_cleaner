@@ -47,8 +47,12 @@ const sections = [
 ];
 
 export const metadata: Metadata = {
-  title: "Privacy",
-  description: "LeadCleanr privacy policy for the MVP.",
+  title: "Privacy Policy — LeadCleanr",
+  description:
+    "LeadCleanr privacy policy. Your raw CSV and pasted text stay in your browser during normal cleanup operations.",
+  alternates: {
+    canonical: "https://leadcleanr.com/privacy",
+  },
 };
 
 export default function PrivacyPage() {
@@ -61,11 +65,11 @@ export default function PrivacyPage() {
         aside={(
           <div className="panel-strong rounded-[1.75rem] p-6 sm:p-8">
             <p className="section-eyebrow">Quick snapshot</p>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {snapshot.map((item, index) => (
                 <div
                   key={item.label}
-                  className={`rounded-[1.25rem] border px-4 py-4 ${
+                  className={`rounded-[1.25rem] border p-5 sm:p-6 ${
                     index === 0
                       ? "border-[color:rgba(37,99,235,0.16)] bg-white"
                       : "border-[color:var(--line)] bg-white/80"
@@ -74,7 +78,7 @@ export default function PrivacyPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
                     {item.label}
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-[color:var(--foreground)]">
+                  <p className="mt-2.5 text-sm leading-7 text-[color:var(--foreground)]">
                     {item.text}
                   </p>
                 </div>
@@ -85,21 +89,21 @@ export default function PrivacyPage() {
         className="pt-10 lg:pt-12"
       />
 
-      <section className="bg-[color:#153246] py-14 text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:px-8 lg:items-start">
+      <section className="my-20 bg-[color:#153246] py-20 text-white md:my-28 md:py-28">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20 lg:px-8 lg:items-start">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
               The boundary
             </p>
-            <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.85rem]">
+            <h2 className="mt-5 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.85rem]">
               Local cleanup has a clear edge.
             </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-[color:rgba(255,255,255,0.72)]">
+            <p className="mt-6 max-w-md text-base leading-8 text-[color:rgba(255,255,255,0.72)]">
               The cleanup work stays on your device. Product telemetry and
               browser storage are separate behaviors, named plainly.
             </p>
           </div>
-          <div className="grid gap-3">
+          <div className="grid gap-6 md:gap-8">
             <BoundaryCard
               title="Cleanup"
               text="Text extraction, CSV parsing, preview, and export happen in your browser during normal use."
@@ -116,19 +120,19 @@ export default function PrivacyPage() {
         </div>
       </section>
 
-      <section className="page-section pb-16 lg:pb-20">
-        <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
+      <section className="page-section mb-20 pb-16 md:mb-28 lg:pb-20">
+        <div className="grid gap-12 lg:grid-cols-[0.42fr_0.58fr] lg:gap-20 lg:items-start">
           <div className="lg:sticky lg:top-28">
             <PageSectionHeading
               eyebrow="Details"
               title="Privacy details, without legal fog."
               intro="Short answers for the checks people make before uploading a lead file: what is touched, what stays on-device, and what should never be treated like raw contact data."
             />
-            <div className="mt-8 rounded-[1.15rem] border border-[color:rgba(37,99,235,0.16)] bg-white/70 px-5 py-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+            <div className="mt-10 rounded-[1.15rem] border border-[color:rgba(37,99,235,0.16)] bg-white/70 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
               <p className="text-sm font-semibold text-[color:var(--foreground)]">
                 Plain-language policy
               </p>
-              <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
+              <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
                 The goal is not to sound bigger than the product. It is to make
                 the browser-first boundary easy to verify.
               </p>
@@ -139,7 +143,7 @@ export default function PrivacyPage() {
             {sections.map((section, index) => (
               <div
                 key={section.title}
-                className="grid gap-4 border-t border-[color:rgba(16,37,52,0.09)] px-5 py-5 first:border-t-0 sm:grid-cols-[4.5rem_1fr] sm:px-6 sm:py-6"
+                className="grid gap-5 border-t border-[color:rgba(16,37,52,0.09)] px-6 py-6 first:border-t-0 sm:grid-cols-[4.5rem_1fr] sm:px-8 sm:py-8"
               >
                 <div className="flex items-start">
                   <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-full border border-[color:rgba(37,99,235,0.18)] bg-[color:rgba(37,99,235,0.07)] font-display text-sm font-semibold tabular-nums text-[color:var(--brand-strong)]">
@@ -150,7 +154,7 @@ export default function PrivacyPage() {
                   <h3 className="font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)]">
                     {section.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+                  <p className="mt-3 text-sm leading-8 text-[color:var(--muted)] sm:text-base">
                     {section.text}
                   </p>
                 </div>
@@ -165,11 +169,11 @@ export default function PrivacyPage() {
 
 function BoundaryCard({ title, text }: { title: string; text: string }) {
   return (
-    <div className="border-t border-[color:rgba(255,255,255,0.14)] py-5 first:border-t-0 first:pt-0">
+    <div className="border-t border-[color:rgba(255,255,255,0.14)] pt-6 first:border-t-0 first:pt-0 md:pt-8">
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[color:#93c5fd]">
         {title}
       </p>
-      <p className="mt-2 max-w-3xl text-base leading-8 text-[color:rgba(255,255,255,0.76)]">
+      <p className="mt-3 max-w-3xl text-base leading-8 text-[color:rgba(255,255,255,0.76)]">
         {text}
       </p>
     </div>

@@ -32,6 +32,7 @@ import {
 } from "@/lib/csv";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 type ExtractionSummary = {
   totalRows: number;
@@ -78,6 +79,22 @@ export function ExtractEmailsFromCsvTool() {
     () => extractEmailsFromCsvRows(rows, selectedColumn),
     [rows, selectedColumn],
   );
+
+  const currentStep = useMemo(() => {
+    if (status === "idle" || status === "parsing") {
+      return 1;
+    }
+    if (status === "ready") {
+      if (!selectedColumn) {
+        return 2;
+      }
+      if (extracted.results.length === 0) {
+        return 3;
+      }
+      return 4;
+    }
+    return 1;
+  }, [status, selectedColumn, extracted.results]);
 
   function resetState(nextFileName = "") {
     setFileName(nextFileName);
@@ -273,7 +290,7 @@ export function ExtractEmailsFromCsvTool() {
 
           <label
             htmlFor="csv-email-upload"
-            className="group mt-5 flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
+            className="group mt-5 flex min-h-[20rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
           >
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
@@ -287,11 +304,11 @@ export function ExtractEmailsFromCsvTool() {
                 {isParsing ? "Parsing your CSV..." : "Drag and drop your lead CSV here"}
               </span>
               <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
-                or click to browse local files. Free supports spreadsheets up to 2 MB.
+                or click to browse local files.
               </span>
               {!isParsing && (
-                <div className="mt-5 inline-flex min-h-9 items-center justify-center rounded-full bg-white border border-[color:var(--line)] px-4 text-xs font-semibold text-slate-800 shadow-xs transition duration-200 hover:bg-slate-100/80 hover:border-slate-300">
-                  Select File
+                <div className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-blue-700 hover:shadow-md cursor-pointer">
+                  Upload CSV to Start
                 </div>
               )}
             </div>
@@ -305,21 +322,64 @@ export function ExtractEmailsFromCsvTool() {
             />
           </label>
 
-          <p className="mt-3 text-xs leading-5 text-[color:var(--muted)]">
-            Core processing happens in your browser on this device. Optional
-            analytics, error reporting, and saved workspace state can still run
-            separately.
+          <p className="mt-3 text-xs leading-relaxed text-slate-500 text-center">
+            Processed locally in your browser. Your CSV is never uploaded.<br />
+            <span className="text-[11px] text-slate-400 font-medium">(Supports files up to 2 MB)</span>
           </p>
+
+          {/* Workflow Stepper */}
+          <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3">
+              Workflow Steps
+            </p>
+            <div className="space-y-3">
+              {[
+                { step: 1, label: "Upload CSV" },
+                { step: 2, label: "Choose email column" },
+                { step: 3, label: "Preview clean emails" },
+                { step: 4, label: "Export list" }
+              ].map(({ step, label }) => {
+                const isActive = currentStep === step;
+                const isCompleted = currentStep > step;
+                return (
+                  <div key={step} className="flex items-center gap-3">
+                    <div
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold border transition ${
+                        isActive
+                          ? "bg-blue-600 text-white border-blue-600 shadow-2xs"
+                          : isCompleted
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : "bg-white text-slate-400 border-slate-200"
+                      }`}
+                    >
+                      {isCompleted ? <Check className="h-3 w-3 text-emerald-600" /> : step}
+                    </div>
+                    <span
+                      className={`text-xs font-medium transition ${
+                        isActive
+                          ? "text-slate-900 font-semibold"
+                          : isCompleted
+                            ? "text-slate-500 font-medium"
+                            : "text-slate-400"
+                      }`}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
               Quick start
             </p>
-            <div className="mt-3 flex flex-wrap gap-3">
+            <div className="mt-2">
               <button
                 type="button"
                 onClick={loadDemoCsv}
-                className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 text-xs font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                className="w-full inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300 hover:shadow-2xs active:bg-slate-100"
               >
                 <FlaskConical className="h-3.5 w-3.5" />
                 Try sample CSV
@@ -420,17 +480,6 @@ export function ExtractEmailsFromCsvTool() {
 
           {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
           {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
-
-          <div className="mt-4 border-l-4 border-indigo-500/80 bg-indigo-50/30 rounded-r-2xl p-4 border border-y border-r border-slate-200/40 shadow-xs">
-            <p className="text-xs font-bold uppercase tracking-wider text-indigo-800">
-              Operation transparency
-            </p>
-            <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-              {selectedColumn
-                ? `Selected column "${selectedColumn}" will yield ${extracted.summary.cleanEmailsReady.toLocaleString()} valid emails, skip ${extracted.summary.invalidEmailsRemoved.toLocaleString()} malformed rows, and remove ${extracted.summary.duplicatesRemoved.toLocaleString()} duplicates.`
-                : "Upload a CSV and pick a column to see exactly what will be extracted before you export."}
-            </p>
-          </div>
         </div>
 
       <div className="flex-1 min-w-0 space-y-6">
@@ -446,17 +495,23 @@ export function ExtractEmailsFromCsvTool() {
                 <p className="mt-3 font-display text-6xl font-bold leading-none tabular-nums text-slate-900 sm:text-7xl relative z-10">
                   {extracted.summary.cleanEmailsReady.toLocaleString()}
                 </p>
+                {selectedColumn && (
+                  <div className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 border border-blue-100 relative z-10">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Active Column:</span>
+                    <span className="font-mono font-semibold bg-white px-1.5 py-0.5 rounded border border-blue-200/50 text-slate-800">{selectedColumn}</span>
+                  </div>
+                )}
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <StatCard label="Rows scanned" value={extracted.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
                 <StatCard
-                  label="Blank rows skipped"
+                  label="Blank rows removed"
                   value={extracted.summary.blankRowsSkipped}
                   icon={<FileMinus className="h-4 w-4 text-slate-400" />}
                 />
                 <StatCard
-                  label="Invalid emails removed"
+                  label="Invalid removed"
                   value={extracted.summary.invalidEmailsRemoved}
                   icon={<AlertTriangle className="h-4 w-4 text-rose-500" />}
                 />
@@ -483,74 +538,123 @@ export function ExtractEmailsFromCsvTool() {
                 </span>
               </div>
 
-              <div className="mt-4 min-h-[22rem] rounded-[1.5rem] border border-slate-200/80 bg-white/60 p-4 shadow-xs">
+              <div className="mt-4 min-h-[22rem] rounded-[1.5rem] border border-slate-200/80 bg-white/60 p-4 shadow-xs flex flex-col justify-center">
                 {extracted.results.length ? (
-                  <pre className="overflow-x-auto whitespace-pre-wrap break-words text-sm leading-7 text-slate-700">
+                  <pre className="overflow-x-auto whitespace-pre-wrap break-words text-sm leading-7 text-slate-700 p-2">
                     {extracted.results.slice(0, PREVIEW_LIMIT).join("\n")}
                   </pre>
+                ) : status === "ready" && headers.length ? (
+                  <div className="flex flex-col items-center justify-center p-6 text-center h-full">
+                    <AlertCircle className="h-8 w-8 text-amber-500 mb-3" />
+                    <h4 className="text-sm font-semibold text-slate-900 mb-1">No clean emails found</h4>
+                    <p className="max-w-md text-xs leading-relaxed text-slate-500">
+                      This file uploaded successfully, but the chosen column did not contain any valid email addresses. Please try selecting a different column.
+                    </p>
+                  </div>
                 ) : (
-                  <EmptyState
-                    title={
-                      status === "ready" && headers.length
-                        ? "No clean emails found"
-                        : "Upload a CSV to start"
-                    }
-                    description={
-                      status === "ready" && headers.length
-                        ? "This file uploaded successfully, but the chosen column did not contain any valid email addresses yet."
-                        : "Upload a CSV and choose a column to preview the extracted email list here."
-                    }
-                  />
+                  <div className="flex flex-col items-center justify-center p-6 text-center h-full">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 shadow-2xs mb-4">
+                      <ScanSearch className="h-5 w-5" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-900 mb-2">Ready to Preview</h4>
+                    <p className="max-w-md text-xs leading-relaxed text-slate-500 mb-6">
+                      Upload a CSV to detect email columns, choose the one you want, and preview clean extracted emails before export.
+                    </p>
+                    <div className="grid gap-3 w-full sm:grid-cols-3">
+                      {[
+                        {
+                          title: "Email columns detected",
+                          desc: "Scans headers and analyzes row contents.",
+                        },
+                        {
+                          title: "Invalid & blank skipped",
+                          desc: "Trims whitespace, filters missing values, and validates formats.",
+                        },
+                        {
+                          title: "Duplicates removed",
+                          desc: "Deduplicates entries instantly to keep your list unique.",
+                        },
+                      ].map((benefit, i) => (
+                        <div key={i} className="rounded-xl border border-slate-100 bg-white p-3 text-left">
+                          <div className="flex items-center gap-1.5">
+                            <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-50 text-[10px] font-bold text-blue-600 border border-blue-100/50">
+                              {i + 1}
+                            </div>
+                            <p className="text-xs font-semibold text-slate-800 leading-tight">{benefit.title}</p>
+                          </div>
+                          <p className="mt-1.5 text-[10px] leading-relaxed text-slate-400">{benefit.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  disabled={!extracted.results.length}
-                  className="btn-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:var(--brand)] px-5 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(37,99,235,0.35)] transition-all hover:bg-[color:var(--brand-strong)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:-translate-y-0"
-                >
-                  {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
-                  {copied ? "Copied" : "Copy emails"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    trackToolEvent("extract-emails-from-csv", "download_txt", {
-                      result_count: extracted.results.length,
-                    });
-                    downloadTextFile(
-                      buildExportName(fileName, "txt"),
-                      extracted.results.join("\n"),
-                    );
-                  }}
-                  disabled={!extracted.results.length}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/85 bg-white px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
-                >
-                  <FileText className="h-4 w-4" />
-                  Download TXT
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    trackToolEvent("extract-emails-from-csv", "download_csv", {
-                      result_count: extracted.results.length,
-                    });
-                    downloadCsvFile(
-                      buildExportName(fileName, "csv"),
-                      extracted.results,
-                      "email",
-                    );
-                  }}
-                  disabled={!extracted.results.length}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200/85 bg-white px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 disabled:hover:bg-white disabled:hover:border-slate-200 disabled:hover:shadow-none"
-                >
-                  <Download className="h-4 w-4" />
-                  Download CSV
-                </button>
+              <div className="mt-4 flex flex-col gap-3">
+                {!extracted.results.length && (
+                  <p className="text-xs leading-relaxed text-slate-400">
+                    Export unlocks after a CSV is uploaded and an email column is selected.
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-2.5">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    disabled={!extracted.results.length}
+                    className={`inline-flex h-10 items-center justify-center gap-1.5 rounded-xl text-sm font-semibold shadow-sm transition cursor-pointer ${
+                      extracted.results.length
+                        ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800"
+                        : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+                    } px-5`}
+                  >
+                    {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
+                    {copied ? "Copied" : "Copy emails"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      trackToolEvent("extract-emails-from-csv", "download_txt", {
+                        result_count: extracted.results.length,
+                      });
+                      downloadTextFile(
+                        buildExportName(fileName, "txt"),
+                        extracted.results.join("\n"),
+                      );
+                    }}
+                    disabled={!extracted.results.length}
+                    className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-2xs cursor-pointer"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Download TXT
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      trackToolEvent("extract-emails-from-csv", "download_csv", {
+                        result_count: extracted.results.length,
+                      });
+                      downloadCsvFile(
+                        buildExportName(fileName, "csv"),
+                        extracted.results,
+                        "email",
+                      );
+                    }}
+                    disabled={!extracted.results.length}
+                    className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-2xs cursor-pointer"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download CSV
+                  </button>
+                </div>
               </div>
             </div>
+
+            <ProWaitlistCard
+              trackSource="extract_csv_sidebar"
+              title="Want saved workflows and export presets?"
+              description="Join the Pro waitlist to get notified when we launch saved cleanup presets, CSV presets for CRM (HubSpot, Salesforce), and outreach tools."
+              className="mt-5"
+            />
         </div>
       </div>
   );
@@ -690,19 +794,28 @@ function FileSizeNotice({
     : "border-[color:rgba(15,118,110,0.18)] bg-[color:rgba(240,253,250,0.9)]";
 
   return (
-    <div className={`mt-3 rounded-[1.3rem] border p-4 ${toneClasses}`}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-sm font-semibold text-[color:var(--foreground)]">
-            {pendingFile.name} · {pendingFile.sizeMb.toFixed(1)} MB
-          </p>
-          <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">
-            {pendingFile.exceedsFreeLimit
-              ? `This file is over the 2 MB free limit. It looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows. Free typically fits around ${formatRowEstimate(pendingFile.estimatedRowsWithinFreeLimit)} rows of this density.`
-              : `This file fits inside the free 2 MB limit and looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows for browser-side processing.`}
-          </p>
+    <div className="space-y-4">
+      <div className={`mt-3 rounded-[1.3rem] border p-4 ${toneClasses}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-[color:var(--foreground)]">
+              {pendingFile.name} · {pendingFile.sizeMb.toFixed(1)} MB
+            </p>
+            <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">
+              {pendingFile.exceedsFreeLimit
+                ? `This file is over the 2 MB free limit. It looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows. Free typically fits around ${formatRowEstimate(pendingFile.estimatedRowsWithinFreeLimit)} rows of this density.`
+                : `This file fits inside the free 2 MB limit and looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows for browser-side processing.`}
+            </p>
+          </div>
         </div>
       </div>
+      {pendingFile.exceedsFreeLimit && (
+        <ProWaitlistCard
+          trackSource="extract_csv_limit"
+          title="Need larger CSV files?"
+          description="Join the Pro waitlist to get notified when we support uploads up to 100MB / 100,000+ rows, saved cleanup workflows, and export presets."
+        />
+      )}
     </div>
   );
 }

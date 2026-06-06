@@ -14,16 +14,17 @@ export function UrlExtractorTool() {
       title="Extract URLs from text"
       description="Paste messy text, pull out website links, normalize the format, remove duplicates, and export the clean list."
       icon={LinkIcon}
-      iconToneClassName="bg-[color:rgba(37,99,235,0.08)] text-[color:var(--brand-strong)]"
+      iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
       sampleInput={SAMPLE_TEXT}
       placeholder="Paste copied website text, notes, or any messy block with links and URLs."
       trackName="extract-urls-from-text"
       processInput={extractUrlsFromText}
       statLabels={{
-        total: "URLs found",
-        duplicates: "Duplicates removed",
-        invalid: "Invalid entries removed",
-        ready: "Clean URLs ready",
+        scanned: "Items scanned",
+        found: "Found",
+        duplicatesRemoved: "Duplicates removed",
+        invalidRemoved: "Invalid removed",
+        finalCount: "Clean URLs ready",
       }}
       csvHeader="url"
       copyLabel="Copy results"

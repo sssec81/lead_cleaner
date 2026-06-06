@@ -23,7 +23,8 @@ import { useEffect, useMemo, useState } from "react";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
-import type { ExtractionStats } from "@/lib/text-tools";
+import type { CleaningStats } from "@/lib/text-tools";
+import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 type TextProcessingToolProps = {
   title: string;
@@ -33,12 +34,14 @@ type TextProcessingToolProps = {
   sampleInput: string;
   placeholder: string;
   trackName: string;
-  processInput: (input: string) => { results: string[]; stats: ExtractionStats };
+  processInput: (input: string) => { results: string[]; stats: CleaningStats };
   statLabels: {
-    total: string;
-    duplicates: string;
-    invalid: string;
-    ready: string;
+    scanned: string;
+    found: string;
+    duplicatesRemoved: string;
+    invalidRemoved: string;
+    blankRemoved?: string;
+    finalCount: string;
   };
   csvHeader?: string;
   copyLabel: string;
@@ -178,6 +181,9 @@ export function TextProcessingTool({
   }
 
   function setFreshInput(nextInput: string) {
+    if (nextInput.length > 50000) {
+      nextInput = nextInput.slice(0, 50000);
+    }
     setInput(nextInput);
     setCopied(false);
   }
@@ -236,6 +242,20 @@ export function TextProcessingTool({
     trackToolEvent(trackName, "use_selected_text", {
       input_length: selection.length,
     });
+  }
+
+  async function handlePasteFromClipboard() {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        setFreshInput(text);
+        trackToolEvent(trackName, "paste_from_clipboard", {
+          input_length: text.length,
+        });
+      }
+    } catch (err) {
+      console.warn("Failed to read clipboard:", err);
+    }
   }
 
   function toggleBatchMode() {
@@ -461,149 +481,191 @@ export function TextProcessingTool({
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[1.02fr_0.98fr]">
       <section className="panel-soft rounded-[2.2rem] p-5 sm:p-7 flex h-full flex-col">
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-6 flex items-start gap-4">
             <div
-              className={`flex h-12 w-12 items-center justify-center rounded-2xl ${iconToneClassName}`}
+              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${iconToneClassName}`}
             >
               <Icon className="h-5 w-5" />
             </div>
-            <div>
-              <h2 className="font-display text-2xl font-semibold">{title}</h2>
-              <p className="text-sm leading-6 text-[color:var(--muted)]">
+            <div className="min-w-0">
+              <h2 className="text-xl font-semibold text-slate-950">{title}</h2>
+              <p className="mt-1 text-sm leading-6 text-slate-500">
                 {description}
               </p>
             </div>
           </div>
 
-          <div className="mt-2 grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-[1.35rem] border border-[color:var(--line)] bg-white/72 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-                Start here
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
+          {/* Group 1: Text Input Area */}
+          <div className="flex flex-col">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-3">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">Input text</h3>
+                <p className="text-xs text-slate-500">Paste messy notes, copied pages, logs, or lead snippets.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handlePasteFromClipboard}
+                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 transition shadow-2xs"
+                  title="Paste from clipboard"
+                >
+                  <Clipboard className="h-3.5 w-3.5" />
+                  <span>Paste</span>
+                </button>
                 <button
                   type="button"
                   onClick={loadSampleInput}
-                  className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 transition shadow-2xs"
+                  title="Load sample"
                 >
-                  <FlaskConical className="h-4 w-4" />
-                  Load sample
+                  <FlaskConical className="h-3.5 w-3.5" />
+                  <span>Sample</span>
                 </button>
                 <button
                   type="button"
                   onClick={useSelectedText}
-                  className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 transition shadow-2xs"
+                  title="Import highlighted text from this page"
                 >
-                  <MousePointerClick className="h-4 w-4" />
-                  Use selected text
+                  <MousePointerClick className="h-3.5 w-3.5" />
+                  <span>Use selected</span>
                 </button>
-              </div>
-            </div>
-            <div className="rounded-[1.35rem] border border-[color:var(--line)] bg-white/72 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-                Working mode
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={toggleBatchMode}
-                  className={`inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 transition-colors ${batchMode ? "border-[color:var(--brand)] bg-[color:var(--brand)]/5 text-[color:var(--brand-strong)] hover:bg-[color:var(--brand)]/10" : "border-[color:var(--line)] bg-white text-[color:var(--foreground)]"}`}
+                  className={`inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border px-2.5 text-xs font-semibold transition shadow-2xs ${
+                    batchMode
+                      ? "border-blue-200 bg-blue-50/50 text-blue-700 hover:bg-blue-50"
+                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                  title={batchMode ? "Disable batch mode" : "Enable batch mode (one item per line)"}
                 >
-                  <span className="text-base leading-none">#</span>
-                  {batchMode ? "Single input mode" : "Batch mode"}
+                  <span className="font-mono text-xs leading-none">#</span>
+                  <span>{batchMode ? "Batch mode" : "Batch"}</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setShowShortcuts((current) => !current)}
-                  className={`inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100 transition-colors ${showShortcuts ? "border-[color:var(--brand)] bg-[color:var(--brand)]/5 text-[color:var(--brand-strong)] hover:bg-[color:var(--brand)]/10" : "border-[color:var(--line)] bg-white text-[color:var(--foreground)]"}`}
+                  onClick={() => setFreshInput("")}
+                  disabled={!input}
+                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 transition shadow-2xs"
+                  title="Clear input"
                 >
-                  <Keyboard className="h-4 w-4" />
-                  Shortcuts
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Clear</span>
                 </button>
+              </div>
+            </div>
+
+            {restoredSession && (
+              <p className="mb-3 text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-xl px-3 py-2">
+                Restored your last workspace on this device so you can keep cleaning without starting over.
+              </p>
+            )}
+
+            {batchMode && (
+              <div className="mb-3 rounded-xl border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
+                <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
+                <p className="mt-0.5 leading-relaxed text-teal-700">
+                  {batchLineCount} non-empty line{batchLineCount === 1 ? "" : "s"} detected. Useful when pasting repeated snippets from LinkedIn, email signatures, or logs.
+                </p>
+              </div>
+            )}
+
+            <textarea
+              id={`${trackName}-input`}
+              value={input}
+              onChange={(event) => setFreshInput(event.target.value)}
+              className="w-full rounded-xl border border-slate-200 bg-white/80 p-3.5 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 min-h-[14rem] sm:min-h-[16rem]"
+              placeholder="Paste messy text here. LeadCleanr will extract and clean the contact data before export."
+            />
+
+            <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center gap-1">
+                <Lock className="h-3 w-3 text-slate-400" />
+                <span>Processed locally in your browser.</span>
+              </div>
+              <div className="font-mono text-slate-400">
+                {input.length.toLocaleString()} / 50,000 characters
               </div>
             </div>
           </div>
 
-          {restoredSession ? (
-            <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
-              Restored your last workspace on this device so you can keep cleaning
-              without starting over.
-            </p>
-          ) : null}
-
-          {batchMode ? (
-            <div className="mt-4 rounded-[1.35rem] border border-[color:rgba(15,118,110,0.14)] bg-[color:rgba(15,118,110,0.08)] px-4 py-4 text-sm">
-              <p className="font-semibold text-[color:var(--foreground)]">
-                One snippet per line
-              </p>
-              <p className="mt-1 leading-6 text-[color:var(--muted)]">
-                {batchLineCount} non-empty line{batchLineCount === 1 ? "" : "s"}{" "}
-                detected. Useful when you are pasting many repeated snippets from
-                LinkedIn, email signatures, or Slack.
-              </p>
-            </div>
-          ) : null}
-
-          <textarea
-            id={`${trackName}-input`}
-            value={input}
-            onChange={(event) => setFreshInput(event.target.value)}
-            className="mt-4 min-h-[18rem] w-full rounded-[1.6rem] border border-[color:var(--line)] bg-white px-4 py-4 text-base text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[color:rgba(37,99,235,0.12)] sm:min-h-[22rem]"
-            placeholder={placeholder}
-          />
-
-          <p className="mt-3 text-xs leading-6 text-[color:var(--muted)]">
-            Processed in your browser. Nothing sent to a server.
-          </p>
-
-          <div className="mt-4 rounded-[1.4rem] border border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(249,251,253,0.96),rgba(241,246,252,0.9))] p-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-                  Step 2 review extraction
-                </p>
-                <p className="mt-1 text-sm font-semibold text-[color:var(--foreground)]">
-                  {processed.results.length} match
-                  {processed.results.length === 1 ? "" : "es"} will be added from
-                  this input.
-                </p>
+          {/* Group 2: Extraction Preview & Actions Panel */}
+          <div className="mt-6 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 sm:p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/50 pb-3 mb-3">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    Step 2 Workflow Action
+                  </p>
+                  <h4 className="text-sm font-semibold text-slate-900">
+                    {processed.results.length > 0 && !processed.results.every(val => workspace.some(item => item.value === val))
+                      ? "Ready to extract"
+                      : "Review extraction"}
+                  </h4>
+                </div>
+                <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 border border-blue-100/50">
+                  {processed.results.length} match{processed.results.length === 1 ? "" : "es"} detected
+                </span>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={replaceWorkspaceFromCurrentInput}
-                  className="btn-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-5 text-sm font-semibold text-white transition hover:bg-[color:#102534]"
-                >
-                  <RefreshCw className="h-4 w-4" />
-                  {primaryActionLabel}
-                </button>
+
+              {/* Detected Pills or Empty/No Matches State */}
+              <div className="mb-5">
+                {processed.results.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-slate-500">Detected items preview:</p>
+                    <div className="flex flex-wrap gap-1.5 max-h-[120px] overflow-y-auto pr-1">
+                      {processed.results.slice(0, 6).map((item, index) => (
+                        <span
+                          key={`${item}-${index}`}
+                          className="inline-flex items-center rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs font-medium text-slate-700 shadow-2xs"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                      {processed.results.length > 6 && (
+                        <span className="inline-flex items-center rounded-lg border border-blue-100 bg-blue-50/40 px-2 py-1 text-xs font-bold text-blue-700">
+                          +{processed.results.length - 6} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-xl border border-dashed border-slate-200 bg-white/50 p-4 text-center">
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      {input.trim()
+                        ? `No valid ${getItemNoun(trackName)} found. Check formatting or paste a larger text sample.`
+                        : "Nothing valid is being matched yet. Paste a noisy block of text above and this panel will show exactly what is detected."
+                      }
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Extraction CTA buttons */}
+            <div className="flex flex-wrap items-center gap-2.5 border-t border-slate-200/50 pt-4 mt-auto">
+              <button
+                type="button"
+                onClick={replaceWorkspaceFromCurrentInput}
+                disabled={processed.results.length === 0}
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm cursor-pointer"
+              >
+                <RefreshCw className="h-4 w-4" />
+                {primaryActionLabel}
+              </button>
+
+              {processed.results.length > 0 && (
                 <button
                   type="button"
                   onClick={appendCurrentExtraction}
-                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs active:bg-slate-100"
+                  className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-2xs cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                   Append to workspace
                 </button>
-              </div>
+              )}
             </div>
-            {currentPreview.length ? (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {currentPreview.map((item, index) => (
-                  <span
-                    key={`${item}-${index}`}
-                    className="rounded-full border border-[color:rgba(16,37,52,0.1)] bg-white px-3 py-2 text-sm text-[color:var(--foreground)]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            ) : (
-              <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
-                Nothing valid is being matched yet. Paste a noisy block of text and
-                this panel will show exactly what the tool sees before you export.
-              </p>
-            )}
           </div>
         </section>
 
@@ -614,7 +676,7 @@ export function TextProcessingTool({
             </p>
             <div className="mt-5 rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(15,118,110,0.06),rgba(255,255,255,0.88))] p-6 border border-[color:rgba(15,118,110,0.08)] shadow-[0_14px_28px_rgba(15,23,42,0.04)]">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                {statLabels.ready}
+                {statLabels.finalCount}
               </p>
               <p className="mt-3 font-display text-6xl font-semibold leading-none tabular-nums text-[color:var(--foreground)] sm:text-7xl">
                 {workspaceValues.length.toLocaleString()}
@@ -622,15 +684,22 @@ export function TextProcessingTool({
             </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                <StatCard label={statLabels.total} value={processed.stats.totalFound} />
+                <StatCard label="Items scanned" value={processed.stats.scanned} />
+                <StatCard label="Found" value={processed.stats.found} />
                 <StatCard
-                  label={statLabels.duplicates}
+                  label="Duplicates removed"
                   value={processed.stats.duplicatesRemoved}
                 />
                 <StatCard
-                  label={statLabels.invalid}
+                  label="Invalid removed"
                   value={processed.stats.invalidRemoved}
                 />
+                {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
+                  <StatCard
+                    label="Blank rows removed"
+                    value={processed.stats.blankRemoved}
+                  />
+                )}
                 <StatCard label="Locked rows" value={lockedCount} />
                 <StatCard label="Selected rows" value={selectedCount} />
               </div>
@@ -885,6 +954,12 @@ export function TextProcessingTool({
                 </p>
               )}
             </div>
+
+            <ProWaitlistCard
+              trackSource={`text_tool_${trackName}`}
+              title="Want saved workflows and export presets?"
+              description="Join the Pro waitlist to get notified when we launch saved cleanup presets, CSV presets for CRM (HubSpot, Salesforce), and outreach tools."
+            />
         </div>
       </div>
   );
@@ -982,4 +1057,14 @@ function createWorkspaceItem(
 
 function normalizeWorkspaceValue(value: string) {
   return value.trim();
+}
+
+function getItemNoun(trackName: string): string {
+  const name = trackName.toLowerCase();
+  if (name.includes("phone")) return "phone numbers";
+  if (name.includes("email") && name.includes("duplicate")) return "duplicate emails";
+  if (name.includes("email")) return "emails";
+  if (name.includes("url")) return "URLs";
+  if (name.includes("domain")) return "domains";
+  return "items";
 }

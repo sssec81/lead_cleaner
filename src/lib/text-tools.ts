@@ -1,3 +1,5 @@
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+
 const EMAIL_REGEX = /\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b/gi;
 const SINGLE_EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 const PHONE_REGEX = /(?:\+?\d[\d().\-\s]{6,}\d)/g;
@@ -6,156 +8,228 @@ const URL_REGEX =
 const DOMAIN_FROM_URL_REGEX =
   /^(?:https?:\/\/)?(?:www\.)?([^\/?#:]+)(?::\d+)?(?:[\/?#]|$)/i;
 
-export type ExtractionStats = {
-  totalFound: number;
+export type CleaningStats = {
+  scanned: number;
+  found: number;
+  valid: number;
   duplicatesRemoved: number;
   invalidRemoved: number;
-  cleanResults: number;
+  blankRemoved?: number;
+  finalCount: number;
 };
 
-export function extractEmailsFromText(input: string) {
-  const matches = input.match(EMAIL_REGEX) ?? [];
-  const cleaned = matches
-    .map((entry) => entry.trim().toLowerCase())
-    .filter(Boolean);
+export function parseAndFormatPhone(value: string): string | null {
+  const candidate = value.trim();
+  if (!candidate) return null;
 
+  if (candidate.startsWith("+")) {
+    const parsed = parsePhoneNumberFromString(candidate);
+    if (parsed && parsed.isValid()) {
+      return parsed.format("E.164");
+    }
+  } else {
+    let parsed = parsePhoneNumberFromString(candidate, "US");
+    if (parsed && parsed.isValid()) {
+      return parsed.format("E.164");
+    }
+    parsed = parsePhoneNumberFromString(candidate, "GB");
+    if (parsed && parsed.isValid()) {
+      return parsed.format("E.164");
+    }
+  }
+  return null;
+}
+
+export function extractEmailsFromText(input: string) {
+  const lines = input.split(/\r?\n/);
+  const blankRemoved = lines.filter((line) => !line.trim()).length;
+  
+  const matches = input.match(EMAIL_REGEX) ?? [];
+  const validEmails = matches.filter((entry) => SINGLE_EMAIL_REGEX.test(entry.trim()));
+  const invalidRemoved = matches.length - validEmails.length;
+
+  const cleaned = validEmails.map((entry) => entry.trim().toLowerCase());
   const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
 
-  const stats: ExtractionStats = {
-    totalFound: matches.length,
+  const stats: CleaningStats = {
+    scanned: lines.length,
+    found: matches.length,
+    valid: validEmails.length,
     duplicatesRemoved: cleaned.length - deduped.length,
-    invalidRemoved: 0,
-    cleanResults: deduped.length,
+    invalidRemoved,
+    blankRemoved,
+    finalCount: deduped.length,
   };
 
   return { results: deduped, stats };
 }
 
 export function cleanEmailList(input: string) {
-  const candidates = input
-    .split(/[\n,\t; ]+/)
-    .map((entry) => entry.trim().toLowerCase())
-    .filter(Boolean);
+  const items = input.split(/[\n\r,\t; ]+/).map((entry) => entry.trim());
+  const blankRemoved = items.filter((entry) => entry === "").length;
+  const candidates = items.filter((entry) => entry !== "");
 
   const validEmails = candidates.filter((entry) => SINGLE_EMAIL_REGEX.test(entry));
+  const invalidRemoved = candidates.length - validEmails.length;
 
-  const deduped = Array.from(new Set(validEmails)).sort((a, b) =>
+  const cleaned = validEmails.map((entry) => entry.toLowerCase());
+  const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
 
-  const stats: ExtractionStats = {
-    totalFound: candidates.length,
-    duplicatesRemoved: validEmails.length - deduped.length,
-    invalidRemoved: candidates.length - validEmails.length,
-    cleanResults: deduped.length,
+  const stats: CleaningStats = {
+    scanned: items.length,
+    found: candidates.length,
+    valid: validEmails.length,
+    duplicatesRemoved: cleaned.length - deduped.length,
+    invalidRemoved,
+    blankRemoved,
+    finalCount: deduped.length,
   };
 
   return { results: deduped, stats };
 }
 
 export function removeDuplicateEmails(input: string) {
-  const candidates = input
-    .split(/[\n,\t; ]+/)
-    .map((entry) => entry.trim().toLowerCase())
-    .filter(Boolean);
+  const items = input.split(/[\n\r,\t; ]+/).map((entry) => entry.trim());
+  const blankRemoved = items.filter((entry) => entry === "").length;
+  const candidates = items.filter((entry) => entry !== "");
 
-  const validEmails = candidates.filter((entry) =>
-    SINGLE_EMAIL_REGEX.test(entry),
-  );
+  const validEmails = candidates.filter((entry) => SINGLE_EMAIL_REGEX.test(entry));
+  const invalidRemoved = candidates.length - validEmails.length;
 
-  const deduped = Array.from(new Set(validEmails)).sort((a, b) =>
+  const cleaned = validEmails.map((entry) => entry.toLowerCase());
+  const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
 
-  const stats: ExtractionStats = {
-    totalFound: validEmails.length,
-    duplicatesRemoved: validEmails.length - deduped.length,
-    invalidRemoved: candidates.length - validEmails.length,
-    cleanResults: deduped.length,
+  const stats: CleaningStats = {
+    scanned: items.length,
+    found: candidates.length,
+    valid: validEmails.length,
+    duplicatesRemoved: cleaned.length - deduped.length,
+    invalidRemoved,
+    blankRemoved,
+    finalCount: deduped.length,
   };
 
   return { results: deduped, stats };
 }
 
 export function extractPhoneNumbersFromText(input: string) {
+  const lines = input.split(/\r?\n/);
+  const blankRemoved = lines.filter((line) => !line.trim()).length;
+
   const matches = input.match(PHONE_REGEX) ?? [];
-  const cleaned = matches
-    .map((entry) => normalizePhoneNumber(entry))
-    .filter((entry): entry is string => Boolean(entry));
+  const cleaned: string[] = [];
+  let invalidRemoved = 0;
+
+  matches.forEach((entry) => {
+    const normalized = parseAndFormatPhone(entry);
+    if (normalized) {
+      cleaned.push(normalized);
+    } else {
+      invalidRemoved += 1;
+    }
+  });
 
   const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
 
-  const stats: ExtractionStats = {
-    totalFound: matches.length,
+  const stats: CleaningStats = {
+    scanned: lines.length,
+    found: matches.length,
+    valid: cleaned.length,
     duplicatesRemoved: cleaned.length - deduped.length,
-    invalidRemoved: 0,
-    cleanResults: deduped.length,
+    invalidRemoved,
+    blankRemoved,
+    finalCount: deduped.length,
   };
 
   return { results: deduped, stats };
 }
 
 export function extractUrlsFromText(input: string) {
+  const lines = input.split(/\r?\n/);
+  const blankRemoved = lines.filter((line) => !line.trim()).length;
+
   const matches = input.match(URL_REGEX) ?? [];
-  const cleaned = matches
-    .map((entry) => normalizeUrlValue(entry))
-    .filter((entry): entry is string => Boolean(entry));
+  const cleaned: string[] = [];
+  let invalidRemoved = 0;
+
+  matches.forEach((entry) => {
+    const normalized = normalizeUrlValue(entry);
+    if (normalized) {
+      cleaned.push(normalized);
+    } else {
+      invalidRemoved += 1;
+    }
+  });
 
   const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
 
-  const stats: ExtractionStats = {
-    totalFound: matches.length,
+  const stats: CleaningStats = {
+    scanned: lines.length,
+    found: matches.length,
+    valid: cleaned.length,
     duplicatesRemoved: cleaned.length - deduped.length,
-    invalidRemoved: 0,
-    cleanResults: deduped.length,
+    invalidRemoved,
+    blankRemoved,
+    finalCount: deduped.length,
   };
 
   return { results: deduped, stats };
 }
 
 export function extractDomainsFromEmails(input: string) {
+  const lines = input.split(/\r?\n/);
+  const blankRemoved = lines.filter((line) => !line.trim()).length;
+
   const emailMatches = input.match(EMAIL_REGEX) ?? [];
   const urlMatches = input.match(URL_REGEX) ?? [];
+  const found = emailMatches.length + urlMatches.length;
 
-  const normalizedEmailDomains = emailMatches
-    .map((entry) => extractDomainFromEmail(entry))
-    .filter((entry): entry is string => Boolean(entry));
+  const cleaned: string[] = [];
+  let invalidRemoved = 0;
 
-  const normalizedUrlDomains = urlMatches
-    .map((entry) => extractDomainFromUrl(entry))
-    .filter((entry): entry is string => Boolean(entry));
+  emailMatches.forEach((entry) => {
+    const domain = extractDomainFromEmail(entry);
+    if (domain) {
+      cleaned.push(domain);
+    } else {
+      invalidRemoved += 1;
+    }
+  });
 
-  const cleaned = [...normalizedEmailDomains, ...normalizedUrlDomains];
+  urlMatches.forEach((entry) => {
+    const domain = extractDomainFromUrl(entry);
+    if (domain) {
+      cleaned.push(domain);
+    } else {
+      invalidRemoved += 1;
+    }
+  });
+
   const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
 
-  const stats: ExtractionStats = {
-    totalFound: cleaned.length,
+  const stats: CleaningStats = {
+    scanned: lines.length,
+    found,
+    valid: cleaned.length,
     duplicatesRemoved: cleaned.length - deduped.length,
-    invalidRemoved: 0,
-    cleanResults: deduped.length,
+    invalidRemoved,
+    blankRemoved,
+    finalCount: deduped.length,
   };
 
   return { results: deduped, stats };
-}
-
-function normalizePhoneNumber(input: string) {
-  const trimmed = input.trim();
-  const hasLeadingPlus = trimmed.startsWith("+");
-  const digitsOnly = trimmed.replace(/\D/g, "");
-
-  if (digitsOnly.length < 7) {
-    return null;
-  }
-
-  return hasLeadingPlus ? `+${digitsOnly}` : digitsOnly;
 }
 
 export function normalizeUrlValue(input: string) {

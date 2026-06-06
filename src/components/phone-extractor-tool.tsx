@@ -14,16 +14,17 @@ export function PhoneExtractorTool() {
       title="Extract phone numbers from text"
       description="Paste messy text, extract phone numbers, normalize formatting, remove duplicates, and export the clean list."
       icon={Phone}
-      iconToneClassName="bg-[color:rgba(37,99,235,0.08)] text-[color:var(--brand-strong)]"
+      iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
       sampleInput={SAMPLE_TEXT}
       placeholder="Paste copied profiles, CRM notes, website text, or any messy block with phone numbers."
       trackName="extract-phone-numbers-from-text"
       processInput={extractPhoneNumbersFromText}
       statLabels={{
-        total: "Numbers found",
-        duplicates: "Duplicates removed",
-        invalid: "Invalid entries removed",
-        ready: "Clean numbers ready",
+        scanned: "Items scanned",
+        found: "Found",
+        duplicatesRemoved: "Duplicates removed",
+        invalidRemoved: "Invalid removed",
+        finalCount: "Clean numbers ready",
       }}
       csvHeader="phone"
       copyLabel="Copy results"

@@ -19,16 +19,17 @@ export function RemoveDuplicateEmailsTool() {
       title="Remove duplicate emails"
       description="Paste a repeated email list to keep one clean copy of each valid address and drop the rest."
       icon={CopyMinus}
-      iconToneClassName="bg-[color:rgba(37,99,235,0.08)] text-[color:var(--brand-strong)]"
+      iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
       sampleInput={SAMPLE_EMAIL_LIST}
       placeholder="Paste one email per line or a mixed list separated by commas, spaces, or tabs."
       trackName="remove-duplicate-emails"
       processInput={removeDuplicateEmails}
       statLabels={{
-        total: "Valid emails scanned",
-        duplicates: "Duplicates removed",
-        invalid: "Invalid entries removed",
-        ready: "Unique emails ready",
+        scanned: "Items scanned",
+        found: "Found",
+        duplicatesRemoved: "Duplicates removed",
+        invalidRemoved: "Invalid removed",
+        finalCount: "Unique emails ready",
       }}
       csvHeader="email"
       copyLabel="Copy deduplicated list"

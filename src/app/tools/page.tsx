@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { PageFrame } from "@/components/page-frame";
 import { PageHero } from "@/components/page-hero";
 import { PageSectionHeading } from "@/components/page-section-heading";
+import { BreadcrumbJsonLd } from "@/lib/seo";
 
 const flagshipTools = [
   {
@@ -67,14 +68,23 @@ const helperTools = [
 ];
 
 export const metadata: Metadata = {
-  title: "All Tools",
+  title: "All Lead Cleaning Tools — LeadCleanr",
   description:
-    "Explore LeadCleanr CSV-first lead cleaning tools and supporting text extractors.",
+    "Explore LeadCleanr browser-first CSV lead cleaner tools and supporting text extractors. Clean, deduplicate, and export leads 100% locally with no signup.",
+  alternates: {
+    canonical: "https://leadcleanr.com/tools",
+  },
 };
 
 export default function ToolsPage() {
   return (
     <PageFrame>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Tools", url: "/tools" },
+        ]}
+      />
       <PageHero
         eyebrow="Tools"
         title="Start with the CSV path."

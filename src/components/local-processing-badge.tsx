@@ -14,10 +14,12 @@ export function LocalProcessingBadge({
   if (compact) {
     return (
       <div
-        className={`inline-flex items-center gap-2 rounded-full border border-[color:rgba(15,23,42,0.08)] bg-white/82 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:#244255] shadow-[0_8px_18px_rgba(15,23,42,0.05)] ${className}`.trim()}
+        title="Your pasted text and CSV files are processed in your browser."
+        className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50/50 px-2.5 py-1 text-[11px] font-medium text-slate-600 ${className}`.trim()}
       >
-        <ShieldCheck className="h-3.5 w-3.5" />
-        Local only
+        <ShieldCheck className="h-3.5 w-3.5 text-blue-500/70" />
+        <span className="hidden sm:inline">Runs locally</span>
+        <span className="sm:hidden">Local</span>
       </div>
     );
   }
