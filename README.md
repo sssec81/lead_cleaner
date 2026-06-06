@@ -1,4 +1,4 @@
-# LeadCleanr
+# LeadCleanr (v1.0.0-mvp)
 
 **Clean messy lead lists instantly.**
 
@@ -14,36 +14,36 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - Agencies & Freelancers
 - Virtual Assistants & Data Entry Workers
 
-## ✨ Core Features (MVP)
+## ✨ Core Features (v1.0.0 MVP)
 
 ### Text Input Tools
 - **Extract Emails**: Detect and return email addresses from pasted text.
-- **Extract Phone Numbers**: Detect phone numbers from messy text.
-- **Extract URLs**: Detect website links and URLs.
+- **Extract Phone Numbers**: Detect phone numbers with smart international fallback logic.
+- **Extract URLs**: Detect website links and cleanly strip trailing punctuation.
 - **Extract Domains**: Extract domains from emails or URLs.
-- **Clean & Deduplicate**: Trim spaces, lowercase emails, remove broken entries, and remove duplicate entries.
+- **Defensive Parsing**: Hard character limits to prevent ReDoS (Regular Expression Denial of Service) browser hangs.
 
 ### CSV Upload Tools
-- **Upload & Preview**: Upload a `.csv` file (up to 2MB) and preview the first 100-500 rows.
-- **Targeted Cleaning**: Select target columns (email, phone, etc.).
-- **Deduplicate**: Remove duplicate rows based on a selected column.
-- **Trim & Format**: Clean specific data, lowercase emails, and delete empty rows with no useful data.
+- **Client-Side Chunking**: Upload `.csv` files and parse them using `PapaParse` via 64KB chunk streaming to keep the browser thread unblocked.
+- **Smart Column Detection**: Automatically detects email, phone, and url columns based on regex scoring of the first 3 rows of data.
+- **Deduplicate**: Remove duplicate rows based on a selected column or a safe JSON-stringified entire row hash.
+- **Trim & Format**: Clean specific data, lowercase emails, and delete empty rows.
 
-### Export
+### Export & UI
+- **SaaS Aesthetic**: Crisp, utilitarian interface replacing oversized glassmorphic elements for professional usability.
 - **Instant Download**: Download cleaned results as `.txt` or `.csv`.
 - **Copy**: One-click copy clean data to clipboard.
 - **Metrics**: Instantly view stats on total items found, duplicates removed, and valid leads ready.
 
 ## 💻 Tech Stack
-- **Framework**: Next.js (App Router)
-- **UI Library**: React
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **UI Library**: React 19
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS v4
 - **CSV Parsing**: PapaParse
 - **Icons**: `lucide-react`
-- **File Export**: Browser Blob API
-- **Hosting**: DigitalOcean Droplet + Nginx + PM2
-- **Database/Auth**: None (for MVP)
+- **Phone Parsing**: `libphonenumber-js`
+- **Hosting**: Designed for Vercel or DigitalOcean Droplet + Nginx + PM2
 
 ## 🚀 Getting Started
 
@@ -51,7 +51,6 @@ First, clone the repo and install the dependencies:
 ```bash
 npm install
 ```
-*(Note: MVP requires `papaparse` and `lucide-react`)*
 
 Run the development server:
 ```bash
@@ -76,44 +75,21 @@ leadcleanr/
 │   │   ├── terms/                 # Terms of Service
 │   │   └── contact/               # Contact Form
 │   ├── components/                # Reusable UI Components
-│   │   ├── Navbar.tsx
-│   │   ├── ToolLayout.tsx
-│   │   ├── TextToolBox.tsx
-│   │   ├── CsvUploader.tsx
-│   │   └── StatsBox.tsx
+│   │   ├── page-frame.tsx         # Main Shell layout
+│   │   ├── site-header.tsx        # Navigation
+│   │   ├── csv-lead-cleaner-tool.tsx
+│   │   └── text-processing-tool.tsx
 │   └── lib/                       # Core Logic (Browser-side)
-│       ├── extractors.ts          # Regex extraction logic
-│       ├── cleaners.ts            # String cleaning functions
-│       ├── csv.ts                 # PapaParse wrappers
+│       ├── text-tools.ts          # Regex extraction & string cleaning
+│       ├── csv.ts                 # PapaParse wrappers & chunking
 │       └── export.ts              # Blob/download logic
 ```
-
-## 🚢 Deployment (DigitalOcean Droplet)
-
-1. Push code to your GitHub repository.
-2. SSH into your DigitalOcean server (Ubuntu LTS).
-3. Pull the latest code:
-   ```bash
-   git pull origin main
-   ```
-4. Install dependencies and build:
-   ```bash
-   npm install
-   npm run build
-   ```
-5. Start or restart the PM2 process:
-   ```bash
-   pm2 start npm --name "leadcleanr" -- start
-   # OR if already running:
-   pm2 restart leadcleanr
-   ```
 
 ## 🗺️ Roadmap
 
 - **V1 (MVP)**: Browser-first text extraction, basic CSV cleaning, and SEO pages. *(Current)*
 - **V2 (Monetization Layer)**: User accounts, Stripe integration, larger file limits, saved workflows.
 - **V3 (Business/API Layer)**: API access, team workspaces, CRM exports, email verification credits.
-- **V4 (Performance Upgrade)**: Rust + WebAssembly for heavy, browser-side CSV processing and batch processing.
 
 ## ⚠️ Acceptable Use Policy
 **LeadCleanr is for cleaning data you own or have permission to process.** Do not use it for spam, scraping abuse, or sending unsolicited messages. Ensure you comply with email marketing and privacy laws in your region.
