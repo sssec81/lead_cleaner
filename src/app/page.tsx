@@ -61,9 +61,24 @@ const useCases = [
 
 const supportTools = [
   {
+    href: "/tools/remove-empty-rows-from-csv",
+    title: "Remove Empty CSV Rows",
+    text: "A fast, simple tool to delete completely blank rows from a spreadsheet and export a clean file instantly.",
+  },
+  {
+    href: "/tools/validate-email-list",
+    title: "Validate Email List",
+    text: "Check an email list for broken syntax and structural formatting errors before you send.",
+  },
+  {
     href: "/tools/extract-emails-from-text",
     title: "Extract Emails from Text",
     text: "Useful when contact data still lives in notes, signatures, or copied directories instead of rows and columns.",
+  },
+  {
+    href: "/tools/remove-duplicate-phone-numbers",
+    title: "Remove Duplicate Phones",
+    text: "Deduplicate and format a raw list of phone numbers.",
   },
   {
     href: "/tools/extract-phone-numbers-from-text",

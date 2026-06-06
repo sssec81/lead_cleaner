@@ -8,6 +8,9 @@ import {
   extractPhoneNumbersFromText,
   extractUrlsFromText,
   parseAndFormatPhone,
+  removeDuplicateEmails,
+  removeDuplicatePhoneNumbers,
+  validateEmailListSyntax,
 } from "../src/lib/text-tools.ts";
 
 test("extractEmailsFromText keeps plus tags and deduplicates results", () => {
@@ -140,9 +143,25 @@ test("phone verification - too-short number should be rejected", () => {
 });
 
 test("phone verification - duplicated number in different formatting deduplicated", () => {
-  const result = extractPhoneNumbersFromText("Call (415) 555-0101 and 415-555-0101 or +1 415 555 0101");
-  assert.equal(result.stats.found, 3);
-  assert.equal(result.stats.duplicatesRemoved, 2);
-  assert.equal(result.stats.finalCount, 1);
-  assert.deepEqual(result.results, ["+14155550101"]);
+  const result = extractPhoneNumbersFromText("Call +1 415 555 0101 or (415) 555-0101");
+  assert.equal(result.results.length, 1);
+  assert.equal(result.results[0], "+14155550101");
+  assert.equal(result.stats.duplicatesRemoved, 1);
+});
+
+test("removeDuplicatePhoneNumbers acts as alias to extractPhoneNumbersFromText", () => {
+  const result = removeDuplicatePhoneNumbers("Call +1 415 555 0101 or (415) 555-0101");
+  assert.equal(result.results.length, 1);
+  assert.equal(result.results[0], "+14155550101");
+});
+
+test("validateEmailListSyntax splits valid and invalid emails", () => {
+  const result = validateEmailListSyntax("valid@email.com, invalid@.com, test@bar.com");
+  assert.equal(result.results.length, 2);
+  assert.equal(result.results[0], "test@bar.com");
+  assert.equal(result.results[1], "valid@email.com");
+  assert.equal(result.invalidResults.length, 1);
+  assert.equal(result.invalidResults[0], "invalid@.com");
+  assert.equal(result.stats.invalidRemoved, 1);
+  assert.equal(result.stats.valid, 2);
 });

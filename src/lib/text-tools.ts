@@ -106,6 +106,39 @@ export function removeDuplicateEmails(input: string) {
   return cleanEmailList(input);
 }
 
+export function validateEmailListSyntax(input: string) {
+  const items = input.split(/[\n\r,\t; ]+/).map((entry) => entry.trim());
+  const blankRemoved = items.filter((entry) => entry === "").length;
+  const candidates = items.filter((entry) => entry !== "");
+
+  const validEmails: string[] = [];
+  const invalidEmails: string[] = [];
+
+  candidates.forEach((entry) => {
+    if (SINGLE_EMAIL_REGEX.test(entry)) {
+      validEmails.push(entry.toLowerCase());
+    } else {
+      invalidEmails.push(entry);
+    }
+  });
+
+  const dedupedValid = Array.from(new Set(validEmails)).sort((a, b) =>
+    a.localeCompare(b),
+  );
+
+  const stats: CleaningStats = {
+    scanned: items.length,
+    found: candidates.length,
+    valid: validEmails.length,
+    duplicatesRemoved: validEmails.length - dedupedValid.length,
+    invalidRemoved: invalidEmails.length,
+    blankRemoved,
+    finalCount: dedupedValid.length,
+  };
+
+  return { results: dedupedValid, invalidResults: invalidEmails, stats };
+}
+
 export function extractPhoneNumbersFromText(input: string) {
   const lines = input.split(/\r?\n/);
   const blankRemoved = lines.filter((line) => !line.trim()).length;
@@ -138,6 +171,10 @@ export function extractPhoneNumbersFromText(input: string) {
   };
 
   return { results: deduped, stats };
+}
+
+export function removeDuplicatePhoneNumbers(input: string) {
+  return extractPhoneNumbersFromText(input);
 }
 
 export function extractUrlsFromText(input: string) {

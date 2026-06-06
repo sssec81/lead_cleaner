@@ -46,8 +46,8 @@ type TextProcessingToolProps = {
   csvHeader?: string;
   copyLabel: string;
   primaryActionLabel: string;
-  resultTitle: string;
-  resultDescription: string;
+  resultTitle: React.ReactNode | ((count: number) => React.ReactNode);
+  resultDescription?: React.ReactNode | ((count: number) => React.ReactNode);
   emptyMessage: string;
 };
 
@@ -591,7 +591,7 @@ export function TextProcessingTool({
           </div>
 
           {/* Group 2: Extraction Preview & Actions Panel */}
-          <div className="mt-6 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 sm:p-5 flex-1 flex flex-col justify-between">
+          <div className="mt-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 sm:p-5 flex-1 flex flex-col justify-between">
             <div>
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/50 pb-3 mb-3">
                 <div>
@@ -599,9 +599,7 @@ export function TextProcessingTool({
                     Step 2 Workflow Action
                   </p>
                   <h4 className="text-sm font-semibold text-slate-900">
-                    {processed.results.length > 0 && !processed.results.every(val => workspace.some(item => item.value === val))
-                      ? "Ready to extract"
-                      : "Review extraction"}
+                    Add to workspace
                   </h4>
                 </div>
                 <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 border border-blue-100/50">
@@ -644,7 +642,7 @@ export function TextProcessingTool({
             </div>
 
             {/* Extraction CTA buttons */}
-            <div className="flex flex-wrap items-center gap-2.5 border-t border-slate-200/50 pt-4 mt-auto">
+            <div className="flex flex-wrap items-center gap-2.5 border-t border-slate-200/50 pt-4 mt-3">
               <button
                 type="button"
                 onClick={replaceWorkspaceFromCurrentInput}
@@ -708,10 +706,14 @@ export function TextProcessingTool({
             <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <h3 className="font-display text-xl font-semibold">{resultTitle}</h3>
-                  <p className="text-sm leading-6 text-[color:var(--muted)]">
-                    {resultDescription}
-                  </p>
+                  <h3 className="font-display text-xl font-semibold">
+                    {typeof resultTitle === "function" ? resultTitle(workspaceValues.length) : resultTitle}
+                  </h3>
+                  {resultDescription && (
+                    <p className="text-sm leading-6 text-[color:var(--muted)]">
+                      {typeof resultDescription === "function" ? resultDescription(workspaceValues.length) : resultDescription}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 rounded-full border border-[color:var(--line)] bg-white p-1">
                   <button
@@ -791,46 +793,48 @@ export function TextProcessingTool({
                 </div>
               </div>
 
-              <div className="mt-4 min-h-[22rem] rounded-[1.5rem] border border-[color:rgba(16,37,52,0.06)] bg-white/60 p-4 shadow-xs">
+              <div className="mt-6 flex flex-col gap-6">
                 {workspaceValues.length ? (
-                  <div className="sticky top-0 z-10 -mx-1 mb-4 rounded-[1.1rem] border border-[color:rgba(16,37,52,0.08)] bg-white/92 p-3 backdrop-blur">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                       <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-                          Step 3 export clean results
-                        </p>
-                        <p className="mt-1 text-sm text-[color:var(--muted)]">
-                          {workspaceValues.length.toLocaleString()} rows ready to copy or download.
+                        <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(37,99,235,0.08)] px-3 py-1.5 mb-2">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-[color:var(--brand-strong)]">Step 3 • Export Ready</p>
+                        </div>
+                        <p className="text-3xl font-display font-bold text-slate-900 tracking-tight">
+                          {workspaceValues.length.toLocaleString()} <span className="text-slate-500 font-medium text-lg">clean rows.</span>
                         </p>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap items-center gap-3">
                         <button
                           type="button"
                           onClick={() => void handleCopy()}
                           disabled={!workspaceValues.length}
-                          className="btn-primary inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full bg-[color:#153246] px-4 text-sm font-semibold text-white transition hover:bg-[color:#102534] disabled:cursor-not-allowed disabled:opacity-50"
+                          className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:hover:bg-blue-600"
                         >
-                          {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
+                          {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4 transition-transform group-hover:-rotate-12" />}
                           {copied ? "Copied" : copyLabel}
                         </button>
-                        <button
-                          type="button"
-                          onClick={handleDownloadTxt}
-                          disabled={!workspaceValues.length}
-                          className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300"
-                        >
-                          <FileText className="h-4 w-4" />
-                          Download TXT
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleDownloadCsv}
-                          disabled={!workspaceValues.length}
-                          className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-50 hover:border-slate-300"
-                        >
-                          <Download className="h-4 w-4" />
-                          Download CSV
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={handleDownloadTxt}
+                            disabled={!workspaceValues.length}
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
+                          >
+                            <FileText className="h-4 w-4 text-slate-400" />
+                            TXT
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleDownloadCsv}
+                            disabled={!workspaceValues.length}
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
+                          >
+                            <Download className="h-4 w-4 text-slate-400" />
+                            CSV
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -838,88 +842,80 @@ export function TextProcessingTool({
 
                 {workspaceValues.length ? (
                   showBulkEditor ? (
-                    <textarea
-                      value={resultText}
-                      onChange={(event) => applyBulkEditor(event.target.value)}
-                      className="min-h-[20rem] w-full rounded-[1rem] border border-[color:var(--line)] bg-white px-4 py-4 text-sm leading-7 text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[color:rgba(37,99,235,0.12)]"
-                    />
+                    <div className="rounded-[2rem] border border-slate-200/60 bg-white p-2 shadow-sm">
+                      <textarea
+                        value={resultText}
+                        onChange={(event) => applyBulkEditor(event.target.value)}
+                        className="min-h-[24rem] w-full rounded-2xl bg-slate-50 px-6 py-6 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:bg-white focus:ring-2 focus:ring-sky-500/20"
+                      />
+                    </div>
                   ) : (
-                    <div className="space-y-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--muted)]">
-                        Previewing the first {Math.min(WORKSPACE_PREVIEW_LIMIT, workspace.length)} of{" "}
-                        {workspace.length}
-                      </p>
-                      {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
-                        <div
-                          key={item.id}
-                          className={`rounded-[1rem] border px-3 ${
-                            item.selected
-                              ? "border-[color:rgba(15,118,110,0.2)] bg-[color:rgba(240,253,250,0.9)]"
-                              : "border-[color:var(--line)] bg-white"
-                          } ${resultDensity === "compact" ? "py-2" : "py-3"}`}
-                        >
-                          <div className="flex items-start gap-3">
+                    <div className="rounded-[2rem] border border-slate-200/60 bg-white shadow-sm overflow-hidden flex flex-col">
+                      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                        <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                          Previewing {Math.min(WORKSPACE_PREVIEW_LIMIT, workspace.length)} of {workspace.length}
+                        </p>
+                        <div className="flex items-center gap-2">
+                           <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Hover for actions</span>
+                        </div>
+                      </div>
+                      <div className="divide-y divide-slate-100 bg-white">
+                        {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
+                          <div
+                            key={item.id}
+                            className={`group relative flex items-center gap-4 px-6 py-3 transition-colors hover:bg-slate-50/80 ${
+                              item.selected ? "bg-sky-50/40" : ""
+                            }`}
+                          >
                             <button
                               type="button"
                               onClick={() => toggleWorkspaceSelection(item.id)}
-                              className={`mt-1 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded border transition-colors ${
+                              className={`flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border transition-all ${
                                 item.selected
-                                  ? "border-[color:var(--brand)] bg-[color:var(--brand)]/10"
-                                  : "border-[color:var(--line)] bg-white hover:border-[color:var(--brand)]"
+                                  ? "border-sky-500 bg-sky-500 text-white"
+                                  : "border-slate-300 bg-white group-hover:border-sky-400"
                               }`}
                               aria-label={`Select row ${index + 1}`}
                             >
-                              {item.selected && <Check className="h-3 w-3 text-[color:var(--brand)]" />}
+                              {item.selected && <Check className="h-3 w-3" />}
                             </button>
-                            <div className="flex-1">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)]">
-                                  Row {index + 1}
-                                </span>
-                                <span className="rounded-full border border-[color:rgba(16,37,52,0.08)] bg-[color:rgba(244,247,250,0.92)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:#38586b]">
-                                  {item.source}
-                                </span>
-                                {item.locked ? (
-                                  <span className="rounded-full bg-[color:rgba(15,118,110,0.12)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--accent)]">
-                                    Locked
-                                  </span>
-                                ) : null}
-                              </div>
+                            
+                            <div className="flex w-16 shrink-0 items-center gap-2">
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                {String(index + 1).padStart(2, '0')}
+                              </span>
+                              {item.locked && <Lock className="h-3 w-3 text-amber-500" />}
+                            </div>
+                            
+                            <div className="flex flex-1 items-center gap-3">
                               <input
                                 value={item.value}
-                                onChange={(event) =>
-                                  updateWorkspaceItem(item.id, event.target.value)
-                                }
-                                className={`mt-3 w-full rounded-lg border border-[color:var(--line)] bg-transparent px-3 text-sm text-[color:var(--foreground)] outline-none focus:border-[color:var(--brand)] ${
-                                  resultDensity === "compact" ? "min-h-9" : "min-h-10"
-                                }`}
+                                onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
+                                className="w-full bg-transparent text-sm font-medium text-slate-800 outline-none focus:bg-slate-100 focus:ring-2 focus:ring-sky-100 rounded px-2 py-1 transition-all"
                               />
                             </div>
-                            <div className="flex items-center gap-2">
+
+                            <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 pl-4">
                               <button
                                 type="button"
                                 onClick={() => toggleWorkspaceLock(item.id)}
-                                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[color:var(--line)] bg-white text-[color:var(--muted)] transition hover:border-[color:var(--brand)]/35 hover:bg-slate-50 hover:text-[color:var(--brand)] active:bg-slate-100"
+                                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700"
                                 aria-label={item.locked ? "Unlock row" : "Lock row"}
                               >
-                                {item.locked ? (
-                                  <Lock className="h-4 w-4" />
-                                ) : (
-                                  <LockOpen className="h-4 w-4" />
-                                )}
+                                {item.locked ? <Lock className="h-4 w-4 text-amber-500" /> : <LockOpen className="h-4 w-4" />}
                               </button>
                               <button
                                 type="button"
                                 onClick={() => removeWorkspaceItem(item.id)}
-                                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[color:var(--line)] bg-white text-[color:var(--muted)] transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 active:bg-red-100"
+                                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-100 hover:text-red-600"
                                 aria-label={`Remove row ${index + 1}`}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )
                 ) : (

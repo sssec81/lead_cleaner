@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck } from "lucide-react";
+import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck, CheckCircle2, Rows3 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 import { BreadcrumbJsonLd } from "@/lib/seo";
@@ -34,9 +34,43 @@ const flagshipTools = [
     icon: FolderDown,
     featured: false,
   },
+  {
+    href: "/tools/extract-phone-numbers-from-csv",
+    label: "CSV Support",
+    title: "Extract Phones from CSV",
+    description:
+      "When you need to pull and format phone numbers from a messy spreadsheet without opening Excel.",
+    notes: [
+      "Auto-detect phone columns",
+      "Format to standard E.164",
+      "Drop invalid formats",
+    ],
+    icon: Phone,
+    featured: false,
+  },
+  {
+    href: "/tools/remove-empty-rows-from-csv",
+    label: "CSV Support",
+    title: "Remove Empty CSV Rows",
+    description:
+      "A fast, simple tool to delete completely blank rows from a spreadsheet and export a clean file instantly.",
+    notes: [
+      "No column mapping required",
+      "Fixes Excel phantom rows",
+      "1-click clean export",
+    ],
+    icon: Rows3,
+    featured: false,
+  },
 ];
 
 const helperTools = [
+  {
+    href: "/tools/validate-email-list",
+    title: "Validate Email List",
+    description: "Check an email list for broken syntax and structural formatting errors.",
+    icon: CheckCircle2,
+  },
   {
     href: "/tools/extract-emails-from-text",
     title: "Extract Emails from Text",
@@ -72,6 +106,12 @@ const helperTools = [
     title: "Remove Duplicate Emails",
     description: "Use this when the main problem is repeated addresses and nothing else.",
     icon: CopyX,
+  },
+  {
+    href: "/tools/remove-duplicate-phone-numbers",
+    title: "Remove Duplicate Phones",
+    description: "Deduplicate and format a raw list of phone numbers.",
+    icon: Phone,
   },
 ];
 
@@ -119,7 +159,7 @@ export default function ToolsPage() {
       {/* Flagship Workflow Cards */}
       <section className="relative z-10 pb-20 lg:pb-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-8 lg:grid-cols-2">
             {flagshipTools.map((tool) => (
               <FlagshipCard key={tool.href} tool={tool} />
             ))}

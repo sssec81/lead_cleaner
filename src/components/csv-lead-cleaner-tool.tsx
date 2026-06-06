@@ -471,7 +471,7 @@ export function CsvLeadCleanerTool() {
         <WorkflowSteps hasLoadedFile={hasLoadedFile} exportReady={exportReady} />
       </div>
 
-      <div className="w-full xl:w-[400px] shrink-0 rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 flex flex-col">
+      <div className="w-full xl:w-[360px] shrink-0 rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 flex flex-col">
           <div className="mb-6 hidden xl:block">
             <WorkflowSteps hasLoadedFile={hasLoadedFile} exportReady={exportReady} />
           </div>
@@ -755,7 +755,7 @@ export function CsvLeadCleanerTool() {
             />
             <ProWaitlistCard
               trackSource="csv_cleaner_sidebar"
-              title="Want saved workflows and export presets?"
+              title="Want Pro workflows?"
               description="Join the Pro waitlist to get notified when we launch saved cleanup presets, CSV presets for CRM (HubSpot, Salesforce), and outreach tools."
             />
           </div>
@@ -772,7 +772,7 @@ export function CsvLeadCleanerTool() {
                     Review what changed before export
                   </h3>
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[color:rgba(37,99,235,0.08)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+                <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] ${hasLoadedFile ? "bg-blue-50/50 border-blue-200 text-blue-700" : "bg-white border-slate-200 text-slate-400"}`}>
                   <ScanSearch className="h-4 w-4" />
                   {hasLoadedFile ? "Step 2 active" : "Waiting for upload"}
                 </div>
@@ -783,8 +783,8 @@ export function CsvLeadCleanerTool() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 relative z-10">
                   Clean rows ready
                 </p>
-                <p className="mt-3 font-display text-6xl font-bold leading-none tabular-nums text-slate-900 sm:text-7xl relative z-10">
-                  {cleaned.summary.cleanRowsReady.toLocaleString()}
+                <p className={`mt-3 font-display text-6xl font-bold leading-none tabular-nums sm:text-7xl relative z-10 ${!hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "text-slate-900/40" : "text-slate-900"}`}>
+                  {!hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "—" : cleaned.summary.cleanRowsReady.toLocaleString()}
                 </p>
                 <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-500 sm:text-base relative z-10">
                   {hasLoadedFile
@@ -1671,9 +1671,9 @@ function ExportActions({
                       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                       : "bg-white text-slate-400 border-slate-200"
                   }`}>
-                    {isDone ? "✓" : "🔒"}
+                    {isDone ? "✓" : "○"}
                   </span>
-                  <span className={isDone ? "text-slate-500 line-through font-medium" : "text-slate-600 font-medium"}>
+                  <span className={isDone ? "text-slate-400 font-medium" : "text-slate-600 font-medium"}>
                     {item.label}
                   </span>
                 </div>
@@ -1773,11 +1773,12 @@ function InsightTile({
   tone: "teal" | "amber" | "slate";
   icon?: React.ReactNode;
 }) {
+  const actualTone = value === 0 && tone === "amber" ? "slate" : tone;
   const palette = {
     teal: "border-teal-100 bg-teal-50/30 text-teal-800 hover:border-teal-200",
     amber: "border-amber-100 bg-amber-50/30 text-amber-800 hover:border-amber-200",
     slate: "border-slate-200 bg-slate-50/40 text-slate-700 hover:border-slate-300",
-  }[tone];
+  }[actualTone];
 
   return (
     <div className={`rounded-2xl border px-4 py-4 transition-all duration-300 hover:shadow-xs ${palette}`}>
