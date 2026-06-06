@@ -1242,9 +1242,9 @@ function buildDuplicateKey(
   }
 
   if (duplicateMode === "entire_row") {
-    return headers
-      .map((header) => String(row[header] ?? "").trim())
-      .join("|");
+    return JSON.stringify(
+      headers.map((header) => String(row[header] ?? "").trim())
+    );
   }
 
   if (duplicateMode === "email") {

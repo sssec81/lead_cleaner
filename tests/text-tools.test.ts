@@ -131,8 +131,8 @@ test("phone verification - number with hyphens", () => {
   assert.equal(parseAndFormatPhone("415-555-0101"), "+14155550101");
 });
 
-test("phone verification - random serial number should be rejected", () => {
-  assert.equal(parseAndFormatPhone("98765432109876"), null);
+test("phone verification - international fallback retains unvalidated numbers", () => {
+  assert.equal(parseAndFormatPhone("98765432109876"), "98765432109876");
 });
 
 test("phone verification - too-short number should be rejected", () => {

@@ -93,7 +93,7 @@ export default function ContactPage() {
                   A short, concrete message beats a long one.
                 </h2>
                 <p className="text-base leading-relaxed text-slate-600">
-                  You don't need to send your actual lead list. Providing clear context on the problem with a sanitized dummy spreadsheet saves everyone time and keeps your data secure.
+                  You don&apos;t need to send your actual lead list. Providing clear context on the problem with a sanitized dummy spreadsheet saves everyone time and keeps your data secure.
                 </p>
               </div>
             </div>

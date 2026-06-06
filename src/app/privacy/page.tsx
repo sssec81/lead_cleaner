@@ -118,7 +118,7 @@ export default function PrivacyPage() {
                 Local cleanup has a clear, physical edge.
               </h2>
               <p className="text-lg leading-8 text-slate-400">
-                The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don't hide behind legal fog.
+                The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don&apos;t hide behind legal fog.
               </p>
             </div>
             <div className="grid gap-8">

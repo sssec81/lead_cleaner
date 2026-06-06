@@ -37,6 +37,16 @@ export function parseAndFormatPhone(value: string): string | null {
       return parsed.format("E.164");
     }
   }
+
+  // Fallback: Retain numbers that look like valid international/local numbers (7-15 digits)
+  // even if they don't strictly pass US/GB validation to avoid aggressively deleting leads.
+  const digitsOnly = candidate.replace(/[^\d+]/g, "");
+  const pureDigitsCount = digitsOnly.replace("+", "").length;
+  
+  if (pureDigitsCount >= 7 && pureDigitsCount <= 15) {
+    return digitsOnly;
+  }
+
   return null;
 }
 
