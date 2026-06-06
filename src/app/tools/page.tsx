@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck, CheckCircle2, Rows3 } from "lucide-react";
+import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck, CheckCircle2, Rows3, Combine, FileJson, Type } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 import { BreadcrumbJsonLd } from "@/lib/seo";
@@ -62,6 +62,34 @@ const flagshipTools = [
     icon: Rows3,
     featured: false,
   },
+  {
+    href: "/tools/merge-csv-files",
+    label: "CSV Support",
+    title: "Merge CSV Files",
+    description:
+      "Combine multiple CSV files into one master dataset. Headers are automatically aligned and matched.",
+    notes: [
+      "Upload multiple files at once",
+      "Auto-aligns column headers",
+      "Keeps all unique columns",
+    ],
+    icon: Combine,
+    featured: false,
+  },
+  {
+    href: "/tools/convert-csv-to-json",
+    label: "CSV Support",
+    title: "Convert CSV to JSON",
+    description:
+      "Instantly convert CSV files into structured JSON arrays. Secure, browser-based conversion.",
+    notes: [
+      "No data uploads required",
+      "Fast local processing",
+      "Export as .json instantly",
+    ],
+    icon: FileJson,
+    featured: false,
+  },
 ];
 
 const helperTools = [
@@ -112,6 +140,18 @@ const helperTools = [
     title: "Remove Duplicate Phones",
     description: "Deduplicate and format a raw list of phone numbers.",
     icon: Phone,
+  },
+  {
+    href: "/tools/remove-duplicate-urls",
+    title: "Remove Duplicate URLs",
+    description: "Remove duplicate links and format a raw list of URLs.",
+    icon: LinkIcon,
+  },
+  {
+    href: "/tools/count-words-characters-text",
+    title: "Count Words / Characters",
+    description: "Instantly count words, characters, sentences, and paragraphs in your text.",
+    icon: Type,
   },
 ];
 

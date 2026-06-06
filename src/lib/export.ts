@@ -5,6 +5,11 @@ export function downloadTextFile(filename: string, content: string) {
   triggerDownload(blob, filename);
 }
 
+export function downloadJsonFile(filename: string, content: string) {
+  const blob = new Blob([content], { type: "application/json;charset=utf-8" });
+  triggerDownload(blob, filename);
+}
+
 export function downloadCsvFile(
   filename: string,
   rows: string[],
