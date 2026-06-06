@@ -668,12 +668,14 @@ export function CsvLeadCleanerTool() {
                   id="column-select"
                   value={selectedColumn}
                   onChange={(event) => {
+                    const nextColumn = event.target.value;
+                    const nextDetection = detections.find(d => d.header === nextColumn);
                     applyConfigChange({
-                      selectedColumn: event.target.value,
+                      selectedColumn: nextColumn,
                       duplicateMode,
                     });
                     trackToolEvent("csv-lead-cleaner", "change_column", {
-                      column: event.target.value,
+                      column_type: nextDetection?.type ?? "unknown",
                     });
                   }}
                   disabled={!headers.length || isParsing}
@@ -765,7 +767,11 @@ export function CsvLeadCleanerTool() {
                     value={emailFilter}
                     onChange={(event) => {
                       const nextFilter = event.target.value as EmailFilterMode;
-                      setEmailFilter(nextFilter);
+                      applyConfigChange({
+                        selectedColumn,
+                        duplicateMode,
+                        emailFilter: nextFilter,
+                      });
                       trackToolEvent("csv-lead-cleaner", "change_email_filter", {
                         filter: nextFilter,
                       });
