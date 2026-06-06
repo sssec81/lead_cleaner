@@ -104,16 +104,24 @@ Main pages:
 - `/terms`
 - `/contact`
 
-Initial SEO tool pages:
+Initial SEO tool pages (16 tools deployed):
 
+- `/tools/csv-lead-cleaner`
+- `/tools/extract-emails-from-csv`
+- `/tools/extract-phone-numbers-from-csv`
+- `/tools/remove-empty-rows-from-csv`
+- `/tools/merge-csv-files`
+- `/tools/convert-csv-to-json`
 - `/tools/extract-emails-from-text`
 - `/tools/extract-phone-numbers-from-text`
 - `/tools/extract-urls-from-text`
 - `/tools/extract-domains-from-emails`
-- `/tools/remove-duplicate-emails`
 - `/tools/clean-email-list`
-- `/tools/csv-lead-cleaner`
-- `/tools/extract-emails-from-csv`
+- `/tools/remove-duplicate-emails`
+- `/tools/remove-duplicate-phone-numbers`
+- `/tools/remove-duplicate-urls`
+- `/tools/validate-email-list`
+- `/tools/count-words-characters-text`
 
 ## Build Order
 
