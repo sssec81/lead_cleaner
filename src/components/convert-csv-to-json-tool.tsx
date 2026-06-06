@@ -338,7 +338,7 @@ export function ConvertCsvToJsonTool() {
                         type="button"
                         onClick={handleCopy}
                         disabled={!rows.length}
-                        className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
+                        className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:hover:bg-blue-600"
                       >
                         {copied ? <Check className="h-4 w-4" /> : <FileJson className="h-4 w-4" />}
                         {copied ? "Copied" : "Copy JSON"}
@@ -347,7 +347,7 @@ export function ConvertCsvToJsonTool() {
                         type="button"
                         onClick={handleExport}
                         disabled={!rows.length}
-                        className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:hover:bg-blue-600"
+                        className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
                       >
                         <Download className="h-4 w-4" />
                         Download .json

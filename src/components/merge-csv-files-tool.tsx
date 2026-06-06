@@ -55,6 +55,12 @@ export function MergeCsvFilesTool() {
     setError(null);
     setStatus("parsing");
 
+    if (fileEntries.length + files.length > 5) {
+      setError("Maximum of 5 files can be merged at once.");
+      setStatus("idle");
+      return;
+    }
+
     let currentMergedRows = [...mergedRows];
     const newFileEntries: FileEntry[] = [];
     
@@ -201,7 +207,7 @@ export function MergeCsvFilesTool() {
                 {isParsing ? "Parsing files..." : "Drop CSV files here"}
               </span>
               <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
-                You can select multiple files at once.
+                You can select up to 5 files at once (max 2MB each).
               </span>
             </div>
             <input
@@ -301,15 +307,35 @@ export function MergeCsvFilesTool() {
                   </div>
                 </div>
 
-                <div className="mt-6 w-full rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                   <h3 className="text-sm font-semibold text-slate-800 mb-4">Merged Columns Preview</h3>
-                   <div className="flex flex-wrap gap-2">
-                     {mergedHeaders.map((h, i) => (
-                        <span key={i} className="inline-flex items-center rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm">
-                           {h}
-                        </span>
-                     ))}
-                   </div>
+                <div className="mt-6 w-full rounded-2xl border border-slate-200 bg-slate-50 p-6 overflow-x-auto">
+                   <h3 className="text-sm font-semibold text-slate-800 mb-4">Column Mapping Preview</h3>
+                   <table className="w-full text-left text-sm whitespace-nowrap">
+                     <thead>
+                       <tr className="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                         <th className="pb-3 pr-6 font-medium">Merged Column</th>
+                         <th className="pb-3 font-medium">Found in Files</th>
+                       </tr>
+                     </thead>
+                     <tbody className="divide-y divide-slate-100">
+                       {mergedHeaders.map((h, i) => {
+                         const foundIn = fileEntries.filter(f => f.headers.includes(h)).map(f => f.name);
+                         return (
+                           <tr key={i}>
+                             <td className="py-3 pr-6 font-medium text-slate-800">{h}</td>
+                             <td className="py-3 text-slate-600">
+                               <div className="flex flex-wrap gap-1.5">
+                                 {foundIn.map((name, idx) => (
+                                   <span key={idx} className="inline-flex items-center rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[10px] text-slate-500">
+                                     {name}
+                                   </span>
+                                 ))}
+                               </div>
+                             </td>
+                           </tr>
+                         );
+                       })}
+                     </tbody>
+                   </table>
                 </div>
               </div>
             )}
