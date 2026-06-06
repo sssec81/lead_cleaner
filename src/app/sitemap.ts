@@ -18,7 +18,9 @@ const staticRoutes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const now = process.env.BUILD_TIME 
+    ? new Date(process.env.BUILD_TIME) 
+    : new Date();
 
   return staticRoutes.map((route) => ({
     url: `https://leadcleanr.com${route}`,
