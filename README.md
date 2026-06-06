@@ -21,13 +21,22 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - **Extract Phone Numbers**: Detect phone numbers with smart international fallback logic.
 - **Extract URLs**: Detect website links and cleanly strip trailing punctuation.
 - **Extract Domains**: Extract domains from emails or URLs.
+- **Clean Email List**: Standardize and validate syntax for messy email lists.
+- **Remove Duplicate Emails**: Fast deduplication for email lists.
+- **Remove Duplicate Phone Numbers**: Fast deduplication for phone lists.
+- **Remove Duplicate URLs**: Fast deduplication for link lists.
+- **Validate Email List**: Check syntax validity of bulk emails.
+- **Count Words / Characters**: Real-time writing statistics and estimates.
 - **Defensive Parsing**: Hard character limits to prevent ReDoS (Regular Expression Denial of Service) browser hangs.
 
 ### CSV Upload Tools
 - **Client-Side Chunking**: Upload `.csv` files and parse them using `PapaParse` via 64KB chunk streaming to keep the browser thread unblocked.
-- **Smart Column Detection**: Automatically detects email, phone, and url columns based on regex scoring of the first 3 rows of data.
-- **Deduplicate**: Remove duplicate rows based on a selected column or a safe JSON-stringified entire row hash.
-- **Trim & Format**: Clean specific data, lowercase emails, and delete empty rows.
+- **CSV Lead Cleaner**: The core tool for smart column detection, deduplication, and trimming.
+- **Extract Emails from CSV**: Bulk extract emails hidden inside CSV cells.
+- **Extract Phone Numbers from CSV**: Bulk extract phone numbers hidden inside CSV cells.
+- **Remove Empty Rows from CSV**: Instantly strip blank lines from large files.
+- **Merge CSV Files**: Combine up to 5 CSV files with header mapping previews.
+- **Convert CSV to JSON**: Transform flat spreadsheet rows into structured JSON arrays.
 
 ### Export & UI
 - **SaaS Aesthetic**: Crisp, utilitarian interface replacing oversized glassmorphic elements for professional usability.
