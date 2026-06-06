@@ -296,17 +296,14 @@ function collectWarnings(errors: ParseError[], warnings: Set<string>) {
 function removePhantomTrailingRows(rows: CsvRow[], errors: ParseError[]) {
   const phantomRowIndexes = new Set<number>();
 
-  errors.forEach((error) => {
-    if (
-      error.code === "TooFewFields" &&
-      typeof error.row === "number" &&
-      isBlankRow(rows[error.row])
-    ) {
-      phantomRowIndexes.add(error.row);
+  const rowsToKeep = rows.filter((row, index) => {
+    if (isBlankRow(row)) {
+      phantomRowIndexes.add(index);
+      return false;
     }
+    return true;
   });
 
-  const rowsToKeep = rows.filter((_, index) => !phantomRowIndexes.has(index));
   const errorsToKeep = errors.filter((error) => {
     return !(typeof error.row === "number" && phantomRowIndexes.has(error.row));
   });
