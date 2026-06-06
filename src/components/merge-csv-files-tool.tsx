@@ -68,8 +68,12 @@ export function MergeCsvFilesTool() {
     const currentHeaderSet = new Set(mergedHeaders);
 
     for (const file of files) {
+      if (fileEntries.some(f => f.name === file.name) || newFileEntries.some(f => f.name === file.name)) {
+        continue;
+      }
+
       if (file.size > MAX_CSV_FILE_SIZE) {
-        setError(`File ${file.name} is too large. Maximum supported size is 100MB.`);
+        setError(`File ${file.name} is too large. Maximum supported size is 2 MB.`);
         setStatus("error");
         return;
       }

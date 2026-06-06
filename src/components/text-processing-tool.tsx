@@ -404,6 +404,9 @@ export function TextProcessingTool({
     downloadCsvFile(`leadcleanr-${trackName}.csv`, workspaceValues, csvHeader);
   }
 
+  // We intentionally omit the dependency array so this effect re-runs on every render.
+  // This ensures the keyboard handlers always have access to the freshest state closures
+  // (like workspaceValues) without needing to wrap 15+ functions in useCallback.
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       const activeElement = document.activeElement;

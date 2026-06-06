@@ -66,7 +66,7 @@ export function ConvertCsvToJsonTool() {
     setFileName(file.name);
 
     if (file.size > MAX_CSV_FILE_SIZE) {
-      setError("File is too large. Maximum supported size is 100MB.");
+      setError("File is too large. Maximum supported size is 2 MB.");
       setStatus("error");
       return;
     }
@@ -368,9 +368,8 @@ export function ConvertCsvToJsonTool() {
                       </div>
                    </div>
                    <div className="p-4 overflow-y-auto max-h-[22rem]">
-                      <pre className="text-xs font-mono text-emerald-400 leading-relaxed">
-                        {jsonPreview}
-                        {rows.length > 3 && "\n  ...\n]"}
+                       <pre className="text-xs font-mono text-emerald-400 leading-relaxed">
+                        {rows.length > 3 ? jsonPreview.replace(/\n\]$/, ",\n  ...\n]") : jsonPreview}
                       </pre>
                    </div>
                 </div>
