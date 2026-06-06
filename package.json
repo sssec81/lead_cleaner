@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "LeadCleanr browser-first lead cleaning tools",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
