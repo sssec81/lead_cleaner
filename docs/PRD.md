@@ -5,6 +5,7 @@
 **Product Name:** LeadCleanr
 **Product Type:** Browser-First Online Utility SaaS Tool
 **Tagline:** Clean messy lead lists instantly.
+**Status:** ✅ MVP Completed (Released as `v1.0.0-mvp`)
 
 ### Core Promise
 Paste messy text or upload a CSV file to instantly extract, clean, deduplicate, and export lead data. All processing occurs locally within the browser, ensuring 100% privacy and security by design.
