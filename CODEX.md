@@ -26,9 +26,9 @@ If there is any conflict, prefer the latest explicit user instruction, then this
 - Privacy positioning: basic processing should happen in the browser whenever possible.
 - Trust positioning: do not store pasted text or uploaded CSV files in the MVP.
 
-## Locked MVP Scope
+## Phase 1 MVP Scope (Completed v1.0.0-mvp)
 
-Build only the simple MVP first.
+The initial browser-first MVP is complete.
 
 Included:
 
@@ -52,25 +52,21 @@ Included:
 18. Show cleaning stats
 19. Separate SEO pages for each tool
 
-Explicitly out of scope for MVP:
+## Phase 2 Roadmap
 
-- User login
-- Dashboard
-- Database
-- Stripe payments
-- AI extraction
-- Email SMTP verification
-- Team workspace
-- API access
-- Google Sheets integration
-- CRM integration
-- Chrome extension
-- Cloud file storage
-- Rust backend
-- Rust WebAssembly
-- Complex country-level phone validation
+The next phase of development focuses on monetization and backend capabilities.
 
-## Tech Direction
+**Phase 2 Stack Additions:**
+- Supabase (Auth + DB + Edge Functions)
+- Stripe (Payments)
+- Resend (Email)
+
+**Phase 2 Features:**
+- User accounts (Free = Anonymous, Pro = Account required)
+- Saved workspaces & history (30-day retention)
+- Paywall gating (25MB CSV limit for Pro)
+- Email Verification (MX + SMTP server-side check)
+- Export presets (HubSpot, Apollo, etc.)
 
 Use this stack unless the user asks to change it:
 

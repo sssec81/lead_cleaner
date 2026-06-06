@@ -159,11 +159,17 @@ NEXT_PUBLIC_SITE_URL=https://leadcleanr.com
 NEXT_PUBLIC_PLAUSIBLE_DOMAIN=leadcleanr.com
 NEXT_PUBLIC_GA_ID=
 ERROR_TRACKING_WEBHOOK_URL=
+
+# Phase 2 Additions (Supabase, Stripe, Resend)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+STRIPE_SECRET_KEY=
+RESEND_API_KEY=
 ```
 
 Notes:
 
-- Leave analytics variables empty if you are not using them yet
+- Leave analytics and Phase 2 variables empty if you are not using them yet
 - If your final domain is `leadcleaner.xyz`, set `NEXT_PUBLIC_SITE_URL=https://leadcleaner.xyz`
 - Update metadata later if you permanently change branding/domain
 
