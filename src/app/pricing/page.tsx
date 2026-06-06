@@ -70,7 +70,7 @@ export default function PricingPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
               Pricing
             </p>
-            <h1 className="mt-4 max-w-5xl font-display text-5xl font-semibold leading-[0.92] sm:text-6xl xl:text-[5.2rem]">
+            <h1 className="mt-4 max-w-5xl font-display text-5xl font-semibold leading-[1.02] sm:text-6xl xl:text-[5.2rem]">
               Free should feel
               <br />
               useful on purpose.

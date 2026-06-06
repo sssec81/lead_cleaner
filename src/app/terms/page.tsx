@@ -45,7 +45,7 @@ export default function TermsPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Terms
             </p>
-            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[0.96] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[1.06] sm:text-5xl lg:text-6xl">
               Use the tool responsibly and review what it gives back.
             </h1>
           </div>

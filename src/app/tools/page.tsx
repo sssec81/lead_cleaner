@@ -85,7 +85,7 @@ export default function ToolsPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
               Tools
             </p>
-            <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[0.96] sm:text-[3.3rem] lg:text-[4.3rem]">
+            <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1.06] sm:text-[3.3rem] lg:text-[4.3rem]">
               Start with the CSV path. Use the text helpers only before the
               mess becomes a spreadsheet.
             </h1>

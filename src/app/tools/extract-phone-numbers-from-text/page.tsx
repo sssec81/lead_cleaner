@@ -39,7 +39,7 @@ export default function ExtractPhoneNumbersFromTextPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Extract Phone Numbers from Text
             </p>
-            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[0.96] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[1.06] sm:text-5xl lg:text-6xl">
               Pull phone numbers out of messy text and normalize them into
               something usable.
             </h1>

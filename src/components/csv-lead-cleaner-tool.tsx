@@ -761,7 +761,7 @@ export function CsvLeadCleanerTool() {
               <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] bg-white/80">
                 {previewHeaders.length && previewRows.length ? (
                   <div className="max-h-[38rem] overflow-auto">
-                    <table className="min-w-[980px] border-collapse text-left text-sm">
+                    <table className="min-w-[980px] w-full border-collapse text-left text-sm">
                       <thead className="sticky top-0 bg-[#f6efe5]">
                         <tr>
                           <th className="border-b border-[color:var(--line)] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
@@ -770,7 +770,7 @@ export function CsvLeadCleanerTool() {
                           {previewHeaders.map((header) => (
                             <th
                               key={header}
-                              className="border-b border-[color:var(--line)] px-4 py-3 font-semibold text-[color:var(--foreground)]"
+                              className="border-b border-[color:var(--line)] px-4 py-3 font-semibold text-[color:var(--foreground)] whitespace-nowrap"
                             >
                               {prettyHeader(header)}
                             </th>

@@ -99,7 +99,7 @@ export default function HomePage() {
             <p className="inline-flex rounded-full border border-[color:rgba(184,106,25,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
               Browser-first CSV cleanup
             </p>
-            <h1 className="mt-5 max-w-5xl font-display text-5xl font-semibold leading-[0.94] sm:text-6xl xl:text-[5.4rem]">
+            <h1 className="mt-5 max-w-5xl font-display text-5xl font-semibold leading-[1.04] sm:text-6xl xl:text-[5.4rem]">
               The spreadsheet cleanup pass you do right before you trust the
               list again.
             </h1>

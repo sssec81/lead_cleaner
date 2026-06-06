@@ -44,7 +44,7 @@ export default function ContactPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Contact
             </p>
-            <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[0.96] sm:text-[3.3rem] lg:text-[4.1rem]">
+            <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1.06] sm:text-[3.3rem] lg:text-[4.1rem]">
               Reach out when the workflow gets weird, not only when it breaks.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[color:var(--muted)]">
