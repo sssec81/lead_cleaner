@@ -28,24 +28,22 @@ export function ProWaitlistCard({
 
     setStatus("submitting");
 
-    try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: trackSource }),
-      });
+    const response = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, source: trackSource }),
+    });
 
-      if (!response.ok) {
-        throw new Error("Waitlist signup failed");
-      }
-
-      trackToolEvent("waitlist", "join", { source: trackSource });
-      setStatus("success");
-      setEmail("");
-    } catch (err) {
-      console.error("Waitlist submit failed", err);
-      setStatus("idle");
+    if (!response.ok) {
+      throw new Error("Waitlist signup failed");
     }
+
+    trackToolEvent("waitlist", "join", {
+      source: trackSource,
+    });
+
+    setStatus("success");
+    setEmail("");
   };
 
   const isDark = theme === "dark";

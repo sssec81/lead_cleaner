@@ -789,6 +789,7 @@ export function CsvLeadCleanerTool() {
                         duplicateMode,
                         emailFilter: nextFilter,
                       });
+
                       trackToolEvent("csv-lead-cleaner", "change_email_filter", {
                         filter: nextFilter,
                       });
