@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Hexagon, Sparkles } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { LocalProcessingBadge } from "@/components/local-processing-badge";
@@ -20,44 +20,35 @@ export function SiteHeader() {
     if (href === "/") {
       return pathname === "/";
     }
-
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 
   return (
-    <header className="sticky top-4 z-30 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div className="rounded-[1.35rem] border border-white/70 bg-[linear-gradient(180deg,rgba(250,252,255,0.94),rgba(241,246,251,0.84))] px-4 py-3 shadow-[0_16px_42px_rgba(15,23,42,0.07)] backdrop-blur-xl sm:px-5 lg:px-6">
+    <header className="sticky top-4 z-50 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="rounded-full border border-white/40 bg-white/60 px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-xl transition-all duration-300 hover:bg-white/80 sm:px-6">
         <div className="flex items-center justify-between gap-5">
-          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3">
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:rgba(255,255,255,0.72)] bg-[linear-gradient(180deg,#5d98fb,#2563eb)] text-white shadow-[0_14px_26px_rgba(37,99,235,0.18)]">
-              <div className="absolute inset-x-1 top-1 h-3 rounded-full bg-white/14 blur-sm" />
-              <div className="relative flex flex-col items-center gap-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white/88" />
-                  <span className="h-1.5 w-4 rounded-full bg-white/78" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-white/88" />
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-2.5 rounded-full bg-white/72" />
-                  <span className="h-1.5 w-5 rounded-full bg-white" />
-                  <span className="text-[10px] font-bold leading-none text-white">✓</span>
-                </div>
-              </div>
+          
+          {/* Logo / Branding */}
+          <Link href="/" className="group flex min-w-0 shrink-0 items-center gap-3">
+            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.4),transparent_50%)]"></div>
+              <Sparkles className="h-5 w-5 text-white/90" />
             </div>
             <div className="min-w-0">
-              <div className="font-display text-[1.05rem] font-semibold leading-none tracking-[-0.02em] text-slate-950 sm:text-[1.15rem]">
+              <div className="font-display text-lg font-bold tracking-tight text-slate-900 transition-colors group-hover:text-blue-600">
                 LeadCleanr
               </div>
-              <div className="mt-1 hidden items-center gap-2 text-[11px] font-medium leading-none text-[color:var(--muted)] sm:flex">
-                <span className="inline-flex h-1 w-1 rounded-full bg-[color:rgba(37,99,235,0.55)]" />
-                <span className="block truncate tracking-[0.01em]">Browser-first lead cleaning</span>
+              <div className="mt-0.5 hidden items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500 sm:flex">
+                <span className="inline-flex h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                Browser-First
               </div>
             </div>
           </Link>
 
+          {/* Desktop Navigation */}
           <nav
             aria-label="Primary"
-            className="hidden items-center gap-6 border-x border-[color:rgba(15,23,42,0.08)] px-7 text-sm font-semibold text-[color:var(--muted)] lg:flex"
+            className="hidden items-center gap-8 lg:flex"
           >
             {navItems.map((item) => {
               const active = isActive(item.href);
@@ -67,18 +58,18 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`group relative inline-flex min-h-11 items-center transition ${
+                  className={`group relative py-2 text-sm font-bold tracking-wide transition-colors ${
                     active
-                      ? "text-[color:#102534]"
-                      : "hover:text-[color:#153246]"
+                      ? "text-blue-600"
+                      : "text-slate-500 hover:text-slate-900"
                   }`}
                 >
                   {item.label}
                   <span
-                    className={`absolute inset-x-0 -bottom-0.5 mx-auto h-0.5 rounded-full transition-all ${
+                    className={`absolute inset-x-0 -bottom-1 mx-auto h-0.5 rounded-full bg-blue-600 transition-all duration-300 ease-out ${
                       active
-                        ? "w-7 bg-[color:#153246]"
-                        : "w-0 bg-[color:rgba(21,50,70,0.36)] group-hover:w-5"
+                        ? "w-full opacity-100"
+                        : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
                     }`}
                   />
                 </Link>
@@ -86,25 +77,27 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* Actions & Badge */}
+          <div className="flex items-center gap-4">
             <div className="hidden xl:flex">
               <LocalProcessingBadge compact />
             </div>
             <Link
               href="/tools/csv-lead-cleaner"
-              className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-[0.95rem] bg-[color:#153246] px-4 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(21,50,70,0.16)] transition hover:bg-[color:#102534] hover:shadow-[0_18px_34px_rgba(21,50,70,0.2)] active:scale-95"
+              className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:shadow-md"
             >
               <span className="sm:hidden">Open</span>
-              <span className="hidden sm:inline">Open CSV Cleaner</span>
-              <ArrowRight className="h-4 w-4" />
+              <span className="hidden sm:inline">Open App</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
 
-        <div className="mt-3 flex flex-col gap-3 lg:hidden">
+        {/* Mobile Navigation (Hidden on large screens) */}
+        <div className="mt-4 flex flex-col gap-3 lg:hidden">
           <nav
             aria-label="Mobile primary"
-            className="grid grid-cols-2 gap-2 text-sm font-semibold text-[color:var(--muted)]"
+            className="grid grid-cols-4 gap-2 text-xs font-semibold text-slate-500"
           >
             {navItems.map((item) => {
               const active = isActive(item.href);
@@ -114,10 +107,10 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`inline-flex min-h-11 items-center justify-center rounded-[0.95rem] border px-4 py-2 transition ${
+                  className={`flex flex-col items-center justify-center rounded-xl p-2 transition-all ${
                     active
-                      ? "border-[color:rgba(21,50,70,0.14)] bg-white text-[color:#153246] shadow-[0_8px_18px_rgba(15,23,42,0.06)]"
-                      : "border-[color:var(--line)] bg-white/72 hover:border-[color:rgba(37,99,235,0.16)] hover:bg-white hover:text-[color:var(--brand)]"
+                      ? "bg-blue-50 text-blue-600 shadow-sm"
+                      : "hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >
                   {item.label}
@@ -126,14 +119,14 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[1.4rem] border border-[color:rgba(15,23,42,0.06)] bg-white/58 px-3 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-slate-50/80 px-4 py-3 border border-slate-100">
             <LocalProcessingBadge compact className="shrink-0" />
             <Link
               href="/tools/csv-lead-cleaner"
-              className="inline-flex min-h-11 items-center gap-2 rounded-[0.95rem] border border-[color:rgba(21,50,70,0.12)] bg-white px-4 text-sm font-semibold text-[color:#153246] transition hover:bg-[color:#f8fafc]"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-white px-4 text-xs font-bold text-slate-900 shadow-sm transition hover:bg-blue-50 hover:text-blue-600 border border-slate-200"
             >
-              Open flagship tool
-              <ArrowRight className="h-4 w-4" />
+              CSV Workflow
+              <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         </div>

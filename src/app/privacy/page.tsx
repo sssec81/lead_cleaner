@@ -1,46 +1,54 @@
 import type { Metadata } from "next";
+import { Shield, Lock, HardDrive, EyeOff, ServerOff, Database } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
-import { PageHero } from "@/components/page-hero";
-import { PageSectionHeading } from "@/components/page-section-heading";
 
 const snapshot = [
   {
-    label: "Core cleanup",
-    text: "Runs in your browser for the MVP flow.",
+    icon: ServerOff,
+    label: "Zero Server Processing",
+    text: "Your core cleanup runs entirely in your browser. No data leaves your machine during the MVP flow.",
   },
   {
-    label: "Raw data",
-    text: "Pasted text and uploaded CSV contents are not sent to the app backend for normal processing.",
+    icon: Database,
+    label: "No Raw Data Stored",
+    text: "Pasted text and uploaded CSV contents are never stored on our backend databases.",
   },
   {
-    label: "Saved state",
-    text: "Workspace persistence can keep current text and results in local browser storage on your device.",
+    icon: HardDrive,
+    label: "Local Persistence",
+    text: "Workspace persistence safely keeps your current text and results in your local browser storage.",
   },
   {
-    label: "Accounts",
-    text: "No account is required for the first release.",
+    icon: EyeOff,
+    label: "No Account Needed",
+    text: "Start cleaning immediately without handing over your email or creating an account.",
   },
 ];
 
 const sections = [
   {
+    icon: Shield,
     title: "What we process",
-    text: "LeadCleanr handles text you paste and CSV files you choose to upload so the selected tool can clean, extract, deduplicate, or format the data.",
+    text: "LeadCleanr handles text you paste and CSV files you choose to upload so the selected tool can clean, extract, deduplicate, or format the data. Everything happens where you can see it.",
   },
   {
+    icon: Lock,
     title: "What stays local",
-    text: "For the MVP, the core cleanup and extraction flow runs in your browser. That keeps the raw working data on your device during normal use.",
+    text: "For the MVP, the core cleanup and extraction flow runs purely in your browser's memory. That keeps the raw working data securely on your device during normal use.",
   },
   {
+    icon: HardDrive,
     title: "What can persist",
     text: "If you use workspace persistence, current text and results can live in local browser storage on your device until you clear them.",
   },
   {
+    icon: ServerOff,
     title: "What can still transmit",
     text: "If analytics or client-error reporting are enabled, they should stay focused on workflow events and sanitized error details rather than raw lead or contact contents.",
   },
   {
+    icon: EyeOff,
     title: "Acceptable use",
     text: "LeadCleanr is for cleaning data you own or have permission to process. Do not use it for spam, scraping abuse, or unsolicited outreach.",
   },
@@ -48,118 +56,126 @@ const sections = [
 
 export const metadata: Metadata = {
   title: "Privacy Policy — LeadCleanr",
-  description:
-    "LeadCleanr privacy policy. Your raw CSV and pasted text stay in your browser during normal cleanup operations.",
-  alternates: {
-    canonical: "https://leadcleanr.com/privacy",
-  },
+  description: "LeadCleanr privacy policy. Your raw CSV and pasted text stay in your browser during normal cleanup operations.",
+  alternates: { canonical: "https://leadcleanr.com/privacy" },
 };
 
 export default function PrivacyPage() {
   return (
     <PageFrame>
-      <PageHero
-        eyebrow="Privacy"
-        title="A plain-language privacy boundary for a browser-first tool."
-        intro="This page should answer one question quickly: what happens to the raw data while you use LeadCleanr? The short version is that the normal cleanup flow runs locally in your browser, while local workspace persistence and optional telemetry are called out directly instead of buried behind vague claims."
-        aside={(
-          <div className="panel-strong rounded-[1.75rem] p-6 sm:p-8">
-            <p className="section-eyebrow">Quick snapshot</p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {snapshot.map((item, index) => (
-                <div
-                  key={item.label}
-                  className={`rounded-[1.25rem] border p-5 sm:p-6 ${
-                    index === 0
-                      ? "border-[color:rgba(37,99,235,0.16)] bg-white"
-                      : "border-[color:var(--line)] bg-white/80"
-                  }`}
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
-                    {item.label}
-                  </p>
-                  <p className="mt-2.5 text-sm leading-7 text-[color:var(--foreground)]">
-                    {item.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        className="pt-10 lg:pt-12"
-      />
+      {/* Hero Section with Beautiful Gradient & Glassmorphism */}
+      <section className="relative overflow-hidden pt-24 pb-32 lg:pt-36 lg:pb-40">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,white,var(--background))]"></div>
+        <div className="absolute top-0 right-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-400/20 blur-[120px]"></div>
+        <div className="absolute bottom-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-400/20 blur-[120px]"></div>
 
-      <section className="my-20 bg-[color:#153246] py-20 text-white md:my-28 md:py-28">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20 lg:px-8 lg:items-start">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
-              The boundary
-            </p>
-            <h2 className="mt-5 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.85rem]">
-              Local cleanup has a clear edge.
-            </h2>
-            <p className="mt-6 max-w-md text-base leading-8 text-[color:rgba(255,255,255,0.72)]">
-              The cleanup work stays on your device. Product telemetry and
-              browser storage are separate behaviors, named plainly.
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm">
+              <Shield className="h-4 w-4" />
+              <span>Trust Boundary</span>
+            </div>
+            <h1 className="mb-8 bg-[linear-gradient(to_right,theme(colors.slate.900),theme(colors.slate.600))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-7xl">
+              Your data never leaves your screen.
+            </h1>
+            <p className="text-lg leading-8 text-slate-600 sm:text-xl">
+              This page answers one question quickly: what happens to your raw data while you use LeadCleanr? The short version: <strong>The cleanup flow runs locally in your browser.</strong>
             </p>
           </div>
-          <div className="grid gap-6 md:gap-8">
-            <BoundaryCard
-              title="Cleanup"
-              text="Text extraction, CSV parsing, preview, and export happen in your browser during normal use."
-            />
-            <BoundaryCard
-              title="Browser state"
-              text="Saved workspaces and preferences can live in local storage on the same device."
-            />
-            <BoundaryCard
-              title="Telemetry"
-              text="Analytics or sanitized error reporting are treated as separate product behavior, not part of raw file cleanup."
-            />
+
+          {/* Floating Glassmorphic Cards */}
+          <div className="mx-auto mt-20 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {snapshot.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div 
+                  key={item.label}
+                  className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white/60 p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-blue-200 hover:bg-white hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                  <div className="relative">
+                    <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-slate-900">{item.label}</h3>
+                    <p className="text-sm leading-relaxed text-slate-600">{item.text}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <section className="page-section mb-20 pb-16 md:mb-28 lg:pb-20">
-        <div className="grid gap-12 lg:grid-cols-[0.42fr_0.58fr] lg:gap-20 lg:items-start">
-          <div className="lg:sticky lg:top-28">
-            <PageSectionHeading
-              eyebrow="Details"
-              title="Privacy details, without legal fog."
-              intro="Short answers for the checks people make before uploading a lead file: what is touched, what stays on-device, and what should never be treated like raw contact data."
-            />
-            <div className="mt-10 rounded-[1.15rem] border border-[color:rgba(37,99,235,0.16)] bg-white/70 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-              <p className="text-sm font-semibold text-[color:var(--foreground)]">
-                Plain-language policy
-              </p>
-              <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-                The goal is not to sound bigger than the product. It is to make
-                the browser-first boundary easy to verify.
+      {/* Dark Mode "The Boundary" Section */}
+      <section className="relative overflow-hidden bg-slate-950 py-24 sm:py-32">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.15),transparent_70%)]"></div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <p className="mb-4 text-sm font-bold uppercase tracking-widest text-blue-400">The Boundary</p>
+              <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                Local cleanup has a clear, physical edge.
+              </h2>
+              <p className="text-lg leading-8 text-slate-400">
+                The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don't hide behind legal fog.
               </p>
             </div>
+            <div className="grid gap-8">
+              <BoundaryCard 
+                number="01"
+                title="Cleanup Operations" 
+                text="Text extraction, CSV parsing, preview generation, and final export file creation happen entirely in your browser's local memory." 
+              />
+              <BoundaryCard 
+                number="02"
+                title="Browser State" 
+                text="Saved workspaces and tool preferences can live in local storage on your specific device, meaning we can't see them." 
+              />
+              <BoundaryCard 
+                number="03"
+                title="Telemetry" 
+                text="Anonymous analytics or sanitized error reporting are treated as separate product behavior, completely isolated from raw file contents." 
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Modern Accordion/List Section */}
+      <section className="bg-slate-50 py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-16 max-w-3xl text-center">
+            <h2 className="mb-4 font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Privacy details, without the jargon.
+            </h2>
+            <p className="text-lg text-slate-600">
+              Short answers for the checks people make before uploading a lead file.
+            </p>
           </div>
 
-          <div className="overflow-hidden rounded-[1.35rem] border border-[color:rgba(16,37,52,0.12)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,251,255,0.82))] shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-            {sections.map((section, index) => (
-              <div
-                key={section.title}
-                className="grid gap-5 border-t border-[color:rgba(16,37,52,0.09)] px-6 py-6 first:border-t-0 sm:grid-cols-[4.5rem_1fr] sm:px-8 sm:py-8"
-              >
-                <div className="flex items-start">
-                  <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-full border border-[color:rgba(37,99,235,0.18)] bg-[color:rgba(37,99,235,0.07)] font-display text-sm font-semibold tabular-nums text-[color:var(--brand-strong)]">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+          <div className="mx-auto max-w-4xl space-y-6">
+            {sections.map((section) => {
+              const Icon = section.icon;
+              return (
+                <div 
+                  key={section.title}
+                  className="group flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:border-slate-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] sm:flex-row"
+                >
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-slate-600 transition-colors duration-300 group-hover:bg-blue-50 group-hover:text-blue-600">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="mb-3 font-display text-2xl font-semibold text-slate-900">
+                      {section.title}
+                    </h3>
+                    <p className="text-base leading-relaxed text-slate-600">
+                      {section.text}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)]">
-                    {section.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-8 text-[color:var(--muted)] sm:text-base">
-                    {section.text}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -167,15 +183,16 @@ export default function PrivacyPage() {
   );
 }
 
-function BoundaryCard({ title, text }: { title: string; text: string }) {
+function BoundaryCard({ number, title, text }: { number: string; title: string; text: string }) {
   return (
-    <div className="border-t border-[color:rgba(255,255,255,0.14)] pt-6 first:border-t-0 first:pt-0 md:pt-8">
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[color:#93c5fd]">
-        {title}
-      </p>
-      <p className="mt-3 max-w-3xl text-base leading-8 text-[color:rgba(255,255,255,0.76)]">
-        {text}
-      </p>
+    <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 transition-all hover:bg-white/10">
+      <div className="absolute -right-10 -top-10 text-9xl font-black text-white/5 transition-transform duration-500 group-hover:scale-110 group-hover:text-white/10">
+        {number}
+      </div>
+      <div className="relative">
+        <h3 className="mb-3 text-xl font-semibold text-white">{title}</h3>
+        <p className="text-base leading-relaxed text-slate-400">{text}</p>
+      </div>
     </div>
   );
 }

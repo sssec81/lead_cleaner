@@ -1,285 +1,269 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Info, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Zap, Info, ArrowUpRight, Check, ShieldCheck } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
-import { PageHero } from "@/components/page-hero";
-import { PageSectionHeading } from "@/components/page-section-heading";
 import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 const freePoints = [
-  "Text tools stay open.",
-  "CSV uploads work up to 2 MB.",
-  "Exports stay unlimited.",
-  "No login required in the MVP.",
+  "All text extraction tools stay open",
+  "CSV uploads work up to 2 MB",
+  "CSV exports stay entirely unlimited",
+  "No login required for core workflow",
 ];
 
 const proPoints = [
-  "Larger CSV uploads for real operational cleanup.",
-  "A better fit for recruiters, agencies, and sales ops teams.",
-  "Earlier access to saved workflow features and heavier-use support.",
+  "Massive CSV uploads (10MB+ limits)",
+  "Built for recruiters, agencies & sales ops",
+  "Saved cleanup workflow presets",
+  "Direct exports to HubSpot & Apollo",
 ];
 
 const decisionRules = [
   {
     label: "Choose Free",
-    text: "when you are testing the workflow, cleaning a smaller file, or checking whether the product feels trustworthy enough to keep around.",
+    icon: ShieldCheck,
+    text: "When you are testing the workflow, cleaning a smaller file, or checking whether the product feels trustworthy enough to keep around.",
+    color: "blue",
   },
   {
     label: "Choose Pro",
-    text: "when cleanup is becoming part of your recurring job and the file size itself starts creating friction.",
+    icon: Zap,
+    text: "When cleanup is becoming part of your recurring job and the 2MB file size limit itself starts creating operational friction.",
+    color: "emerald",
   },
   {
     label: "Do not pay yet",
-    text: "if the product has not yet earned a place in your actual workflow. The free tier should prove the case first.",
+    icon: Info,
+    text: "If the product has not yet earned a place in your actual workflow. The free tier should prove the case first.",
+    color: "slate",
   },
 ];
 
 const comparisonRows = [
   {
-    title: "CSV limit",
+    title: "CSV Upload Limit",
     free: "Up to 2 MB",
-    pro: "Larger files",
+    pro: "10 MB+ (Larger files)",
   },
   {
-    title: "Exports",
+    title: "Export Limits",
     free: "Unlimited",
     pro: "Unlimited",
   },
   {
-    title: "Best fit",
-    free: "Trying the workflow",
-    pro: "Recurring cleanup work",
+    title: "Best Fit For",
+    free: "Trying the workflow & trust building",
+    pro: "Heavy operational recurring cleanup",
   },
   {
-    title: "Why it exists",
-    free: "Trust-building",
-    pro: "Heavier operational use",
+    title: "Support",
+    free: "Community & Docs",
+    pro: "Priority support channel",
   },
 ];
 
 export const metadata: Metadata = {
   title: "Pricing — LeadCleanr",
-  description:
-    "LeadCleanr pricing for browser-first CSV lead cleanup workflows, from free discovery to heavier operational use.",
-  alternates: {
-    canonical: "https://leadcleanr.com/pricing",
-  },
+  description: "LeadCleanr pricing for browser-first CSV lead cleanup workflows, from free discovery to heavier operational use.",
+  alternates: { canonical: "https://leadcleanr.com/pricing" },
 };
 
 export default function PricingPage() {
   return (
     <PageFrame>
-      <PageHero
-        eyebrow="Pricing"
-        title="Free should feel useful on purpose."
-        intro="LeadCleanr is not priced like a trap. The free tier is supposed to let someone test the product honestly. Pro starts only when the spreadsheet work gets heavier and the larger files create real operational friction."
-        aside={(
-          <div className="panel-strong relative rounded-[1.75rem] p-6 sm:p-8">
-            <p className="section-eyebrow">Pricing note</p>
-            <p className="mt-4 font-display text-3xl font-semibold leading-[1.08] text-[color:var(--foreground)] sm:text-4xl">
-              “People do not mind paying for heavier use. They mind feeling tricked into it.”
+      {/* Hero Section with Beautiful Gradients */}
+      <section className="relative overflow-hidden pt-24 pb-20 lg:pt-36 lg:pb-32">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,white,var(--background))]"></div>
+        <div className="absolute top-0 right-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-400/20 blur-[120px]"></div>
+        <div className="absolute bottom-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-400/20 blur-[120px]"></div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm">
+              <Zap className="h-4 w-4" />
+              <span>Fair Pricing Model</span>
+            </div>
+            <h1 className="mb-8 bg-[linear-gradient(to_right,theme(colors.slate.900),theme(colors.slate.600))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-7xl">
+              Free should feel useful on purpose.
+            </h1>
+            <p className="text-lg leading-8 text-slate-600 sm:text-xl">
+              LeadCleanr is not priced like a trap. The free tier lets you test the product honestly. Pro starts only when spreadsheet work gets heavier and larger files create friction.
             </p>
-            <p className="mt-6 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-              That is the whole model here. Free is for trust. Pro is for larger files and repeat cleanup work. Nothing else needs to be more complicated than that right now.
-            </p>
-          </div>
-        )}
-        className="pt-10 lg:pt-12"
-      />
-
-      <section className="page-section">
-        <div className="grid gap-8 xl:grid-cols-[0.98fr_1.02fr] xl:items-stretch">
-          <div className="panel-strong rounded-[1.75rem] p-7 sm:p-9">
-            <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(16,37,52,0.1)] pb-6">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
-                  Free
-                </p>
-                <div className="mt-3 flex items-end gap-2">
-                  <span className="font-display text-7xl font-semibold leading-none text-[color:var(--foreground)]">
-                    $0
-                  </span>
-                  <span className="pb-2 text-base text-[color:var(--muted)]">
-                    /month
-                  </span>
-                </div>
-              </div>
-              <span className="rounded-full border border-[color:rgba(37,99,235,0.18)] bg-white/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
-                Start here
-              </span>
-            </div>
-
-            <p className="mt-6 max-w-2xl text-base leading-8 text-[color:var(--foreground)]">
-              Free is for the first real pass. Paste text, upload a smaller
-              CSV, clean what you need, export it, and decide whether the
-              product deserves to stay in your workflow. If the free tier feels
-              stingy, the pricing is wrong.
-            </p>
-
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              {freePoints.map((point, index) => (
-                <div
-                  key={point}
-                  className={`rounded-[1.5rem] border px-4 py-4 text-sm leading-6 ${
-                    index === 0
-                      ? "border-[color:rgba(37,99,235,0.16)] bg-white text-[color:var(--foreground)] shadow-[0_12px_28px_rgba(15,23,42,0.05)]"
-                      : "border-[color:var(--line)] bg-white/82 text-[color:var(--muted)]"
-                  }`}
-                >
-                  {point}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8">
-              <Link
-                href="/tools/csv-lead-cleaner"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-6 text-sm font-semibold text-[color:var(--foreground)]"
-              >
-                Try the free workflow
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-x-6 top-6 -z-10 h-full rounded-[1.75rem] bg-[color:rgba(21,50,70,0.08)] blur-2xl" />
-            <div className="rounded-[1.75rem] bg-[color:#153246] p-7 text-white shadow-[0_30px_60px_rgba(15,23,42,0.18)] sm:p-9">
-              <div className="flex items-end justify-between gap-4 border-b border-[color:rgba(255,255,255,0.12)] pb-6">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#93c5fd]">
-                    Pro
-                  </p>
-                  <div className="mt-3 flex items-end gap-2">
-                    <span className="font-display text-7xl font-semibold leading-none text-white">
-                      $12
-                    </span>
-                    <span className="pb-2 text-base text-[color:rgba(255,255,255,0.7)]">
-                      /month
-                    </span>
-                  </div>
-                </div>
-                <span className="rounded-full bg-[color:#93c5fd] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#153246]">
-                  Heavy use
-                </span>
-              </div>
-
-              <p className="mt-6 max-w-2xl text-base leading-8 text-[color:rgba(255,255,255,0.82)]">
-                Pro is not a different personality. It is the same product
-                once the spreadsheets get heavier, the cleanup becomes repeat
-                work, and you stop wanting the file-size boundary to interrupt
-                the job.
-              </p>
-
-              <div className="mt-8 space-y-4">
-                {proPoints.map((point, index) => (
-                  <div
-                    key={point}
-                    className={`rounded-[1.45rem] border px-4 py-4 text-sm leading-7 ${
-                      index === 0
-                        ? "border-[color:rgba(147,197,253,0.28)] bg-[color:rgba(255,255,255,0.06)] text-white"
-                        : "border-[color:rgba(255,255,255,0.12)] bg-[color:rgba(255,255,255,0.03)] text-[color:rgba(255,255,255,0.78)]"
-                    }`}
-                  >
-                    {point}
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8">
-                <ProWaitlistCard
-                  trackSource="pricing_pro_card"
-                  theme="dark"
-                  title="Join the Pro Waitlist"
-                  description="We are currently in private beta. Join the waitlist to get notified when we launch paid limits, saved workflows, and export presets."
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="page-section pb-16 lg:pb-20">
-        <div className="grid gap-12 xl:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <PageSectionHeading
-              eyebrow="How to choose"
-              title="Choose the plan based on the weight of the spreadsheet job."
-            />
-            <div className="mt-6 space-y-4">
-              {decisionRules.map((rule, index) => {
-                const Icon = [Check, Zap, Info][index] || Info;
-                const iconColor = [
-                  "text-emerald-600 bg-emerald-50/80 border-emerald-100/80",
-                  "text-blue-600 bg-blue-50/80 border-blue-100/80",
-                  "text-slate-600 bg-slate-100/80 border-slate-200/80",
-                ][index];
-
-                return (
-                  <div
-                    key={rule.label}
-                    className="panel-soft flex gap-4 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[color:rgba(37,99,235,0.16)] hover:bg-white/92 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
-                  >
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${iconColor}`}>
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--foreground)]">
-                        {rule.label}
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
-                        {rule.text}
-                      </p>
+      {/* Pricing Cards Section */}
+      <section className="relative pb-24 lg:pb-32 z-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:items-start">
+            
+            {/* Free Tier Card (Glassmorphic Light) */}
+            <div className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40 transition-all duration-300 hover:border-blue-300 sm:p-12">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+              <div className="relative">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-blue-600">Free</h3>
+                    <div className="mt-4 flex items-baseline gap-2">
+                      <span className="text-6xl font-display font-bold tracking-tight text-slate-900">$0</span>
+                      <span className="text-lg text-slate-500">/mo</span>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="panel-soft rounded-[1.75rem] p-7 sm:p-9">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Side-by-side only where it helps
-            </p>
-            <div className="mt-6 space-y-5">
-              {comparisonRows.map((row, index) => (
-                <div
-                  key={row.title}
-                  className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.1)] pt-5"}
-                >
-                  <div className="grid gap-4 sm:grid-cols-[0.8fr_0.6fr_0.6fr]">
-                    <div className="text-sm font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
-                      {row.title}
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
-                        Free
-                      </p>
-                      <p className="mt-1 text-sm leading-7 text-[color:var(--foreground)]">
-                        {row.free}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--accent)]">
-                        Pro
-                      </p>
-                      <p className="mt-1 text-sm leading-7 text-[color:var(--foreground)]">
-                        {row.pro}
-                      </p>
-                    </div>
+                  <div className="inline-flex items-center justify-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold uppercase tracking-widest text-blue-700">
+                    Start Here
                   </div>
                 </div>
-              ))}
+
+                <p className="mb-8 text-base leading-relaxed text-slate-600">
+                  Free is for the first real pass. Clean what you need, export it, and decide whether the product deserves to stay in your workflow.
+                </p>
+
+                <div className="mb-10 space-y-4">
+                  {freePoints.map((point) => (
+                    <div key={point} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-blue-500" />
+                      <span className="text-sm text-slate-700">{point}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <Link
+                  href="/tools/csv-lead-cleaner"
+                  className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md"
+                >
+                  <span>Try the free workflow</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
 
-            <div className="mt-8 border-t border-[color:rgba(16,37,52,0.1)] pt-5">
-              <p className="max-w-3xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-                Business and API features should appear only after repeat
-                demand proves they belong here. Until then, pricing should stay
-                easy to explain: free for trust-building, Pro for heavier
-                spreadsheet work.
-              </p>
+            {/* Pro Tier Card (Sleek Dark Mode) */}
+            <div className="group relative overflow-hidden rounded-3xl bg-slate-950 p-8 shadow-2xl transition-all duration-300 hover:shadow-[0_40px_80px_-15px_rgba(15,23,42,0.4)] sm:p-12">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(56,189,248,0.15),transparent_50%)]"></div>
+              <div className="absolute inset-0 border border-white/10 rounded-3xl"></div>
+              
+              <div className="relative">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-sky-400">Pro</h3>
+                    <div className="mt-4 flex items-baseline gap-2">
+                      <span className="text-6xl font-display font-bold tracking-tight text-white">$12</span>
+                      <span className="text-lg text-slate-400">/mo</span>
+                    </div>
+                  </div>
+                  <div className="inline-flex items-center justify-center rounded-full bg-sky-400/10 border border-sky-400/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-sky-400">
+                    Heavy Use
+                  </div>
+                </div>
+
+                <p className="mb-8 text-base leading-relaxed text-slate-400">
+                  Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
+                </p>
+
+                <div className="mb-10 space-y-4">
+                  {proPoints.map((point) => (
+                    <div key={point} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-sky-400" />
+                      <span className="text-sm text-slate-300">{point}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <ProWaitlistCard
+                  trackSource="pricing_pro_card"
+                  theme="dark"
+                  title="Join the Pro Waitlist"
+                  description="Join the waitlist to get notified when we launch paid limits, saved workflows, and export presets."
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Decision Rules / How to Choose Section */}
+      <section className="bg-slate-50 py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center mb-16">
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl mb-4">
+              How to choose your plan
+            </h2>
+            <p className="text-lg text-slate-600">
+              Choose based on the weight of the spreadsheet job.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+            {decisionRules.map((rule) => {
+              const Icon = rule.icon;
+              const colorStyles = 
+                rule.color === 'blue' ? 'text-blue-600 bg-blue-50 border-blue-100 group-hover:bg-blue-100' :
+                rule.color === 'emerald' ? 'text-emerald-600 bg-emerald-50 border-emerald-100 group-hover:bg-emerald-100' :
+                'text-slate-600 bg-slate-100 border-slate-200 group-hover:bg-slate-200';
+
+              return (
+                <div 
+                  key={rule.label}
+                  className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:border-slate-300"
+                >
+                  <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border transition-colors duration-300 ${colorStyles}`}>
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-900 mb-3">{rule.label}</h3>
+                  <p className="text-sm leading-relaxed text-slate-600">{rule.text}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table Section */}
+      <section className="py-24 lg:py-32">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-3xl border border-slate-200/60 bg-white shadow-xl shadow-slate-200/40">
+            <div className="p-8 sm:p-12 text-center border-b border-slate-100 bg-slate-50/50">
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900">
+                Side-by-side comparison
+              </h2>
+            </div>
+            
+            <div className="p-8 sm:p-12">
+              <div className="hidden sm:grid grid-cols-[1fr_1fr_1fr] gap-4 mb-2 border-b border-slate-200 pb-4 px-4">
+                <div className="text-xs font-bold uppercase tracking-widest text-slate-400">Feature</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-slate-900">Free</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-blue-600">Pro</div>
+              </div>
+
+              <div className="space-y-0">
+                {comparisonRows.map((row) => (
+                  <div
+                    key={row.title}
+                    className="grid gap-2 sm:gap-4 sm:grid-cols-[1fr_1fr_1fr] items-center border-b border-slate-100 py-4 px-4 transition-colors hover:bg-slate-50/50"
+                  >
+                    <div className="text-sm font-semibold text-slate-900">
+                      {row.title}
+                    </div>
+                    <div className="text-sm text-slate-600">
+                      <span className="sm:hidden text-xs font-bold uppercase tracking-widest text-slate-400 mr-2">Free:</span>
+                      {row.free}
+                    </div>
+                    <div className="text-sm font-medium text-blue-700">
+                      <span className="sm:hidden text-xs font-bold uppercase tracking-widest text-blue-400 mr-2">Pro:</span>
+                      {row.pro}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-12 rounded-2xl border border-slate-100 bg-slate-50 p-6 text-center">
+                <p className="text-sm leading-relaxed text-slate-600">
+                  <strong>Note:</strong> Business and API features should appear only after repeat demand proves they belong here. Until then, pricing stays easy to explain.
+                </p>
+              </div>
             </div>
           </div>
         </div>

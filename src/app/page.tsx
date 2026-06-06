@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield, Zap, FileSpreadsheet, CheckCircle2, Lock, ArrowUpRight, Copy } from "lucide-react";
 import type { Metadata } from "next";
 
 import { PageFrame } from "@/components/page-frame";
@@ -8,17 +8,17 @@ import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 const workflowSteps = [
   {
     number: "01",
-    title: "Upload Messy Lead CSV",
+    title: "Upload Messy CSV",
     text: "Drop in your raw list. The cleaning begins locally without sending contact records to external servers.",
   },
   {
     number: "02",
-    title: "Choose Rules & Review",
+    title: "Choose Rules",
     text: "Isolate duplicate rows, filter missing fields, and analyze domain structures directly in the dashboard preview.",
   },
   {
     number: "03",
-    title: "Export Clean Database",
+    title: "Export Database",
     text: "Download a structured list ready for import into HubSpot, Clay, Apollo, or outreach pipelines.",
   },
 ];
@@ -26,15 +26,18 @@ const workflowSteps = [
 const productSignals = [
   {
     label: "Catches duplicates before import",
-    text: "Scans record fields to deduplicate rows, preventing dirty lists from bloating HubSpot, Salesforce, Apollo, or outreach pipelines.",
+    text: "Scans record fields to deduplicate rows, preventing dirty lists from bloating CRM or outreach pipelines.",
+    icon: Copy,
   },
   {
     label: "Flags email quality signals",
-    text: "Filters invalid domains, detects generic role addresses (support@, info@), and separates business vs. personal Gmail accounts.",
+    text: "Filters invalid domains, detects generic role addresses, and separates business vs. personal Gmail accounts.",
+    icon: Zap,
   },
   {
     label: "Keeps cleanup visible",
     text: "Previews your processed records and inspects error reports in real-time so you trust the data before downloading.",
+    icon: Shield,
   },
 ];
 
@@ -77,292 +80,250 @@ const supportTools = [
 const faqEntries = [
   {
     question: "What is LeadCleanr actually for?",
-    answer:
-      "Cleaning messy lead CSVs before CRM import, outreach, recruiting, and agency handoff work. The text tools help with discovery and edge cases, but the main product is the CSV workflow.",
+    answer: "Cleaning messy lead CSVs before CRM import, outreach, recruiting, and agency handoff work. The text tools help with discovery and edge cases, but the main product is the CSV workflow.",
   },
   {
     question: "Does it process the file on the server?",
-    answer:
-      "The core cleanup flow runs in your browser. Raw file contents are not sent to the app backend for routine processing.",
+    answer: "The core cleanup flow runs entirely in your browser. Raw file contents are not sent to the app backend for routine processing.",
   },
   {
     question: "Who gets value first?",
-    answer:
-      "Sales ops teams, recruiters, agencies, marketers, and assistants who inherit spreadsheets they did not create and still have to make usable.",
+    answer: "Sales ops teams, recruiters, agencies, marketers, and assistants who inherit spreadsheets they did not create and still have to make usable.",
   },
 ];
 
 export const metadata: Metadata = {
   title: "LeadCleanr — Private CSV Lead Cleaner for CRM & Outreach Lists",
-  description:
-    "Instantly clean messy lead CSVs before importing into CRM or outreach platforms. Deduplicate rows, filter invalid emails, spot personal vs. business inboxes, and flag role-based addresses—100% locally in your browser with no signup required.",
-  alternates: {
-    canonical: "https://leadcleanr.com",
-  },
+  description: "Instantly clean messy lead CSVs before importing into CRM or outreach platforms. 100% locally in your browser with no signup required.",
+  alternates: { canonical: "https://leadcleanr.com" },
 };
 
 export default function HomePage() {
   return (
     <PageFrame>
-      <section className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
-        <div className="grid gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-start">
-          <div>
-            <p className="inline-flex rounded-full border border-[color:rgba(37,99,235,0.18)] bg-white/82 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--brand-strong)]">
-              Private CSV cleanup
-            </p>
-            <h1 className="mt-5 max-w-4xl font-display text-5xl font-semibold leading-[1.02] sm:text-6xl xl:text-[4.75rem]">
-              Clean messy lead CSVs before import.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-[color:var(--muted)]">
-              Instantly clean messy lead CSVs before importing into CRM or outreach platforms. 
-              Deduplicate rows, filter invalid emails, spot personal vs. business inboxes, and flag role-based addresses—100% locally in your browser.
-            </p>
+      {/* Massive Hero Section */}
+      <section className="relative overflow-hidden pt-24 pb-32 lg:pt-40 lg:pb-48">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,white,var(--background))]"></div>
+        <div className="absolute top-0 right-1/4 -z-10 h-[600px] w-[600px] rounded-full bg-blue-400/20 blur-[140px] animate-pulse"></div>
+        <div className="absolute bottom-0 left-1/4 -z-10 h-[600px] w-[600px] rounded-full bg-emerald-400/20 blur-[140px] animate-pulse" style={{ animationDelay: '2s' }}></div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/tools/csv-lead-cleaner"
-                className="btn-primary inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition"
-              >
-                Clean a CSV Free
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/pricing"
-                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[color:var(--line)] bg-white/88 px-6 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
-              >
-                View free limits
-              </Link>
-            </div>
-
-            <div className="mt-8 border-t border-[color:rgba(16,37,52,0.12)] pt-5">
-              <p className="max-w-3xl text-sm leading-relaxed text-[color:var(--foreground)]">
-                <span className="font-semibold">Core Cleanup:</span> Deduplicates row records, matches email syntax, categorizes business vs personal inboxes, highlights role addresses, and structures unformatted database fields before CRM import.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative mt-10 min-w-0 xl:mt-0 xl:pl-10">
-            <div className="absolute -left-6 top-10 hidden h-[82%] w-[88%] rounded-[1.75rem] bg-[color:rgba(37,99,235,0.08)] blur-3xl lg:block" />
-            <div className="overflow-hidden rounded-[1.75rem] border border-[color:rgba(16,37,52,0.12)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,250,253,0.96))] p-5 shadow-[0_24px_56px_rgba(15,23,42,0.14)] sm:p-7">
-              <div className="flex items-center justify-between border-b border-[color:rgba(16,37,52,0.1)] pb-5">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
-                    Live workspace
-                  </p>
-                  <p className="mt-1 text-sm text-[color:var(--muted)]">
-                    The part people trust first
-                  </p>
-                </div>
-                <div className="shrink-0 rounded-full border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.1)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                  Local preview
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-3">
-                <WorkspaceRowMock
-                  index={1}
-                  value="michael.chen@acmecorp.com"
-                  source="Current extraction"
-                  locked
-                />
-                <WorkspaceRowMock
-                  index={2}
-                  value="sarah.jenkins@techlogistics.net"
-                  source="Current extraction"
-                />
-                <WorkspaceRowMock
-                  index={3}
-                  value="robert.williams@globalfinance.org"
-                  source="Manual edit"
-                />
-                <WorkspaceRowMock
-                  index={4}
-                  value="contact@innovatesolutions.io"
-                  source="Locked row"
-                  locked
-                />
-              </div>
-
-              <div className="mt-5 grid gap-3 border-t border-[color:rgba(16,37,52,0.1)] pt-5 sm:grid-cols-3">
-                <MetricNote value="412" label="Rows ready" />
-                <MetricNote value="43" label="Duplicates removed" />
-                <MetricNote value="11" label="Role inboxes flagged" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <section className="mt-10 grid gap-4 lg:grid-cols-3">
-          {productSignals.map((signal) => (
-            <div
-              key={signal.label}
-              className="rounded-2xl border border-slate-200/60 bg-white/70 p-5 shadow-2xs flex flex-col justify-between hover:border-slate-350 transition-colors"
-            >
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)] mb-2">
-                  {signal.label}
-                </p>
-                <p className="text-xs sm:text-sm leading-relaxed text-[color:var(--muted)]">
-                  {signal.text}
-                </p>
-              </div>
-            </div>
-          ))}
-        </section>
-      </section>
-
-      <section className="bg-[color:#153246] py-10 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[color:#93c5fd]">
-                Workflow
+          <div className="grid gap-16 xl:grid-cols-[1.1fr_0.9fr] xl:items-center">
+            
+            {/* Hero Content */}
+            <div className="relative z-10">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm backdrop-blur-md">
+                <Lock className="h-4 w-4" />
+                <span>Private CSV Cleanup</span>
+              </div>
+              <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl xl:text-[5rem] leading-[1.05]">
+                Clean messy lead CSVs before import.
+              </h1>
+              <p className="mb-10 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+                Instantly clean messy lead CSVs before importing into CRM or outreach platforms. Deduplicate rows, filter invalid emails, and flag role-based addresses—<strong className="text-slate-900">100% locally in your browser.</strong>
               </p>
-              <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.85rem]">
-                Clean, review, export.
-              </h2>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-[color:rgba(255,255,255,0.72)]">
-                The workflow is intentionally short: load the file, choose the
-                field that matters, then export only after the report makes
-                sense.
-              </p>
-              <div className="mt-6">
+
+              <div className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/tools/csv-lead-cleaner"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-sm"
+                  className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-8 text-base font-semibold text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] transition-all duration-300 hover:bg-blue-500 hover:shadow-[0_10px_30px_-10px_rgba(37,99,235,0.8)] hover:-translate-y-0.5"
                 >
                   Clean a CSV Free
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
+                <Link
+                  href="/pricing"
+                  className="inline-flex min-h-14 items-center justify-center rounded-full border border-slate-200 bg-white/50 px-8 text-base font-semibold text-slate-700 backdrop-blur-md transition-colors hover:border-slate-300 hover:bg-white"
+                >
+                  View limits
+                </Link>
+              </div>
+
+              <div className="mt-12 flex items-center gap-3 text-sm font-medium text-slate-500">
+                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                No signup required. Start immediately.
               </div>
             </div>
 
-            <div className="grid gap-3">
+            {/* Live Workspace Mockup */}
+            <div className="relative lg:ml-10">
+              <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-blue-500/10 to-emerald-500/10 blur-2xl"></div>
+              <div className="relative overflow-hidden rounded-[2.5rem] border border-white/40 bg-white/60 p-6 backdrop-blur-xl shadow-[0_30px_80px_rgba(15,23,42,0.1)] sm:p-8">
+                
+                <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-200/50">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Live Workspace</p>
+                    <p className="text-sm font-semibold text-slate-900">100% Local Processing</p>
+                  </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <FileSpreadsheet className="h-5 w-5" />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <WorkspaceRowMock index={1} value="michael.chen@acmecorp.com" source="Cleaned" locked />
+                  <WorkspaceRowMock index={2} value="sarah.jenkins@techlogistics.net" source="Cleaned" />
+                  <WorkspaceRowMock index={3} value="contact@innovatesolutions.io" source="Role Inbox" highlight />
+                </div>
+
+                <div className="mt-8 grid grid-cols-3 gap-4 border-t border-slate-200/50 pt-8">
+                  <MetricNote value="412" label="Ready" />
+                  <MetricNote value="43" label="Deduped" />
+                  <MetricNote value="11" label="Flagged" />
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+      {/* Product Signals Section */}
+      <section className="relative z-10 pb-24 lg:pb-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-3">
+            {productSignals.map((signal) => {
+              const Icon = signal.icon;
+              return (
+                <div key={signal.label} className="group rounded-3xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:border-blue-200 hover:-translate-y-1">
+                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mb-3 font-display text-xl font-bold text-slate-900">{signal.label}</h3>
+                  <p className="text-base leading-relaxed text-slate-600">{signal.text}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Dark Mode Workflow Section */}
+      <section className="relative overflow-hidden bg-slate-950 py-32">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.15),transparent_50%)]"></div>
+        
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            
+            <div>
+              <p className="mb-4 text-sm font-bold uppercase tracking-widest text-sky-400">The Workflow</p>
+              <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Clean, review, export.
+              </h2>
+              <p className="mb-10 text-lg leading-8 text-slate-400">
+                The workflow is intentionally short: load the file, choose the field that matters, then export only after the report makes sense.
+              </p>
+              <Link
+                href="/tools/csv-lead-cleaner"
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-sky-500 px-8 text-sm font-bold text-slate-950 transition-all hover:bg-sky-400 hover:shadow-[0_0_20px_rgba(56,189,248,0.5)]"
+              >
+                Clean a CSV Free
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+
+            <div className="grid gap-8">
               {workflowSteps.map((step) => (
-                <div
-                  key={step.number}
-                  className="grid gap-4 border-t border-[color:rgba(255,255,255,0.14)] py-5 first:border-t-0 first:pt-0 sm:grid-cols-[72px_1fr] sm:items-start"
-                >
-                  <div className="font-display text-3xl leading-none text-[color:#93c5fd] sm:text-4xl">
+                <div key={step.number} className="group flex gap-8 rounded-3xl border border-white/5 bg-white/5 p-8 transition-colors hover:bg-white/10 hover:border-white/10">
+                  <div className="font-display text-4xl font-bold text-sky-400/30 transition-colors group-hover:text-sky-400">
                     {step.number}
                   </div>
                   <div>
-                    <h3 className="font-display text-xl font-semibold text-white sm:text-2xl">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:rgba(255,255,255,0.7)] sm:text-base">
-                      {step.text}
-                    </p>
+                    <h3 className="mb-3 text-2xl font-semibold text-white">{step.title}</h3>
+                    <p className="text-base leading-relaxed text-slate-400">{step.text}</p>
                   </div>
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-start">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Where it fits
-            </p>
-            <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.65rem]">
-              For the messy handoff before import.
-            </h2>
-            <p className="mt-4 max-w-lg text-sm leading-relaxed text-[color:var(--muted)]">
-              LeadCleanr earns its place when a file is captured, but not yet
-              safe enough for CRM, outreach, recruiting, or client delivery.
-            </p>
-            <Link
-              href="/tools/csv-lead-cleaner"
-              className="btn-primary mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition"
-            >
-              Clean a CSV Free
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="overflow-hidden rounded-[1.35rem] border border-[color:rgba(16,37,52,0.11)] bg-white/74 shadow-[0_24px_70px_rgba(15,23,42,0.07)]">
-            {useCases.map((useCase, index) => (
-              <UseCaseRow
-                key={useCase.kicker}
-                {...useCase}
-                index={index + 1}
-                primary={index === 0}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-[color:rgba(16,37,52,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.42),rgba(239,246,255,0.34))] py-10 lg:py-12">
+      {/* Use Cases Section */}
+      <section className="bg-slate-50 py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Helper tools
-              </p>
-              <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.55rem]">
-                Quick helper utilities for raw text blocks
+          <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            
+            <div className="lg:sticky lg:top-32">
+              <p className="mb-4 text-sm font-bold uppercase tracking-widest text-blue-600">Where it fits</p>
+              <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+                For the messy handoff before import.
               </h2>
-              <p className="mt-4 max-w-lg text-sm leading-relaxed text-[color:var(--muted)]">
-                Use these when the data is still copied text, notes, or snippets before the CSV workflow. Perfect for pasting emails, support logs, website snippets, or signatures.
+              <p className="mb-10 text-lg leading-8 text-slate-600">
+                LeadCleanr earns its place when a file is captured, but not yet safe enough for CRM, outreach, recruiting, or client delivery.
               </p>
             </div>
 
-            <div className="overflow-hidden rounded-[1.35rem] border border-[color:rgba(16,37,52,0.1)] bg-white/80 shadow-[0_22px_60px_rgba(15,23,42,0.06)]">
-              {supportTools.map((tool, index) => (
-                <SupportLink key={tool.href} {...tool} index={index + 1} />
+            <div className="grid gap-6">
+              {useCases.map((useCase, index) => (
+                <UseCaseRow key={useCase.kicker} {...useCase} index={index + 1} primary={index === 0} />
               ))}
             </div>
+
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
-          <div className="space-y-6">
-            <div className="panel-soft rounded-[2rem] p-6 bg-slate-50 border border-slate-200/60 shadow-2xs">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-                Trust boundary
-              </p>
-              <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl text-slate-950">
-                Your data remains on your machine.
-              </h2>
-              <p className="mt-4 text-xs sm:text-sm leading-relaxed text-[color:var(--muted)]">
-                Your raw CSV and pasted text stay in your browser during normal cleanup. All file parsing, cleaning filters, and table preview generation are executed locally.
-              </p>
-            </div>
-            
-            <ProWaitlistCard
-              trackSource="home_bottom"
-              title="Want saved workflows and export presets?"
-              description="Join the Pro waitlist to get notified when we launch saved cleanup presets, advanced domain filters, and custom CRM export options."
-            />
+      {/* Helper Tools Section */}
+      <section className="py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center mb-16">
+            <h2 className="font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl mb-6">
+              Quick helper utilities.
+            </h2>
+            <p className="text-lg leading-8 text-slate-600">
+              Use these when the data is still copied text, notes, or snippets before the CSV workflow. Perfect for pasting emails, support logs, or signatures.
+            </p>
           </div>
 
-          <div className="space-y-5">
-            {faqEntries.map((faq, index) => (
-              <div
-                key={faq.question}
-                className={index === 0 ? "" : "border-t border-[color:rgba(16,37,52,0.1)] pt-5"}
-              >
-                <h3 className="text-lg font-semibold text-[color:var(--foreground)]">
-                  {faq.question}
-                </h3>
-                <p className="mt-2 max-w-3xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-                  {faq.answer}
+          <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+            {supportTools.map((tool, index) => (
+              <SupportLink key={tool.href} {...tool} index={index + 1} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & FAQ Section */}
+      <section className="bg-slate-50 py-32 border-t border-slate-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-[1fr_1fr]">
+            
+            <div className="space-y-8">
+              <div className="rounded-3xl border border-blue-100 bg-white p-10 shadow-sm">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                  <Shield className="h-6 w-6" />
+                </div>
+                <h2 className="mb-4 font-display text-3xl font-semibold text-slate-900">
+                  Your data remains on your machine.
+                </h2>
+                <p className="text-base leading-relaxed text-slate-600">
+                  Your raw CSV and pasted text stay in your browser during normal cleanup. All file parsing, cleaning filters, and table preview generation are executed locally.
                 </p>
               </div>
-            ))}
-            <Link
-              href="/pricing"
-              className="inline-flex items-center gap-2 pt-2 text-sm font-semibold text-[color:var(--brand-strong)]"
-            >
-              Read the pricing philosophy
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+              
+              <ProWaitlistCard
+                trackSource="home_bottom"
+                title="Want saved workflows and export presets?"
+                description="Join the Pro waitlist to get notified when we launch saved cleanup presets, advanced domain filters, and custom CRM export options."
+              />
+            </div>
+
+            <div className="space-y-8">
+              <h2 className="font-display text-3xl font-semibold text-slate-900 mb-8">
+                Frequently asked questions
+              </h2>
+              <div className="space-y-8">
+                {faqEntries.map((faq) => (
+                  <div key={faq.question} className="border-b border-slate-200 pb-8 last:border-0">
+                    <h3 className="mb-3 text-lg font-bold text-slate-900">{faq.question}</h3>
+                    <p className="text-base leading-relaxed text-slate-600">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -370,132 +331,75 @@ export default function HomePage() {
   );
 }
 
-function WorkspaceRowMock({
-  index,
-  value,
-  source,
-  locked = false,
-}: {
-  index: number;
-  value: string;
-  source: string;
-  locked?: boolean;
-}) {
+// Subcomponents
+
+function WorkspaceRowMock({ index, value, source, locked = false, highlight = false }: any) {
   return (
-    <div className="rounded-[1.2rem] border border-[color:rgba(16,37,52,0.12)] bg-white/94 p-3 shadow-[0_8px_18px_rgba(15,23,42,0.05)]">
-      <div className="flex items-start gap-3">
-        <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full border border-[color:rgba(16,37,52,0.12)] text-[11px] font-semibold text-[color:var(--muted)]">
+    <div className={`rounded-2xl border bg-white p-4 transition-colors ${highlight ? 'border-amber-200 bg-amber-50/30' : 'border-slate-100'}`}>
+      <div className="flex items-center gap-4">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-50 text-xs font-bold text-slate-400">
           {index}
         </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-[color:rgba(16,37,52,0.08)] bg-[color:rgba(244,247,250,0.96)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:#38586b]">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest ${highlight ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>
               {source}
             </span>
-            {locked ? (
-              <span className="rounded-full bg-[color:rgba(15,118,110,0.1)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--accent)]">
-                Locked
+            {locked && (
+              <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-600">
+                Verified
               </span>
-            ) : null}
+            )}
           </div>
-          <p className="mt-3 rounded-[0.95rem] border border-[color:rgba(16,37,52,0.1)] bg-[color:rgba(240,244,255,0.9)] px-3 py-3 text-sm leading-6 text-[color:var(--foreground)]">
-            {value}
-          </p>
+          <p className="text-sm font-medium text-slate-900 font-mono">{value}</p>
         </div>
       </div>
     </div>
   );
 }
 
-function MetricNote({ value, label }: { value: string; label: string }) {
+function MetricNote({ value, label }: any) {
   return (
     <div>
-      <p className="text-2xl font-semibold tabular-nums text-[color:var(--foreground)]">
-        {value}
-      </p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
-        {label}
-      </p>
+      <p className="font-display text-3xl font-bold text-slate-900">{value}</p>
+      <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-500">{label}</p>
     </div>
   );
 }
 
-function UseCaseRow({
-  kicker,
-  title,
-  text,
-  index,
-  primary = false,
-}: {
-  kicker: string;
-  title: string;
-  text: string;
-  index: number;
-  primary?: boolean;
-}) {
+function UseCaseRow({ kicker, title, text, index, primary = false }: any) {
   return (
-    <div
-      className={`grid gap-4 border-t border-[color:rgba(16,37,52,0.09)] px-5 py-5 first:border-t-0 sm:grid-cols-[4rem_1fr] sm:px-6 sm:py-6 ${
-        primary
-          ? "bg-[linear-gradient(90deg,rgba(37,99,235,0.07),rgba(255,255,255,0.72))]"
-          : ""
-      }`}
-    >
-      <div className="font-display text-3xl font-semibold leading-none tabular-nums text-[color:rgba(29,78,216,0.38)]">
-        {String(index).padStart(2, "0")}
-      </div>
-      <div>
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-            {kicker}
-          </p>
-          {primary ? (
-            <span className="rounded-full border border-[color:rgba(37,99,235,0.16)] bg-white/78 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--brand-strong)]">
-              Main path
-            </span>
-          ) : null}
+    <div className={`group rounded-3xl border p-8 transition-all hover:shadow-md ${primary ? 'border-blue-200 bg-white shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'}`}>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500">
+            0{index}
+          </span>
+          <span className="text-xs font-bold uppercase tracking-widest text-blue-600">{kicker}</span>
         </div>
-        <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)] sm:text-[1.7rem]">
-          {title}
-        </h3>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-          {text}
-        </p>
+        {primary && (
+          <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-600">
+            Main Path
+          </span>
+        )}
       </div>
+      <h3 className="mb-4 font-display text-2xl font-bold text-slate-900">{title}</h3>
+      <p className="text-base leading-relaxed text-slate-600">{text}</p>
     </div>
   );
 }
 
-function SupportLink({
-  href,
-  title,
-  text,
-  index,
-}: {
-  href: string;
-  title: string;
-  text: string;
-  index: number;
-}) {
+function SupportLink({ href, title, text, index }: any) {
   return (
-    <Link
-      href={href}
-      className="group grid gap-4 border-t border-[color:rgba(16,37,52,0.08)] px-5 py-5 transition first:border-t-0 hover:bg-white sm:grid-cols-[3.25rem_1fr_auto] sm:items-center sm:px-6"
-    >
-      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:rgba(37,99,235,0.16)] bg-[color:rgba(37,99,235,0.06)] text-xs font-semibold tabular-nums text-[color:var(--brand-strong)]">
-        {String(index).padStart(2, "0")}
-      </span>
-      <span>
-        <span className="block font-display text-xl font-semibold text-[color:var(--foreground)] sm:text-2xl">
-          {title}
-        </span>
-        <span className="mt-1 block max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-          {text}
-        </span>
-      </span>
-      <span className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white/82 px-4 text-sm font-semibold text-[color:var(--brand-strong)] transition group-hover:border-[color:rgba(37,99,235,0.18)] group-hover:bg-[color:rgba(37,99,235,0.06)]">
-        Open
-        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+    <Link href={href} className="group rounded-3xl border border-slate-200 bg-white p-8 transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg">
+      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 font-bold">
+        0{index}
+      </div>
+      <h3 className="mb-3 font-display text-xl font-bold text-slate-900">{title}</h3>
+      <p className="mb-6 text-sm leading-relaxed text-slate-600">{text}</p>
+      <span className="inline-flex items-center gap-2 text-sm font-bold text-blue-600">
+        Open tool
+        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </span>
     </Link>
   );

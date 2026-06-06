@@ -471,7 +471,7 @@ export function CsvLeadCleanerTool() {
         <WorkflowSteps hasLoadedFile={hasLoadedFile} exportReady={exportReady} />
       </div>
 
-      <div className="panel-soft w-full xl:w-[400px] shrink-0 rounded-[2.2rem] p-5 sm:p-7 flex flex-col">
+      <div className="w-full xl:w-[400px] shrink-0 rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 flex flex-col">
           <div className="mb-6 hidden xl:block">
             <WorkflowSteps hasLoadedFile={hasLoadedFile} exportReady={exportReady} />
           </div>
@@ -491,7 +491,7 @@ export function CsvLeadCleanerTool() {
 
           <label
             htmlFor="csv-upload"
-            className="group mt-5 flex min-h-[20rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(240,244,255,0.95))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(235,241,255,0.98))] hover:shadow-[0_16px_30px_rgba(37,99,235,0.08)]"
+            className="group mt-6 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white px-6 py-8 text-center transition-all duration-200 hover:border-blue-500 hover:bg-blue-50/50"
           >
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
@@ -508,7 +508,7 @@ export function CsvLeadCleanerTool() {
                 Drag and drop or click to browse.
               </span>
               {!isParsing && (
-                <div className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition duration-205 hover:bg-blue-700 hover:shadow-md cursor-pointer">
+                <div className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 cursor-pointer">
                   Upload CSV to Start
                 </div>
               )}
@@ -762,7 +762,7 @@ export function CsvLeadCleanerTool() {
         </div>
 
         <div className="flex-1 min-w-0 space-y-6">
-          <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
@@ -834,7 +834,7 @@ export function CsvLeadCleanerTool() {
               </div>
             </div>
 
-            <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+            <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h3 className="font-display text-xl font-semibold">

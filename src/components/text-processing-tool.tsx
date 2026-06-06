@@ -480,7 +480,7 @@ export function TextProcessingTool({
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[1.02fr_0.98fr]">
-      <section className="panel-soft rounded-[2.2rem] p-5 sm:p-7 flex h-full flex-col">
+      <section className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8 flex h-full flex-col">
           <div className="mb-6 flex items-start gap-4">
             <div
               className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${iconToneClassName}`}
@@ -670,7 +670,7 @@ export function TextProcessingTool({
         </section>
 
         <div className="space-y-6">
-          <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
               Workspace stats
             </p>
@@ -705,7 +705,7 @@ export function TextProcessingTool({
               </div>
             </div>
 
-            <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+            <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <h3 className="font-display text-xl font-semibold">{resultTitle}</h3>
