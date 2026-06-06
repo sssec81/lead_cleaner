@@ -34,7 +34,7 @@ type TextProcessingToolProps = {
   sampleInput: string;
   placeholder: string;
   trackName: string;
-  processInput: (input: string) => { results: string[]; stats: CleaningStats };
+  processInput: (input: string) => { results: string[]; stats: CleaningStats; invalidResults?: string[] };
   statLabels: {
     scanned: string;
     found: string;
@@ -924,6 +924,20 @@ export function TextProcessingTool({
                   </p>
                 )}
               </div>
+
+              {processed.invalidResults && processed.invalidResults.length > 0 && (
+                <div className="mt-6 rounded-2xl border border-red-200/60 bg-red-50/50 p-6">
+                  <h4 className="text-sm font-semibold text-red-900">Broken entries detected</h4>
+                  <p className="mt-1 text-xs text-red-700">These items have invalid syntax and were automatically excluded from your clean workspace.</p>
+                  <div className="mt-4 flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-2">
+                    {processed.invalidResults.map((item, i) => (
+                      <span key={i} className="inline-flex items-center rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-medium text-red-800 shadow-sm">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {showShortcuts ? (
                 <div className="mt-4 rounded-[1.35rem] border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.08)] p-4 text-sm">

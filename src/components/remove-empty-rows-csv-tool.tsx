@@ -20,7 +20,7 @@ import {
   parseCsvFile,
   parseCsvText,
 } from "@/lib/csv";
-import { downloadTextFile, buildCsvTextFromRecords } from "@/lib/export";
+import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
@@ -129,8 +129,7 @@ export function RemoveEmptyRowsCsvTool() {
 
   function handleExport() {
     const cleanRows = rows.filter((r) => !Object.values(r).every((v) => v === ""));
-    const csvContent = buildCsvTextFromRecords(cleanRows);
-    downloadTextFile(buildExportName(fileName), csvContent);
+    downloadCsvRecords(buildExportName(fileName), cleanRows);
     trackToolEvent("remove-empty-rows", "download_csv", {
       result_count: cleanRows.length,
     });
