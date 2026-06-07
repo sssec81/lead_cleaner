@@ -5,7 +5,7 @@
 **Product Name:** LeadCleanr
 **Product Type:** Browser-First Online Utility SaaS Tool
 **Tagline:** Clean messy lead lists instantly.
-**Status:** ✅ MVP Completed (Released as `v1.0.0-mvp`)
+**Status:** ✅ Active Release (`v1.1.1`)
 
 ### Core Promise
 Paste messy text or upload a CSV file to instantly extract, clean, deduplicate, and export lead data. All processing occurs locally within the browser, ensuring 100% privacy and security by design.
@@ -60,7 +60,7 @@ LeadCleanr addresses these pain points by offering:
 ### Key Workflows
 *   **The "Quick Clean" (Text Mode):** Copy a block of text containing mixed text, HTML, and headers, paste it into the UI, click "Extract Emails", and copy the clean, deduplicated list.
 *   **Batch Mode:** Toggle batch mode to allow continuous, incremental pasting of text blocks. The tool parses and appends new results to the workspace without overwriting previous extractions.
-*   **CSV Sanitizer:** Upload a messy 2MB CRM export, select the target email column, remove duplicates and blank rows, and download a clean CSV for immediate import.
+*   **CSV Sanitizer:** Upload a messy 2MB CRM export, select the target column, remove duplicates, blank rows, and invalid rows, optionally filter business vs. personal emails, then download a clean CSV for immediate import.
 
 ---
 
@@ -87,6 +87,9 @@ LeadCleanr addresses these pain points by offering:
     *   **Deduplication:** Remove duplicate rows based on a selected column (e.g., deduplicate by `Email`).
     *   **Data Formatting:** Trim whitespace, lowercase emails, and normalize phone numbers within the selected column.
     *   **Empty Row Purging:** Remove rows containing empty or invalid values in the primary target column.
+    *   **Email-Type Review:** Classify business vs. personal email rows, flag role-based inboxes, and optionally filter those rows before export.
+    *   **Review Views:** Preview clean rows, removed rows, and invalid rows before downloading.
+*   **CSV Merge Utility:** Combine up to 5 CSV files, preserve unique headers, and deduplicate by exact row or normalized column values.
 *   **Blob Export:** Generates the cleaned CSV file on the client side using a browser Blob API for immediate, instant download.
 
 ### 4.3 Real-Time Value Metrics
@@ -94,7 +97,8 @@ Every tool page and utility must display a dedicated **Stats Box** highlighting:
 1.  **Total Found:** Gross count of extracted items before cleaning.
 2.  **Duplicates Removed:** Total count of duplicate records purged.
 3.  **Invalid Entries Removed:** Number of entries that failed regex/validation tests.
-4.  **Final Clean Leads:** Net count of verified, unique records ready for export.
+4.  **Filtered Rows Removed:** Number of records excluded by cleanup filters such as business-only or personal-only email mode.
+5.  **Final Clean Leads:** Net count of verified, unique records ready for export.
 
 ---
 
@@ -213,4 +217,6 @@ To protect the brand and domain authority:
 - Previews the first 100–500 rows in a grid layout.
 - Correctly identifies primary data columns (Emails, Phones, URLs).
 - Deduplicates rows according to the chosen column key, updating the preview.
+- Shows removed and invalid row previews before export.
+- Reports rows removed by email filtering when business-only or personal-only mode is enabled.
 - Allows immediate download of the sanitized CSV without uploading any data to a backend.
