@@ -21,6 +21,7 @@ import {
 } from "@/lib/csv";
 import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+import { normalizeUrlValue, parseAndFormatPhone } from "@/lib/text-tools";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
@@ -60,7 +61,10 @@ export function MergeCsvFilesTool() {
     if (duplicateMode === "column" && selectedColumn) {
       const seen = new Set<string>();
       return mergedRows.filter(row => {
-        const val = String(row[selectedColumn] ?? "").trim().toLowerCase();
+        const val = normalizeMergeDedupValue(
+          String(row[selectedColumn] ?? ""),
+          selectedColumn,
+        );
         if (!val) return true; // Don't dedupe empty cells, keep them
         if (seen.has(val)) return false;
         seen.add(val);
@@ -430,4 +434,43 @@ export function MergeCsvFilesTool() {
       </div>
     </div>
   );
+}
+
+function normalizeMergeDedupValue(value: string, columnName: string) {
+  const rawValue = value.trim();
+  if (!rawValue) {
+    return "";
+  }
+
+  const normalizedColumn = columnName.toLowerCase();
+
+  if (normalizedColumn.includes("email")) {
+    return normalizeEmailValue(rawValue);
+  }
+
+  if (normalizedColumn.includes("phone") || normalizedColumn.includes("tel")) {
+    return parseAndFormatPhone(rawValue) ?? rawValue.toLowerCase();
+  }
+
+  if (
+    normalizedColumn.includes("website") ||
+    normalizedColumn.includes("url") ||
+    normalizedColumn.includes("link")
+  ) {
+    return normalizeUrlValue(rawValue) ?? rawValue.toLowerCase();
+  }
+
+  if (normalizedColumn.includes("domain")) {
+    return normalizeDomainValue(rawValue);
+  }
+
+  return rawValue.toLowerCase();
+}
+
+function normalizeEmailValue(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function normalizeDomainValue(value: string) {
+  return value.trim().toLowerCase().replace(/^www\./, "");
 }

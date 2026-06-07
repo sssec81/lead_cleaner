@@ -48,6 +48,7 @@ type CleaningSummary = {
   emptyRowsRemoved: number;
   invalidRowsRemoved: number;
   duplicatesRemoved: number;
+  filteredRowsRemoved: number;
   cleanRowsReady: number;
   businessEmails: number;
   personalEmails: number;
@@ -434,6 +435,7 @@ export function CsvLeadCleanerTool() {
     const nextColumn = pickDefaultColumn(headers, detections);
     setSelectedColumn(nextColumn);
     setDuplicateMode("selected");
+    setEmailFilter("all");
     setPreviewMode("clean");
     setPastConfigs([]);
     setFutureConfigs([]);
@@ -627,6 +629,7 @@ export function CsvLeadCleanerTool() {
                   <ChecklistMetric label="Duplicates reviewed" value={cleaned.summary.duplicatesRemoved} />
                   <ChecklistMetric label="Invalid rows reviewed" value={cleaned.summary.invalidRowsRemoved} />
                   <ChecklistMetric label="Blank rows reviewed" value={cleaned.summary.emptyRowsRemoved} />
+                  <ChecklistMetric label="Email filter removed" value={cleaned.summary.filteredRowsRemoved} />
                   <ChecklistMetric label="Clean rows ready" value={cleaned.summary.cleanRowsReady} />
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -864,7 +867,7 @@ export function CsvLeadCleanerTool() {
                 </p>
               </div>
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-4">
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 <StatCard label="Rows scanned" value={cleaned.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
                 <StatCard
                   label="Duplicates removed"
@@ -880,6 +883,11 @@ export function CsvLeadCleanerTool() {
                   label="Blank rows removed"
                   value={cleaned.summary.emptyRowsRemoved}
                   icon={<FileMinus className="h-4 w-4 text-slate-400" />}
+                />
+                <StatCard
+                  label="Email filter removed"
+                  value={cleaned.summary.filteredRowsRemoved}
+                  icon={<Mail className="h-4 w-4 text-violet-500" />}
                 />
               </div>
 
@@ -1117,6 +1125,7 @@ function cleanCsvRows(
     emptyRowsRemoved: 0,
     invalidRowsRemoved: 0,
     duplicatesRemoved: 0,
+    filteredRowsRemoved: 0,
     cleanRowsReady: 0,
     businessEmails: 0,
     personalEmails: 0,
@@ -1142,6 +1151,7 @@ function cleanCsvRows(
   const emptyRowsRemoved = rows.length - nonEmptyRows.length;
   let invalidRowsRemoved = 0;
   let duplicatesRemoved = 0;
+  let filteredRowsRemoved = 0;
   let personalEmails = 0;
   let businessEmails = 0;
   let roleBasedEmails = 0;
@@ -1239,12 +1249,14 @@ function cleanCsvRows(
     }
 
     if (emailFilter === "business_only" && nextRow.leadcleanr_email_type === "personal") {
+      filteredRowsRemoved += 1;
       const removedRow = { ...nextRow, leadcleanr_reason: "personal_email" as const };
       removedRows.push(removedRow);
       return;
     }
 
     if (emailFilter === "personal_only" && nextRow.leadcleanr_email_type === "business") {
+      filteredRowsRemoved += 1;
       const removedRow = { ...nextRow, leadcleanr_reason: "business_email" as const };
       removedRows.push(removedRow);
       return;
@@ -1260,6 +1272,7 @@ function cleanCsvRows(
       emptyRowsRemoved,
       invalidRowsRemoved,
       duplicatesRemoved,
+      filteredRowsRemoved,
       cleanRowsReady: cleanedRows.length,
       personalEmails,
       businessEmails,
