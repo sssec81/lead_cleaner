@@ -13,7 +13,7 @@ type ProWaitlistCardProps = {
 };
 
 export function ProWaitlistCard({
-  title = "Join the Pro Waitlist",
+  title = "Join the Pro waitlist",
   description = "Get notified when we launch larger CSV limits, saved cleanup workflows, and custom export presets (HubSpot, Apollo, Outreach, Clay).",
   className = "",
   trackSource,

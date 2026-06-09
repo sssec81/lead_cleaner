@@ -46,7 +46,7 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - **Metrics**: Instantly view stats on duplicates removed, invalid rows, blank rows, email-filter removals, and clean leads ready.
 
 ## 💻 Tech Stack
-- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Framework**: Next.js 16 (App Router, Webpack on this platform)
 - **UI Library**: React 19
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
@@ -67,6 +67,13 @@ Run the development server:
 npm run dev
 ```
 Open http://localhost:3000 with your browser.
+On Apple Silicon machines without native Turbopack bindings, this project uses Webpack for local development too.
+
+Create a production build:
+```bash
+npm run build
+```
+On Apple Silicon machines without native Turbopack bindings, this project uses Webpack for production builds.
 
 ## 📂 Project Structure
 

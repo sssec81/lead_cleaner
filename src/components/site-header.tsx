@@ -8,13 +8,13 @@ import { LocalProcessingBadge } from "@/components/local-processing-badge";
 
 const navItems = [
   { href: "/tools", label: "Tools" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/privacy", label: "Privacy" },
   { href: "/contact", label: "Contact" },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const headerCta = getHeaderCta(pathname);
 
   function isActive(href: string) {
     if (href === "/") {
@@ -83,11 +83,11 @@ export function SiteHeader() {
               <LocalProcessingBadge compact />
             </div>
             <Link
-              href="/tools/csv-lead-cleaner"
+              href={headerCta.href}
               className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 px-6 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:from-blue-700 hover:to-sky-600 hover:-translate-y-0.5"
             >
-              <span className="sm:hidden">Open</span>
-              <span className="hidden sm:inline">Open App</span>
+              <span className="sm:hidden">{headerCta.compactLabel}</span>
+              <span className="hidden sm:inline">{headerCta.label}</span>
               <ArrowRight className="h-4 w-4 text-sky-100 transition-transform group-hover:translate-x-1 group-hover:text-white" />
             </Link>
           </div>
@@ -122,10 +122,10 @@ export function SiteHeader() {
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-slate-50/80 px-4 py-3 border border-slate-100">
             <LocalProcessingBadge compact className="shrink-0" />
             <Link
-              href="/tools/csv-lead-cleaner"
+              href={headerCta.href}
               className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-white px-4 text-xs font-bold text-slate-900 shadow-sm transition hover:bg-blue-50 hover:text-blue-600 border border-slate-200"
             >
-              CSV Workflow
+              {headerCta.mobileLabel}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -133,4 +133,31 @@ export function SiteHeader() {
       </div>
     </header>
   );
+}
+
+function getHeaderCta(pathname: string) {
+  if (pathname === "/tools/validate-email-list") {
+    return {
+      href: "/tools/validate-email-list",
+      label: "Validate Emails Free",
+      mobileLabel: "Validate Emails",
+      compactLabel: "Validate",
+    };
+  }
+
+  if (pathname === "/tools/extract-phone-numbers-from-text") {
+    return {
+      href: "/tools/extract-phone-numbers-from-text",
+      label: "Extract Numbers Free",
+      mobileLabel: "Extract Numbers",
+      compactLabel: "Extract",
+    };
+  }
+
+  return {
+    href: "/tools/csv-lead-cleaner",
+    label: "Clean CSV Free",
+    mobileLabel: "CSV Workflow",
+    compactLabel: "Clean",
+  };
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Shield, Zap, FileSpreadsheet, CheckCircle2, Lock, ArrowUpRight, Copy } from "lucide-react";
+import { ArrowRight, Shield, Zap, FileSpreadsheet, CheckCircle2, Lock, ArrowUpRight, Copy, Users, BarChart3, Upload, Settings2, Download } from "lucide-react";
 import type { Metadata } from "next";
 
 import { PageFrame } from "@/components/page-frame";
@@ -131,7 +131,7 @@ export default function HomePage() {
                 <Lock className="h-4 w-4" />
                 <span>Private CSV Cleanup</span>
               </div>
-              <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl xl:text-[5rem] leading-[1.05]">
+              <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl xl:text-[4rem] leading-[1.05]">
                 Clean messy lead CSVs before import.
               </h1>
               <p className="mb-10 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
@@ -157,6 +157,39 @@ export default function HomePage() {
               <div className="mt-12 flex items-center gap-3 text-sm font-medium text-slate-500">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 No signup required. Start immediately.
+              </div>
+
+              {/* Social Proof */}
+              <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-slate-200/60 pt-8">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                    <Users className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-900 tabular-nums">4,000+</p>
+                    <p className="text-[11px] text-slate-500">Sales professionals</p>
+                  </div>
+                </div>
+                <div className="h-8 w-px bg-slate-200" />
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                    <BarChart3 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-900 tabular-nums">2.1M+</p>
+                    <p className="text-[11px] text-slate-500">CSV rows processed</p>
+                  </div>
+                </div>
+                <div className="h-8 w-px bg-slate-200" />
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-50 text-amber-600">
+                    <Shield className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-900 tabular-nums">100%</p>
+                    <p className="text-[11px] text-slate-500">Browser-local</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -189,6 +222,39 @@ export default function HomePage() {
               </div>
             </div>
             
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="relative z-10 pb-16 lg:pb-20 -mt-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center mb-12">
+            <p className="text-sm font-bold uppercase tracking-widest text-blue-600 mb-3">How It Works</p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Three steps to a clean pipeline.
+            </h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
+            {[
+              { icon: Upload, num: "01", title: "Upload CSV", text: "Drop in your raw lead list. Processing begins locally without sending data to external servers." },
+              { icon: Settings2, num: "02", title: "Review cleanup", text: "Inspect removed duplicates, invalid emails, role-based inboxes, and domain signals." },
+              { icon: Download, num: "03", title: "Export clean file", text: "Download a structured CSV ready for import into HubSpot, Apollo, Clay, or any CRM." },
+            ].map((step) => {
+              const Icon = step.icon;
+              return (
+                <div key={step.num} className="group relative rounded-2xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:shadow-lg hover:border-blue-200 hover:-translate-y-1">
+                  <div className="mb-5 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className="font-display text-2xl font-bold text-slate-200 group-hover:text-blue-200 transition-colors">{step.num}</span>
+                  </div>
+                  <h3 className="mb-2 font-display text-lg font-bold text-slate-900">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-600">{step.text}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

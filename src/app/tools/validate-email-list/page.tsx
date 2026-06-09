@@ -3,15 +3,15 @@ import type { Metadata } from "next";
 import { ValidateEmailListTool } from "@/components/validate-email-list-tool";
 import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
-import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Validate Email List Syntax Online — Free Checker",
+  title: "Free Email List Validator for Syntax Checks",
   description:
-    "Check your email list for formatting errors, typos, and broken syntax. Run a free browser-side check before uploading to your CRM or verification tool.",
+    "Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM.",
   path: "/tools/validate-email-list",
   keywords: [
     "validate email list",
+    "email list validator",
     "check email syntax",
     "email format checker",
     "verify email list formatting",
@@ -29,17 +29,48 @@ export default function ValidateEmailListPage() {
         ]}
       />
       <ToolJsonLd
-        title="Validate Email List Syntax Online — Free Checker"
-        description="Check your email list for formatting errors, typos, and broken syntax. Run a free browser-side check before uploading to your CRM or verification tool."
+        title="Free Email List Validator for Syntax Checks"
+        description="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM."
         path="/tools/validate-email-list"
         category="BusinessApplication"
       />
       <TextToolPageShell
-        eyebrow="Validate Email Syntax"
-        title="Find the broken email addresses before you send."
-        intro="Paste your list to instantly identify emails with missing @ symbols, bad domain formats, or invisible formatting errors. We'll separate the structurally valid emails from the broken ones."
-        quote="Catch the typos before they become hard bounces."
+        eyebrow="Email List Validator"
+        title="Free Email List Validator for Syntax Checks"
+        intro="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM."
+        quote="Catch invalid email formats before outreach."
+        asideDescription="This free tool checks email formatting only. Domain, MX, SMTP, and mailbox checks are planned for Pro, so users can validate syntax now without confusing it with deliverability verification."
         tool={<ValidateEmailListTool />}
+        toolSupportingContent={
+          <section className="rounded-[2rem] border border-slate-200/70 bg-white/85 p-6 shadow-sm sm:p-8">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+              What this email validator checks
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+              Use it to clean pasted email lists before outreach, CRM import, or campaign launch.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {[
+                "Missing @ symbols",
+                "Invalid domain format",
+                "Duplicate emails",
+                "Blank rows",
+                "Extra spaces and formatting issues",
+                "Clean export-ready email list",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 text-sm font-medium text-slate-700"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 rounded-2xl border border-amber-200/70 bg-amber-50/80 px-4 py-3 text-sm text-amber-900">
+              Full deliverability, MX, SMTP, and mailbox checks are planned for Pro.
+            </p>
+          </section>
+        }
       />
     </>
   );

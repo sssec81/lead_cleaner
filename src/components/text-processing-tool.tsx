@@ -25,6 +25,7 @@ import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import type { CleaningStats } from "@/lib/text-tools";
 import { ProWaitlistCard } from "@/components/pro-waitlist-card";
+import type { ReactNode } from "react";
 
 type TextProcessingToolProps = {
   title: string;
@@ -49,6 +50,11 @@ type TextProcessingToolProps = {
   resultTitle: React.ReactNode | ((count: number) => React.ReactNode);
   resultDescription?: React.ReactNode | ((count: number) => React.ReactNode);
   emptyMessage: string;
+  inputMinHeightClassName?: string;
+  inputLabel?: string;
+  inputHelpText?: string;
+  collapseWorkspaceActions?: boolean;
+  inputControls?: ReactNode;
 };
 
 type WorkspaceItem = {
@@ -68,6 +74,10 @@ type PersistedState = {
 };
 
 const WORKSPACE_PREVIEW_LIMIT = 8;
+const TEXT_INPUT_BOX_CLASS_NAME =
+  "rounded-2xl border-2 border-dashed border-slate-300 bg-white px-4 py-4 transition-all duration-200 focus-within:border-blue-500 focus-within:bg-blue-50/30 sm:px-5 sm:py-5";
+const TEXT_INPUT_ACTION_CLASS_NAME =
+  "inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 shadow-2xs";
 
 export function TextProcessingTool({
   title,
@@ -85,6 +95,11 @@ export function TextProcessingTool({
   resultTitle,
   resultDescription,
   emptyMessage,
+  inputMinHeightClassName = "min-h-[14rem] sm:min-h-[16rem]",
+  inputLabel = "Input text",
+  inputHelpText = "Paste messy notes, copied pages, logs, or lead snippets.",
+  collapseWorkspaceActions = false,
+  inputControls,
 }: TextProcessingToolProps) {
   const storageKey = `leadcleanr:text-tool:${trackName}`;
   const [input, setInput] = useState("");
@@ -92,6 +107,7 @@ export function TextProcessingTool({
   const [batchMode, setBatchMode] = useState(false);
   const [showBulkEditor, setShowBulkEditor] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showWorkspaceActions, setShowWorkspaceActions] = useState(!collapseWorkspaceActions);
   const [resultDensity, setResultDensity] = useState<"comfortable" | "compact">(
     "comfortable",
   );
@@ -483,7 +499,7 @@ export function TextProcessingTool({
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[1.02fr_0.98fr]">
-      <section className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 sm:p-8 flex h-full flex-col">
+      <section className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 shadow-sm backdrop-blur-md sm:p-8 flex h-full flex-col">
           <div className="mb-6 flex items-start gap-4">
             <div
               className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${iconToneClassName}`}
@@ -500,16 +516,17 @@ export function TextProcessingTool({
 
           {/* Group 1: Text Input Area */}
           <div className="flex flex-col">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-3">
+            <div className={TEXT_INPUT_BOX_CLASS_NAME}>
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
               <div>
-                <h3 className="text-sm font-semibold text-slate-900">Input text</h3>
-                <p className="text-xs text-slate-500">Paste messy notes, copied pages, logs, or lead snippets.</p>
+                <h3 className="text-sm font-semibold text-slate-900">{inputLabel}</h3>
+                <p className="text-xs text-slate-500">{inputHelpText}</p>
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
                 <button
                   type="button"
                   onClick={handlePasteFromClipboard}
-                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 transition shadow-2xs"
+                  className={TEXT_INPUT_ACTION_CLASS_NAME}
                   title="Paste from clipboard"
                 >
                   <Clipboard className="h-3.5 w-3.5" />
@@ -518,7 +535,7 @@ export function TextProcessingTool({
                 <button
                   type="button"
                   onClick={loadSampleInput}
-                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 transition shadow-2xs"
+                  className={TEXT_INPUT_ACTION_CLASS_NAME}
                   title="Load sample"
                 >
                   <FlaskConical className="h-3.5 w-3.5" />
@@ -527,7 +544,7 @@ export function TextProcessingTool({
                 <button
                   type="button"
                   onClick={useSelectedText}
-                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 transition shadow-2xs"
+                  className={TEXT_INPUT_ACTION_CLASS_NAME}
                   title="Import highlighted text from this page"
                 >
                   <MousePointerClick className="h-3.5 w-3.5" />
@@ -550,45 +567,48 @@ export function TextProcessingTool({
                   type="button"
                   onClick={() => setFreshInput("")}
                   disabled={!input}
-                  className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 transition shadow-2xs"
+                  className={`${TEXT_INPUT_ACTION_CLASS_NAME} disabled:cursor-not-allowed disabled:opacity-40`}
                   title="Clear input"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   <span>Clear</span>
                 </button>
               </div>
-            </div>
+              </div>
 
-            {restoredSession && (
-              <p className="mb-3 text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-xl px-3 py-2">
-                Restored your last workspace on this device so you can keep cleaning without starting over.
-              </p>
-            )}
-
-            {batchMode && (
-              <div className="mb-3 rounded-xl border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
-                <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
-                <p className="mt-0.5 leading-relaxed text-teal-700">
-                  {batchLineCount} non-empty line{batchLineCount === 1 ? "" : "s"} detected. Useful when pasting repeated snippets from LinkedIn, email signatures, or logs.
+              {restoredSession && (
+                <p className="mb-3 text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-xl px-3 py-2">
+                  Restored your last workspace on this device so you can keep cleaning without starting over.
                 </p>
-              </div>
-            )}
+              )}
 
-            <textarea
-              id={`${trackName}-input`}
-              value={input}
-              onChange={(event) => setFreshInput(event.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-white/80 p-3.5 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 min-h-[14rem] sm:min-h-[16rem]"
-              placeholder="Paste messy text here. LeadCleanr will extract and clean the contact data before export."
-            />
+              {batchMode && (
+                <div className="mb-3 rounded-xl border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
+                  <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
+                  <p className="mt-0.5 leading-relaxed text-teal-700">
+                    {batchLineCount} non-empty line{batchLineCount === 1 ? "" : "s"} detected. Useful when pasting repeated snippets from LinkedIn, email signatures, or logs.
+                  </p>
+                </div>
+              )}
 
-            <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
-              <div className="flex items-center gap-1">
-                <Lock className="h-3 w-3 text-slate-400" />
-                <span>Processed locally in your browser.</span>
-              </div>
-              <div className="font-mono text-slate-400">
-                {input.length.toLocaleString()} / 50,000 characters
+              {inputControls ? <div className="mb-3">{inputControls}</div> : null}
+
+              <textarea
+                id={`${trackName}-input`}
+                value={input}
+                onChange={(event) => setFreshInput(event.target.value)}
+                className={`w-full rounded-xl border border-slate-200 bg-white/90 p-3.5 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 ${inputMinHeightClassName}`}
+                placeholder={placeholder}
+              />
+
+              <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                <div className="flex items-center gap-1">
+                  <Lock className="h-3 w-3 text-slate-400" />
+                  <span>Processed locally in your browser.</span>
+                </div>
+                <div className="font-mono text-slate-400">
+                  {input.length.toLocaleString()} / 50,000 characters
+                </div>
               </div>
             </div>
           </div>
@@ -685,19 +705,19 @@ export function TextProcessingTool({
             </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                <StatCard label="Items scanned" value={processed.stats.scanned} />
-                <StatCard label="Found" value={processed.stats.found} />
+                <StatCard label={statLabels.scanned} value={processed.stats.scanned} />
+                <StatCard label={statLabels.found} value={processed.stats.found} />
                 <StatCard
-                  label="Duplicates removed"
+                  label={statLabels.duplicatesRemoved}
                   value={processed.stats.duplicatesRemoved}
                 />
                 <StatCard
-                  label="Invalid removed"
+                  label={statLabels.invalidRemoved}
                   value={processed.stats.invalidRemoved}
                 />
                 {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
                   <StatCard
-                    label="Blank rows removed"
+                    label={statLabels.blankRemoved ?? "Blank rows removed"}
                     value={processed.stats.blankRemoved}
                   />
                 )}
@@ -745,10 +765,52 @@ export function TextProcessingTool({
               </div>
 
               <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
-                  Workspace actions
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+                    Workspace actions
+                  </p>
+                  {collapseWorkspaceActions ? (
+                    <button
+                      type="button"
+                      onClick={() => setShowWorkspaceActions((current) => !current)}
+                      disabled={!workspaceValues.length}
+                      className="inline-flex min-h-9 items-center justify-center rounded-full border border-[color:var(--line)] bg-white px-3 text-xs font-semibold text-[color:var(--foreground)] transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {showWorkspaceActions ? "Hide extras" : "More actions"}
+                    </button>
+                  ) : null}
+                </div>
                 <div className="mt-3 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => void handleCopy()}
+                  disabled={!workspaceValues.length}
+                  className="group inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-blue-600"
+                >
+                  {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4 transition-transform group-hover:-rotate-12" />}
+                  {copied ? "Copied" : copyLabel}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadCsv}
+                  disabled={!workspaceValues.length}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-slate-50 hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4 text-slate-400" />
+                  Download CSV
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadTxt}
+                  disabled={!workspaceValues.length}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-white px-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-slate-50 hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <FileText className="h-4 w-4 text-slate-400" />
+                  Download TXT
+                </button>
+                </div>
+                {showWorkspaceActions ? (
+                  <div className="mt-3 flex flex-wrap gap-3 border-t border-slate-200/70 pt-3">
                 <button
                   type="button"
                   onClick={() => setShowBulkEditor((current) => !current)}
@@ -793,7 +855,8 @@ export function TextProcessingTool({
                   <Redo2 className="h-4 w-4" />
                   Redo
                 </button>
-                </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="mt-6 flex flex-col gap-6">
@@ -808,37 +871,9 @@ export function TextProcessingTool({
                           {workspaceValues.length.toLocaleString()} <span className="text-slate-500 font-medium text-lg">clean rows.</span>
                         </p>
                       </div>
-                      <div className="flex flex-wrap items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => void handleCopy()}
-                          disabled={!workspaceValues.length}
-                          className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:hover:bg-blue-600"
-                        >
-                          {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4 transition-transform group-hover:-rotate-12" />}
-                          {copied ? "Copied" : copyLabel}
-                        </button>
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            onClick={handleDownloadTxt}
-                            disabled={!workspaceValues.length}
-                            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
-                          >
-                            <FileText className="h-4 w-4 text-slate-400" />
-                            TXT
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleDownloadCsv}
-                            disabled={!workspaceValues.length}
-                            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
-                          >
-                            <Download className="h-4 w-4 text-slate-400" />
-                            CSV
-                          </button>
-                        </div>
-                      </div>
+                      <p className="text-sm leading-6 text-slate-500">
+                        Copy or export your cleaned list using the priority actions above.
+                      </p>
                     </div>
                   </div>
                 ) : null}

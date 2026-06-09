@@ -155,6 +155,30 @@ test("removeDuplicatePhoneNumbers acts as alias to extractPhoneNumbersFromText",
   assert.equal(result.results[0], "+14155550101");
 });
 
+test("extractPhoneNumbersFromText supports digits-only output", () => {
+  const result = extractPhoneNumbersFromText("Call +1 415 555 0101 today.", {
+    outputFormat: "digits-only",
+  });
+
+  assert.deepEqual(result.results, ["14155550101"]);
+});
+
+test("extractPhoneNumbersFromText supports original formatting output", () => {
+  const result = extractPhoneNumbersFromText("Call +1 415 555 0101 today.", {
+    outputFormat: "original",
+  });
+
+  assert.deepEqual(result.results, ["+1 415 555 0101"]);
+});
+
+test("extractPhoneNumbersFromText respects the selected default country", () => {
+  const result = extractPhoneNumbersFromText("Office: 9801234567", {
+    defaultCountry: "IN",
+  });
+
+  assert.deepEqual(result.results, ["+919801234567"]);
+});
+
 test("validateEmailListSyntax splits valid and invalid emails", () => {
   const result = validateEmailListSyntax("valid@email.com, invalid@.com, test@bar.com");
   assert.equal(result.results.length, 2);
