@@ -79,7 +79,7 @@ export function RemoveEmptyRowsCsvTool() {
       resetState();
       setStatus("error");
       setError(
-        "The free CSV limit is 2 MB. Upgrade to Pro when you need larger file cleanup.",
+        "The free CSV limit is 5 MB. Upgrade to Pro when you need larger file cleanup.",
       );
       return;
     }
@@ -156,10 +156,10 @@ export function RemoveEmptyRowsCsvTool() {
 
           <label
             htmlFor="csv-upload"
-            className="group mt-5 flex min-h-[20rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] px-6 py-8 text-center transition duration-200 hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
+            className="group mt-5 flex min-h-[20rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white px-6 py-8 text-center transition-all duration-200 hover:border-blue-500 hover:bg-blue-50/50"
           >
             <div className="flex flex-col items-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:rgba(37,99,235,0.1)] bg-[color:rgba(37,99,235,0.04)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
                 {isParsing ? (
                   <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
                 ) : (
@@ -190,7 +190,7 @@ export function RemoveEmptyRowsCsvTool() {
 
           <p className="mt-3 text-xs leading-relaxed text-slate-500 text-center">
             Processed locally in your browser. Your CSV is never uploaded.<br />
-            <span className="text-[11px] text-slate-400 font-medium">(Supports files up to 2 MB)</span>
+            <span className="text-[11px] text-slate-400 font-medium">(Supports files up to 5 MB)</span>
           </p>
 
           <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-3">

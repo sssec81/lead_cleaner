@@ -51,7 +51,7 @@ export function SplitCsvFilesTool() {
     setStatus("parsing");
 
     if (file.size > MAX_CSV_FILE_SIZE) {
-      setError(`File is too large. Maximum supported size is 2 MB.`);
+      setError(`File is too large. Maximum supported size is 5 MB.`);
       setStatus("error");
       return;
     }
@@ -178,14 +178,14 @@ export function SplitCsvFilesTool() {
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            className={`group mt-5 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed transition duration-200 px-6 py-8 text-center ${
-              isDragging 
-                ? "border-blue-500 bg-blue-50" 
-                : "border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
+            className={`group mt-5 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-8 text-center transition-all duration-200 ${
+              isDragging
+                ? "border-blue-500 bg-blue-50/50"
+                : "border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50/50"
             }`}
           >
             <div className="flex flex-col items-center pointer-events-none">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:rgba(37,99,235,0.1)] bg-[color:rgba(37,99,235,0.04)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
                 {isParsing ? (
                   <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
                 ) : (
@@ -196,7 +196,7 @@ export function SplitCsvFilesTool() {
                 {isParsing ? "Parsing file..." : "Drop a CSV file here"}
               </span>
               <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
-                Up to 2 MB. All data stays in your browser.
+                Up to 5 MB. All data stays in your browser.
               </span>
             </div>
             <input

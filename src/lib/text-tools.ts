@@ -1,4 +1,4 @@
-import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js";
 
 const EMAIL_REGEX = /\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b/gi;
 const SINGLE_EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
@@ -18,23 +18,68 @@ export type CleaningStats = {
   finalCount: number;
 };
 
-export function parseAndFormatPhone(value: string): string | null {
+export type PhoneOutputFormat = "international" | "digits-only" | "original";
+
+export type PhoneExtractionOptions = {
+  defaultCountry?: Extract<CountryCode, "US" | "GB" | "IN" | "NP">;
+  outputFormat?: PhoneOutputFormat;
+};
+
+type ParsedPhoneResult = {
+  canonical: string;
+  display: string;
+};
+
+function formatPhoneDisplay(
+  originalValue: string,
+  canonicalValue: string,
+  outputFormat: PhoneOutputFormat,
+) {
+  if (outputFormat === "original") {
+    return originalValue.trim();
+  }
+
+  if (outputFormat === "digits-only") {
+    return canonicalValue.replace(/\D/g, "");
+  }
+
+  return canonicalValue;
+}
+
+function parsePhoneDetails(
+  value: string,
+  options: PhoneExtractionOptions = {},
+): ParsedPhoneResult | null {
   const candidate = value.trim();
+  const defaultCountry = options.defaultCountry ?? "US";
+  const outputFormat = options.outputFormat ?? "international";
+
   if (!candidate) return null;
 
   if (candidate.startsWith("+")) {
     const parsed = parsePhoneNumberFromString(candidate);
     if (parsed && parsed.isValid()) {
-      return parsed.format("E.164");
+      const canonical = parsed.format("E.164");
+      return {
+        canonical,
+        display: formatPhoneDisplay(candidate, canonical, outputFormat),
+      };
     }
   } else {
-    let parsed = parsePhoneNumberFromString(candidate, "US");
-    if (parsed && parsed.isValid()) {
-      return parsed.format("E.164");
-    }
-    parsed = parsePhoneNumberFromString(candidate, "GB");
-    if (parsed && parsed.isValid()) {
-      return parsed.format("E.164");
+    const countryFallbacks: CountryCode[] = [defaultCountry, "US", "GB", "IN", "NP"];
+    const countryChecks = countryFallbacks.filter(
+      (country, index, array) => array.indexOf(country) === index,
+    );
+
+    for (const country of countryChecks) {
+      const parsed = parsePhoneNumberFromString(candidate, country);
+      if (parsed && parsed.isValid()) {
+        const canonical = parsed.format("E.164");
+        return {
+          canonical,
+          display: formatPhoneDisplay(candidate, canonical, outputFormat),
+        };
+      }
     }
   }
 
@@ -44,10 +89,24 @@ export function parseAndFormatPhone(value: string): string | null {
   const pureDigitsCount = digitsOnly.replace("+", "").length;
   
   if (pureDigitsCount >= 7 && pureDigitsCount <= 15) {
-    return digitsOnly;
+    const canonical = digitsOnly;
+    return {
+      canonical,
+      display:
+        outputFormat === "digits-only"
+          ? canonical.replace(/\D/g, "")
+          : formatPhoneDisplay(candidate, canonical, outputFormat),
+    };
   }
 
   return null;
+}
+
+export function parseAndFormatPhone(
+  value: string,
+  options: PhoneExtractionOptions = {},
+): string | null {
+  return parsePhoneDetails(value, options)?.display ?? null;
 }
 
 export function extractEmailsFromText(input: string) {
@@ -139,24 +198,35 @@ export function validateEmailListSyntax(input: string) {
   return { results: dedupedValid, invalidResults: invalidEmails, stats };
 }
 
-export function extractPhoneNumbersFromText(input: string) {
+export function extractPhoneNumbersFromText(
+  input: string,
+  options: PhoneExtractionOptions = {},
+) {
   const lines = input.split(/\r?\n/);
   const blankRemoved = lines.filter((line) => !line.trim()).length;
 
   const matches = input.match(PHONE_REGEX) ?? [];
   const cleaned: string[] = [];
+  const seenCanonical = new Set<string>();
   let invalidRemoved = 0;
+  let duplicatesRemoved = 0;
 
   matches.forEach((entry) => {
-    const normalized = parseAndFormatPhone(entry);
+    const normalized = parsePhoneDetails(entry, options);
     if (normalized) {
-      cleaned.push(normalized);
+      if (seenCanonical.has(normalized.canonical)) {
+        duplicatesRemoved += 1;
+        return;
+      }
+
+      seenCanonical.add(normalized.canonical);
+      cleaned.push(normalized.display);
     } else {
       invalidRemoved += 1;
     }
   });
 
-  const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
+  const deduped = [...cleaned].sort((a, b) =>
     a.localeCompare(b),
   );
 
@@ -164,7 +234,7 @@ export function extractPhoneNumbersFromText(input: string) {
     scanned: lines.length,
     found: matches.length,
     valid: cleaned.length,
-    duplicatesRemoved: cleaned.length - deduped.length,
+    duplicatesRemoved,
     invalidRemoved,
     blankRemoved,
     finalCount: deduped.length,

@@ -34,7 +34,12 @@ type ParseCsvFileOptions = {
   onError: (message: string) => void;
 };
 
-export const MAX_CSV_FILE_SIZE = 2 * 1024 * 1024;
+type CsvHeaderMapping = {
+  originalHeader: string;
+  normalizedHeader: string;
+};
+
+export const MAX_CSV_FILE_SIZE = 5 * 1024 * 1024;
 
 export async function inspectCsvFile(file: File): Promise<CsvFileInspection> {
   if (file.size === 0) {
@@ -128,9 +133,10 @@ export function parseCsvFile({
       });
     },
     complete: () => {
-      const headers = normalizeHeaders(metaFields);
-      const normalizedRows = headers.length
-        ? allRows.map((row) => normalizeRow(row, headers))
+      const headerMappings = normalizeHeaderMappings(metaFields);
+      const headers = headerMappings.map((mapping) => mapping.normalizedHeader);
+      const normalizedRows = headerMappings.length
+        ? allRows.map((row) => normalizeRow(row, headerMappings))
         : [];
       const { rows, errorsToKeep } = removePhantomTrailingRows(
         normalizedRows,
@@ -166,9 +172,10 @@ export function parseCsvText(content: string): CsvParseResult {
     skipEmptyLines: false,
   });
 
-  const headers = normalizeHeaders(result.meta.fields ?? []);
-  const normalizedRows = headers.length
-    ? result.data.map((row) => normalizeRow(row, headers))
+  const headerMappings = normalizeHeaderMappings(result.meta.fields ?? []);
+  const headers = headerMappings.map((mapping) => mapping.normalizedHeader);
+  const normalizedRows = headerMappings.length
+    ? result.data.map((row) => normalizeRow(row, headerMappings))
     : [];
   const { rows, errorsToKeep } = removePhantomTrailingRows(
     normalizedRows,
@@ -192,8 +199,14 @@ export function detectCsvColumns(
   return headers.map((header) => detectCsvColumn(header, rows));
 }
 
-function normalizeHeaders(headers: string[]) {
-  return headers.map((header) => header.trim()).filter(Boolean);
+function normalizeHeaderMappings(headers: string[]): CsvHeaderMapping[] {
+  return headers.flatMap((header) => {
+    const normalizedHeader = header.trim();
+
+    return normalizedHeader
+      ? [{ originalHeader: header, normalizedHeader }]
+      : [];
+  });
 }
 
 function detectCsvColumn(header: string, rows: CsvRow[]): CsvColumnDetection {
@@ -267,12 +280,12 @@ function detectCsvColumn(header: string, rows: CsvRow[]): CsvColumnDetection {
 
 function normalizeRow(
   row: Record<string, unknown>,
-  headers: string[],
+  headerMappings: CsvHeaderMapping[],
 ): CsvRow {
   const normalizedRow: CsvRow = {};
 
-  headers.forEach((header) => {
-    normalizedRow[header] = String(row[header] ?? "").trim();
+  headerMappings.forEach(({ originalHeader, normalizedHeader }) => {
+    normalizedRow[normalizedHeader] = String(row[originalHeader] ?? "").trim();
   });
 
   return normalizedRow;

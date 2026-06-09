@@ -11,6 +11,17 @@ test("parseCsvText returns headers and rows from a basic CSV", () => {
   assert.equal(result.rows[0]?.email, "jane@acme.com");
 });
 
+test("parseCsvText preserves values when headers contain surrounding spaces", () => {
+  const result = parseCsvText(" name , email ,company\nJane,jane@acme.com,Acme");
+
+  assert.deepEqual(result.headers, ["name", "email", "company"]);
+  assert.deepEqual(result.rows[0], {
+    name: "Jane",
+    email: "jane@acme.com",
+    company: "Acme",
+  });
+});
+
 test("detectCsvColumns identifies email and url columns", () => {
   const parsed = parseCsvText(
     "company,email,website\nAcme,hello@acme.com,https://acme.com",

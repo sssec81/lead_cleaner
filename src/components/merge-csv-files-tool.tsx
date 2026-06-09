@@ -19,6 +19,10 @@ import {
   MAX_CSV_FILE_SIZE,
   parseCsvFile,
 } from "@/lib/csv";
+import {
+  canonicalizeCsvRows,
+  type MergeHeaderMapping,
+} from "@/lib/csv-merge";
 import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import { normalizeUrlValue, parseAndFormatPhone } from "@/lib/text-tools";
@@ -30,6 +34,7 @@ interface FileEntry {
   size: number;
   rows: number;
   headers: string[];
+  headerMappings: MergeHeaderMapping[];
 }
 
 export function MergeCsvFilesTool() {
@@ -107,7 +112,7 @@ export function MergeCsvFilesTool() {
       }
 
       if (file.size > MAX_CSV_FILE_SIZE) {
-        setError(`File ${file.name} is too large. Maximum supported size is 2 MB.`);
+        setError(`File ${file.name} is too large. Maximum supported size is 5 MB.`);
         setStatus("error");
         return;
       }
@@ -133,17 +138,17 @@ export function MergeCsvFilesTool() {
           throw new Error("No headers found.");
         }
 
-        // Add to merged rows
-        currentMergedRows = currentMergedRows.concat(result.rows);
-        
-        // Track headers
-        result.headers.forEach(h => currentHeaderSet.add(h));
+        const canonicalized = canonicalizeCsvRows(result.headers, result.rows);
+
+        currentMergedRows = currentMergedRows.concat(canonicalized.rows);
+        canonicalized.headers.forEach((header) => currentHeaderSet.add(header));
         
         newFileEntries.push({
           name: file.name,
           size: file.size,
-          rows: result.rows.length,
-          headers: result.headers,
+          rows: canonicalized.rows.length,
+          headers: canonicalized.headers,
+          headerMappings: canonicalized.headerMappings,
         });
 
       } catch (err) {
@@ -236,14 +241,14 @@ export function MergeCsvFilesTool() {
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            className={`group mt-5 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-[1.8rem] border border-dashed transition duration-200 px-6 py-8 text-center ${
-              isDragging 
-                ? "border-blue-500 bg-blue-50" 
-                : "border-[color:rgba(37,99,235,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,244,255,0.92))] hover:border-[color:var(--brand)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(235,241,255,0.96))] hover:shadow-[0_18px_36px_rgba(37,99,235,0.08)]"
+            className={`group mt-5 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-8 text-center transition-all duration-200 ${
+              isDragging
+                ? "border-blue-500 bg-blue-50/50"
+                : "border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50/50"
             }`}
           >
             <div className="flex flex-col items-center pointer-events-none">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] group-hover:bg-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:rgba(37,99,235,0.1)] bg-[color:rgba(37,99,235,0.04)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
                 {isParsing ? (
                   <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
                 ) : (
@@ -254,7 +259,7 @@ export function MergeCsvFilesTool() {
                 {isParsing ? "Parsing files..." : "Drop CSV files here"}
               </span>
               <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
-                You can select up to 5 files at once (max 2MB each).
+                You can select up to 5 files at once (max 5 MB each).
               </span>
             </div>
             <input
@@ -407,15 +412,22 @@ export function MergeCsvFilesTool() {
                      </thead>
                      <tbody className="divide-y divide-slate-100">
                        {mergedHeaders.map((h, i) => {
-                         const foundIn = fileEntries.filter(f => f.headers.includes(h)).map(f => f.name);
+                         const foundIn = fileEntries.flatMap((fileEntry) =>
+                           fileEntry.headerMappings
+                             .filter((mapping) => mapping.mergedHeader === h)
+                             .map((mapping) => ({
+                               fileName: fileEntry.name,
+                               originalHeader: mapping.originalHeader,
+                             })),
+                         );
                          return (
                            <tr key={i}>
                              <td className="py-3 pr-6 font-medium text-slate-800">{h}</td>
                              <td className="py-3 text-slate-600">
                                <div className="flex flex-wrap gap-1.5">
-                                 {foundIn.map((name, idx) => (
+                                 {foundIn.map((entry, idx) => (
                                    <span key={idx} className="inline-flex items-center rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[10px] text-slate-500">
-                                     {name}
+                                     {entry.fileName}: {entry.originalHeader}
                                    </span>
                                  ))}
                                </div>
