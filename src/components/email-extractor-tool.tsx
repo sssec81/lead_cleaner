@@ -9,29 +9,29 @@ const SAMPLE_TEXT = `Reach our team at Sales@LeadCleanr.com, support@leadcleanr.
 For partnerships email Hello@LeadCleanr.com and media@leadcleanr.com.`;
 
 export function EmailExtractorTool() {
-  return (
-    <TextProcessingTool
-      title="Extract emails from text"
-      description="Paste messy text, pull out email addresses, remove duplicates, then copy or export the clean list."
-      icon={Mail}
-      iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
-      sampleInput={SAMPLE_TEXT}
-      placeholder="Paste website text, copied profiles, CRM notes, or any messy lead block here."
-      trackName="extract-emails-from-text"
-      processInput={extractEmailsFromText}
-      statLabels={{
-        scanned: "Items scanned",
-        found: "Found",
-        duplicatesRemoved: "Duplicates removed",
-        invalidRemoved: "Invalid removed",
-        finalCount: "Clean emails ready",
-      }}
-      csvHeader="email"
-      copyLabel="Copy results"
-      primaryActionLabel="Extract emails"
-      resultTitle="Clean result"
-      resultDescription="Preview, edit, and export the extracted list before it leaves the page."
-      emptyMessage="No email addresses detected yet. Paste text with emails to generate a clean list."
-    />
-  );
+ return (
+ <TextProcessingTool
+ title="Extract emails from text"
+ description="Paste messy text, pull out email addresses, remove duplicates, then copy or export the clean list."
+ icon={Mail}
+ iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+ sampleInput={SAMPLE_TEXT}
+ placeholder="Paste website text, copied profiles, CRM notes, or any messy lead block here."
+ trackName="extract-emails-from-text"
+ processInput={extractEmailsFromText}
+ statLabels={{
+ scanned: "Items scanned",
+ found: "Found",
+ duplicatesRemoved: "Duplicates removed",
+ invalidRemoved: "Invalid removed",
+ finalCount: "Clean emails ready",
+ }}
+ csvHeader="email"
+ copyLabel="Copy results"
+ primaryActionLabel="Extract emails"
+ resultTitle="Clean result"
+ resultDescription="Preview, edit, and export the extracted list before it leaves the page."
+ emptyMessage="No email addresses detected yet. Paste text with emails to generate a clean list."
+ />
+ );
 }

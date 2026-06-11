@@ -10,29 +10,29 @@ Partners: hello@agencystack.io
 Sites: https://leadcleanr.com/pricing, www.agencystack.io/about, and http://blog.leadcleanr.com/start`;
 
 export function DomainExtractorTool() {
-  return (
-    <TextProcessingTool
-      title="Extract domains from emails and URLs"
-      description="Paste emails or website links, pull out the root domains, remove duplicates, and export the clean list."
-      icon={Globe}
-      iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
-      sampleInput={SAMPLE_TEXT}
-      placeholder="Paste email addresses, website URLs, or any messy lead text with domains."
-      trackName="extract-domains-from-emails"
-      processInput={extractDomainsFromEmails}
-      statLabels={{
-        scanned: "Items scanned",
-        found: "Found",
-        duplicatesRemoved: "Duplicates removed",
-        invalidRemoved: "Invalid removed",
-        finalCount: "Clean domains ready",
-      }}
-      csvHeader="domain"
-      copyLabel="Copy results"
-      primaryActionLabel="Extract domains"
-      resultTitle="Clean result"
-      resultDescription="Preview the extracted domains, remove noise, and export only what is useful."
-      emptyMessage="No domains detected yet. Paste emails or URLs to generate a clean list."
-    />
-  );
+ return (
+ <TextProcessingTool
+ title="Extract domains from emails and URLs"
+ description="Paste emails or website links, pull out the root domains, remove duplicates, and export the clean list."
+ icon={Globe}
+ iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+ sampleInput={SAMPLE_TEXT}
+ placeholder="Paste email addresses, website URLs, or any messy lead text with domains."
+ trackName="extract-domains-from-emails"
+ processInput={extractDomainsFromEmails}
+ statLabels={{
+ scanned: "Items scanned",
+ found: "Found",
+ duplicatesRemoved: "Duplicates removed",
+ invalidRemoved: "Invalid removed",
+ finalCount: "Clean domains ready",
+ }}
+ csvHeader="domain"
+ copyLabel="Copy results"
+ primaryActionLabel="Extract domains"
+ resultTitle="Clean result"
+ resultDescription="Preview the extracted domains, remove noise, and export only what is useful."
+ emptyMessage="No domains detected yet. Paste emails or URLs to generate a clean list."
+ />
+ );
 }
