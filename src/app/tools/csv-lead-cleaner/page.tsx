@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Zap, Users, Briefcase, Database, BarChart3, Shield } from "lucide-react";
+import { Zap, Users, Briefcase, Database, BarChart3, Shield, X, AlertTriangle } from "lucide-react";
 import { CsvLeadCleanerTool } from "@/components/csv-lead-cleaner-tool";
 import { PageFrame } from "@/components/page-frame";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
@@ -53,7 +53,7 @@ export default function CsvLeadCleanerPage() {
       </p>
 
       {/* Before/After Example Table */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200/60 bg-white/60 shadow-sm backdrop-blur-md">
+      <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-slate-200/60 bg-white/60 shadow-sm backdrop-blur-md">
         <div className="bg-slate-50/80 px-6 py-3 border-b border-slate-100">
           <h3 className="text-sm font-semibold text-slate-800">What happens to your CSV?</h3>
         </div>
@@ -67,23 +67,23 @@ export default function CsvLeadCleanerPage() {
           <tbody className="divide-y divide-slate-100 text-slate-600">
             <tr>
               <td className="px-6 py-3">Duplicate rows</td>
-              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-[10px]">✕</span> Removed</span></td>
+              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"><X className="h-3 w-3" /></span> Removed</span></td>
             </tr>
             <tr>
               <td className="px-6 py-3">Invalid emails</td>
-              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-[10px]">✕</span> Skipped</span></td>
+              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"><X className="h-3 w-3" /></span> Skipped</span></td>
             </tr>
             <tr>
               <td className="px-6 py-3">Blank rows</td>
-              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-[10px]">✕</span> Cleaned</span></td>
+              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"><X className="h-3 w-3" /></span> Cleaned</span></td>
             </tr>
             <tr>
               <td className="px-6 py-3">Role emails (info@, support@)</td>
-              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-amber-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-50 text-[10px]">⚠</span> Flagged</span></td>
+              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-amber-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-50 text-amber-600"><AlertTriangle className="h-3 w-3" /></span> Flagged</span></td>
             </tr>
             <tr className="border-b-0">
               <td className="px-6 py-3">Gmail/Yahoo emails</td>
-              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-amber-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-50 text-[10px]">⚠</span> Separated</span></td>
+              <td className="px-6 py-3"><span className="inline-flex items-center gap-1.5 text-amber-600 font-semibold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-50 text-amber-600"><AlertTriangle className="h-3 w-3" /></span> Separated</span></td>
             </tr>
           </tbody>
         </table>

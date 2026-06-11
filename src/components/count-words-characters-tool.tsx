@@ -54,6 +54,7 @@ export function CountWordsCharactersTool() {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
+          aria-label="Text to analyze"
           placeholder="Paste or type your text here to instantly see word, character, and line counts..."
           className="w-full flex-1 min-h-[24rem] rounded-xl border border-slate-200 bg-white/80 p-4 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 resize-y"
         />

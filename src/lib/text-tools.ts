@@ -109,15 +109,50 @@ export function parseAndFormatPhone(
   return parsePhoneDetails(value, options)?.display ?? null;
 }
 
+export function extractEmailMatches(input: string) {
+  const matches = input.match(EMAIL_REGEX) ?? [];
+  const results: string[] = [];
+
+  matches.forEach((entry) => {
+    const normalized = entry.trim().toLowerCase();
+
+    if (!SINGLE_EMAIL_REGEX.test(normalized)) {
+      return;
+    }
+
+    results.push(normalized);
+  });
+
+  return results;
+}
+
+export function extractPhoneMatches(
+  input: string,
+  options: PhoneExtractionOptions = {},
+) {
+  const matches = input.match(PHONE_REGEX) ?? [];
+  const results: string[] = [];
+
+  matches.forEach((entry) => {
+    const normalized = parsePhoneDetails(entry, options);
+
+    if (!normalized) {
+      return;
+    }
+
+    results.push(normalized.display);
+  });
+
+  return results;
+}
+
 export function extractEmailsFromText(input: string) {
   const lines = input.split(/\r?\n/);
   const blankRemoved = lines.filter((line) => !line.trim()).length;
-  
-  const matches = input.match(EMAIL_REGEX) ?? [];
-  const validEmails = matches.filter((entry) => SINGLE_EMAIL_REGEX.test(entry.trim()));
-  const invalidRemoved = matches.length - validEmails.length;
 
-  const cleaned = validEmails.map((entry) => entry.trim().toLowerCase());
+  const matches = input.match(EMAIL_REGEX) ?? [];
+  const cleaned = extractEmailMatches(input);
+  const invalidRemoved = matches.length - cleaned.length;
   const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
@@ -125,7 +160,7 @@ export function extractEmailsFromText(input: string) {
   const stats: CleaningStats = {
     scanned: lines.length,
     found: matches.length,
-    valid: validEmails.length,
+    valid: cleaned.length,
     duplicatesRemoved: cleaned.length - deduped.length,
     invalidRemoved,
     blankRemoved,
@@ -206,29 +241,12 @@ export function extractPhoneNumbersFromText(
   const blankRemoved = lines.filter((line) => !line.trim()).length;
 
   const matches = input.match(PHONE_REGEX) ?? [];
-  const cleaned: string[] = [];
-  const seenCanonical = new Set<string>();
-  let invalidRemoved = 0;
-  let duplicatesRemoved = 0;
-
-  matches.forEach((entry) => {
-    const normalized = parsePhoneDetails(entry, options);
-    if (normalized) {
-      if (seenCanonical.has(normalized.canonical)) {
-        duplicatesRemoved += 1;
-        return;
-      }
-
-      seenCanonical.add(normalized.canonical);
-      cleaned.push(normalized.display);
-    } else {
-      invalidRemoved += 1;
-    }
-  });
-
-  const deduped = [...cleaned].sort((a, b) =>
+  const cleaned = extractPhoneMatches(input, options);
+  const invalidRemoved = matches.length - cleaned.length;
+  const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
     a.localeCompare(b),
   );
+  const duplicatesRemoved = cleaned.length - deduped.length;
 
   const stats: CleaningStats = {
     scanned: lines.length,

@@ -8,7 +8,7 @@ import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 export const metadata: Metadata = buildToolMetadata({
   title: "Extract Emails from CSV Online — Private Browser Tool",
   description:
-    "Extract and clean emails from CSV files. Pick your email column, filter duplicates, remove invalid rows, and download a clean list—100% locally on-device with no signup required.",
+    "Extract and clean emails from CSV files. Detect the email column, pull addresses out of messy cell text, remove duplicates and invalid rows, and download a clean list locally in your browser.",
   path: "/tools/extract-emails-from-csv",
   keywords: [
     "extract emails from csv",
@@ -77,14 +77,14 @@ export default function ExtractEmailsFromCsvPage() {
       />
       <ToolJsonLd
         title="Extract Emails from CSV Online — Private Browser Tool"
-        description="Extract and clean emails from CSV files. Pick your email column, filter duplicates, remove invalid rows, and download a clean list—100% locally on-device with no signup required."
+        description="Extract and clean emails from CSV files. Detect the email column, pull addresses out of messy cell text, remove duplicates and invalid rows, and download a clean list locally in your browser."
         path="/tools/extract-emails-from-csv"
         category="BusinessApplication"
       />
       <TextToolPageShell
         eyebrow="Extract Emails from CSV"
         title="Extract clean email lists from messy spreadsheets in seconds."
-        intro="Upload any CSV, detect the email column, remove blanks, invalid rows, and duplicates, then export an outreach-ready list without touching the rest of the sheet."
+        intro="Upload any CSV, detect the email column, pull email addresses out of messy cells, remove blanks, invalid rows, and duplicates, then export an outreach-ready list without touching the rest of the sheet."
         quote="Turn a messy spreadsheet into a clean email list you can use right away."
         asideContent={asideContent}
         tool={<ExtractEmailsFromCsvTool />}

@@ -32,6 +32,7 @@ import {
 } from "@/lib/csv";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+import { extractPhoneMatches } from "@/lib/text-tools";
 import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 type ExtractionSummary = {
@@ -43,8 +44,6 @@ type ExtractionSummary = {
 };
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
-
-import { parseAndFormatPhone } from "@/lib/text-tools";
 const PREVIEW_LIMIT = 100;
 const DEMO_CSV = `name,phone,company
 Jane Doe,+14155550101,Acme
@@ -115,7 +114,7 @@ export function ExtractPhonesFromCsvTool() {
     }
 
     window.localStorage.setItem(
-      "leadcleanr:extract-csv:preferred-column",
+      "leadcleanr:extract-phone-csv:preferred-column",
       selectedColumn,
     );
   }, [selectedColumn]);
@@ -183,7 +182,7 @@ export function ExtractPhonesFromCsvTool() {
         const nextDetections = detectCsvColumns(nextHeaders, nextRows);
         const storedPreferredColumn =
           typeof window !== "undefined"
-            ? window.localStorage.getItem("leadcleanr:extract-csv:preferred-column")
+            ? window.localStorage.getItem("leadcleanr:extract-phone-csv:preferred-column")
             : null;
         setHeaders(nextHeaders);
         setRows(nextRows);
@@ -697,20 +696,22 @@ function extractPhonesFromCsvRows(
       return;
     }
 
-    const normalized = parseAndFormatPhone(rawValue);
+    const extractedPhones = extractPhoneMatches(rawValue);
 
-    if (!normalized) {
+    if (!extractedPhones.length) {
       invalidPhonesRemoved += 1;
       return;
     }
 
-    if (seen.has(normalized)) {
-      duplicatesRemoved += 1;
-      return;
-    }
+    extractedPhones.forEach((phone) => {
+      if (seen.has(phone)) {
+        duplicatesRemoved += 1;
+        return;
+      }
 
-    seen.add(normalized);
-    cleanPhones.push(normalized);
+      seen.add(phone);
+      cleanPhones.push(phone);
+    });
   });
 
   return {

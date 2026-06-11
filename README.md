@@ -32,8 +32,8 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 ### CSV Upload Tools
 - **Client-Side Chunking**: Upload `.csv` files and parse them using `PapaParse` via 64KB chunk streaming to keep the browser thread unblocked.
 - **CSV Lead Cleaner**: Smart column detection, row deduplication, invalid/blank row removal, and email-type filtering for messy lead sheets.
-- **Extract Emails from CSV**: Bulk extract emails hidden inside CSV cells.
-- **Extract Phone Numbers from CSV**: Bulk extract phone numbers hidden inside CSV cells.
+- **Extract Emails from CSV**: Detect the likely email column, pull embedded email addresses out of messy cell text, deduplicate them, and export a clean list.
+- **Extract Phone Numbers from CSV**: Detect the likely phone column, pull embedded phone numbers out of messy cell text, normalize them, and export a clean list.
 - **Remove Empty Rows from CSV**: Instantly strip blank lines from large files.
 - **Merge CSV Files**: Combine up to 5 CSV files with header mapping previews and normalized column-based deduplication for emails, phones, URLs, and domains.
 - **Convert CSV to JSON**: Transform flat spreadsheet rows into structured JSON arrays.
@@ -42,8 +42,10 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - **SaaS Aesthetic**: Crisp, utilitarian interface replacing oversized glassmorphic elements for professional usability.
 - **Instant Download**: Download cleaned results as `.txt` or `.csv`.
 - **Copy**: One-click copy clean data to clipboard.
+- **Spreadsheet-Safe Export**: CSV exports guard formula-like cells while preserving leading `+` for phone fields.
 - **Review States**: Preview cleaned rows, removed rows, and invalid rows before exporting.
 - **Metrics**: Instantly view stats on duplicates removed, invalid rows, blank rows, email-filter removals, and clean leads ready.
+- **Simplified V1 Workflow**: Text tools focus on a straightforward replace-and-export flow instead of incremental append actions.
 
 ## 💻 Tech Stack
 - **Framework**: Next.js 16 (App Router, Webpack on this platform)
@@ -114,6 +116,9 @@ leadcleanr/
 - Waitlist signups now fail honestly if persistence fails instead of returning a false success response.
 - CSV lead cleaner now reports rows removed by email-type filters and fully resets cleanup settings.
 - Merge CSV column deduplication now normalizes emails, phones, URLs, and domains before comparing values.
+- CSV extractors now pull embedded emails and phone numbers out of messy cell text instead of requiring the entire cell to be a single clean value.
+- Phone values keep their leading `+` in both single-column exports and record-based CSV downloads.
+- Text tools now use a simpler V1 replace-workspace flow without the old append action.
 
 ## ⚠️ Acceptable Use Policy
 **LeadCleanr is for cleaning data you own or have permission to process.** Do not use it for spam, scraping abuse, or sending unsolicited messages. Ensure you comply with email marketing and privacy laws in your region.

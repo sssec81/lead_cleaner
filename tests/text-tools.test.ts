@@ -4,7 +4,9 @@ import test from "node:test";
 import {
   cleanEmailList,
   extractDomainsFromEmails,
+  extractEmailMatches,
   extractEmailsFromText,
+  extractPhoneMatches,
   extractPhoneNumbersFromText,
   extractUrlsFromText,
   parseAndFormatPhone,
@@ -30,6 +32,14 @@ test("extractEmailsFromText keeps plus tags and deduplicates results", () => {
   assert.equal(result.stats.duplicatesRemoved, 1);
 });
 
+test("extractEmailMatches pulls embedded emails from messy text", () => {
+  const result = extractEmailMatches(
+    "Reach jane@acme.com or backup JOHN@northstar.io from this note.",
+  );
+
+  assert.deepEqual(result, ["jane@acme.com", "john@northstar.io"]);
+});
+
 test("cleanEmailList filters invalid entries", () => {
   const result = cleanEmailList(
     "valid@example.com invalid-email another@company.io valid@example.com",
@@ -45,6 +55,14 @@ test("extractPhoneNumbersFromText normalizes international and local numbers wit
   );
 
   assert.deepEqual(result.results, ["+14155550101", "+442079460958"]);
+});
+
+test("extractPhoneMatches pulls embedded phone numbers from messy text", () => {
+  const result = extractPhoneMatches(
+    "Call sales at +1 (415) 555-0101 or support on 415-555-0101.",
+  );
+
+  assert.deepEqual(result, ["+14155550101", "+14155550101"]);
 });
 
 test("extractUrlsFromText normalizes URLs and drops punctuation", () => {

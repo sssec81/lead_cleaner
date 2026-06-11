@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Copy,
   Settings2,
+  ShieldCheck,
 } from "lucide-react";
 
 import {
@@ -268,9 +269,12 @@ export function ConvertCsvToJsonTool() {
           </label>
 
           <div className="mt-4 flex flex-col gap-2 border-b border-slate-200/60 pb-5">
-            <p className="text-xs font-semibold leading-relaxed text-slate-700 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
-              🔒 Your CSV is processed locally in your browser and is never uploaded to our servers.
-            </p>
+            <div className="flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
+              <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
+              <p className="text-xs font-semibold leading-relaxed text-slate-700">
+                Your CSV is processed locally in your browser and is never uploaded to our servers.
+              </p>
+            </div>
             <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> No account needed
             </div>

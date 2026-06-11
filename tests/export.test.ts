@@ -22,6 +22,15 @@ test("buildCsvTextFromLines sanitizes exported line items", () => {
   assert.match(csv, /safe@example\.com/);
 });
 
+test("buildCsvTextFromLines keeps leading plus for phone exports", () => {
+  const csv = buildCsvTextFromLines(["+14155550101"], "phone", {
+    allowLeadingPlus: true,
+  });
+
+  assert.match(csv, /\+14155550101/);
+  assert.ok(!csv.includes("'+14155550101"));
+});
+
 test("buildCsvTextFromRecords sanitizes dangerous record cells", () => {
   const csv = buildCsvTextFromRecords([
     {
@@ -32,4 +41,18 @@ test("buildCsvTextFromRecords sanitizes dangerous record cells", () => {
 
   assert.match(csv, /safe@example\.com/);
   assert.ok(csv.includes("'=HYPERLINK"));
+});
+
+test("buildCsvTextFromRecords keeps leading plus for phone-like columns", () => {
+  const csv = buildCsvTextFromRecords([
+    {
+      phone: "+14155550101",
+      mobile: "+442079460958",
+    },
+  ]);
+
+  assert.match(csv, /\+14155550101/);
+  assert.match(csv, /\+442079460958/);
+  assert.ok(!csv.includes("'+14155550101"));
+  assert.ok(!csv.includes("'+442079460958"));
 });

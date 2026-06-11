@@ -39,7 +39,7 @@ export default function ValidateEmailListPage() {
         title="Free Email List Validator for Syntax Checks"
         intro="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM."
         quote="Catch invalid email formats before outreach."
-        asideDescription="This free tool checks email formatting only. Domain, MX, SMTP, and mailbox checks are planned for Pro, so users can validate syntax now without confusing it with deliverability verification."
+        asideDescription="Checks formatting only. Domain, MX, and mailbox verification are coming to Pro — so you can fix syntax now without worrying about deliverability."
         tool={<ValidateEmailListTool />}
         toolSupportingContent={
           <section className="rounded-[2rem] border border-slate-200/70 bg-white/85 p-6 shadow-sm sm:p-8">

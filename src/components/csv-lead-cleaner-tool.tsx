@@ -4,7 +4,9 @@ import {
   AlertCircle,
   AlertTriangle,
   Building2,
+  Check,
   CheckCircle2,
+  Circle,
   CopyMinus,
   Download,
   FileMinus,
@@ -15,9 +17,11 @@ import {
   Redo2,
   ScanSearch,
   ShieldAlert,
+  ShieldCheck,
   Sparkles,
   Undo2,
   Upload,
+  X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -541,9 +545,12 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
             <input id="csv-upload-mobile" type="file" accept=".csv,text/csv" className="sr-only" onChange={handleFileUpload} disabled={isParsing} />
           </label>
 
-          <p className="mt-3 text-xs font-semibold leading-relaxed text-slate-700 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
-            🔒 Your CSV is processed locally in your browser and is never uploaded to our servers.
-          </p>
+          <div className="mt-3 flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
+            <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
+            <p className="text-xs font-semibold leading-relaxed text-slate-700">
+              Your CSV is processed locally in your browser and is never uploaded to our servers.
+            </p>
+          </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
             <button type="button" onClick={loadDemoCsv} className="inline-flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">
@@ -601,110 +608,118 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
 
         {/* ── Cleaning Report ── */}
         <div className={`space-y-5 ${!hasLoadedFile ? 'opacity-[0.72]' : ''}`}>
-          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-5 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">Cleaning report</p>
-                <h3 className="mt-1 font-display text-xl font-semibold sm:text-2xl">Review what changed before export</h3>
+          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-5 sm:p-6 shadow-sm">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">Workspace Summary</p>
+
+            <div className="mt-4 flex flex-col gap-4">
+              <div className={`rounded-2xl p-6 border relative overflow-hidden transition-all duration-300 ${
+                hasLoadedFile && cleaned.summary.cleanRowsReady > 0
+                  ? 'bg-[linear-gradient(180deg,rgba(16,185,129,0.06),rgba(255,255,255,0.94))] border-emerald-200/60 shadow-sm'
+                  : 'bg-[linear-gradient(180deg,rgba(37,99,235,0.04),rgba(255,255,255,0.94))] border-slate-200/60 shadow-[0_12px_24px_rgba(15,23,42,0.03)]'
+              }`}>
+                <div className="absolute right-0 top-0 h-40 w-40 rounded-full blur-2xl -mr-10 -mt-10"
+                  style={{ backgroundColor: hasLoadedFile && cleaned.summary.cleanRowsReady > 0 ? 'rgba(16,185,129,0.06)' : 'rgba(37,99,235,0.04)' }}
+                />
+                <div className="flex items-baseline gap-4">
+                  <div>
+                    <p className={`text-xs font-semibold uppercase tracking-[0.18em] relative z-10 ${
+                      hasLoadedFile && cleaned.summary.cleanRowsReady > 0 ? 'text-emerald-600' : 'text-slate-500'
+                    }`}>
+                      FINAL COUNT
+                    </p>
+                    <p className={`mt-2 font-display text-5xl font-bold leading-none tabular-nums sm:text-6xl relative z-10 ${
+                      !hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "text-slate-900/40" : "text-slate-900"
+                    }`}>
+                      {!hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "0" : cleaned.summary.cleanRowsReady.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                {hasLoadedFile && (
+                  <p className="mt-2 text-sm text-slate-600/80 relative z-10 max-w-lg">
+                    This is the cleaned row count that will move forward into CRM, outreach, sales, or recruiting tools.
+                  </p>
+                )}
               </div>
-              <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] ${hasLoadedFile ? "bg-blue-50/50 border-blue-200 text-blue-700" : "bg-white border-slate-200 text-slate-400"}`}>
-                <ScanSearch className="h-4 w-4" />
-                {hasLoadedFile ? "Step 2 active" : "Waiting for upload"}
+
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+                <StatCard label="Rows scanned" value={cleaned.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
+                <StatCard label="Duplicates removed" value={cleaned.summary.duplicatesRemoved} icon={<CopyMinus className="h-4 w-4 text-amber-500" />} />
+                <StatCard label="Invalid removed" value={cleaned.summary.invalidRowsRemoved} icon={<AlertTriangle className="h-4 w-4 text-rose-500" />} />
+                <StatCard label="Blank rows removed" value={cleaned.summary.emptyRowsRemoved} icon={<FileMinus className="h-4 w-4 text-slate-400" />} />
+                <StatCard label="Emails filtered out" value={cleaned.summary.filteredRowsRemoved} icon={<Mail className="h-4 w-4 text-violet-500" />} />
               </div>
-            </div>
 
-            <div className="mt-4 rounded-2xl bg-[linear-gradient(180deg,rgba(37,99,235,0.04),rgba(255,255,255,0.94))] p-5 border border-slate-200/60 shadow-[0_12px_24px_rgba(15,23,42,0.03)] relative overflow-hidden">
-              <div className="absolute right-0 top-0 h-40 w-40 bg-[color:rgba(37,99,235,0.04)] rounded-full blur-2xl -mr-10 -mt-10" />
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 relative z-10">Clean rows ready for export</p>
-              <p className={`mt-2 font-display text-5xl font-bold leading-none tabular-nums sm:text-6xl relative z-10 ${!hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "text-slate-900/40" : "text-slate-900"}`}>
-                {!hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "0" : cleaned.summary.cleanRowsReady.toLocaleString()}
-              </p>
-              <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-500 relative z-10">
-                {hasLoadedFile
-                  ? "This is the cleaned row count that will move forward into CRM, outreach, sales, or recruiting tools."
-                  : "After upload, your cleaning report will appear here. Upload a CSV to see duplicates, invalid rows, and email signals."}
-              </p>
-            </div>
-
-            <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-              <StatCard label="Rows scanned" value={cleaned.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
-              <StatCard label="Duplicates removed" value={cleaned.summary.duplicatesRemoved} icon={<CopyMinus className="h-4 w-4 text-amber-500" />} />
-              <StatCard label="Invalid removed" value={cleaned.summary.invalidRowsRemoved} icon={<AlertTriangle className="h-4 w-4 text-rose-500" />} />
-              <StatCard label="Blank rows removed" value={cleaned.summary.emptyRowsRemoved} icon={<FileMinus className="h-4 w-4 text-slate-400" />} />
-              <StatCard label="Emails filtered out" value={cleaned.summary.filteredRowsRemoved} icon={<Mail className="h-4 w-4 text-violet-500" />} />
-            </div>
-
-            <div className="mt-3 grid gap-2 md:grid-cols-3">
-              <InsightTile label="Business emails" value={cleaned.summary.businessEmails} tone="teal" icon={<Building2 className="h-4 w-4 text-teal-600" />} />
-              <InsightTile label="Personal emails" value={cleaned.summary.personalEmails} tone="amber" icon={<Mail className="h-4 w-4 text-amber-600" />} />
-              <InsightTile label="Role-based inboxes" value={cleaned.summary.roleBasedEmails} tone="slate" icon={<ShieldAlert className="h-4 w-4 text-slate-500" />} />
+              <div className="grid gap-2 md:grid-cols-3">
+                <InsightTile label="Business emails" value={cleaned.summary.businessEmails} tone="teal" icon={<Building2 className="h-4 w-4 text-teal-600" />} />
+                <InsightTile label="Personal emails" value={cleaned.summary.personalEmails} tone="amber" icon={<Mail className="h-4 w-4 text-amber-600" />} />
+                <InsightTile label="Role-based inboxes" value={cleaned.summary.roleBasedEmails} tone="slate" icon={<ShieldAlert className="h-4 w-4 text-slate-500" />} />
+              </div>
             </div>
           </div>
 
           {/* ── Preview Table ── */}
-          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-5 sm:p-6">
-            <div className="flex items-center justify-between gap-4">
+          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-5 sm:p-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
-                <h3 className="font-display text-xl font-semibold">{previewLabel}</h3>
-                <p className="text-sm leading-6 text-[color:var(--muted)]">{previewDescription}</p>
+                <h3 className="font-display text-xl font-semibold">Results</h3>
+                <p className="text-sm leading-6 text-slate-500">{previewDescription}</p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <button type="button" onClick={() => setPreviewMode("clean")} className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${previewMode === "clean" ? "bg-[color:rgba(15,118,110,0.12)] text-[color:var(--accent)]" : "border border-[color:var(--line)] bg-white text-[color:var(--muted)]"}`}>Clean</button>
+              <div className="flex flex-wrap gap-2 bg-white rounded-xl border border-slate-200/80 p-1">
+                <button type="button" onClick={() => setPreviewMode("clean")} className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${previewMode === "clean" ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>Clean</button>
                 {cleaned.removedRows.length ? (
-                  <button type="button" onClick={() => setPreviewMode("removed")} className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${previewMode === "removed" ? "bg-[color:rgba(37,99,235,0.12)] text-[color:var(--brand-strong)]" : "border border-[color:var(--line)] bg-white text-[color:var(--muted)]"}`}>Removed</button>
+                  <button type="button" onClick={() => setPreviewMode("removed")} className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${previewMode === "removed" ? "bg-rose-50 text-rose-700" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>Removed</button>
                 ) : null}
                 {cleaned.invalidRows.length ? (
-                  <button type="button" onClick={() => setPreviewMode("invalid")} className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${previewMode === "invalid" ? "bg-[color:rgba(245,158,11,0.14)] text-amber-700" : "border border-[color:var(--line)] bg-white text-[color:var(--muted)]"}`}>Invalid</button>
+                  <button type="button" onClick={() => setPreviewMode("invalid")} className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${previewMode === "invalid" ? "bg-amber-50 text-amber-700" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>Invalid</button>
                 ) : null}
               </div>
             </div>
 
-            <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs">
+            <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs">
               {reportHeaders.length && visiblePreviewRows.length ? (
                 <div className="max-h-[52rem] overflow-auto">
                   <table className="min-w-[980px] w-full border-collapse text-left text-sm">
-                    <thead className="sticky top-0 bg-slate-50">
+                    <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm">
                       <tr>
-                        <th className="border-b border-slate-200 px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">#</th>
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 w-16">#</th>
                         {previewMode !== "clean" && (
-                          <th className="border-b border-slate-200 px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 whitespace-nowrap">Reason</th>
+                          <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 whitespace-nowrap w-32">Reason</th>
+                        )}
+                        {previewMode === "clean" && (
+                          <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 w-24">STATUS</th>
                         )}
                         {reportHeaders.map((header) => (
-                          <th key={header} className="border-b border-slate-200 px-4 py-3 font-semibold text-slate-800 whitespace-nowrap">{prettyHeader(header)}</th>
+                          <th key={header} className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-800 whitespace-nowrap">{prettyHeader(header)}</th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-slate-100 bg-white">
                       {visiblePreviewRows.map((row, index) => (
-                        <tr key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}-${previewMode}`} className="hover:bg-slate-50/60 transition-colors">
-                          <td className="border-b border-slate-100 px-3 py-3 align-top text-xs font-semibold text-slate-400">
-                            <div className="flex items-center gap-1.5">
-                              <span>{index + 1}</span>
-                              {previewMode === "clean" && (
-                                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-50 text-[9px] text-emerald-600">✓</span>
-                              )}
-                              {previewMode === "removed" && (
-                                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-rose-50 text-[9px] text-rose-600">✕</span>
-                              )}
-                              {previewMode === "invalid" && (
-                                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber-50 text-[9px] text-amber-600">⚠</span>
-                              )}
-                            </div>
+                        <tr key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}-${previewMode}`} className="group hover:bg-slate-50/60 transition-colors">
+                          <td className="px-4 py-3.5 text-xs font-medium text-slate-400">
+                            {index + 1}
                           </td>
                           {previewMode !== "clean" && "leadcleanr_reason" in row && (
-                            <td className="border-b border-slate-100 px-3 py-3 align-top">
+                            <td className="px-4 py-3.5 align-top">
                               <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
                                 (row as any).leadcleanr_reason === "duplicate" ? "bg-amber-50/80 text-amber-700 border-amber-200/50" :
                                 (row as any).leadcleanr_reason === "blank" ? "bg-slate-50/80 text-slate-600 border-slate-200/50" :
                                 (row as any).leadcleanr_reason === "invalid" ? "bg-rose-50/80 text-rose-700 border-rose-200/50" :
                                 "bg-purple-50/80 text-purple-700 border-purple-200/50"
                               }`}>
-                                {(row as any).leadcleanr_reason === "duplicate" ? "⚠ Duplicate" :
-                                 (row as any).leadcleanr_reason === "blank" ? "○ Blank" :
-                                 (row as any).leadcleanr_reason === "invalid" ? "✕ Invalid" :
-                                 (row as any).leadcleanr_reason === "personal_email" ? "✕ Personal" :
-                                 (row as any).leadcleanr_reason === "business_email" ? "✕ Business" :
+                                {(row as any).leadcleanr_reason === "duplicate" ? <span className="flex items-center"><AlertTriangle className="mr-1 h-3 w-3" /> Duplicate</span> :
+                                 (row as any).leadcleanr_reason === "blank" ? <span className="flex items-center"><Circle className="mr-1 h-3 w-3" /> Blank</span> :
+                                 (row as any).leadcleanr_reason === "invalid" ? <span className="flex items-center"><X className="mr-1 h-3 w-3" /> Invalid</span> :
+                                 (row as any).leadcleanr_reason === "personal_email" ? <span className="flex items-center"><X className="mr-1 h-3 w-3" /> Personal</span> :
+                                 (row as any).leadcleanr_reason === "business_email" ? <span className="flex items-center"><X className="mr-1 h-3 w-3" /> Business</span> :
                                  (row as any).leadcleanr_reason}
+                              </span>
+                            </td>
+                          )}
+                          {previewMode === "clean" && (
+                            <td className="px-4 py-3.5">
+                              <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/50 bg-emerald-50/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                                Valid
                               </span>
                             </td>
                           )}
@@ -720,7 +735,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
                             } else if (header === "leadcleanr_generated_domain" && cellValue) {
                               displayElement = (<code className="font-mono text-xs text-indigo-700 bg-indigo-50/50 border border-indigo-100/30 px-1.5 py-0.5 rounded">{cellValue}</code>);
                             }
-                            return (<td key={`${index}-${header}`} className="border-b border-slate-100 px-4 py-3 align-top text-slate-600"><div className="max-w-[16rem] whitespace-normal break-words">{displayElement}</div></td>);
+                            return (<td key={`${index}-${header}`} className="px-4 py-3.5 align-top text-sm font-medium text-slate-700"><div className="max-w-[16rem] whitespace-normal break-words">{displayElement}</div></td>);
                           })}
                         </tr>
                       ))}
@@ -790,7 +805,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
         <div className={`rounded-xl border p-4 transition-all duration-300 ${!hasLoadedFile ? 'border-blue-200 bg-blue-50/20 border-l-2 border-l-blue-500' : 'border-slate-200/40 bg-white/40'}`}>
           <div className="flex items-center gap-2 mb-3">
             <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${hasLoadedFile ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-600 text-white border-blue-600'}`}>
-              {hasLoadedFile ? '✓' : '1'}
+              {hasLoadedFile ? <Check className="h-4 w-4" /> : '1'}
             </span>
             <span className={`text-xs font-bold uppercase tracking-wider ${hasLoadedFile ? 'text-slate-400' : 'text-slate-800'}`}>Upload</span>
           </div>
@@ -848,9 +863,12 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
             </div>
           )}
 
-          <p className="mt-3 text-xs font-semibold leading-relaxed text-slate-700 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
-            🔒 Your CSV is processed locally in your browser and is never uploaded to our servers.
-          </p>
+          <div className="mt-3 flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
+            <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
+            <p className="text-xs font-semibold leading-relaxed text-slate-700">
+              Your CSV is processed locally in your browser and is never uploaded to our servers.
+            </p>
+          </div>
 
           <div className="mt-2 flex items-center gap-3 text-xs font-medium text-slate-500">
             <div className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> No signup</div>
@@ -878,7 +896,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
         <div className={`rounded-xl border p-4 transition-all duration-300 ${hasLoadedFile && !exportReady ? 'border-blue-200 bg-blue-50/20 border-l-2 border-l-blue-500' : hasLoadedFile ? 'border-slate-200/40 bg-white/40' : 'border-slate-200/30 bg-slate-50/30 opacity-60'}`}>
           <div className="flex items-center gap-2 mb-3">
             <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportReady ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : hasLoadedFile ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-400 border-slate-200'}`}>
-              {exportReady ? '✓' : '2'}
+              {exportReady ? <Check className="h-4 w-4" /> : '2'}
             </span>
             <span className={`text-xs font-bold uppercase tracking-wider ${hasLoadedFile ? 'text-slate-800' : 'text-slate-400'}`}>Configure</span>
             {hasLoadedFile && (
@@ -1566,7 +1584,7 @@ function WorkflowSteps({
                         : "bg-white text-slate-400 border-slate-200"
                   }`}
                 >
-                  {isCompleted ? "✓" : step.num}
+                  {isCompleted ? <Check className="h-4 w-4" /> : step.num}
                 </div>
                 <span
                   className={`text-xs font-medium transition ${
@@ -1612,7 +1630,7 @@ function ExportActions({
       {/* Step 3 Header */}
       <div className="flex items-center gap-2 mb-4">
         <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportUnlocked ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-slate-400 border-slate-200'}`}>
-          {exportUnlocked ? '✓' : '3'}
+          {exportUnlocked ? <Check className="h-4 w-4" /> : '3'}
         </span>
         <span className={`text-xs font-bold uppercase tracking-wider ${exportUnlocked ? 'text-emerald-800' : 'text-slate-400'}`}>Export</span>
         {exportUnlocked && (
@@ -1652,7 +1670,7 @@ function ExportActions({
                       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                       : "bg-white text-slate-400 border-slate-200"
                   }`}>
-                    {isDone ? "✓" : "○"}
+                    {isDone ? <Check className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
                   </span>
                   <span className={isDone ? "text-slate-400 font-medium" : "text-slate-600 font-medium"}>
                     {item.label}
@@ -1675,9 +1693,9 @@ function ExportActions({
             downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
           }}
           disabled={!exportUnlocked}
-          className={`inline-flex h-13 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-bold transition-all duration-200 ${
+          className={`inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
             exportUnlocked
-              ? "bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-[0_8px_24px_rgba(16,185,129,0.3)] hover:shadow-[0_12px_32px_rgba(16,185,129,0.4)] hover:-translate-y-0.5"
+              ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm cursor-pointer"
               : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
           }`}
         >
@@ -1691,9 +1709,9 @@ function ExportActions({
             onClick={() => {
               downloadCsvRecords(fileName.replace(/\.csv$/i, "-removed.csv"), removedRows);
             }}
-            className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 shadow-xs"
+            className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
           >
-            <Download className="h-4 w-4 text-slate-400" />
+            <Download className="h-4 w-4" />
             Download Removed Rows
           </button>
         )}
@@ -1704,9 +1722,9 @@ function ExportActions({
             onClick={() => {
               downloadCsvRecords(fileName.replace(/\.csv$/i, "-invalid.csv"), invalidRows);
             }}
-            className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 shadow-xs"
+            className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
           >
-            <Download className="h-4 w-4 text-slate-400" />
+            <Download className="h-4 w-4" />
             Download Invalid Rows
           </button>
         )}

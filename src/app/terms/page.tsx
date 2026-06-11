@@ -254,16 +254,18 @@ export default function TermsPage() {
             {legalTerms.map((term, index) => (
               <details
                 key={term.title}
-                open={index < 3}
-                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+                open={index === 0}
+                className="group overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-sm transition-all duration-300 open:border-blue-200/60 open:shadow-md hover:border-slate-300"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left">
-                  <span className="font-display text-xl font-semibold text-slate-950">{term.title}</span>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600 transition group-open:rotate-45">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 bg-slate-50/50 p-5 sm:p-6 text-left transition-colors hover:bg-slate-50 group-open:bg-blue-50/30">
+                  <span className="font-display text-xl font-semibold text-slate-900 group-open:text-blue-900">{term.title}</span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200/60 text-sm font-bold text-slate-500 transition-transform duration-300 group-open:rotate-45 group-open:bg-blue-200/50 group-open:text-blue-600">
                     +
                   </span>
                 </summary>
-                <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">{term.text}</p>
+                <div className="border-t border-slate-100/60 p-5 sm:px-6 sm:py-5 group-open:animate-in group-open:fade-in group-open:slide-in-from-top-2 duration-300">
+                  <p className="text-sm leading-7 text-slate-600 sm:text-base">{term.text}</p>
+                </div>
               </details>
             ))}
           </div>

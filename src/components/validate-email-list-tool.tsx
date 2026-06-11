@@ -17,11 +17,11 @@ export function ValidateEmailListTool() {
   return (
     <TextProcessingTool
       title="Email list validator"
-      description="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing."
+      description="Find invalid addresses, duplicates, and formatting errors before you send or import."
       icon={CheckCircle2}
       iconToneClassName="bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
       sampleInput={SAMPLE_EMAIL_LIST}
-      placeholder="Paste an email list to check for syntax issues, extra spaces, duplicates, and broken formatting."
+      placeholder="Paste a list of emails, one per line."
       trackName="validate-email-list"
       processInput={validateEmailListSyntax}
       statLabels={{
@@ -35,11 +35,11 @@ export function ValidateEmailListTool() {
       copyLabel="Copy valid list"
       primaryActionLabel="Validate emails"
       resultTitle={(count) => count > 0 ? `${count} valid addresses ready` : null}
-      resultDescription="This free validator checks formatting only. Domain, MX, SMTP, and mailbox verification are planned for Pro."
-      emptyMessage="No valid email addresses detected yet. Paste a list to run a syntax check."
+      resultDescription="Syntax only — no MX, SMTP, or send required. Deliverability checks are coming to Pro."
+      emptyMessage="Paste a list above and valid addresses will appear here."
       inputMinHeightClassName="min-h-[11rem] sm:min-h-[13rem]"
       inputLabel="Email list input"
-      inputHelpText="Paste one email per line or drop in a rough list copied from your CRM, spreadsheet, or notes."
+      inputHelpText="One email per line. Messy or mixed lists are fine."
       collapseWorkspaceActions
     />
   );

@@ -13,8 +13,10 @@ import {
   FlaskConical,
   LoaderCircle,
   ScanSearch,
+  ShieldCheck,
   Sparkles,
   Upload,
+  Zap,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -32,6 +34,7 @@ import {
 } from "@/lib/csv";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+import { extractEmailMatches } from "@/lib/text-tools";
 import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 type ExtractionSummary = {
@@ -44,7 +47,6 @@ type ExtractionSummary = {
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
-const EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 const PREVIEW_LIMIT = 100;
 const DEMO_CSV = `name,email,company
 Jane Doe,jane@acme.com,Acme
@@ -115,7 +117,7 @@ export function ExtractEmailsFromCsvTool() {
     }
 
     window.localStorage.setItem(
-      "leadcleanr:extract-csv:preferred-column",
+      "leadcleanr:extract-email-csv:preferred-column",
       selectedColumn,
     );
   }, [selectedColumn]);
@@ -183,7 +185,7 @@ export function ExtractEmailsFromCsvTool() {
         const nextDetections = detectCsvColumns(nextHeaders, nextRows);
         const storedPreferredColumn =
           typeof window !== "undefined"
-            ? window.localStorage.getItem("leadcleanr:extract-csv:preferred-column")
+            ? window.localStorage.getItem("leadcleanr:extract-email-csv:preferred-column")
             : null;
         setHeaders(nextHeaders);
         setRows(nextRows);
@@ -276,16 +278,17 @@ export function ExtractEmailsFromCsvTool() {
 
   return (
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
-      <div className="panel-soft w-full xl:w-[380px] shrink-0 rounded-[2.2rem] p-5 sm:p-7 flex flex-col">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
+      <div className="flex w-full flex-col gap-6 xl:w-[380px] shrink-0">
+        <section className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 shadow-sm backdrop-blur-md sm:p-8">
+          <div className="mb-6 flex items-start gap-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
               <FileSpreadsheet className="h-5 w-5" />
             </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">
+            <div className="min-w-0">
+              <h2 className="text-xl font-semibold text-slate-950">
                 Extract Emails from CSV
-              </p>
-              <p className="text-sm leading-6 text-[color:var(--muted)]">
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-slate-500">
                 Upload, isolate, export
               </p>
             </div>
@@ -293,7 +296,7 @@ export function ExtractEmailsFromCsvTool() {
 
           <label
             htmlFor="csv-email-upload"
-            className="group mt-5 flex min-h-[20rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white px-6 py-8 text-center transition-all duration-200 hover:border-blue-500 hover:bg-blue-50/50"
+            className="group mt-2 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white px-6 py-8 text-center transition-all duration-200 hover:border-blue-500 hover:bg-blue-50/50"
           >
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:rgba(37,99,235,0.1)] bg-[color:rgba(37,99,235,0.04)] text-[color:#2563eb] shadow-[0_8px_24px_rgba(37,99,235,0.02)] transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
@@ -306,7 +309,7 @@ export function ExtractEmailsFromCsvTool() {
               <span className="mt-4 text-base font-semibold text-slate-800">
                 {isParsing ? "Parsing your CSV..." : "Drag and drop your lead CSV here"}
               </span>
-              <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
+              <span className="mt-2 max-w-sm text-xs leading-relaxed text-slate-500">
                 or click to browse local files.
               </span>
               {!isParsing && (
@@ -327,16 +330,18 @@ export function ExtractEmailsFromCsvTool() {
 
           <div className="mt-4 grid grid-cols-3 gap-2">
             {[
-              { emoji: "🔒", label: "Processed locally" },
-              { emoji: "🛡️", label: "Never uploaded" },
-              { emoji: "⚡", label: "Browser only" },
+              { icon: ShieldCheck, label: "Processed locally", color: "text-emerald-600", bg: "bg-emerald-50" },
+              { icon: FileSpreadsheet, label: "Never uploaded", color: "text-blue-600", bg: "bg-blue-50" },
+              { icon: Zap, label: "Browser only", color: "text-amber-600", bg: "bg-amber-50" },
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-xl border border-slate-200 bg-white/80 px-3 py-2.5 text-center"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white/80 px-2 py-3 text-center shadow-sm"
               >
-                <span className="block text-base mb-0.5">{item.emoji}</span>
-                <span className="text-[11px] font-semibold text-slate-700">{item.label}</span>
+                <div className={`flex h-8 w-8 items-center justify-center rounded-full ${item.bg} ${item.color}`}>
+                  <item.icon className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-semibold text-slate-700 leading-tight">{item.label}</span>
               </div>
             ))}
           </div>
@@ -344,49 +349,27 @@ export function ExtractEmailsFromCsvTool() {
             Supports files up to 5 MB on the free plan.
           </p>
 
-          {/* Workflow Stepper */}
-          <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3">
-              Workflow Steps
-            </p>
-            <div className="space-y-3">
-              {[
-                { step: 1, label: "Upload CSV" },
-                { step: 2, label: "Choose email column" },
-                { step: 3, label: "Preview clean emails" },
-                { step: 4, label: "Export list" }
-              ].map(({ step, label }) => {
-                const isActive = currentStep === step;
-                const isCompleted = currentStep > step;
-                return (
-                  <div key={step} className="flex items-center gap-3">
-                    <div
-                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold border transition ${
-                        isActive
-                          ? "bg-blue-600 text-white border-blue-600 shadow-2xs"
-                          : isCompleted
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                            : "bg-white text-slate-400 border-slate-200"
-                      }`}
-                    >
-                      {isCompleted ? <Check className="h-3 w-3 text-emerald-600" /> : step}
-                    </div>
-                    <span
-                      className={`text-xs font-medium transition ${
-                        isActive
-                          ? "text-slate-900 font-semibold"
-                          : isCompleted
-                            ? "text-slate-500 font-medium"
-                            : "text-slate-400"
-                      }`}
-                    >
-                      {label}
-                    </span>
-                  </div>
-                );
-              })}
+        </section>
+
+        <section className="rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm sm:p-8">
+          <h3 className="text-base font-semibold text-slate-900">Workflow</h3>
+          <p className="mt-1 text-sm text-slate-500">
+            Note the classic validation flow designed dashboard by words, hugging and lines. Inspired by Linear.
+          </p>
+          <div className="mt-8 flex items-center justify-center gap-2 sm:gap-3 py-2">
+            <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 shadow-sm">
+              <span className="text-xs font-semibold text-slate-700 whitespace-nowrap">Upload CSV</span>
+            </div>
+            <div className="h-[2px] w-4 sm:w-8 bg-slate-200 shrink-0"></div>
+            <div className="flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 shadow-sm">
+              <span className="text-xs font-semibold text-blue-700 whitespace-nowrap">Extract</span>
+            </div>
+            <div className="h-[2px] w-4 sm:w-8 bg-slate-200 shrink-0"></div>
+            <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+              <span className="text-xs font-semibold text-slate-700 whitespace-nowrap">Export</span>
             </div>
           </div>
+        </section>
 
           <div className="mt-4 rounded-[1.25rem] border border-[color:var(--line)] bg-[color:rgba(248,250,252,0.82)] p-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
@@ -503,59 +486,58 @@ export function ExtractEmailsFromCsvTool() {
         </div>
 
       <div className="flex-1 min-w-0 space-y-6">
-        <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
+        <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-5 sm:p-6 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">
-              Extraction stats
+              Workspace Summary
             </p>
             {showStats ? (
               <>
-                <div className={`mt-5 rounded-[1.7rem] p-6 border relative overflow-hidden transition-all duration-300 ${
-                  extracted.summary.cleanEmailsReady > 0
-                    ? 'bg-gradient-to-b from-emerald-50/60 to-white border-emerald-200 shadow-[0_12px_32px_rgba(16,185,129,0.08)]'
-                    : 'bg-[linear-gradient(180deg,rgba(37,99,235,0.05),rgba(255,255,255,0.9))] border-slate-200/60 shadow-[0_14px_30px_rgba(15,23,42,0.04)]'
-                }`}>
-                  <div className="flex items-baseline gap-4">
-                    <div>
-                      <p className={`text-xs font-semibold uppercase tracking-[0.18em] relative z-10 ${
-                        extracted.summary.cleanEmailsReady > 0 ? 'text-emerald-600' : 'text-slate-500'
-                      }`}>
-                        Clean emails ready
-                      </p>
-                      <p className={`mt-2 font-display text-4xl font-bold leading-none tabular-nums relative z-10 ${
-                        extracted.summary.cleanEmailsReady > 0 ? 'text-emerald-700' : 'text-slate-900'
-                      }`}>
-                        {extracted.summary.cleanEmailsReady.toLocaleString()}
-                      </p>
-                    </div>
-                    {selectedColumn && (
-                      <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-2.5 py-1 text-xs font-medium text-slate-600 border border-slate-200/60 relative z-10">
-                        <span className="font-bold uppercase tracking-wider text-[10px] text-slate-400">Column:</span>
-                        <span className="font-mono font-semibold text-slate-800">{selectedColumn}</span>
+                <div className="mt-4 flex flex-col gap-4">
+                  <div className={`rounded-2xl p-6 border relative overflow-hidden transition-all duration-300 ${
+                    extracted.summary.cleanEmailsReady > 0
+                      ? 'bg-[linear-gradient(180deg,rgba(16,185,129,0.06),rgba(255,255,255,0.94))] border-emerald-200/60 shadow-sm'
+                      : 'bg-[linear-gradient(180deg,rgba(37,99,235,0.04),rgba(255,255,255,0.94))] border-slate-200/60 shadow-[0_12px_24px_rgba(15,23,42,0.03)]'
+                  }`}>
+                    <div className="absolute right-0 top-0 h-40 w-40 rounded-full blur-2xl -mr-10 -mt-10"
+                      style={{ backgroundColor: extracted.summary.cleanEmailsReady > 0 ? 'rgba(16,185,129,0.06)' : 'rgba(37,99,235,0.04)' }}
+                    />
+                    <div className="flex items-baseline gap-4">
+                      <div>
+                        <p className={`text-xs font-semibold uppercase tracking-[0.18em] relative z-10 ${
+                          extracted.summary.cleanEmailsReady > 0 ? 'text-emerald-600' : 'text-slate-500'
+                        }`}>
+                          FINAL COUNT
+                        </p>
+                        <p className={`mt-2 font-display text-5xl font-bold leading-none tabular-nums sm:text-6xl relative z-10 ${
+                          extracted.summary.cleanEmailsReady > 0 ? 'text-emerald-700' : 'text-slate-900'
+                        }`}>
+                          {extracted.summary.cleanEmailsReady.toLocaleString()}
+                        </p>
                       </div>
+                    </div>
+                    {extracted.summary.cleanEmailsReady > 0 && (
+                      <p className="mt-2 text-sm text-emerald-600/80 relative z-10 max-w-lg">Ready for outreach, CRM, or recruiting import.</p>
                     )}
                   </div>
-                  {extracted.summary.cleanEmailsReady > 0 && (
-                    <p className="mt-2 text-xs text-emerald-600/80 relative z-10">Ready for outreach, CRM, or recruiting import.</p>
-                  )}
-                </div>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <StatCard label="Rows scanned" value={extracted.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
-                  <StatCard
-                    label="Blank rows removed"
-                    value={extracted.summary.blankRowsSkipped}
-                    icon={<FileMinus className="h-4 w-4 text-slate-400" />}
-                  />
-                  <StatCard
-                    label="Invalid removed"
-                    value={extracted.summary.invalidEmailsRemoved}
-                    icon={<AlertTriangle className="h-4 w-4 text-rose-500" />}
-                  />
-                  <StatCard
-                    label="Duplicates removed"
-                    value={extracted.summary.duplicatesRemoved}
-                    icon={<CopyMinus className="h-4 w-4 text-amber-500" />}
-                  />
+                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                    <StatCard label="Rows scanned" value={extracted.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
+                    <StatCard
+                      label="Blank rows removed"
+                      value={extracted.summary.blankRowsSkipped}
+                      icon={<FileMinus className="h-4 w-4 text-slate-400" />}
+                    />
+                    <StatCard
+                      label="Invalid removed"
+                      value={extracted.summary.invalidEmailsRemoved}
+                      icon={<AlertTriangle className="h-4 w-4 text-rose-500" />}
+                    />
+                    <StatCard
+                      label="Duplicates removed"
+                      value={extracted.summary.duplicatesRemoved}
+                      icon={<CopyMinus className="h-4 w-4 text-amber-500" />}
+                    />
+                  </div>
                 </div>
               </>
             ) : (
@@ -572,34 +554,108 @@ export function ExtractEmailsFromCsvTool() {
               </div>
             )}
 
-            <div className="panel-soft rounded-[2.2rem] p-5 sm:p-7">
-              <div className="flex items-center justify-between gap-4">
+            <div className="rounded-2xl border border-slate-200/60 bg-slate-50/50 p-5 sm:p-6 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div>
                   <h3 className="font-display text-xl font-semibold">
-                    Preview extracted emails
+                    Results
                   </h3>
-                  <p className="text-sm leading-6 text-[color:var(--muted)]">
+                  <p className="text-sm leading-6 text-slate-500">
                     {hasReadyResults
                       ? `Showing up to ${PREVIEW_LIMIT} clean emails after extraction.`
                       : "This is the output you will get after upload, column selection, and cleanup."}
                   </p>
                 </div>
-                <span className="rounded-full bg-[color:rgba(15,118,110,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--accent)]">
-                  {hasReadyResults ? "Export ready" : "Sample output"}
-                </span>
+                
+                {hasReadyResults && (
+                  <div className="flex flex-wrap gap-2.5">
+                    <button
+                      type="button"
+                      onClick={handleCopy}
+                      className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 cursor-pointer"
+                    >
+                      {copied ? <Check className="h-3.5 w-3.5" /> : <Clipboard className="h-3.5 w-3.5" />}
+                      {copied ? "Copied" : "Copy All"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        trackToolEvent("extract-emails-from-csv", "download_txt", {
+                          result_count: extracted.results.length,
+                        });
+                        downloadTextFile(
+                          buildExportName(fileName, "txt"),
+                          extracted.results.join("\n"),
+                        );
+                      }}
+                      className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
+                    >
+                      <FileText className="h-3.5 w-3.5" />
+                      TXT
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        trackToolEvent("extract-emails-from-csv", "download_csv", {
+                          result_count: extracted.results.length,
+                        });
+                        downloadCsvFile(
+                          buildExportName(fileName, "csv"),
+                          extracted.results,
+                          "email",
+                        );
+                      }}
+                      className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      CSV
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div
-                className={`mt-4 rounded-[1.5rem] border border-slate-200/80 bg-white/60 p-4 shadow-xs flex flex-col ${
+                className={`mt-4 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs flex flex-col ${
                   extracted.results.length
                     ? "justify-start"
                     : "min-h-[22rem] justify-center"
                 }`}
               >
                 {extracted.results.length ? (
-                  <pre className="overflow-x-auto whitespace-pre-wrap break-words text-sm leading-7 text-slate-700 p-2">
-                    {extracted.results.slice(0, PREVIEW_LIMIT).join("\n")}
-                  </pre>
+                  <div className="max-h-[52rem] overflow-auto">
+                    <table className="w-full min-w-[500px] border-collapse text-left text-sm">
+                      <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm">
+                        <tr>
+                          <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 w-16">
+                            #
+                          </th>
+                          <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 w-24">
+                            STATUS
+                          </th>
+                          <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                            VALUE
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 bg-white">
+                        {extracted.results.slice(0, PREVIEW_LIMIT).map((email, idx) => (
+                          <tr key={idx} className="group hover:bg-slate-50/60 transition-colors">
+                            <td className="px-4 py-3.5 text-xs font-medium text-slate-400">
+                              {idx + 1}
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/50 bg-emerald-50/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                                Valid
+                              </span>
+                            </td>
+                            <td className="px-4 py-3.5 text-sm font-medium text-slate-700">
+                              {email}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : status === "ready" && headers.length ? (
                   <div className="flex flex-col items-center justify-center p-6 text-center h-full">
                     <AlertCircle className="h-8 w-8 text-amber-500 mb-3" />
@@ -653,59 +709,6 @@ export function ExtractEmailsFromCsvTool() {
                   </div>
                 )}
               </div>
-
-              <div className="mt-4 flex flex-col gap-3">
-                {hasReadyResults ? (
-                  <>
-                    <div className="flex flex-wrap gap-2.5">
-                      <button
-                        type="button"
-                        onClick={handleCopy}
-                        className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.25)] transition-all duration-200 hover:bg-emerald-700 hover:shadow-[0_12px_32px_rgba(16,185,129,0.35)] hover:-translate-y-0.5 active:bg-emerald-800 cursor-pointer"
-                      >
-                        {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
-                        {copied ? "Copied" : "Copy emails"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          trackToolEvent("extract-emails-from-csv", "download_txt", {
-                            result_count: extracted.results.length,
-                          });
-                          downloadTextFile(
-                            buildExportName(fileName, "txt"),
-                            extracted.results.join("\n"),
-                          );
-                        }}
-                        className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
-                      >
-                        <FileText className="h-4 w-4" />
-                        Download TXT
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          trackToolEvent("extract-emails-from-csv", "download_csv", {
-                            result_count: extracted.results.length,
-                          });
-                          downloadCsvFile(
-                            buildExportName(fileName, "csv"),
-                            extracted.results,
-                            "email",
-                          );
-                        }}
-                        className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
-                      >
-                        <Download className="h-4 w-4" />
-                        Download CSV
-                      </button>
-                    </div>
-                    <p className="text-xs leading-relaxed text-slate-400">
-                      🔒 Processed entirely in your browser. Your CSV was never uploaded.
-                    </p>
-                  </>
-                ) : null}
-              </div>
             </div>
         </div>
       </div>
@@ -744,20 +747,22 @@ function extractEmailsFromCsvRows(
       return;
     }
 
-    const normalized = rawValue.toLowerCase();
+    const extractedEmails = extractEmailMatches(rawValue);
 
-    if (!EMAIL_REGEX.test(normalized)) {
+    if (!extractedEmails.length) {
       invalidEmailsRemoved += 1;
       return;
     }
 
-    if (seen.has(normalized)) {
-      duplicatesRemoved += 1;
-      return;
-    }
+    extractedEmails.forEach((email) => {
+      if (seen.has(email)) {
+        duplicatesRemoved += 1;
+        return;
+      }
 
-    seen.add(normalized);
-    cleanEmails.push(normalized);
+      seen.add(email);
+      cleanEmails.push(email);
+    });
   });
 
   return {

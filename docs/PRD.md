@@ -8,7 +8,7 @@
 **Status:** ✅ Active Release (`v1.1.1`)
 
 ### Core Promise
-Paste messy text or upload a CSV file to instantly extract, clean, deduplicate, and export lead data. All processing occurs locally within the browser, ensuring 100% privacy and security by design.
+Paste messy text or upload a CSV file to instantly extract, clean, deduplicate, and export lead data. Core processing occurs locally within the browser, keeping raw working data on-device during normal tool use.
 
 ### One-Line Positioning
 LeadCleanr helps sales development representatives (SDRs), recruiters, marketers, agencies, and virtual assistants format and clean unstructured contact lists in real-time, without leaking sensitive prospect data to third-party servers.
@@ -59,8 +59,8 @@ LeadCleanr addresses these pain points by offering:
 
 ### Key Workflows
 *   **The "Quick Clean" (Text Mode):** Copy a block of text containing mixed text, HTML, and headers, paste it into the UI, click "Extract Emails", and copy the clean, deduplicated list.
-*   **Batch Mode:** Toggle batch mode to allow continuous, incremental pasting of text blocks. The tool parses and appends new results to the workspace without overwriting previous extractions.
-*   **CSV Sanitizer:** Upload a messy 2MB CRM export, select the target column, remove duplicates, blank rows, and invalid rows, optionally filter business vs. personal emails, then download a clean CSV for immediate import.
+*   **Batch Mode:** Toggle batch mode to prepare multiple pasted snippets in one input box, run extraction across the whole set, and replace the current clean result set with one export-ready list.
+*   **CSV Sanitizer:** Upload a messy 5MB CRM export, select the target column, remove duplicates, blank rows, and invalid rows, optionally filter business vs. personal emails, then download a clean CSV for immediate import.
 
 ---
 
@@ -80,9 +80,10 @@ LeadCleanr addresses these pain points by offering:
 
 ### 4.2 CSV Processing Suite
 
-*   **Browser-Based Upload:** Supports `.csv` files up to **2 MB** (MVP size limit).
+*   **Browser-Based Upload:** Supports `.csv` files up to **5 MB** (current free-plan limit).
 *   **Interactive Preview:** Reads and displays the first 100–500 rows in a responsive preview table using client-side memory.
 *   **Smart Column Auto-Detection:** Automatically scans headers and values to identify and categorize columns (Emails, Phones, URLs, Domains) with confidence scores.
+*   **Embedded Contact Extraction:** CSV email and phone extractors can pull valid emails or phone numbers out of messy text inside the selected column's cells.
 *   **Targeted Column Cleanup:**
     *   **Deduplication:** Remove duplicate rows based on a selected column (e.g., deduplicate by `Email`).
     *   **Data Formatting:** Trim whitespace, lowercase emails, and normalize phone numbers within the selected column.
@@ -90,7 +91,7 @@ LeadCleanr addresses these pain points by offering:
     *   **Email-Type Review:** Classify business vs. personal email rows, flag role-based inboxes, and optionally filter those rows before export.
     *   **Review Views:** Preview clean rows, removed rows, and invalid rows before downloading.
 *   **CSV Merge Utility:** Combine up to 5 CSV files, preserve unique headers, and deduplicate by exact row or normalized column values.
-*   **Blob Export:** Generates the cleaned CSV file on the client side using a browser Blob API for immediate, instant download.
+*   **Blob Export:** Generates the cleaned CSV file on the client side using a browser Blob API for immediate download, while preserving leading `+` in phone columns.
 
 ### 4.3 Real-Time Value Metrics
 Every tool page and utility must display a dedicated **Stats Box** highlighting:
