@@ -9,7 +9,7 @@ import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/li
 export const metadata: Metadata = buildToolMetadata({
  title: "Extract URLs from Text Online",
  description:
- "Extract and clean URLs from text. Normalize web protocols, clean trailing punctuation, filter duplicates, and download results—100% locally in your browser with no signup required.",
+ "Extract and clean URLs from text. Normalize web protocols, clean trailing punctuation, filter duplicates, and download results. Core cleanup runs locally in your browser, with no signup required.",
  path: "/tools/extract-urls-from-text",
  keywords: [
  "extract urls from text",
@@ -44,7 +44,7 @@ export default function ExtractUrlsFromTextPage() {
  />
  <ToolJsonLd
  title="Extract URLs from Text Online"
- description="Extract and clean URLs from text. Normalize web protocols, clean trailing punctuation, filter duplicates, and download results—100% locally in your browser with no signup required."
+ description="Extract and clean URLs from text. Normalize web protocols, clean trailing punctuation, filter duplicates, and download results. Core cleanup runs locally in your browser, with no signup required."
  path="/tools/extract-urls-from-text"
  category="BusinessApplication"
  />

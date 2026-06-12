@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import { ArrowRight, MessageSquare, LifeBuoy, Bug, Briefcase, FileSpreadsheet, AlertCircle, PlayCircle, Code2, Copy } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { getSiteUrl } from "@/lib/seo";
+
+const launchInbox = "hello@leadcleanr.xyz";
 
 const contactItems = [
  {
  icon: LifeBuoy,
  label: "General Support",
  description: "Questions about a tool, confusing output, or a workflow you want to test before moving a massive file.",
- value: "support@leadcleanr.com",
+ value: launchInbox,
  cta: "Email Support",
  color: "blue",
  },
@@ -16,7 +19,7 @@ const contactItems = [
  icon: Bug,
  label: "Bug Reports",
  description: "Found a parsing issue, export problem, or route that feels broken on your device.",
- value: "bugs@leadcleanr.com",
+ value: launchInbox,
  cta: "Report a Bug",
  color: "emerald",
  },
@@ -24,7 +27,7 @@ const contactItems = [
  icon: Briefcase,
  label: "Business & API",
  description: "Need larger limits, team workflows, or want to shape future paid CRM export features.",
- value: "hello@leadcleanr.com",
+ value: launchInbox,
  cta: "Talk Business",
  color: "slate",
  },
@@ -52,7 +55,7 @@ const messageTips = [
 export const metadata: Metadata = {
  title: "Contact Us — LeadCleanr",
  description: "Get in touch with LeadCleanr support, report bugs, or request custom API access and business limits.",
- alternates: { canonical: "https://leadcleanr.com/contact" },
+ alternates: { canonical: `${getSiteUrl()}/contact` },
 };
 
 export default function ContactPage() {

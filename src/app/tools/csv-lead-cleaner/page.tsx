@@ -129,21 +129,21 @@ export default function CsvLeadCleanerPage() {
         </table>
       </div>
 
- {/* Social Proof Strip */}
+ {/* Trust Signals */}
  <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-slate-500">
  <div className="flex items-center gap-1.5">
  <Users className="h-4 w-4 text-blue-500" />
- <span className="font-semibold text-slate-700 tabular-nums">4,000+</span> sales professionals
+ <span className="font-semibold text-slate-700">No signup</span> required
  </div>
  <span className="text-slate-300">·</span>
  <div className="flex items-center gap-1.5">
  <BarChart3 className="h-4 w-4 text-emerald-500" />
- <span className="font-semibold text-slate-700 tabular-nums">2.1M+</span> rows processed
+ <span className="font-semibold text-slate-700">Local-first</span> cleanup
  </div>
  <span className="text-slate-300">·</span>
  <div className="flex items-center gap-1.5">
  <Shield className="h-4 w-4 text-amber-500" />
- <span className="font-semibold text-slate-700">100%</span> browser-local
+ <span className="font-semibold text-slate-700">5 MB</span> MVP file limit
  </div>
  </div>
  </div>
@@ -206,4 +206,3 @@ export default function CsvLeadCleanerPage() {
  </PageFrame>
  );
 }
-

@@ -9,7 +9,7 @@ import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/li
 export const metadata: Metadata = buildToolMetadata({
  title: "Extract Domains from Emails Online",
  description:
- "Extract domains from emails and URLs. Parse unique domains from contact records to isolate corporate websites and accounts—100% locally on-device with no signup required.",
+ "Extract domains from emails and URLs. Parse unique domains from contact records to isolate corporate websites and accounts. Core cleanup runs locally in your browser, with no signup required.",
  path: "/tools/extract-domains-from-emails",
  keywords: [
  "extract domains from emails",
@@ -44,7 +44,7 @@ export default function ExtractDomainsFromEmailsPage() {
  />
  <ToolJsonLd
  title="Extract Domains from Emails Online"
- description="Extract domains from emails and URLs. Parse unique domains from contact records to isolate corporate websites and accounts—100% locally on-device with no signup required."
+ description="Extract domains from emails and URLs. Parse unique domains from contact records to isolate corporate websites and accounts. Core cleanup runs locally in your browser, with no signup required."
  path="/tools/extract-domains-from-emails"
  category="BusinessApplication"
  />

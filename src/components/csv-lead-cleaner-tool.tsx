@@ -498,505 +498,306 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
  : `Showing up to ${PREVIEW_LIMIT} rows after cleanup.`;
  const visiblePreviewRows = reportRows.slice(0, PREVIEW_LIMIT);
 
- return (
- <div className="flex flex-col xl:flex-row xl:gap-14 gap-6 xl:items-start">
- {/* ── Left Column: Hero → Report → Preview ── */}
- <div className="flex-1 min-w-0 flex flex-col gap-6">
- {heroContent}
+     return (
+    <div className="w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+      {/* ── Workspace Header ── */}
+      <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 bg-slate-50/50">
+        <div className="flex items-center gap-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm">
+            <FileSpreadsheet className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 leading-tight">LeadCleanr Workspace</h1>
+            <div className="flex items-center gap-2 text-xs font-medium text-slate-500 mt-0.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+              <span>Processed locally in browser</span>
+            </div>
+          </div>
+        </div>
 
- {/* Mobile‑only: Upload sidebar (hidden on desktop) */}
- <div className="xl:hidden rounded-xl border border-slate-200 bg-slate-50 p-5 flex flex-col shadow-sm backdrop-blur-md">
- <div className="flex items-center gap-3 mb-4">
- <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
- <FileSpreadsheet className="h-5 w-5" />
- </div>
- <div>
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">CSV Lead Cleaner</p>
- <p className="text-sm leading-6 text-[color:var(--muted)]">Upload, review, export</p>
- </div>
- </div>
+        {hasLoadedFile && (
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-end">
+              <span className="text-sm font-semibold text-slate-900 truncate max-w-[200px] sm:max-w-[300px]" title={fileName}>
+                {fileName}
+              </span>
+              <span className="text-xs text-slate-500">{rows.length.toLocaleString()} rows</span>
+            </div>
+            <div className="h-8 w-px bg-slate-200"></div>
+            <button
+              onClick={() => resetState()}
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+            >
+              Replace file
+            </button>
+          </div>
+        )}
+      </div>
 
- <label
- htmlFor="csv-upload-mobile"
- className={`group flex min-h-[12rem] flex-col items-center justify-center rounded-xl border-2 border-dashed px-5 py-5 text-center transition-all duration-200 ${
- isParsing
- ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-60"
- : "cursor-pointer border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50/50"
- }`}
- >
- <div className="flex flex-col items-center">
- <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb]">
- {isParsing ? (
- <LoaderCircle className="h-5 w-5 animate-spin" />
- ) : (
- <Upload className="h-5 w-5" />
- )}
- </div>
- <span className="mt-3 text-sm font-semibold text-slate-800">
- {isParsing ? "Parsing your CSV..." : "Upload a CSV file"}
- </span>
- <span className="mt-1 text-xs text-[color:var(--muted)]">Drag and drop, or click to browse.</span>
- {!isParsing && (
- <div className="mt-4 inline-flex min-h-10 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm cursor-pointer">
- Upload CSV to Clean
- </div>
- )}
- </div>
- <input id="csv-upload-mobile" type="file" accept=".csv,text/csv" className="sr-only" onChange={handleFileUpload} disabled={isParsing} />
- </label>
+      {!hasLoadedFile ? (
+        /* ── Main Upload Panel (Empty State) ── */
+        <div className="flex flex-col items-center justify-center p-12 lg:p-24 bg-white">
+          <div className="max-w-md w-full flex flex-col items-center text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 mb-6 shadow-sm">
+              <Upload className="h-8 w-8" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Upload a CSV to begin</h2>
+            <p className="text-sm text-slate-500 mb-8 leading-relaxed">
+              Drop your raw lead list here. The data is parsed and cleaned entirely on your device for maximum privacy.
+            </p>
 
- <div className="mt-3 flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
- <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
- <p className="text-xs font-semibold leading-relaxed text-slate-700">
- Your CSV is processed locally in your browser and is never uploaded to our servers.
- </p>
- </div>
+            <label
+              htmlFor="csv-upload"
+              className={`group relative flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 transition-all ${
+                isParsing
+                  ? "border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed"
+                  : "border-slate-300 bg-slate-50/50 hover:border-blue-500 hover:bg-blue-50/50"
+              }`}
+            >
+              <input id="csv-upload" type="file" accept=".csv,text/csv" className="sr-only" onChange={handleFileUpload} disabled={isParsing} />
+              
+              <div className="flex items-center justify-center gap-3">
+                {isParsing ? (
+                  <LoaderCircle className="h-6 w-6 animate-spin text-slate-400" />
+                ) : (
+                  <span className="inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition group-hover:bg-blue-700 group-hover:shadow-md">
+                    Browse Files
+                  </span>
+                )}
+              </div>
+              <p className="mt-4 text-xs font-medium text-slate-400">Supports CSV files up to 5 MB</p>
+            </label>
 
- <div className="mt-3 flex flex-wrap gap-2">
- <button type="button" onClick={loadDemoCsv} className="inline-flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">
- <FlaskConical className="h-3.5 w-3.5" /> Try sample CSV
- </button>
- {hasLoadedFile ? (
- <>
- <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="inline-flex min-h-9 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 disabled:opacity-50">
- <Undo2 className="h-3.5 w-3.5" /> Undo
- </button>
- <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="inline-flex min-h-9 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 disabled:opacity-50">
- <Redo2 className="h-3.5 w-3.5" /> Redo
- </button>
- </>
- ) : null}
- </div>
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <span className="text-xs text-slate-400">Don't have a file?</span>
+              <button
+                type="button"
+                onClick={loadDemoCsv}
+                className="text-xs font-bold text-blue-600 hover:text-blue-700 transition hover:underline"
+              >
+                Load sample CSV
+              </button>
+            </div>
 
- {pendingFile ? <FileSizeNotice pendingFile={pendingFile} /> : null}
+            {error && (
+              <div className="mt-6 w-full rounded-lg border border-red-200 bg-red-50 p-4 text-left shadow-sm">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-semibold text-red-900">Upload failed</h4>
+                    <p className="mt-1 text-sm text-red-700">{error}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {pendingFile ? (
+              <div className="mt-6 w-full">
+                <FileSizeNotice pendingFile={pendingFile} />
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        /* ── Unified Application Workspace ── */
+        <div className="flex flex-col flex-1 bg-slate-50">
+          
+          {/* Cleanup Controls Toolbar */}
+          <div className="border-b border-slate-200 bg-white px-6 py-4 flex flex-wrap items-end gap-4 shadow-sm z-10">
+            <div className="flex-1 min-w-[200px]">
+              <label htmlFor="column-select" className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-2">Primary Target Column</label>
+              <select
+                id="column-select"
+                value={selectedColumn}
+                onChange={(event) => {
+                  const nextColumn = event.target.value;
+                  const nextDetection = detections.find(d => d.header === nextColumn);
+                  applyConfigChange({ selectedColumn: nextColumn, duplicateMode });
+                  trackToolEvent("csv-lead-cleaner", "change_column", { column_type: nextDetection?.type ?? "unknown" });
+                }}
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+              >
+                {headers.map((header) => (<option key={header} value={header}>{header}</option>))}
+              </select>
+            </div>
 
- {isParsing ? (
- <div className="mt-3 rounded-xl border border-[color:var(--line)] bg-white/75 p-3">
- <div className="flex items-center justify-between text-sm"><span className="font-semibold">{progress.percentage}%</span></div>
- <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
- <div className="h-full rounded-full bg-[color:var(--brand)] transition-[width]" style={{ width: `${progress.percentage}%` }} />
- </div>
- </div>
- ) : null}
+            <div className="flex-1 min-w-[200px]">
+              <label htmlFor="duplicate-mode" className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-2">Deduplication Rule</label>
+              <select
+                id="duplicate-mode"
+                value={duplicateMode}
+                onChange={(event) => {
+                  const nextMode = event.target.value as DuplicateMode;
+                  applyConfigChange({ selectedColumn, duplicateMode: nextMode });
+                  trackToolEvent("csv-lead-cleaner", "change_duplicate_mode", { mode: nextMode });
+                }}
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+              >
+                {DUPLICATE_MODE_OPTIONS.map((option) => (<option key={option.value} value={option.value}>{option.label}</option>))}
+              </select>
+            </div>
 
- {hasLoadedFile ? (
- <div className="mt-4 grid gap-3">
- <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
- <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">Current File</p>
- <p className="mt-1 text-sm font-semibold truncate text-slate-800">{fileName}</p>
- <p className="mt-0.5 text-xs text-slate-500">{rows.length.toLocaleString()} rows</p>
- </div>
- <select id="column-select-mobile" value={selectedColumn} onChange={(e) => { applyConfigChange({ selectedColumn: e.target.value, duplicateMode }); }} disabled={!headers.length || isParsing} className="min-h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none">
- {headers.map((h) => <option key={h} value={h}>{h}</option>)}
- </select>
- <select id="duplicate-mode-mobile" value={duplicateMode} onChange={(e) => { applyConfigChange({ selectedColumn, duplicateMode: e.target.value as DuplicateMode }); }} disabled={!headers.length || isParsing} className="min-h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none">
- {DUPLICATE_MODE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
- </select>
- {showEmailEnrichment ? (
- <select id="email-filter-mobile" value={emailFilter} onChange={(e) => { applyConfigChange({ selectedColumn, duplicateMode, emailFilter: e.target.value as EmailFilterMode }); }} disabled={!headers.length || isParsing} className="min-h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none">
- <option value="all">Keep all valid emails</option>
- <option value="business_only">Business emails only</option>
- <option value="personal_only">Personal emails only</option>
- </select>
- ) : null}
- </div>
- ) : null}
+            {showEmailEnrichment && (
+              <div className="flex-1 min-w-[200px]">
+                <label htmlFor="email-filter" className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-2">Email Filter</label>
+                <select
+                  id="email-filter"
+                  value={emailFilter}
+                  onChange={(event) => {
+                    const nextFilter = event.target.value as EmailFilterMode;
+                    applyConfigChange({ selectedColumn, duplicateMode, emailFilter: nextFilter });
+                    trackToolEvent("csv-lead-cleaner", "change_email_filter", { filter: nextFilter });
+                  }}
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+                >
+                  <option value="all">Keep all valid emails</option>
+                  <option value="business_only">Business emails only</option>
+                  <option value="personal_only">Personal emails only</option>
+                </select>
+              </div>
+            )}
 
- {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
- {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
- </div>
+            <div className="flex gap-1">
+              <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-[42px] w-[42px] items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm cursor-pointer" title="Undo">
+                <Undo2 className="h-4 w-4" />
+              </button>
+              <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-[42px] w-[42px] items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm cursor-pointer" title="Redo">
+                <Redo2 className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
 
- {/* ── Cleaning Report ── */}
- <div className={`space-y-5 ${!hasLoadedFile ? 'opacity-[0.72]' : ''}`}>
- <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-sm">
- <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--brand-strong)]">Workspace Summary</p>
+          {/* Results Summary Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border-b border-slate-200 z-0">
+            <div className="bg-white p-5 transition-colors hover:bg-slate-50/50">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Total Rows</p>
+              <p className="mt-1 text-2xl font-bold text-slate-900 tabular-nums">{cleaned.summary.totalRows.toLocaleString()}</p>
+            </div>
+            <div className="bg-white p-5 transition-colors hover:bg-slate-50/50">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Duplicates Removed</p>
+              <p className="mt-1 text-2xl font-bold text-slate-900 tabular-nums">{cleaned.summary.duplicatesRemoved.toLocaleString()}</p>
+            </div>
+            <div className="bg-white p-5 transition-colors hover:bg-slate-50/50">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Invalid Entries</p>
+              <p className="mt-1 text-2xl font-bold text-slate-900 tabular-nums">{(cleaned.summary.invalidRowsRemoved + cleaned.summary.emptyRowsRemoved + cleaned.summary.filteredRowsRemoved).toLocaleString()}</p>
+            </div>
+            <div className="bg-blue-50/30 p-5 transition-colors hover:bg-blue-50/60 relative overflow-hidden">
+              <div className="absolute inset-y-0 left-0 w-1 bg-blue-500"></div>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-blue-700">Clean Records Ready</p>
+              <p className="mt-1 text-2xl font-bold text-blue-700 tabular-nums">{cleaned.summary.cleanRowsReady.toLocaleString()}</p>
+            </div>
+          </div>
 
- <div className="mt-4 flex flex-col gap-4">
- <div className={`rounded-xl p-6 border relative overflow-hidden transition-all duration-300 ${
- hasLoadedFile && cleaned.summary.cleanRowsReady > 0
- ? 'bg-[linear-gradient(180deg,rgba(16,185,129,0.06),rgba(255,255,255,0.94))] border-emerald-200/60 shadow-sm'
- : 'bg-[linear-gradient(180deg,rgba(37,99,235,0.04),rgba(255,255,255,0.94))] border-slate-200 shadow-sm'
- }`}>
- <div className="absolute right-0 top-0 h-40 w-40 rounded-full blur-2xl -mr-10 -mt-10"
- style={{ backgroundColor: hasLoadedFile && cleaned.summary.cleanRowsReady > 0 ? 'rgba(16,185,129,0.06)' : 'rgba(37,99,235,0.04)' }}
- />
- <div className="flex items-baseline gap-4">
- <div>
- <p className={`text-xs font-semibold uppercase tracking-[0.18em] relative z-10 ${
- hasLoadedFile && cleaned.summary.cleanRowsReady > 0 ? 'text-emerald-600' : 'text-slate-500'
- }`}>
- FINAL COUNT
- </p>
- <p className={`mt-2 font-display text-5xl font-bold leading-none tabular-nums sm:text-6xl relative z-10 ${
- !hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "text-slate-900/40" : "text-slate-900"
- }`}>
- {!hasLoadedFile && cleaned.summary.cleanRowsReady === 0 ? "0" : cleaned.summary.cleanRowsReady.toLocaleString()}
- </p>
- </div>
- </div>
- {hasLoadedFile && (
- <p className="mt-2 text-sm text-slate-600/80 relative z-10 max-w-lg">
- This is the cleaned row count that will move forward into CRM, outreach, sales, or recruiting tools.
- </p>
- )}
- </div>
+          {/* Warning Banner */}
+          {warning && (
+            <div className="flex items-center gap-3 bg-amber-50 px-6 py-3 border-b border-amber-200">
+              <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+              <p className="text-sm font-medium text-amber-800">{warning}</p>
+            </div>
+          )}
 
- <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
- <StatCard label="Rows scanned" value={cleaned.summary.totalRows} icon={<FileSpreadsheet className="h-4 w-4 text-blue-500" />} />
- <StatCard label="Duplicates removed" value={cleaned.summary.duplicatesRemoved} icon={<CopyMinus className="h-4 w-4 text-amber-500" />} />
- <StatCard label="Invalid removed" value={cleaned.summary.invalidRowsRemoved} icon={<AlertTriangle className="h-4 w-4 text-rose-500" />} />
- <StatCard label="Blank rows removed" value={cleaned.summary.emptyRowsRemoved} icon={<FileMinus className="h-4 w-4 text-slate-400" />} />
- <StatCard label="Emails filtered out" value={cleaned.summary.filteredRowsRemoved} icon={<Mail className="h-4 w-4 text-violet-500" />} />
- </div>
+          {/* Data Preview Area */}
+          <div className="flex-1 flex flex-col min-h-[400px]">
+            {/* Table Header Controls */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-3 bg-white border-b border-slate-200 gap-4">
+              <div className="flex p-1 bg-slate-100 rounded-lg inline-flex">
+                <button type="button" onClick={() => setPreviewMode("clean")} className={`rounded-md px-4 py-1.5 text-xs font-bold transition-all cursor-pointer ${previewMode === "clean" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>Clean Preview</button>
+                {cleaned.removedRows.length > 0 && <button type="button" onClick={() => setPreviewMode("removed")} className={`rounded-md px-4 py-1.5 text-xs font-bold transition-all cursor-pointer ${previewMode === "removed" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>Removed Rows</button>}
+                {cleaned.invalidRows.length > 0 && <button type="button" onClick={() => setPreviewMode("invalid")} className={`rounded-md px-4 py-1.5 text-xs font-bold transition-all cursor-pointer ${previewMode === "invalid" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>Invalid Data</button>}
+              </div>
+              <span className="text-xs font-medium text-slate-500">{previewDescription}</span>
+            </div>
+            
+            {/* The Table */}
+            <div className="flex-1 overflow-auto bg-white">
+              {reportHeaders.length && visiblePreviewRows.length ? (
+                <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
+                  <thead className="sticky top-0 z-10 bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">
+                    <tr>
+                      <th className="px-5 py-3.5 font-bold text-slate-500 w-12 border-r border-slate-200">#</th>
+                      {previewMode !== "clean" && <th className="px-5 py-3.5 font-bold text-slate-900 border-r border-slate-200">Reason</th>}
+                      {reportHeaders.map((header) => (
+                        <th key={header} className="px-5 py-3.5 font-bold text-slate-900 border-r border-slate-200 last:border-r-0">{prettyHeader(header)}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {visiblePreviewRows.map((row, index) => (
+                      <tr key={index} className="hover:bg-slate-50 transition-colors group">
+                        <td className="px-5 py-3 text-slate-400 bg-slate-50/50 group-hover:bg-slate-100/50 border-r border-slate-200">{index + 1}</td>
+                        {previewMode !== "clean" && "leadcleanr_reason" in row && (
+                          <td className="px-5 py-3 border-r border-slate-200 bg-red-50/20 group-hover:bg-red-50/40">
+                            <span className="inline-flex items-center rounded-md bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700">
+                              {(row as any).leadcleanr_reason}
+                            </span>
+                          </td>
+                        )}
+                        {reportHeaders.map((header) => {
+                          const val = row[header];
+                          return <td key={header} className="px-5 py-3 text-slate-700 max-w-[280px] truncate border-r border-slate-200 last:border-r-0" title={String(val || "")}>{val || <span className="text-slate-300">—</span>}</td>;
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="flex h-full min-h-[200px] items-center justify-center text-sm font-medium text-slate-400">
+                  No rows available for this preview mode.
+                </div>
+              )}
+            </div>
 
- <div className="grid gap-2 md:grid-cols-3">
- <InsightTile label="Business emails" value={cleaned.summary.businessEmails} tone="teal" icon={<Building2 className="h-4 w-4 text-teal-600" />} />
- <InsightTile label="Personal emails" value={cleaned.summary.personalEmails} tone="amber" icon={<Mail className="h-4 w-4 text-amber-600" />} />
- <InsightTile label="Role-based inboxes" value={cleaned.summary.roleBasedEmails} tone="slate" icon={<ShieldAlert className="h-4 w-4 text-slate-500" />} />
- </div>
- </div>
- </div>
-
- {/* ── Preview Table ── */}
- <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-sm">
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
- <div>
- <h3 className="font-display text-xl font-semibold">Results</h3>
- <p className="text-sm leading-6 text-slate-500">{previewDescription}</p>
- </div>
- <div className="flex flex-wrap gap-2 bg-white rounded-xl border border-slate-200 p-1">
- <button type="button" onClick={() => setPreviewMode("clean")} className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${previewMode === "clean" ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>Clean</button>
- {cleaned.removedRows.length ? (
- <button type="button" onClick={() => setPreviewMode("removed")} className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${previewMode === "removed" ? "bg-rose-50 text-rose-700" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>Removed</button>
- ) : null}
- {cleaned.invalidRows.length ? (
- <button type="button" onClick={() => setPreviewMode("invalid")} className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${previewMode === "invalid" ? "bg-amber-50 text-amber-700" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>Invalid</button>
- ) : null}
- </div>
- </div>
-
- <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
- {reportHeaders.length && visiblePreviewRows.length ? (
- <div className="max-h-[52rem] overflow-auto">
- <table className="min-w-[980px] w-full border-collapse text-left text-sm">
- <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 backdrop-blur-sm">
- <tr>
- <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 w-16">#</th>
- {previewMode !== "clean" && (
- <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 whitespace-nowrap w-32">Reason</th>
- )}
- {previewMode === "clean" && (
- <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 w-24">STATUS</th>
- )}
- {reportHeaders.map((header) => (
- <th key={header} className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-800 whitespace-nowrap">{prettyHeader(header)}</th>
- ))}
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-100 bg-white">
- {visiblePreviewRows.map((row, index) => (
- <tr key={`${index}-${duplicateMode}-${selectedColumn}-${row[selectedColumn] ?? ""}-${previewMode}`} className="group hover:bg-slate-50 transition-colors">
- <td className="px-4 py-3.5 text-xs font-medium text-slate-400">
- {index + 1}
- </td>
- {previewMode !== "clean" && "leadcleanr_reason" in row && (
- <td className="px-4 py-3.5 align-top">
- <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
- (row as any).leadcleanr_reason === "duplicate" ? "bg-amber-50/80 text-amber-700 border-amber-200/50" :
- (row as any).leadcleanr_reason === "blank" ? "bg-slate-50 text-slate-600 border-slate-200" :
- (row as any).leadcleanr_reason === "invalid" ? "bg-rose-50/80 text-rose-700 border-rose-200/50" :
- "bg-purple-50/80 text-purple-700 border-purple-200/50"
- }`}>
- {(row as any).leadcleanr_reason === "duplicate" ? <span className="flex items-center"><AlertTriangle className="mr-1 h-3 w-3" /> Duplicate</span> :
- (row as any).leadcleanr_reason === "blank" ? <span className="flex items-center"><Circle className="mr-1 h-3 w-3" /> Blank</span> :
- (row as any).leadcleanr_reason === "invalid" ? <span className="flex items-center"><X className="mr-1 h-3 w-3" /> Invalid</span> :
- (row as any).leadcleanr_reason === "personal_email" ? <span className="flex items-center"><X className="mr-1 h-3 w-3" /> Personal</span> :
- (row as any).leadcleanr_reason === "business_email" ? <span className="flex items-center"><X className="mr-1 h-3 w-3" /> Business</span> :
- (row as any).leadcleanr_reason}
- </span>
- </td>
- )}
- {previewMode === "clean" && (
- <td className="px-4 py-3.5">
- <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/50 bg-emerald-50/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
- Valid
- </span>
- </td>
- )}
- {reportHeaders.map((header) => {
- const cellValue = row[header];
- let displayElement = <>{cellValue || "—"}</>;
- if (header === "leadcleanr_email_type" && cellValue) {
- const isBusiness = cellValue === "business";
- displayElement = (<span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold border ${isBusiness ? "bg-teal-50/80 text-teal-700 border-teal-200/50" : "bg-amber-50/80 text-amber-700 border-amber-200/50"}`}>{cellValue}</span>);
- } else if (header === "leadcleanr_role_email" && cellValue) {
- const isRole = cellValue === "role-based";
- displayElement = (<span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold border ${isRole ? "bg-purple-50/80 text-purple-700 border-purple-200/50" : "bg-slate-50 text-slate-600 border-slate-200"}`}>{cellValue}</span>);
- } else if (header === "leadcleanr_generated_domain" && cellValue) {
- displayElement = (<code className="font-mono text-xs text-indigo-700 bg-indigo-50/50 border border-indigo-100/30 px-1.5 py-0.5 rounded">{cellValue}</code>);
- }
- return (<td key={`${index}-${header}`} className="px-4 py-3.5 align-top text-sm font-medium text-slate-700"><div className="max-w-[16rem] whitespace-normal break-words">{displayElement}</div></td>);
- })}
- </tr>
- ))}
- </tbody>
- </table>
- </div>
- ) : (
- status === "ready" && headers.length ? (
- <div className="flex flex-col items-center justify-center p-6 text-center min-h-[12rem]">
- <AlertCircle className="h-8 w-8 text-amber-500 mb-3" />
- <h4 className="text-sm font-semibold text-slate-900 mb-1">No clean rows found</h4>
- <p className="max-w-md text-xs leading-relaxed text-slate-500">This file uploaded successfully, but none of the rows survived the current cleanup and deduplication rules. Try resetting cleanup or choosing a different column.</p>
- </div>
- ) : (
- <div className="flex flex-col items-center justify-center p-6 text-center min-h-[12rem]">
- <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-100 shadow-2xs mb-4">
- <ScanSearch className="h-5 w-5" />
- </div>
- <h4 className="text-sm font-semibold text-slate-900 mb-2">Upload a CSV to see exactly what will be cleaned.</h4>
- <p className="max-w-md text-xs leading-relaxed text-slate-500 mb-5">We&apos;ll show removed duplicates, invalid emails, personal emails, role-based inboxes, and clean export rows.</p>
- <div className="grid gap-3 w-full sm:grid-cols-3">
- {[
- { title: "Duplicate rows removed", desc: "Instantly deduplicates lead records based on chosen parameters." },
- { title: "Invalid & blank skipped", desc: "Flags incomplete contact records and invalid emails early." },
- { title: "Email signals surfaced", desc: "Surfaces business, personal, and role-based email categories." },
- ].map((benefit, i) => (
- <div key={i} className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-left">
- <div className="flex items-center gap-1.5">
- <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-600 border border-blue-100/50">{i + 1}</div>
- <p className="text-xs font-semibold text-slate-800 leading-tight">{benefit.title}</p>
- </div>
- <p className="mt-1.5 text-xs leading-relaxed text-slate-400">{benefit.desc}</p>
- </div>
- ))}
- </div>
- </div>
- )
- )}
- </div>
- </div>
- </div>
-
- {/* Mobile Export + Waitlist */}
- <div className="xl:hidden space-y-5">
- <ExportActions cleanedRows={cleaned.rows} removedRows={cleaned.removedRows} invalidRows={cleaned.invalidRows} duplicateMode={duplicateMode} fileName={fileName} />
- <ProWaitlistCard trackSource="csv_cleaner_mobile_bottom" title="Want saved workflows and export presets?" description="Join the Pro waitlist to get notified when we launch saved cleanup presets, CSV presets for CRM (HubSpot, Salesforce), and outreach tools." />
- </div>
- </div>
-
- {/* ── Right Column: Sticky Sidebar (desktop only) ── */}
- <div className="hidden xl:flex xl:flex-col w-[360px] shrink-0 sticky top-24 rounded-xl border border-slate-200 bg-slate-50 p-5 shadow-sm gap-6 ring-1 ring-black/[0.03]">
- {/* Sidebar Header */}
- <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
- <FileSpreadsheet className="h-5 w-5" />
- </div>
- <div>
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--brand-strong)]">CSV Lead Cleaner</p>
- <p className="text-sm leading-6 text-[color:var(--muted)]">Upload, review, export</p>
- </div>
- </div>
-
- {/* Progress Indicator */}
- <WorkflowSteps hasLoadedFile={hasLoadedFile} exportReady={exportReady} />
-
- {/* ── Step 1: Upload ── */}
- <div className={`rounded-xl border p-4 transition-all duration-300 ${!hasLoadedFile ? 'border-blue-200 bg-blue-50/20 border-l-2 border-l-blue-500' : 'border-slate-200 bg-white'}`}>
- <div className="flex items-center gap-2 mb-3">
- <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${hasLoadedFile ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-600 text-white border-blue-600'}`}>
- {hasLoadedFile ? <Check className="h-4 w-4" /> : '1'}
- </span>
- <span className={`text-xs font-bold uppercase tracking-wider ${hasLoadedFile ? 'text-slate-400' : 'text-slate-800'}`}>Upload</span>
- </div>
-
- {!hasLoadedFile || !fileName ? (
- <>
- <label
- htmlFor="csv-upload"
- className={`group flex min-h-[11rem] flex-col items-center justify-center rounded-xl border-2 border-dashed px-5 py-5 text-center transition-all duration-200 ${
- isParsing
- ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-60"
- : "cursor-pointer border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50/50"
- }`}
- >
- <div className="flex flex-col items-center">
- <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[color:rgba(37,99,235,0.04)] border border-[color:rgba(37,99,235,0.1)] text-[color:#2563eb] transition-all duration-300 group-hover:scale-105 group-hover:shadow-sm group-hover:bg-white">
- {isParsing ? (
- <LoaderCircle className="h-5 w-5 animate-spin text-[color:var(--brand-strong)]" />
- ) : (
- <Upload className="h-5 w-5 text-[color:var(--brand-strong)]" />
- )}
- </div>
- <span className="mt-3 text-sm font-semibold text-slate-800">
- {isParsing ? "Parsing your CSV..." : "Upload a CSV file"}
- </span>
- <span className="mt-1 text-xs text-[color:var(--muted)]">Drag and drop, or click to browse.</span>
- {!isParsing && (
- <div className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
- Upload CSV to Clean
- </div>
- )}
- </div>
- <input id="csv-upload" type="file" accept=".csv,text/csv" className="sr-only" onChange={handleFileUpload} disabled={isParsing} />
- </label>
-
- <div className="mt-3 flex flex-wrap gap-2">
- <button type="button" onClick={loadDemoCsv} className="inline-flex min-h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300">
- <FlaskConical className="h-3.5 w-3.5" /> Try sample CSV
- </button>
- </div>
- </>
- ) : (
- <div className="space-y-2">
- <div className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 px-3 py-2">
- <FileSpreadsheet className="h-4 w-4 text-blue-500 shrink-0" />
- <div className="min-w-0 flex-1">
- <p className="text-sm font-semibold truncate text-slate-800">{fileName}</p>
- <p className="text-[11px] text-slate-500">{rows.length.toLocaleString()} rows loaded</p>
- </div>
- </div>
- <label htmlFor="csv-upload" className="inline-flex min-h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300">
- <Upload className="h-3.5 w-3.5" /> Upload different CSV
- <input id="csv-upload" type="file" accept=".csv,text/csv" className="sr-only" onChange={handleFileUpload} disabled={isParsing} />
- </label>
- </div>
- )}
-
- <div className="mt-3 flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
- <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
- <p className="text-xs font-semibold leading-relaxed text-slate-700">
- Your CSV is processed locally in your browser and is never uploaded to our servers.
- </p>
- </div>
-
- <div className="mt-2 flex items-center gap-3 text-xs font-medium text-slate-500">
- <div className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> No signup</div>
- <span className="text-slate-300">·</span>
- <span>Up to 5 MB</span>
- </div>
- </div>
-
- {pendingFile ? <FileSizeNotice pendingFile={pendingFile} /> : null}
-
- {isParsing ? (
- <div className="rounded-xl border border-[color:var(--line)] bg-white/75 p-3">
- <div className="flex items-center justify-between text-sm">
- <span className="font-semibold text-[color:var(--foreground)]">Reading rows</span>
- <span className="tabular-nums text-[color:var(--muted)]">{progress.percentage}%</span>
- </div>
- <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[color:rgba(17,36,51,0.08)]">
- <div className="h-full rounded-full bg-[color:var(--brand)] transition-[width]" style={{ width: `${progress.percentage}%` }} />
- </div>
- <p className="mt-2 text-xs text-[color:var(--muted)]">{progress.rowsProcessed.toLocaleString()} rows processed.</p>
- </div>
- ) : null}
-
- {/* ── Step 2: Configure ── */}
- <div className={`rounded-xl border p-4 transition-all duration-300 ${hasLoadedFile && !exportReady ? 'border-blue-200 bg-blue-50/20 border-l-2 border-l-blue-500' : hasLoadedFile ? 'border-slate-200 bg-white' : 'border-slate-200/30 bg-slate-50/30 opacity-60'}`}>
- <div className="flex items-center gap-2 mb-3">
- <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportReady ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : hasLoadedFile ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-400 border-slate-200'}`}>
- {exportReady ? <Check className="h-4 w-4" /> : '2'}
- </span>
- <span className={`text-xs font-bold uppercase tracking-wider ${hasLoadedFile ? 'text-slate-800' : 'text-slate-400'}`}>Configure</span>
- {hasLoadedFile && (
- <div className="ml-auto flex gap-1.5">
- <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} title="Undo" className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 disabled:opacity-40 hover:bg-slate-50 transition">
- <Undo2 className="h-3 w-3" />
- </button>
- <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} title="Redo" className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 disabled:opacity-40 hover:bg-slate-50 transition">
- <Redo2 className="h-3 w-3" />
- </button>
- </div>
- )}
- </div>
-
- {hasLoadedFile ? (
- <div className="grid gap-3">
- <div>
- <label htmlFor="column-select" className="text-xs font-bold uppercase tracking-wider text-[color:var(--brand-strong)]">Primary column</label>
- <select
- id="column-select"
- value={selectedColumn}
- onChange={(event) => {
- const nextColumn = event.target.value;
- const nextDetection = detections.find(d => d.header === nextColumn);
- applyConfigChange({ selectedColumn: nextColumn, duplicateMode });
- trackToolEvent("csv-lead-cleaner", "change_column", { column_type: nextDetection?.type ?? "unknown" });
- }}
- disabled={!headers.length || isParsing}
- className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus:bg-white px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10 transition"
- >
- {headers.map((header) => (<option key={header} value={header}>{header}</option>))}
- </select>
- {selectedDetection ? (
- <div className="mt-2 flex items-center justify-between gap-2 rounded-lg bg-teal-50/50 border border-teal-100/50 px-2.5 py-1 text-xs text-teal-800">
- <span className="flex items-center gap-1 font-medium"><ScanSearch className="h-3 w-3 text-teal-600" /> {prettyColumnType(selectedDetection.type)}</span>
- <span className="text-[10px] font-bold uppercase tracking-wider text-teal-600/80">{selectedDetection.confidence}%</span>
- </div>
- ) : null}
- {recommendedDetection && recommendedDetection.header !== selectedColumn ? (
- <button type="button" onClick={() => applyConfigChange({ selectedColumn: recommendedDetection.header, duplicateMode })} className="mt-2 flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition">
- <Sparkles className="h-3 w-3 text-blue-500" /> Use: {recommendedDetection.header}
- </button>
- ) : null}
- </div>
-
- <div>
- <label htmlFor="duplicate-mode" className="text-xs font-bold uppercase tracking-wider text-[color:var(--brand-strong)]">Deduplicate by</label>
- <select
- id="duplicate-mode"
- value={duplicateMode}
- onChange={(event) => {
- const nextMode = event.target.value as DuplicateMode;
- applyConfigChange({ selectedColumn, duplicateMode: nextMode });
- trackToolEvent("csv-lead-cleaner", "change_duplicate_mode", { mode: nextMode });
- }}
- disabled={!headers.length || isParsing}
- className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus:bg-white px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10 transition"
- >
- {DUPLICATE_MODE_OPTIONS.map((option) => (<option key={option.value} value={option.value}>{option.label}</option>))}
- </select>
- <p className="mt-1.5 text-[11px] leading-relaxed text-slate-500">{DUPLICATE_MODE_OPTIONS.find((o) => o.value === duplicateMode)?.description}</p>
- </div>
-
- {showEmailEnrichment ? (
- <div>
- <label htmlFor="email-filter" className="text-xs font-bold uppercase tracking-wider text-[color:var(--brand-strong)]">Email Filter</label>
- <select
- id="email-filter"
- value={emailFilter}
- onChange={(event) => {
- const nextFilter = event.target.value as EmailFilterMode;
- applyConfigChange({ selectedColumn, duplicateMode, emailFilter: nextFilter });
- trackToolEvent("csv-lead-cleaner", "change_email_filter", { filter: nextFilter });
- }}
- disabled={!headers.length || isParsing}
- className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus:bg-white px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10 transition"
- >
- <option value="all">Keep all valid emails</option>
- <option value="business_only">Business emails only</option>
- <option value="personal_only">Personal emails only</option>
- </select>
- <p className="mt-1.5 text-[11px] leading-relaxed text-slate-500">
- {emailFilter === "business_only" ? "Removes free providers like Gmail and Yahoo." : emailFilter === "personal_only" ? "Removes corporate and custom domains." : "Includes both business and free providers."}
- </p>
- </div>
- ) : null}
- </div>
- ) : (
- <p className="text-xs text-slate-400 leading-relaxed">Upload a CSV to configure column selection, deduplication mode, and email filters.</p>
- )}
- </div>
-
- {error ? <InlineMessage tone="error">{error}</InlineMessage> : null}
- {warning ? <InlineMessage tone="warning">{warning}</InlineMessage> : null}
-
- {/* ── Step 3: Export ── */}
- <ExportActions cleanedRows={cleaned.rows} removedRows={cleaned.removedRows} invalidRows={cleaned.invalidRows} duplicateMode={duplicateMode} fileName={fileName} />
- </div>
- </div>
- );
+            {/* Export Section */}
+            <div className="border-t border-slate-200 bg-slate-50 p-6 flex flex-col sm:flex-row items-center justify-between gap-6 z-10 shadow-[0_-1px_2px_rgba(0,0,0,0.02)]">
+              <div className="flex items-center gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm border border-emerald-200">
+                  <Check className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Workflow Complete</h3>
+                  <p className="text-sm text-slate-500 mt-0.5">{cleaned.summary.cleanRowsReady.toLocaleString()} cleaned rows ready for CRM import.</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                {cleaned.removedRows.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => downloadCsvRecords(fileName.replace(/\.csv$/i, "-removed.csv"), cleaned.removedRows)}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer flex-1 sm:flex-none"
+                  >
+                    <Download className="h-4 w-4" /> Removed
+                  </button>
+                )}
+                {cleaned.invalidRows.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => downloadCsvRecords(fileName.replace(/\.csv$/i, "-invalid.csv"), cleaned.invalidRows)}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer flex-1 sm:flex-none"
+                  >
+                    <Download className="h-4 w-4" /> Invalid
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackToolEvent("csv-lead-cleaner", "export_csv", {
+                      row_count_bucket: getRowCountBucket(cleaned.rows.length),
+                      duplicate_mode: duplicateMode,
+                    });
+                    downloadCsvRecords(buildCleanFileName(fileName), cleaned.rows);
+                  }}
+                  disabled={!exportReady}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 text-sm font-bold text-white shadow-md transition hover:bg-blue-700 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex-1 sm:flex-none"
+                >
+                  <Download className="h-5 w-5" /> Export Cleaned CSV
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function cleanCsvRows(

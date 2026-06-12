@@ -7,7 +7,7 @@ import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 export const metadata: Metadata = buildToolMetadata({
  title: "Remove Duplicate Emails Online — Private Email Deduper",
  description:
- "Remove duplicate emails online. Keep one clean copy of each valid address and export the result—100% locally in your browser with no signup required.",
+ "Remove duplicate emails online. Keep one clean copy of each valid address and export the result. Core cleanup runs locally in your browser, with no signup required.",
  path: "/tools/remove-duplicate-emails",
  keywords: [
  "remove duplicate emails",
@@ -29,7 +29,7 @@ export default function RemoveDuplicateEmailsPage() {
  />
  <ToolJsonLd
  title="Remove Duplicate Emails Online — Private Email Deduper"
- description="Remove duplicate emails online. Keep one clean copy of each valid address and export the result—100% locally in your browser with no signup required."
+ description="Remove duplicate emails online. Keep one clean copy of each valid address and export the result. Core cleanup runs locally in your browser, with no signup required."
  path="/tools/remove-duplicate-emails"
  category="BusinessApplication"
  />

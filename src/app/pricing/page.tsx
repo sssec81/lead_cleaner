@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, Zap, Info, Check, ShieldCheck } from "lucide-
 
 import { PageFrame } from "@/components/page-frame";
 import { ProWaitlistCard } from "@/components/pro-waitlist-card";
+import { getSiteUrl } from "@/lib/seo";
 
 const freePoints = [
  "All text extraction tools stay open",
@@ -69,7 +70,7 @@ const proComparison = [
 export const metadata: Metadata = {
  title: "Pricing — LeadCleanr",
  description: "LeadCleanr pricing for browser-first CSV lead cleanup workflows, from free discovery to heavier operational use.",
- alternates: { canonical: "https://leadcleanr.com/pricing" },
+ alternates: { canonical: `${getSiteUrl()}/pricing` },
 };
 
 export default function PricingPage() {

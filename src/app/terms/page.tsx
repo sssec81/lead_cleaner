@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
- AlertTriangle,
+  AlertTriangle,
  ArrowRight,
  Check,
  FileText,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { getSiteUrl } from "@/lib/seo";
 
 const quickAnswers = [
  {
@@ -88,12 +89,12 @@ const operatingRules = [
 ];
 
 export const metadata: Metadata = {
- title: "Terms of Service — LeadCleanr",
- description:
- "LeadCleanr terms of service, acceptable use, data handling answers, accuracy expectations, and product rules.",
- alternates: {
- canonical: "https://leadcleanr.com/terms",
- },
+  title: "Terms of Service — LeadCleanr",
+  description:
+    "LeadCleanr terms of service, acceptable use, data handling answers, accuracy expectations, and product rules.",
+  alternates: {
+    canonical: `${getSiteUrl()}/terms`,
+  },
 };
 
 export default function TermsPage() {

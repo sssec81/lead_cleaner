@@ -10,7 +10,7 @@ export type ToolMetadataInput = {
 
 const DEFAULT_SITE_URL = "https://leadcleanr.com";
 
-function getSiteUrl() {
+export function getSiteUrl() {
  const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
  if (!rawSiteUrl) {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, FileSpreadsheet, Mail, Phone, Link as LinkIcon, Globe, CopyX, Sparkles, FolderDown, Zap, ShieldCheck, CheckCircle2, Rows3, Combine, FileJson, Type, Scissors } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { getSiteUrl } from "@/lib/seo";
 import { BreadcrumbJsonLd } from "@/lib/seo";
 
 const flagshipTools = [
@@ -172,9 +173,9 @@ const helperTools = [
 export const metadata: Metadata = {
  title: "All Lead Cleaning Tools — LeadCleanr",
  description:
- "Explore LeadCleanr browser-first CSV lead cleaner tools and supporting text extractors. Clean, deduplicate, and export leads 100% locally with no signup.",
+ "Explore LeadCleanr browser-first CSV lead cleaner tools and supporting text extractors. Core cleanup runs locally in your browser, with no signup required for the main workflow.",
  alternates: {
- canonical: "https://leadcleanr.com/tools",
+ canonical: `${getSiteUrl()}/tools`,
  },
 };
 

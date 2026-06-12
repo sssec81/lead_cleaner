@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { getSiteUrl } from "@/lib/seo";
+
 const staticRoutes = [
  "",
  "/tools",
@@ -27,12 +29,13 @@ const staticRoutes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+ const siteUrl = getSiteUrl();
  const now = process.env.BUILD_TIME 
  ? new Date(process.env.BUILD_TIME) 
  : new Date();
 
  return staticRoutes.map((route) => ({
- url: `https://leadcleanr.com${route}`,
+ url: `${siteUrl}${route}`,
  lastModified: now,
  changeFrequency: route === "" ? "weekly" : "monthly",
  priority: route === "" ? 1 : route.startsWith("/tools/") ? 0.8 : 0.6,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Shield, Lock, HardDrive, EyeOff, ServerOff, Database } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { getSiteUrl } from "@/lib/seo";
 
 const snapshot = [
  {
@@ -55,9 +56,9 @@ const sections = [
 ];
 
 export const metadata: Metadata = {
- title: "Privacy Policy — LeadCleanr",
- description: "LeadCleanr privacy policy. Your raw CSV and pasted text stay in your browser during normal cleanup operations.",
- alternates: { canonical: "https://leadcleanr.com/privacy" },
+  title: "Privacy Policy — LeadCleanr",
+  description: "LeadCleanr privacy policy. Your raw CSV and pasted text stay in your browser during normal cleanup operations.",
+  alternates: { canonical: `${getSiteUrl()}/privacy` },
 };
 
 export default function PrivacyPage() {

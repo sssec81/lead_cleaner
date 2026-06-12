@@ -7,7 +7,7 @@ import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 export const metadata: Metadata = buildToolMetadata({
  title: "Clean Email List Online — Remove Duplicates & Invalid Emails",
  description:
- "Clean email lists online. Lowercase addresses, filter duplicates, remove invalid syntax, and download a clean list—100% locally in your browser with no signup required.",
+ "Clean email lists online. Lowercase addresses, filter duplicates, remove invalid syntax, and download a clean list. Core cleanup runs locally in your browser, with no signup required.",
  path: "/tools/clean-email-list",
  keywords: [
  "clean email list",
@@ -29,7 +29,7 @@ export default function CleanEmailListPage() {
  />
  <ToolJsonLd
  title="Clean Email List Online — Remove Duplicates & Invalid Emails"
- description="Clean email lists online. Lowercase addresses, filter duplicates, remove invalid syntax, and download a clean list—100% locally in your browser with no signup required."
+ description="Clean email lists online. Lowercase addresses, filter duplicates, remove invalid syntax, and download a clean list. Core cleanup runs locally in your browser, with no signup required."
  path="/tools/clean-email-list"
  category="BusinessApplication"
  />

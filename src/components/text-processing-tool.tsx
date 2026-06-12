@@ -15,6 +15,7 @@ import {
  RefreshCw,
  Trash2,
  Undo2,
+  ShieldCheck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";

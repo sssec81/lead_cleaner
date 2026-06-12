@@ -3,11 +3,14 @@ import type { ReactNode } from "react";
 
 import { AnalyticsScripts } from "@/components/analytics-scripts";
 import { TelemetryProvider } from "@/components/telemetry-provider";
+import { getSiteUrl } from "@/lib/seo";
 
 import "./globals.css";
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
- metadataBase: new URL("https://leadcleanr.com"),
+ metadataBase: new URL(siteUrl),
  applicationName: "LeadCleanr",
  title: {
  default: "LeadCleanr | Clean Messy Lead Lists Instantly",
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
  title: "LeadCleanr | Clean Messy Lead Lists Instantly",
  description:
  "Paste text or upload a CSV to extract emails, phone numbers, URLs, domains, and remove duplicates in your browser.",
- url: "https://leadcleanr.com",
+ url: siteUrl,
  siteName: "LeadCleanr",
  type: "website",
  images: [
