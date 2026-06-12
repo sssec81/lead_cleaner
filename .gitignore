@@ -7,3 +7,15 @@ coverage
 .DS_Store
 
 waitlist.txt
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Build cache
+tsconfig.tsbuildinfo
+
+# Python cache
+__pycache__/
+*.pyc

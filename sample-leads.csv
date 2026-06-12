@@ -1,8 +1,0 @@
-name,email,phone,company,website
-Alice Johnson,Alice@Example.com,+1 (415) 555-0101,Northstar Labs,https://northstarlabs.com
-Bob Smith,bob@example.com,415-555-0101,Northstar Labs,www.northstarlabs.com
-Charlie Brown,invalid-email,020 7946 0958,Beacon Works,http://beaconworks.co.uk
-Dana Lee,dana@sample.io,,Sample IO,https://sample.io
-Evan Ross,BOB@example.com,+1 415 555 0101,Northstar Labs,https://northstarlabs.com/pricing
-,,,, 
-Farah Khan,farah@agencyhub.net,+44 20 7946 0958,Agency Hub,www.agencyhub.net
