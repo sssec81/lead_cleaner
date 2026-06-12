@@ -42,34 +42,34 @@ export default function ValidateEmailListPage() {
  asideDescription="Checks formatting only. Domain, MX, and mailbox verification are coming to Pro — so you can fix syntax now without worrying about deliverability."
  tool={<ValidateEmailListTool />}
  toolSupportingContent={
- <section className="rounded-xl border border-slate-200 bg-white/85 p-6 shadow-sm sm:p-8">
- <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
- What this email validator checks
- </h2>
- <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
- Use it to clean pasted email lists before outreach, CRM import, or campaign launch.
- </p>
- <div className="mt-6 grid gap-3 sm:grid-cols-2">
- {[
- "Missing @ symbols",
- "Invalid domain format",
- "Duplicate emails",
- "Blank rows",
- "Extra spaces and formatting issues",
- "Clean export-ready email list",
- ].map((item) => (
- <div
- key={item}
- className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700"
- >
- {item}
- </div>
- ))}
- </div>
- <p className="mt-5 rounded-xl border border-amber-200/70 bg-amber-50/80 px-4 py-3 text-sm text-amber-900">
- Full deliverability, MX, SMTP, and mailbox checks are planned for Pro.
- </p>
- </section>
+  <section className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6 sm:p-8">
+  <h2 className="font-display text-2xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-3xl">
+  What this email validator checks
+  </h2>
+  <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--lc-muted)] sm:text-base">
+  Use it to clean pasted email lists before outreach, CRM import, or campaign launch.
+  </p>
+  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+  {[
+  "Missing @ symbols",
+  "Invalid domain format",
+  "Duplicate emails",
+  "Blank rows",
+  "Extra spaces and formatting issues",
+  "Clean export-ready email list",
+  ].map((item) => (
+  <div
+  key={item}
+  className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] px-4 py-3 text-sm font-medium text-[var(--lc-ink)]"
+  >
+  {item}
+  </div>
+  ))}
+  </div>
+  <p className="mt-5 rounded-xl border border-[var(--lc-accent)]/20 bg-[var(--lc-accent-bg)] px-4 py-3 text-sm text-[var(--lc-accent)]">
+  Full deliverability, MX, SMTP, and mailbox checks are planned for Pro.
+  </p>
+  </section>
  }
  />
  </>

@@ -396,7 +396,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       }
       exportControls={
         extracted.results.length > 0 && (
-          <div className="flex w-full flex-col items-center justify-between gap-6 sm:flex-row">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 w-full">
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm border border-emerald-200">
                 <Check className="h-5 w-5" />

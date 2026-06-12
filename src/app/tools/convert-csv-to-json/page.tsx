@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Briefcase, Code2, Database, FileJson, FileSpreadsheet, Sparkles } from "lucide-react";
-
+import { Briefcase, Code2, Database, FileJson, FileSpreadsheet, Shield, Users, BarChart3 } from "lucide-react";
+import { Suspense } from "react";
 import { ConvertCsvToJsonTool } from "@/components/convert-csv-to-json-tool";
-import { TextToolPageShell } from "@/components/text-tool-page-shell";
+import { PageFrame } from "@/components/page-frame";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
@@ -50,40 +50,32 @@ const seoUseCases = [
 ];
 
 export default function ConvertCsvToJsonPage() {
-  const asideContent = (
-    <div className="glass-panel relative overflow-hidden rounded-[1.5rem] p-5 sm:p-6">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-white/30 to-blue-50/40" />
-      <div className="relative">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-indigo-700">
-          <Sparkles className="h-4 w-4" />
-          Format Converter
+  const pageHeader = (
+    <div className="mx-auto max-w-3xl pt-12 pb-8 text-center">
+      <div className="mb-4 text-[0.75rem] font-bold tracking-[0.22em] uppercase text-[var(--lc-accent)]">
+        CSV TOOL
+      </div>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
+        Free CSV to JSON Converter
+      </h1>
+      <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
+        Upload a CSV file and convert it into a structured JSON array instantly. Runs locally in your browser, with no signup and no server upload.
+      </p>
+      
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-[var(--lc-muted)]">
+        <div className="flex items-center gap-1.5">
+          <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
+          <span className="font-medium text-[var(--lc-ink)]">Browser-only</span>
         </div>
-        <h3 className="font-display text-xl font-bold leading-tight text-slate-900 sm:text-2xl">
-          See the structure before you upload.
-        </h3>
-        <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
-          Each CSV row is transformed into a clean JSON object using the header row as keys.
-        </p>
-
-        <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-slate-200 shadow-sm">
-          {/* CSV side */}
-          <div className="bg-slate-50 border-b border-slate-200">
-            <div className="flex items-center gap-2 border-b border-slate-200/60 px-3 py-2">
-              <FileSpreadsheet className="h-4 w-4 text-slate-500" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">CSV Input</span>
-            </div>
-            <pre className="overflow-x-auto p-3 text-[10px] font-mono leading-relaxed text-slate-600">{EXAMPLE_CSV}</pre>
-          </div>
-          {/* JSON side */}
-          <div className="bg-slate-900">
-            <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-3 py-2">
-              <FileJson className="h-4 w-4 text-emerald-400" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">JSON Output</span>
-            </div>
-            <div className="overflow-x-auto p-3">
-              <pre className="text-[10px] font-mono leading-relaxed text-emerald-300">{EXAMPLE_JSON}</pre>
-            </div>
-          </div>
+        <span className="text-[var(--lc-border-mid)]">·</span>
+        <div className="flex items-center gap-1.5">
+          <Users className="h-4 w-4 text-[var(--lc-accent)]" />
+          <span className="font-medium text-[var(--lc-ink)]">No account needed</span>
+        </div>
+        <span className="text-[var(--lc-border-mid)]">·</span>
+        <div className="flex items-center gap-1.5">
+          <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
+          <span className="font-medium text-[var(--lc-ink)]">Up to 2MB free</span>
         </div>
       </div>
     </div>
@@ -118,7 +110,7 @@ export default function ConvertCsvToJsonPage() {
   );
 
   return (
-    <>
+    <PageFrame>
       <BreadcrumbJsonLd
         items={[
           { name: "Home", url: "/" },
@@ -132,15 +124,17 @@ export default function ConvertCsvToJsonPage() {
         path="/tools/convert-csv-to-json"
         category="BusinessApplication"
       />
-      <TextToolPageShell
-        eyebrow="Format Converter"
-        title="Free CSV to JSON Converter"
-        intro="Upload a CSV file and convert it into a structured JSON array instantly. Runs locally in your browser, with no signup and no server upload."
-        quote="Transforms flat CSV rows into clean, structured JSON arrays—entirely in your browser."
-        asideContent={asideContent}
-        tool={<ConvertCsvToJsonTool />}
-        toolSupportingContent={supportingContent}
-      />
-    </>
+      <main className="relative min-h-screen pt-4 pb-24 lg:pb-32 bg-[var(--lc-bg)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {pageHeader}
+          <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>
+            <ConvertCsvToJsonTool />
+          </Suspense>
+        </div>
+      </main>
+      <div className="bg-white">
+        {supportingContent}
+      </div>
+    </PageFrame>
   );
 }

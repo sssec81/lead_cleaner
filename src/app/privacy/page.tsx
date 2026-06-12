@@ -64,122 +64,116 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
  return (
  <PageFrame>
- {/* Hero Section with Beautiful Gradient & Glassmorphism */}
- <section className="relative overflow-hidden pt-24 pb-32 lg:pt-36 lg:pb-40">
- <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,white,var(--background))]"></div>
- <div className="absolute top-0 right-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-400/20 blur-[120px]"></div>
- <div className="absolute bottom-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-400/20 blur-[120px]"></div>
+  {/* Hero Section */}
+  <section className="pt-24 pb-32 lg:pt-36 lg:pb-40">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+  <div className="mx-auto max-w-3xl text-center">
+  <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
+  <Shield className="h-4 w-4" />
+  <span>Trust Boundary</span>
+  </div>
+  <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-7xl">
+  Your data never leaves your screen.
+  </h1>
+  <p className="text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
+  This page answers one question quickly: what happens to your raw data while you use LeadCleanr? The short version: <strong>The cleanup flow runs locally in your browser.</strong>
+  </p>
+  </div>
 
- <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
- <div className="mx-auto max-w-3xl text-center">
- <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm">
- <Shield className="h-4 w-4" />
- <span>Trust Boundary</span>
- </div>
- <h1 className="mb-8 bg-[linear-gradient(to_right,theme(colors.slate.900),theme(colors.slate.600))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-7xl">
- Your data never leaves your screen.
- </h1>
- <p className="text-lg leading-8 text-slate-600 sm:text-xl">
- This page answers one question quickly: what happens to your raw data while you use LeadCleanr? The short version: <strong>The cleanup flow runs locally in your browser.</strong>
- </p>
- </div>
+  {/* Floating Glassmorphic Cards */}
+  <div className="mx-auto mt-20 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+  {snapshot.map((item) => {
+  const Icon = item.icon;
+  return (
+  <div 
+  key={item.label}
+  className="group relative overflow-hidden surface-card rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--lc-border-mid)]"
+  >
+  <div className="relative">
+  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)] transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 group-hover:bg-[var(--lc-accent-bg)]">
+  <Icon className="h-6 w-6" />
+  </div>
+  <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--lc-ink)]">{item.label}</h3>
+  <p className="text-sm leading-relaxed text-[var(--lc-muted)]">{item.text}</p>
+  </div>
+  </div>
+  );
+  })}
+  </div>
+  </div>
+  </section>
 
- {/* Floating Glassmorphic Cards */}
- <div className="mx-auto mt-20 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
- {snapshot.map((item) => {
- const Icon = item.icon;
- return (
- <div 
- key={item.label}
- className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-2 hover:border-blue-200 hover:bg-white hover:shadow-sm"
- >
- <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
- <div className="relative">
- <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
- <Icon className="h-6 w-6" />
- </div>
- <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-slate-900">{item.label}</h3>
- <p className="text-sm leading-relaxed text-slate-600">{item.text}</p>
- </div>
- </div>
- );
- })}
- </div>
- </div>
- </section>
+  {/* Dark Mode "The Boundary" Section */}
+  <section className="relative overflow-hidden bg-[var(--lc-dark-bg)] py-24 sm:py-32">
+  <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+  <div>
+  <p className="mb-4 text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">The Boundary</p>
+  <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-[var(--lc-surface)] sm:text-5xl">
+  Local cleanup has a clear, physical edge.
+  </h2>
+  <p className="text-lg leading-8 text-[#e4e4e1]">
+  The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don&apos;t hide behind legal fog.
+  </p>
+  </div>
+  <div className="grid gap-8">
+  <BoundaryCard 
+  number="01"
+  title="Cleanup Operations" 
+  text="Text extraction, CSV parsing, preview generation, and final export file creation happen entirely in your browser's local memory." 
+  />
+  <BoundaryCard 
+  number="02"
+  title="Browser State" 
+  text="Saved workspaces and tool preferences can live in local storage on your specific device, meaning we can't see them." 
+  />
+  <BoundaryCard 
+  number="03"
+  title="Telemetry" 
+  text="Anonymous analytics or sanitized error reporting are treated as separate product behavior, completely isolated from raw file contents." 
+  />
+  </div>
+  </div>
+  </div>
+  </section>
 
- {/* Dark Mode "The Boundary" Section */}
- <section className="relative overflow-hidden bg-slate-950 py-24 sm:py-32">
- <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.15),transparent_70%)]"></div>
- <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
- <div>
- <p className="mb-4 text-sm font-bold uppercase tracking-widest text-blue-400">The Boundary</p>
- <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
- Local cleanup has a clear, physical edge.
- </h2>
- <p className="text-lg leading-8 text-slate-500">
- The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don&apos;t hide behind legal fog.
- </p>
- </div>
- <div className="grid gap-8">
- <BoundaryCard 
- number="01"
- title="Cleanup Operations" 
- text="Text extraction, CSV parsing, preview generation, and final export file creation happen entirely in your browser's local memory." 
- />
- <BoundaryCard 
- number="02"
- title="Browser State" 
- text="Saved workspaces and tool preferences can live in local storage on your specific device, meaning we can't see them." 
- />
- <BoundaryCard 
- number="03"
- title="Telemetry" 
- text="Anonymous analytics or sanitized error reporting are treated as separate product behavior, completely isolated from raw file contents." 
- />
- </div>
- </div>
- </div>
- </section>
+  {/* Modern Accordion/List Section */}
+  <section className="py-24 sm:py-32">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto mb-16 max-w-3xl text-center">
+  <h2 className="mb-4 font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
+  Privacy details, without the jargon.
+  </h2>
+  <p className="text-lg text-[var(--lc-muted)]">
+  Short answers for the checks people make before uploading a lead file.
+  </p>
+  </div>
 
- {/* Modern Accordion/List Section */}
- <section className="bg-slate-50 py-24 sm:py-32">
- <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="mx-auto mb-16 max-w-3xl text-center">
- <h2 className="mb-4 font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
- Privacy details, without the jargon.
- </h2>
- <p className="text-lg text-slate-600">
- Short answers for the checks people make before uploading a lead file.
- </p>
- </div>
-
- <div className="mx-auto max-w-4xl space-y-6">
- {sections.map((section) => {
- const Icon = section.icon;
- return (
- <div 
- key={section.title}
- className="group flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:border-slate-300 hover:shadow-sm sm:flex-row"
- >
- <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-600 transition-colors duration-300 group-hover:bg-blue-50 group-hover:text-blue-600">
- <Icon className="h-6 w-6" />
- </div>
- <div>
- <h3 className="mb-3 font-display text-2xl font-semibold text-slate-900">
- {section.title}
- </h3>
- <p className="text-base leading-relaxed text-slate-600">
- {section.text}
- </p>
- </div>
- </div>
- );
- })}
- </div>
- </div>
- </section>
+  <div className="mx-auto max-w-4xl space-y-6">
+  {sections.map((section) => {
+  const Icon = section.icon;
+  return (
+  <div 
+  key={section.title}
+  className="group flex flex-col gap-6 rounded-[1.25rem] surface-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--lc-border-mid)] sm:flex-row"
+  >
+  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)] transition-colors duration-300 group-hover:bg-[var(--lc-accent-bg)]">
+  <Icon className="h-6 w-6" />
+  </div>
+  <div>
+  <h3 className="mb-3 font-display text-2xl font-semibold text-[var(--lc-ink)]">
+  {section.title}
+  </h3>
+  <p className="text-base leading-relaxed text-[var(--lc-muted)]">
+  {section.text}
+  </p>
+  </div>
+  </div>
+  );
+  })}
+  </div>
+  </div>
+  </section>
  </PageFrame>
  );
 }

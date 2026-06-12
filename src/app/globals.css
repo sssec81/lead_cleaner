@@ -1,30 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #f5f7fb;
-  --background-strong: #edf2f8;
-  --foreground: #09111f;
-  --surface: rgba(255, 255, 255, 0.82);
-  --surface-strong: rgba(255, 255, 255, 0.96);
-  --line: rgba(17, 24, 39, 0.08);
-  --line-strong: rgba(17, 24, 39, 0.14);
-  --brand: #1d4ed8;
-  --brand-strong: #1e3a8a;
-  --accent: #0f766e;
-  --accent-soft: #ecfeff;
-  --muted: #425466;
-  --muted-strong: #6b7a8c;
-  --shadow: 0 20px 48px rgba(9, 17, 31, 0.08);
-  --shadow-strong: 0 28px 70px rgba(9, 17, 31, 0.12);
-  --shadow-elevated: 0 40px 110px rgba(9, 17, 31, 0.14);
-  --panel: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,250,253,0.86));
-  --panel-strong: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(240,245,252,0.95));
-  --panel-dark: linear-gradient(180deg, rgba(8,15,29,0.92), rgba(12,22,39,0.98));
-  --font-display: "Space Grotesk", "Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif;
-  --font-body: "Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif;
-  --radius-card: 1.5rem;
-  --radius-panel: 1.75rem;
+  --lc-bg: #f8f8f7;
+  --lc-surface: #ffffff;
+  --lc-border: #e4e4e1;
+  --lc-border-mid: #cececa;
+  --lc-ink: #1a1a18;
+  --lc-muted: #6b6b67;
+  --lc-hint: #a3a39e;
+  --lc-accent: #1d4ed8;
+  --lc-accent-bg: #eff4ff;
+  --lc-green: #16a34a;
+  --lc-green-bg: #f0fdf4;
+  --lc-dark-bg: #111110;
+  --lc-dark-surface: #1c1c1a;
+  --background: var(--lc-bg);
+  --background-strong: #f2f2f0;
+  --foreground: var(--lc-ink);
+  --surface: var(--lc-surface);
+  --surface-strong: #ffffff;
+  --line: var(--lc-border);
+  --line-strong: var(--lc-border-mid);
+  --brand: var(--lc-accent);
+  --brand-strong: #1e40af;
+  --accent: var(--lc-accent);
+  --accent-soft: var(--lc-accent-bg);
+  --muted: var(--lc-muted);
+  --muted-strong: var(--lc-hint);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-strong: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --panel: #ffffff;
+  --panel-strong: #ffffff;
+  --panel-dark: #141412;
+  --font-display: "DM Sans", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --radius-card: 0.75rem;
+  --radius-panel: 0.75rem;
 }
 
 * {
@@ -46,11 +60,7 @@ textarea {
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 24%),
-    radial-gradient(circle at 82% 12%, rgba(14, 165, 233, 0.08), transparent 18%),
-    radial-gradient(circle at 22% 88%, rgba(16, 185, 129, 0.08), transparent 20%),
-    linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+  background: var(--lc-bg);
   color: var(--foreground);
   font-family: var(--font-body), sans-serif;
   line-height: 1.5;
@@ -92,6 +102,12 @@ textarea {
 
 .font-display {
   font-family: var(--font-display), serif;
+}
+
+.font-mono,
+code,
+pre {
+  font-family: var(--font-mono), monospace;
 }
 
 .skip-link {
@@ -167,39 +183,22 @@ textarea {
 }
 
 .page-shell::before {
-  position: fixed;
-  inset: auto auto 10% -10%;
-  z-index: -1;
-  height: 24rem;
-  width: 24rem;
-  border-radius: 9999px;
-  background: rgba(29, 78, 216, 0.08);
-  filter: blur(58px);
-  content: "";
+  display: none;
 }
 
 .page-shell::after {
-  position: fixed;
-  inset: 18% -8% auto auto;
-  z-index: -1;
-  height: 28rem;
-  width: 28rem;
-  border-radius: 9999px;
-  background: rgba(15, 118, 110, 0.08);
-  filter: blur(60px);
-  content: "";
+  display: none;
 }
 
 .surface-card {
   border: 1px solid var(--line);
   background: var(--panel);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(14px);
 }
 
 .surface-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 26px 52px rgba(9, 17, 31, 0.1);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
 }
 
 .btn-primary {
@@ -207,17 +206,16 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 0.625rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(29, 78, 216, 0.18);
-  background: linear-gradient(135deg, #0b1327, #1d4ed8);
-  box-shadow: 0 18px 38px rgba(29, 78, 216, 0.24);
+  border-radius: 0.5rem;
+  border: 1px solid var(--lc-accent);
+  background: var(--lc-accent);
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff;
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 22px 42px rgba(29, 78, 216, 0.3);
+  background: #1d42b8;
+  box-shadow: var(--shadow);
 }
 
 .btn-primary *,
@@ -242,18 +240,17 @@ textarea {
 }
 
 .btn-secondary {
-  border: 1px solid rgba(148, 163, 184, 0.38);
-  background: rgba(255, 255, 255, 0.9);
-  color: #334155;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  backdrop-filter: blur(12px);
+  border: 1px solid var(--lc-border-mid);
+  background: #ffffff;
+  color: var(--lc-ink);
+  box-shadow: var(--shadow);
 }
 
 .btn-secondary:hover {
   transform: translateY(-1px);
-  border-color: rgba(100, 116, 139, 0.4);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  border-color: var(--lc-border-mid);
+  background: #ffffff;
+  box-shadow: var(--shadow);
 }
 
 .btn-ghost {
@@ -386,10 +383,10 @@ a[aria-disabled="true"] {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.55), transparent 88%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.3), transparent 80%);
   pointer-events: none;
   content: "";
 }

@@ -75,252 +75,251 @@ export const metadata: Metadata = {
 export default function PricingPage() {
  return (
  <PageFrame>
- {/* Hero Section with Beautiful Gradients */}
- <section className="relative overflow-hidden pt-24 pb-20 lg:pt-36 lg:pb-32">
- <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,white,var(--background))]"></div>
- <div className="absolute top-0 right-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-400/20 blur-[120px]"></div>
- <div className="absolute bottom-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-400/20 blur-[120px]"></div>
-
- <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
- <div className="mx-auto max-w-3xl text-center">
- <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm">
- <Zap className="h-4 w-4" />
- <span>Fair Pricing Model</span>
- </div>
- <h1 className="mb-8 bg-[linear-gradient(to_right,theme(colors.slate.900),theme(colors.slate.600))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-7xl">
- Free should feel useful on purpose.
- </h1>
- <p className="text-lg leading-8 text-slate-600 sm:text-xl">
- LeadCleanr is not priced like a trap. The free tier lets you test the product honestly. Pro starts only when spreadsheet work gets heavier and larger files create friction.
- </p>
- <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-500">
- Most users never need Pro. Pay only when larger files and recurring workflows become part of the job.
- </p>
- </div>
- </div>
- </section>
+  {/* Hero Section */}
+  <section className="pt-24 pb-20 lg:pt-36 lg:pb-32">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+  <div className="mx-auto max-w-3xl text-center">
+  <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
+  <Zap className="h-4 w-4" />
+  <span>Fair Pricing Model</span>
+  </div>
+  <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-7xl">
+  Free should feel useful on purpose.
+  </h1>
+  <p className="text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
+  LeadCleanr is not priced like a trap. The free tier lets you test the product honestly. Pro starts only when spreadsheet work gets heavier and larger files create friction.
+  </p>
+  <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[var(--lc-hint)]">
+  Most users never need Pro. Pay only when larger files and recurring workflows become part of the job.
+  </p>
+  </div>
+  </div>
+  </section>
 
  {/* Pricing Cards Section */}
  <section className="relative pb-24 lg:pb-32 z-10">
  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
  <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:items-start">
- 
- {/* Free Tier Card */}
- <div className="group relative overflow-hidden rounded-xl border border-blue-200 bg-white p-8 shadow-sm ring-1 ring-blue-100 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-sm sm:p-12">
- <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(37,99,235,0.12),transparent_45%),linear-gradient(135deg,rgba(239,246,255,0.9),rgba(255,255,255,0.82))]"></div>
- <div className="relative">
- <div className="flex items-center justify-between mb-8">
- <div>
- <h3 className="text-sm font-bold uppercase tracking-widest text-blue-600">Free</h3>
- <div className="mt-4 flex items-baseline gap-2">
- <span className="text-6xl font-display font-bold tracking-tight text-slate-900">$0</span>
- <span className="text-lg text-slate-500">/mo</span>
- </div>
- </div>
- <div className="inline-flex items-center justify-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold uppercase tracking-widest text-blue-700">
- Featured
- </div>
- </div>
+  {/* Free Tier Card */}
+  <div className="group relative flex flex-col overflow-hidden surface-card rounded-[1.5rem] p-8 sm:p-12 transition-all duration-300 hover:-translate-y-1">
+  <div className="relative flex-1">
+  <div className="flex items-center justify-between mb-8">
+  <div>
+  <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-accent)]">Free</h3>
+  <div className="mt-4 flex items-baseline gap-2">
+  <span className="text-6xl font-display font-bold tracking-tight text-[var(--lc-ink)]">$0</span>
+  <span className="text-lg text-[var(--lc-muted)]">/mo</span>
+  </div>
+  </div>
+  <div className="inline-flex items-center justify-center rounded-full border border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--lc-accent)] shadow-sm">
+  Featured
+  </div>
+  </div>
 
- <p className="mb-8 text-base leading-relaxed text-slate-600">
- Free is for the first real pass. Clean what you need, export it, and decide whether the product deserves to stay in your workflow.
- </p>
+  <p className="mb-8 text-base leading-relaxed text-[var(--lc-muted)]">
+  Free is for the first real pass. Clean what you need, export it, and decide whether the product deserves to stay in your workflow.
+  </p>
 
- <div className="mb-10 space-y-4">
- {freePoints.map((point) => (
- <div key={point} className="flex items-start gap-3">
- <CheckCircle2 className="h-5 w-5 shrink-0 text-blue-500" />
- <span className="text-sm text-slate-700">{point}</span>
- </div>
- ))}
- </div>
+  <div className="mb-10 space-y-4">
+  {freePoints.map((point) => (
+  <div key={point} className="flex items-start gap-3">
+  <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--lc-accent)]" />
+  <span className="text-sm text-[var(--lc-ink)]">{point}</span>
+  </div>
+  ))}
+  </div>
 
- <div className="mb-8 rounded-xl border border-blue-100 bg-white p-4">
- <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-blue-600">
- Good for
- </p>
- <div className="mt-3 grid gap-2">
- {freeUseCases.map((item) => (
- <div key={item} className="flex items-center gap-2 text-sm text-slate-700">
- <Check className="h-4 w-4 text-blue-500" />
- <span>{item}</span>
- </div>
- ))}
- </div>
- </div>
+  <div className="mb-8 rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-4">
+  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--lc-accent)]">
+  Good for
+  </p>
+  <div className="mt-3 grid gap-2">
+  {freeUseCases.map((item) => (
+  <div key={item} className="flex items-center gap-2 text-sm text-[var(--lc-ink)]">
+  <Check className="h-4 w-4 text-[var(--lc-accent)]" />
+  <span>{item}</span>
+  </div>
+  ))}
+  </div>
+  </div>
+  </div>
 
- <Link
- href="/tools/csv-lead-cleaner"
- className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] px-6 text-sm font-semibold text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all duration-300 hover:bg-[position:right_center] hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(147,51,234,0.5)]"
- >
- <span>Try the free workflow</span>
- <ArrowRight className="h-4 w-4" />
- </Link>
- </div>
- </div>
+  <div className="mt-auto pt-4">
+  <Link
+  href="/tools/csv-lead-cleaner"
+  className="btn-primary w-full min-h-12 text-sm font-semibold"
+  >
+  <span>Try the free workflow</span>
+  <ArrowRight className="h-4 w-4" />
+  </Link>
+  </div>
+  </div>
 
- {/* Pro Tier Card */}
- <div className="group relative overflow-hidden rounded-xl bg-slate-950 p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm sm:p-12">
- <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(56,189,248,0.12),transparent_52%)]"></div>
- <div className="absolute inset-0 border border-white/10 rounded-xl"></div>
- 
- <div className="relative">
- <div className="flex items-center justify-between mb-8">
- <div>
- <h3 className="text-sm font-bold uppercase tracking-widest text-sky-400">Pro</h3>
- <div className="mt-4 flex items-baseline gap-2">
- <span className="text-6xl font-display font-bold tracking-tight text-white">$12</span>
- <span className="text-lg text-slate-500">/mo</span>
- </div>
- </div>
- <div className="inline-flex items-center justify-center rounded-full bg-sky-400/10 border border-sky-400/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-sky-400">
- Heavy Use
- </div>
- </div>
+  {/* Pro Tier Card */}
+  <div className="group relative flex flex-col overflow-hidden rounded-[1.5rem] bg-[var(--lc-dark-bg)] p-8 shadow-[var(--shadow-strong)] transition-all duration-300 hover:-translate-y-1 sm:p-12">
+  <div className="absolute inset-0 border border-white/10 rounded-[1.5rem]"></div>
+  
+  <div className="relative flex-1">
+  <div className="flex items-center justify-between mb-8">
+  <div>
+  <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">Pro</h3>
+  <div className="mt-4 flex items-baseline gap-2">
+  <span className="text-6xl font-display font-bold tracking-tight text-[var(--lc-surface)]">$12</span>
+  <span className="text-lg text-[var(--lc-hint)]">/mo</span>
+  </div>
+  </div>
+  <div className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--lc-surface)]">
+  Heavy Use
+  </div>
+  </div>
 
- <p className="mb-8 text-base leading-relaxed text-slate-500">
- Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
- </p>
+  <p className="mb-8 text-base leading-relaxed text-[var(--lc-hint)]">
+  Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
+  </p>
 
- <div className="mb-10 space-y-4">
- {proPoints.map((point) => (
- <div key={point} className="flex items-start gap-3">
- <CheckCircle2 className="h-5 w-5 shrink-0 text-sky-400" />
- <span className="text-sm text-slate-300">{point}</span>
- </div>
- ))}
- </div>
+  <div className="mb-10 space-y-4">
+  {proPoints.map((point) => (
+  <div key={point} className="flex items-start gap-3">
+  <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--lc-surface)]" />
+  <span className="text-sm text-[#e4e4e1]">{point}</span>
+  </div>
+  ))}
+  </div>
 
- <div className="mb-8 rounded-xl border border-white/10 bg-white/[0.03] p-4">
- <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-sky-300">
- Good for
- </p>
- <div className="mt-3 grid gap-2">
- {proUseCases.map((item) => (
- <div key={item} className="flex items-center gap-2 text-sm text-slate-300">
- <Check className="h-4 w-4 text-sky-400" />
- <span>{item}</span>
- </div>
- ))}
- </div>
- </div>
+  <div className="mb-8 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#e4e4e1]">
+  Good for
+  </p>
+  <div className="mt-3 grid gap-2">
+  {proUseCases.map((item) => (
+  <div key={item} className="flex items-center gap-2 text-sm text-[#e4e4e1]">
+  <Check className="h-4 w-4 text-[var(--lc-surface)]" />
+  <span>{item}</span>
+  </div>
+  ))}
+  </div>
+  </div>
+  </div>
 
- 
- </div>
- </div>
+  <div className="relative mt-auto pt-4">
+  <Link
+  href="#"
+  className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--lc-surface)] px-6 text-sm font-semibold text-[var(--lc-ink)] transition-all hover:bg-[#e4e4e1]"
+  >
+  <span>Get Pro Access</span>
+  <ArrowRight className="h-4 w-4" />
+  </Link>
+  </div>
+  </div>
 
  </div>
  </div>
  </section>
 
- {/* Decision Rules / How to Choose Section */}
- <section className="bg-slate-50 py-24 lg:py-32">
- <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="mx-auto max-w-3xl text-center mb-16">
- <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl mb-4">
- How to choose your plan
- </h2>
- <p className="text-lg text-slate-600">
- Choose based on the weight of the spreadsheet job.
- </p>
- </div>
+  {/* Decision Rules / How to Choose Section */}
+  <section className="py-24 lg:py-32">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto max-w-3xl text-center mb-16">
+  <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl mb-4">
+  How to choose your plan
+  </h2>
+  <p className="text-lg text-[var(--lc-muted)]">
+  Choose based on the weight of the spreadsheet job.
+  </p>
+  </div>
 
- <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
- {decisionRules.map((rule) => {
- const Icon = rule.icon;
- const colorStyles = 
- rule.color === 'blue' ? 'text-blue-600 bg-blue-50 border-blue-100 group-hover:bg-blue-100' :
- rule.color === 'emerald' ? 'text-emerald-600 bg-emerald-50 border-emerald-100 group-hover:bg-emerald-100' :
- 'text-slate-600 bg-slate-100 border-slate-200 group-hover:bg-slate-200';
+  <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+  {decisionRules.map((rule) => {
+  const Icon = rule.icon;
 
- return (
- <div 
- key={rule.label}
- className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-sm hover:border-slate-300"
- >
- <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-xl border transition-colors duration-300 ${colorStyles}`}>
- <Icon className="h-6 w-6" />
- </div>
- <h3 className="text-sm font-bold uppercase tracking-widest text-slate-900 mb-3">{rule.label}</h3>
- <p className="text-sm leading-relaxed text-slate-600">{rule.text}</p>
- </div>
- );
- })}
- </div>
- </div>
- </section>
+  return (
+  <div 
+  key={rule.label}
+  className="group relative overflow-hidden surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--lc-border-mid)]"
+  >
+  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)] transition-colors duration-300 group-hover:bg-[var(--lc-accent-bg)]">
+  <Icon className="h-6 w-6" />
+  </div>
+  <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-ink)] mb-3">{rule.label}</h3>
+  <p className="text-sm leading-relaxed text-[var(--lc-muted)]">{rule.text}</p>
+  </div>
+  );
+  })}
+  </div>
+  </div>
+  </section>
 
- {/* Comparison Cards Section */}
- <section className="py-24 lg:py-32">
- <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
- <div className="mx-auto max-w-3xl text-center">
- <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
- Compare by how much work you need to do
- </h2>
- <p className="mt-4 text-base leading-7 text-slate-600">
- The free plan is a real workflow. Pro is for scale, presets, and repeat cleanup jobs.
- </p>
- </div>
+  {/* Comparison Cards Section */}
+  <section className="py-24 lg:py-32">
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto max-w-3xl text-center">
+  <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
+  Compare by how much work you need to do
+  </h2>
+  <p className="mt-4 text-base leading-7 text-[var(--lc-muted)]">
+  The free plan is a real workflow. Pro is for scale, presets, and repeat cleanup jobs.
+  </p>
+  </div>
 
- <div className="mt-12 grid gap-6 md:grid-cols-2">
- <div className="rounded-xl border border-blue-100 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm">
- <div className="flex items-center justify-between gap-4">
- <div>
- <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">
- Free
- </p>
- <h3 className="mt-2 font-display text-2xl font-semibold text-slate-900">
- Useful without pressure
- </h3>
- </div>
- <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-700">
- $0
- </span>
- </div>
+  <div className="mt-12 grid gap-6 md:grid-cols-2">
+  <div className="surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1">
+  <div className="flex items-center justify-between gap-4">
+  <div>
+  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--lc-accent)]">
+  Free
+  </p>
+  <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--lc-ink)]">
+  Useful without pressure
+  </h3>
+  </div>
+  <span className="rounded-full border border-[var(--lc-border)] bg-[var(--lc-bg)] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--lc-ink)]">
+  $0
+  </span>
+  </div>
 
- <div className="mt-6 grid gap-3">
- {freeComparison.map((item) => (
- <div key={item} className="flex items-start gap-3 rounded-xl bg-blue-50/50 px-4 py-3">
- <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-500" />
- <span className="text-sm font-medium text-slate-700">{item}</span>
- </div>
- ))}
- </div>
- </div>
+  <div className="mt-6 grid gap-3">
+  {freeComparison.map((item) => (
+  <div key={item} className="flex items-start gap-3 rounded-xl bg-[var(--lc-bg)] px-4 py-3">
+  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--lc-accent)]" />
+  <span className="text-sm font-medium text-[var(--lc-ink)]">{item}</span>
+  </div>
+  ))}
+  </div>
+  </div>
 
- <div className="rounded-xl border border-slate-200 bg-slate-50 p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-sm">
- <div className="flex items-center justify-between gap-4">
- <div>
- <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-600">
- Pro
- </p>
- <h3 className="mt-2 font-display text-2xl font-semibold text-slate-900">
- Scale when it becomes repeat work
- </h3>
- </div>
- <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-700">
- $12/mo
- </span>
- </div>
+  <div className="surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1">
+  <div className="flex items-center justify-between gap-4">
+  <div>
+  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--lc-ink)]">
+  Pro
+  </p>
+  <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--lc-ink)]">
+  Scale when it becomes repeat work
+  </h3>
+  </div>
+  <span className="rounded-full border border-[var(--lc-border)] bg-[var(--lc-surface)] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--lc-ink)]">
+  $12/mo
+  </span>
+  </div>
 
- <div className="mt-6 grid gap-3">
- {proComparison.map((item) => (
- <div key={item} className="flex items-start gap-3 rounded-xl bg-white px-4 py-3">
- <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
- <span className="text-sm font-medium text-slate-700">{item}</span>
- </div>
- ))}
- </div>
- </div>
- </div>
+  <div className="mt-6 grid gap-3">
+  {proComparison.map((item) => (
+  <div key={item} className="flex items-start gap-3 rounded-xl bg-[var(--lc-surface)] border border-[var(--lc-border)] px-4 py-3">
+  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--lc-ink)]" />
+  <span className="text-sm font-medium text-[var(--lc-ink)]">{item}</span>
+  </div>
+  ))}
+  </div>
+  </div>
+  </div>
 
- <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm">
- <p className="text-sm leading-relaxed text-slate-600">
- <strong>Note:</strong> Business and API features should appear only after repeat demand proves they belong here. Until then, pricing stays easy to explain.
- </p>
- </div>
- </div>
- </section>
+  <div className="mt-8 surface-card rounded-xl p-6 text-center">
+  <p className="text-sm leading-relaxed text-[var(--lc-muted)]">
+  <strong>Note:</strong> Business and API features should appear only after repeat demand proves they belong here. Until then, pricing stays easy to explain.
+  </p>
+  </div>
+  </div>
+  </section>
  </PageFrame>
  );
 }

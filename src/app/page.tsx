@@ -2,38 +2,35 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import {
   ArrowRight,
-  BarChart3,
-  CheckCircle2,
+  Check,
+  Download,
   FileSpreadsheet,
-  FileText,
   Globe,
-  Lock,
   Mail,
   Phone,
   Shield,
-  Sparkles,
   Upload,
   Users,
-  Zap,
+  Wand2,
 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 
-const workflowSteps = [
+const processSteps = [
   {
-    step: "01",
     title: "Upload or paste the raw list",
-    text: "Start with CSV if the spreadsheet already exists. Only use text helpers when the data is still messy copied input.",
+    text: "Start with a CSV when the spreadsheet already exists.",
+    icon: Upload,
   },
   {
-    step: "02",
     title: "Clean only what matters",
-    text: "Run the focused tool that matches the job: full CSV cleanup, email extraction, dedupe, validation, or format conversion.",
+    text: "Extract emails, phones, domains, or remove the duplicates.",
+    icon: Wand2,
   },
   {
-    step: "03",
     title: "Review, then export",
-    text: "Check the output inside the workspace and download only when the cleaned result looks right.",
+    text: "Download the cleaned output only when it looks right.",
+    icon: Download,
   },
 ];
 
@@ -41,297 +38,250 @@ const quickStarts = [
   {
     href: "/tools/csv-lead-cleaner",
     title: "Full CSV cleanup",
-    text: "Best for CRM imports, prospect lists, recruiter sheets, and agency handoffs.",
+    text: "Best for CRM imports, recruiter sheets, and agency delivery.",
     icon: FileSpreadsheet,
-    tag: "Start here",
   },
   {
-    href: "/tools/extract-emails-from-text",
+    href: "/tools/extract-emails-from-text?sample=1",
     title: "Emails from pasted text",
-    text: "Use when contacts still live in notes, pages, signatures, or copied blocks.",
+    text: "Use when the contacts still live in copied notes or rough blocks.",
     icon: Mail,
-    tag: "Text helper",
   },
   {
-    href: "/tools/extract-phone-numbers-from-text",
+    href: "/tools/extract-phone-numbers-from-text?sample=1",
     title: "Phones from pasted text",
-    text: "Pull phone numbers out of raw sourcing notes or messy copied directories.",
+    text: "Pull phone numbers out of raw sourcing notes or messy directories.",
     icon: Phone,
-    tag: "Text helper",
   },
   {
-    href: "/tools/extract-domains-from-emails",
+    href: "/tools/extract-domains-from-emails?sample=1",
     title: "Domains for enrichment",
-    text: "Quick domain extraction when you need a list for lookup or routing.",
+    text: "Turn messy emails and URLs into a clean company-domain list.",
     icon: Globe,
-    tag: "Support step",
   },
-];
-
-const trustPoints = [
-  {
-    title: "Browser-first processing",
-    text: "CSV files and pasted content are cleaned locally in your browser during normal usage.",
-    icon: Shield,
-  },
-  {
-    title: "No signup required",
-    text: "Users can start immediately without creating an account for the main workflow.",
-    icon: Lock,
-  },
-  {
-    title: "Built for lead ops",
-    text: "Designed for CRM imports, outreach operations, recruiting workflows, and agency delivery.",
-    icon: Users,
-  },
-];
-
-const heroProofs = [
-  { label: "Processed locally", value: "Browser-only", icon: Shield },
-  { label: "Free path", value: "No signup", icon: Lock },
-  { label: "First success", value: "Try sample fast", icon: Zap },
 ];
 
 export const metadata: Metadata = {
   title: "LeadCleanr — Private CSV Lead Cleaner for CRM & Outreach Lists",
   description:
-    "Clean messy lead CSVs before import. Choose the right workflow fast, process locally in your browser, and export only after review.",
+    "Paste a messy list or upload a CSV. LeadCleanr extracts emails, phones, and domains in your browser with no signup required.",
   alternates: { canonical: "https://leadcleanr.com" },
 };
 
 export default function HomePage() {
   return (
     <PageFrame>
-      <section className="grid-glow relative overflow-hidden pt-24 pb-14 lg:pt-36 lg:pb-18">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.84),var(--background))]" />
-        <div className="absolute top-0 right-1/4 -z-10 h-[520px] w-[520px] rounded-full bg-blue-400/18 blur-[120px]" />
-        <div className="absolute bottom-0 left-1/4 -z-10 h-[520px] w-[520px] rounded-full bg-emerald-400/16 blur-[120px]" />
+      <section className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 lg:px-8 lg:pt-28">
+        <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
+          <div>
+            <p className="section-eyebrow">Workflow Tool</p>
+            <h1 className="section-title mt-4 max-w-none font-display text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-[var(--lc-ink)]">
+              Clean messy lead CSVs
+              <br />
+              before they break
+              <br />
+              your CRM import.
+            </h1>
+            <p className="mt-4 max-w-sm text-base leading-7 text-[var(--lc-muted)]">
+              Paste a messy list or upload a CSV. LeadCleanr extracts emails,
+              phones, and domains in your browser, nothing uploaded.
+            </p>
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-[1.12fr_0.88fr]">
-            <div className="pt-4">
-              <div className="metric-chip mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700">
-                <Sparkles className="h-4 w-4" />
-                <span>Private Lead Workflow</span>
-              </div>
-              <h1 className="aurora-text max-w-4xl font-display text-4xl font-bold tracking-tight sm:text-6xl">
-                Clean messy lead CSVs before they break your CRM import.
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
-                LeadCleanr is a workflow-first set of cleanup tools. Start with the CSV cleaner when the spreadsheet already exists, then branch into helper tools only when the input is still raw text.
-              </p>
-
-              <div className="mt-7 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/tools/csv-lead-cleaner"
-                  className="btn-primary min-h-14 rounded-full px-8 text-base font-semibold"
-                >
-                  Start CSV Workflow
-                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <Link
-                  href="/tools"
-                  className="btn-secondary min-h-14 rounded-full px-8 text-base font-semibold"
-                >
-                  Browse All Tools
-                </Link>
-              </div>
-
-              <div className="mt-6 flex items-center gap-3 text-sm font-medium text-slate-500">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                No signup required. Clean locally and review before export.
-              </div>
-
-              <div className="mt-7 grid gap-3 sm:grid-cols-3">
-                {heroProofs.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div
-                      key={item.label}
-                      className="rounded-[1.2rem] border border-slate-200/80 bg-white/82 px-4 py-3 shadow-sm"
-                    >
-                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
-                        <Icon className="h-3.5 w-3.5 text-blue-600" />
-                        {item.label}
-                      </div>
-                      <p className="mt-2 text-sm font-semibold text-slate-900">{item.value}</p>
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/tools/csv-lead-cleaner?sample=1"
+                className="btn-primary min-h-11 rounded-lg px-5 py-2.5 text-[15px] font-medium"
+              >
+                Start CSV Workflow
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/tools"
+                className="btn-secondary min-h-11 rounded-lg px-5 py-2.5 text-[15px] font-medium"
+              >
+                Browse all tools
+              </Link>
             </div>
 
-            <div className="glass-panel rounded-[1.75rem] p-6 sm:p-7">
-              <div className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.22em] text-blue-700">
-                <BarChart3 className="h-4 w-4" />
-                Live Demo
-              </div>
-              <div className="rounded-[1.5rem] border border-slate-200/80 bg-white/86 p-4 shadow-sm">
-                <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
-                  <div className="rounded-[1.2rem] border border-slate-200 bg-slate-50/85 p-4">
-                    <div className="mb-3 flex items-center justify-between gap-3">
-                      <div>
-                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                          Messy Input
-                        </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-900">Raw pasted lead notes</p>
-                      </div>
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-white">
-                        <FileText className="h-5 w-5" />
-                      </div>
-                    </div>
-                    <div className="space-y-2 rounded-[1rem] border border-slate-200 bg-white px-4 py-3 font-mono text-xs leading-6 text-slate-500">
-                      <p>Jane - JANE@acme.com, copied from footer</p>
-                      <p>support@northstar.io after the demo call</p>
-                      <p>(415) 555-0101 in notes again</p>
-                      <p>www.riverlabs.ai/contact from research</p>
-                    </div>
-                  </div>
+            <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-[11px] text-[var(--lc-muted)]">
+              <span>✓ No account needed</span>
+              <span className="text-[var(--lc-hint)]">·</span>
+              <span>✓ 2MB free</span>
+              <span className="text-[var(--lc-hint)]">·</span>
+              <span>✓ Processed locally</span>
+            </div>
+          </div>
 
-                  <div className="flex items-center justify-center">
-                    <div className="flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
-                      <Upload className="h-3.5 w-3.5" />
-                      Clean
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-
-                  <div className="rounded-[1.2rem] border border-slate-800 bg-slate-950 p-4 text-white shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
-                    <div className="mb-3 flex items-center justify-between gap-3">
-                      <div>
-                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-200">
-                          Clean Output
-                        </p>
-                        <p className="mt-1 text-sm font-semibold text-white">Structured, export-ready values</p>
-                      </div>
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/15 text-blue-200">
-                        <FileSpreadsheet className="h-5 w-5" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      {[
-                        { label: "Email", value: "jane@acme.com" },
-                        { label: "Email", value: "support@northstar.io" },
-                        { label: "Phone", value: "+14155550101" },
-                        { label: "Domain", value: "riverlabs.ai" },
-                      ].map((row) => (
-                        <div
-                          key={row.value}
-                          className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/6 px-4 py-3"
-                        >
-                          <div className="min-w-0">
-                            <span className="rounded-full bg-blue-500/12 px-2.5 py-1 text-[11px] font-bold tracking-wide text-blue-100">
-                              {row.label}
-                            </span>
-                            <p className="mt-2 truncate font-mono text-sm text-slate-100">{row.value}</p>
-                          </div>
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          <div className="overflow-hidden rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)]">
+            <div className="grid lg:grid-cols-2">
+              <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col">
+                <div className="border-b border-[var(--lc-border)] bg-[#F4F4F2] px-4 py-2">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
+                    Messy Input
+                  </p>
                 </div>
+                <div className="flex-1 px-4 py-4 font-mono text-[13px] leading-relaxed text-[var(--lc-muted)]">
+                  <p>Jane - JANE@acme.com, copied from footer</p>
+                  <p>support@northstar.io after demo call</p>
+                  <p>(415) 555-0101 in notes again</p>
+                  <p>www.riverlabs.ai/contact from research</p>
+                </div>
+              </div>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                  {workflowSteps.map((item) => (
-                    <div key={item.step} className="rounded-[1.15rem] border border-slate-200/80 bg-white px-4 py-4">
-                      <div className="mb-2 flex items-center gap-3">
-                        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold tracking-widest text-blue-700">
-                          {item.step}
+              <div className="relative flex flex-col bg-[#141412]">
+                <div className="absolute left-1/2 top-0 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--lc-border-mid)] bg-white px-3 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--lc-accent)] lg:inline-flex">
+                  Clean
+                </div>
+                <div className="bg-[var(--lc-ink)] px-4 py-2 shrink-0">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
+                    Clean Output
+                  </p>
+                </div>
+                <div className="flex-1 px-4 py-4">
+                  {[
+                    { type: "Email", value: "jane@acme.com", tone: "bg-blue-950 text-blue-300" },
+                    { type: "Email", value: "support@northstar.io", tone: "bg-blue-950 text-blue-300" },
+                    { type: "Phone", value: "+14155550101", tone: "bg-emerald-950 text-emerald-300" },
+                    { type: "Domain", value: "riverlabs.ai", tone: "bg-violet-950 text-violet-300" },
+                  ].map((item, index) => (
+                    <div
+                      key={item.value}
+                      className="homepage-demo-row mb-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 last:mb-0"
+                      style={{ animationDelay: `${index * 120}ms` }}
+                    >
+                      <div className="min-w-0">
+                        <span className={`rounded-full px-2 py-1 font-mono text-[10px] ${item.tone}`}>
+                          {item.type}
                         </span>
-                        <h2 className="text-sm font-semibold text-slate-900">{item.title}</h2>
+                        <p className="mt-2 truncate font-mono text-[13px] text-white">
+                          {item.value}
+                        </p>
                       </div>
-                      <p className="text-sm leading-6 text-slate-600">{item.text}</p>
+                      <Check className="h-4 w-4 shrink-0 text-[var(--lc-green)]" />
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+
+            <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-4">
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/tools/extract-emails-from-text?sample=1"
+                  className="btn-secondary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
+                >
+                  Try text sample
+                </Link>
+                <Link
+                  href="/tools/csv-lead-cleaner?sample=1"
+                  className="btn-primary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
+                >
+                  Open CSV sample
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="pb-12 lg:pb-16">
+      <section className="border-y border-[var(--lc-border)] bg-[var(--lc-surface)] py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-blue-700">
-                Quick Start Paths
-              </p>
-              <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-                Pick the workflow that matches the mess.
-              </h2>
-            </div>
-            <div className="flex flex-wrap gap-2 text-xs font-semibold text-slate-600">
-              <span className="metric-chip rounded-full px-3 py-1.5">CSV-first</span>
-              <span className="metric-chip rounded-full px-3 py-1.5">Compact choices</span>
-              <span className="metric-chip rounded-full px-3 py-1.5">Built for speed</span>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {quickStarts.map((item) => (
-              <QuickStartCard key={item.href} item={item} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(240,245,251,0.92))] py-12 lg:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-4 lg:grid-cols-3">
-            {trustPoints.map((point) => {
-              const Icon = point.icon;
+          <div className="grid gap-8 md:grid-cols-3 md:items-start">
+            {processSteps.map((step, index) => {
+              const Icon = step.icon;
               return (
-                <div key={point.title} className="glass-panel rounded-[1.5rem] p-6">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                <div key={step.title} className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-slate-900">{point.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">{point.text}</p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3">
+                      <h2 className="text-base font-semibold text-[var(--lc-ink)]">{step.title}</h2>
+                      {index < processSteps.length - 1 ? (
+                        <span className="hidden text-[var(--lc-hint)] md:inline">→</span>
+                      ) : null}
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">{step.text}</p>
+                  </div>
                 </div>
               );
             })}
           </div>
         </div>
       </section>
-    </PageFrame>
-  );
-}
 
-function QuickStartCard({
-  item,
-}: {
-  item: {
-    href: string;
-    title: string;
-    text: string;
-    icon: React.ComponentType<{ className?: string }>;
-    tag: string;
-  };
-}) {
-  const Icon = item.icon;
-
-  return (
-    <Link
-      href={item.href}
-      className="surface-card group rounded-[1.5rem] p-5 transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_18px_38px_rgba(15,23,42,0.08)]"
-    >
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-50 text-slate-600 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
-          <Icon className="h-5 w-5" />
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <p className="section-eyebrow">Quick Start Paths</p>
+        <div className="mt-3 flex items-end justify-between gap-6">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">
+            Pick the workflow that matches the mess.
+          </h2>
         </div>
-        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold tracking-wide text-blue-700">
-          {item.tag}
-        </span>
-      </div>
-      <h3 className="font-display text-xl font-semibold text-slate-900">{item.title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-700">
-        Open path
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-      </div>
-    </Link>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {quickStarts.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-5 transition-colors hover:border-[var(--lc-accent)] hover:shadow-sm"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+                  <Icon className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold text-[var(--lc-ink)]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">{item.text}</p>
+                <div className="mt-5 inline-flex items-center gap-2 rounded-md border border-[var(--lc-border-mid)] px-3 py-1 text-sm font-medium text-[var(--lc-ink)] transition-colors hover:border-[var(--lc-accent)]">
+                  Open path
+                  <ArrowRight className="h-4 w-4" />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+              <Shield className="h-6 w-6" />
+            </div>
+            <h2 className="mt-5 font-display text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--lc-ink)]">
+              Your data never leaves
+              <br />
+              your browser.
+            </h2>
+            <div className="mt-5 space-y-2 text-sm leading-6 text-[var(--lc-muted)]">
+              <p>✓ CSV parsing and text cleanup happen locally on this device.</p>
+              <p>✓ You can test the free workflow without creating an account first.</p>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+                <Check className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-[var(--lc-ink)]">No signup</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                Open a tool, load a sample, and see the output before committing to anything.
+              </p>
+            </div>
+            <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+                <Users className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-[var(--lc-ink)]">Built for lead ops</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                Designed for CRM imports, outbound cleanup, recruiter sourcing, and agency handoff workflows.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </PageFrame>
   );
 }

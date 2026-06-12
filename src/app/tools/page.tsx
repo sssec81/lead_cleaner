@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
+  ChevronRight,
   BarChart3,
   CheckCircle2,
   CopyX,
@@ -24,36 +25,6 @@ import {
 
 import { PageFrame } from "@/components/page-frame";
 import { BreadcrumbJsonLd, getSiteUrl } from "@/lib/seo";
-
-const workflowSteps = [
-  {
-    step: "01",
-    title: "Start with CSV if you already have rows",
-    text: "Use the CSV tools when the list already lives in a spreadsheet and needs cleanup before export or import.",
-  },
-  {
-    step: "02",
-    title: "Use text helpers only for messy copied input",
-    text: "Paste copied notes, signatures, or pages when the data is not in spreadsheet form yet.",
-  },
-  {
-    step: "03",
-    title: "Return to the main cleaner for the final pass",
-    text: "After extracting emails, phones, or domains, move back into the CSV workflow for the actual cleanup review.",
-  },
-];
-
-const primaryPath = {
-  href: "/tools/csv-lead-cleaner",
-  title: "CSV Lead Cleaner",
-  description:
-    "The default path for CRM imports, recruiter sheets, agency handoffs, and outreach lists that need a full cleanup pass.",
-  points: [
-    "Deduplicate and clean columns",
-    "Review what changed before export",
-    "Keep processing local in the browser",
-  ],
-};
 
 const csvTools = [
   {
@@ -178,235 +149,214 @@ export const metadata: Metadata = {
 export default function ToolsPage() {
   return (
     <PageFrame>
-      <BreadcrumbJsonLd
-        items={[
-          { name: "Home", url: "/" },
-          { name: "Tools", url: "/tools" },
-        ]}
-      />
+      <div className="bg-[var(--lc-bg)] min-h-screen pb-16">
+        <BreadcrumbJsonLd
+          items={[
+            { name: "Home", url: "/" },
+            { name: "Tools", url: "/tools" },
+          ]}
+        />
 
-      <section className="grid-glow relative overflow-hidden pt-24 pb-14 lg:pt-36 lg:pb-18">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.86),var(--background))]" />
-        <div className="absolute top-0 right-1/4 -z-10 h-[420px] w-[420px] rounded-full bg-blue-400/18 blur-[110px]" />
-        <div className="absolute bottom-0 left-1/4 -z-10 h-[420px] w-[420px] rounded-full bg-emerald-400/14 blur-[110px]" />
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="metric-chip mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700">
-              <ShieldCheck className="h-4 w-4" />
-              <span>Compact Workflow Map</span>
+        {/* Zone 1: Page header */}
+        <section className="pt-16 pb-10">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl">
+              <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-3">
+                All Tools
+              </p>
+              <h1 className="font-display text-[2.75rem] font-bold tracking-[-0.025em] text-[var(--lc-ink)] leading-tight mb-4">
+                Pick the right tool in one pass.
+              </h1>
+              <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-xl">
+                Start with CSV if you already have a spreadsheet.<br />
+                Use text helpers when the data is still copied text.
+              </p>
             </div>
-            <h1 className="aurora-text mb-6 font-display text-4xl font-bold tracking-tight sm:text-6xl">
-              Pick the right tool in one pass.
-            </h1>
-            <p className="text-base leading-7 text-slate-600 sm:text-lg">
-              Most users should start with the CSV workflow. Only branch into helper tools when the input is still copied text or you need one small cleanup step.
-            </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="pb-10 lg:pb-14">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-            <Link
-              href={primaryPath.href}
-              className="group relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/88 p-6 shadow-[0_22px_60px_-44px_rgba(15,23,42,0.42)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_72px_-42px_rgba(37,99,235,0.24)] sm:p-7"
-            >
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(242,247,252,0.94))]" />
-              <div className="absolute right-0 top-0 h-48 w-48 rounded-full bg-blue-400/12 blur-[90px]" />
-              <div className="relative">
-                <div className="mb-5 flex items-center justify-between gap-4">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-blue-700">
-                    <Zap className="h-3.5 w-3.5" />
-                    Start Here
+        {/* Zone 2: Featured tool + workflow logic */}
+        <section className="pb-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-6 lg:grid-cols-12">
+
+              {/* Left Card 7/12 */}
+              <div className="lg:col-span-7">
+                <div className="h-full bg-[var(--lc-ink)] text-white rounded-xl p-8 flex flex-col items-start relative overflow-hidden">
+                  <div className="mb-6 inline-block bg-white/10 text-white/70 font-mono text-[10px] uppercase rounded-full px-3 py-1 tracking-wider">
+                    ↗ Start Here
                   </div>
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#1d4ed8,#0f766e)] text-white shadow-[0_12px_26px_rgba(29,78,216,0.24)]">
-                    <FileSpreadsheet className="h-5 w-5" />
+                  <h2 className="font-display text-[1.75rem] font-bold text-white mb-2">
+                    CSV Lead Cleaner
+                  </h2>
+                  <p className="font-sans text-[15px] text-white/70 max-w-md leading-relaxed">
+                    The default path for CRM imports, recruiter sheets, agency handoffs, and outreach lists that need a full cleanup pass.
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    <span className="bg-white/10 text-white/80 rounded-md px-3 py-1.5 text-sm font-sans">Deduplicate & clean columns</span>
+                    <span className="bg-white/10 text-white/80 rounded-md px-3 py-1.5 text-sm font-sans">Review before export</span>
+                    <span className="bg-white/10 text-white/80 rounded-md px-3 py-1.5 text-sm font-sans">Browser-local processing</span>
+                  </div>
+
+                  <Link href="/tools/csv-lead-cleaner" className="mt-8 inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition-colors rounded-lg px-5 py-2.5 text-sm font-medium">
+                    Open main workflow <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Panel 5/12 */}
+              <div className="lg:col-span-5">
+                <div className="h-full bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-6">
+                  <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-6">
+                    Workflow Logic
+                  </p>
+
+                  <div className="flex flex-col">
+                    <div className="flex flex-col gap-1 border-b border-[var(--lc-border)] py-3">
+                      <span className="font-sans text-[13px] text-[var(--lc-muted)]">○ Have a spreadsheet?</span>
+                      <div className="flex items-center gap-1 font-sans text-[13px] font-medium text-[var(--lc-ink)]">
+                        <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> Use CSV Lead Cleaner
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1 border-b border-[var(--lc-border)] py-3">
+                      <span className="font-sans text-[13px] text-[var(--lc-muted)]">○ Copied/pasted text?</span>
+                      <div className="flex items-center gap-1 font-sans text-[13px] font-medium text-[var(--lc-ink)]">
+                        <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> Use text extractors
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1 py-3">
+                      <span className="font-sans text-[13px] text-[var(--lc-muted)]">○ Done extracting?</span>
+                      <div className="flex items-center gap-1 font-sans text-[13px] font-medium text-[var(--lc-ink)]">
+                        <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> Return to CSV cleaner
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-[2rem]">
-                  {primaryPath.title}
+            </div>
+          </div>
+        </section>
+
+        {/* Zone 3: Tool Directory */}
+        <section className="pt-16 pb-16 border-t border-[var(--lc-border)]">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
+                  CSV Helpers
+                </p>
+                <h2 className="font-sans text-[1.25rem] font-semibold text-[var(--lc-ink)]">
+                  One focused action on your spreadsheet.
                 </h2>
-                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-                  {primaryPath.description}
+              </div>
+              <div className="flex gap-2">
+                <button className="rounded-full px-3 py-1 text-xs font-medium border bg-[var(--lc-ink)] text-white border-[var(--lc-ink)]">
+                  All
+                </button>
+                <button className="rounded-full px-3 py-1 text-xs font-medium border bg-transparent text-[var(--lc-muted)] border-[var(--lc-border)]">
+                  Most used
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {csvTools.map((tool) => {
+                const Icon = tool.icon;
+                return (
+                  <Link key={tool.href} href={tool.href} className="group bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 flex flex-col gap-3 transition-all duration-150 hover:border-[var(--lc-border-mid)] hover:shadow-sm">
+                    <div className="flex items-start justify-between">
+                      <div className="bg-[var(--lc-accent-bg)] rounded-lg p-1.5">
+                        <Icon className="h-5 w-5 text-[var(--lc-accent)]" />
+                      </div>
+                      <span className="font-mono text-[10px] uppercase bg-[var(--lc-bg)] text-[var(--lc-muted)] rounded px-2 py-0.5 border border-[var(--lc-border)]">
+                        {tool.tag}
+                      </span>
+                    </div>
+                    <h3 className="font-sans text-[15px] font-medium text-[var(--lc-ink)] mt-2">
+                      {tool.title}
+                    </h3>
+                    <p className="font-sans text-[13px] leading-relaxed text-[var(--lc-muted)]">
+                      {tool.description}
+                    </p>
+                    <div className="mt-auto pt-3 text-[var(--lc-accent)] text-sm font-medium group-hover:underline">
+                      Open tool →
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="pt-16 pb-16 border-t border-[var(--lc-border)]">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-8 lg:grid-cols-2">
+
+              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-6">
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
+                  Text Extraction
+                </p>
+                <h2 className="font-sans text-[1.25rem] font-semibold text-[var(--lc-ink)] mb-2">
+                  Input is still messy copied text.
+                </h2>
+                <p className="font-sans text-[13px] text-[var(--lc-muted)] mb-6 truncate">
+                  Use these when you have notes, pasted pages, or signatures.
                 </p>
 
-                <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                  {primaryPath.points.map((point) => (
-                    <div
-                      key={point}
-                      className="rounded-2xl border border-slate-200/80 bg-white/84 px-4 py-3 text-sm font-medium text-slate-700 shadow-sm"
-                    >
-                      {point}
-                    </div>
-                  ))}
+                <div className="flex flex-col">
+                  {textExtractionTools.map((tool) => {
+                    const Icon = tool.icon;
+                    return (
+                      <Link key={tool.href} href={tool.href} className="group flex items-start gap-3 py-3 border-b border-[var(--lc-border)] last:border-0 cursor-pointer transition-colors hover:bg-[var(--lc-bg)] -mx-4 px-4 hover:rounded-lg">
+                        <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>
+                          <p className="font-sans text-[13px] text-[var(--lc-muted)] truncate">{tool.description}</p>
+                        </div>
+                        <ChevronRight className="h-4 w-4 mt-1 text-[var(--lc-hint)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0 ml-auto" />
+                      </Link>
+                    );
+                  })}
                 </div>
+              </div>
 
-                <div className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-700">
-                  Open main workflow
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-6">
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
+                  Quick Cleanup
+                </p>
+                <h2 className="font-sans text-[1.25rem] font-semibold text-[var(--lc-ink)] mb-2">
+                  You only need one cleanup utility.
+                </h2>
+                <p className="font-sans text-[13px] text-[var(--lc-muted)] mb-6 truncate">
+                  Small sharp tools for validation, dedupe, or quick measurement.
+                </p>
+
+                <div className="flex flex-col">
+                  {cleanupTools.map((tool) => {
+                    const Icon = tool.icon;
+                    return (
+                      <Link key={tool.href} href={tool.href} className="group flex items-start gap-3 py-3 border-b border-[var(--lc-border)] last:border-0 cursor-pointer transition-colors hover:bg-[var(--lc-bg)] -mx-4 px-4 hover:rounded-lg">
+                        <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>
+                          <p className="font-sans text-[13px] text-[var(--lc-muted)] truncate">{tool.description}</p>
+                        </div>
+                        <ChevronRight className="h-4 w-4 mt-1 text-[var(--lc-hint)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0 ml-auto" />
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
-            </Link>
 
-            <div className="glass-panel rounded-[1.75rem] p-6">
-              <div className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-blue-700">
-                <BarChart3 className="h-4 w-4" />
-                Workflow Logic
-              </div>
-              <div className="space-y-3">
-                {workflowSteps.map((item) => (
-                  <div
-                    key={item.step}
-                    className="rounded-2xl border border-slate-200/80 bg-white/80 px-4 py-4"
-                  >
-                    <div className="mb-1 flex items-center gap-3">
-                      <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold tracking-widest text-blue-700">
-                        {item.step}
-                      </span>
-                      <h3 className="text-sm font-semibold text-slate-900">{item.title}</h3>
-                    </div>
-                    <p className="text-sm leading-6 text-slate-600">{item.text}</p>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="pb-12 lg:pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-blue-700">
-                CSV Helpers
-              </p>
-              <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-                Spreadsheet already exists, but you only need one focused action.
-              </h2>
-            </div>
-            <div className="flex flex-wrap gap-2 text-xs font-semibold text-slate-600">
-              <span className="metric-chip rounded-full px-3 py-1.5">Fast picks</span>
-              <span className="metric-chip rounded-full px-3 py-1.5">CSV-only</span>
-              <span className="metric-chip rounded-full px-3 py-1.5">Compact cards</span>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {csvTools.map((tool) => (
-              <CompactToolCard key={tool.href} tool={tool} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(240,245,251,0.92))] py-12 lg:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <ToolGroup
-              eyebrow="Text Extraction"
-              title="Input is still messy copied text."
-              intro="Use these when you have notes, pasted pages, recruiter scraps, or signatures instead of a clean table."
-              tools={textExtractionTools}
-            />
-            <ToolGroup
-              eyebrow="Quick Cleanup"
-              title="You only need one cleanup utility."
-              intro="These are the small sharp tools for validation, dedupe, normalization, or quick measurement."
-              tools={cleanupTools}
-            />
-          </div>
-        </div>
-      </section>
+      </div>
     </PageFrame>
-  );
-}
-
-function ToolGroup({
-  eyebrow,
-  title,
-  intro,
-  tools,
-}: {
-  eyebrow: string;
-  title: string;
-  intro: string;
-  tools: Array<{
-    href: string;
-    title: string;
-    description: string;
-    icon: React.ComponentType<{ className?: string }>;
-  }>;
-}) {
-  return (
-    <div className="glass-panel rounded-[1.75rem] p-6 sm:p-7">
-      <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-blue-700">
-        {eyebrow}
-      </p>
-      <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
-        {title}
-      </h2>
-      <p className="mt-2 text-sm leading-7 text-slate-600">{intro}</p>
-
-      <div className="mt-5 grid gap-3">
-        {tools.map((tool) => (
-          <Link
-            key={tool.href}
-            href={tool.href}
-            className="group flex items-start gap-4 rounded-2xl border border-slate-200/80 bg-white/82 px-4 py-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_34px_rgba(15,23,42,0.08)]"
-          >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-slate-600 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
-              <tool.icon className="h-5 w-5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="text-sm font-semibold text-slate-900">{tool.title}</h3>
-                <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:text-blue-600" />
-              </div>
-              <p className="mt-1 text-sm leading-6 text-slate-600">{tool.description}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CompactToolCard({
-  tool,
-}: {
-  tool: {
-    href: string;
-    title: string;
-    description: string;
-    icon: React.ComponentType<{ className?: string }>;
-    tag: string;
-  };
-}) {
-  const Icon = tool.icon;
-
-  return (
-    <Link
-      href={tool.href}
-      className="surface-card group rounded-[1.5rem] p-5 transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_18px_38px_rgba(15,23,42,0.08)]"
-    >
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-50 text-slate-600 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
-          <Icon className="h-5 w-5" />
-        </div>
-        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold tracking-wide text-blue-700">
-          {tool.tag}
-        </span>
-      </div>
-      <h3 className="font-display text-xl font-semibold text-slate-900">{tool.title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{tool.description}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-700">
-        Open tool
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-      </div>
-    </Link>
   );
 }

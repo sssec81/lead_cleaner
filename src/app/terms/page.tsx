@@ -98,246 +98,229 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
- return (
- <PageFrame>
- <section className="relative overflow-hidden pt-20 pb-12 lg:pt-28 lg:pb-16">
- <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#fffef8_0%,#f5f8fd_52%,#f3f6fb_100%)]" />
- <div className="absolute inset-x-0 top-0 -z-10 h-48 bg-[linear-gradient(180deg,rgba(15,23,42,0.03),transparent)]" />
- <div className="absolute left-[-10rem] top-12 -z-10 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
- <div className="absolute right-[-10rem] top-10 -z-10 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
- <div className="absolute left-1/3 bottom-0 -z-10 h-64 w-64 rounded-full bg-emerald-200/20 blur-3xl" />
+  return (
+    <PageFrame>
+      <section className="pt-20 pb-12 lg:pt-28 lg:pb-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+            <div className="relative overflow-hidden surface-card rounded-[1.5rem] p-7 sm:p-10">
+              <div className="relative">
+                <div className="section-eyebrow mb-6 inline-flex items-center gap-2">
+                  <Scale className="h-4 w-4" />
+                  Terms of Service
+                </div>
+                <h1 className="mt-6 max-w-3xl font-display text-4xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-5xl lg:text-[3.8rem] lg:leading-[1.02]">
+                  Clear rules, plain language, and no legal fog.
+                </h1>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--lc-muted)] sm:text-lg">
+                  LeadCleanr is built to clean data, not obscure responsibility.
+                  These terms explain where the product helps, where judgment still matters,
+                  and what responsible use looks like.
+                </p>
 
- <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
- <div className="relative overflow-hidden rounded-xl border border-white/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.97),rgba(248,250,252,0.92))] p-7 shadow-sm sm:p-10">
- <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-blue-100/60 blur-3xl" />
- <div className="relative">
- <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 shadow-sm">
- <Scale className="h-4 w-4 text-blue-600" />
- Terms of Service
- </div>
- <h1 className="mt-6 max-w-3xl font-display text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-[3.8rem] lg:leading-[1.02]">
- Clear rules, plain language, and no legal fog.
- </h1>
- <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
- LeadCleanr is built to clean data, not obscure responsibility.
- These terms explain where the product helps, where judgment still matters,
- and what responsible use looks like.
- </p>
+                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                  {operatingRules.map((rule, index) => (
+                    <div
+                      key={rule}
+                      className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-4"
+                    >
+                      <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
+                        Rule {index + 1}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-[var(--lc-ink)]">{rule}</p>
+                    </div>
+                  ))}
+                </div>
 
- <div className="mt-8 grid gap-3 sm:grid-cols-3">
- {operatingRules.map((rule, index) => (
- <div
- key={rule}
- className="rounded-xl border border-slate-200 bg-white/85 p-4 shadow-sm"
- >
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-blue-700">
- Rule {index + 1}
- </p>
- <p className="mt-2 text-sm leading-6 text-slate-700">{rule}</p>
- </div>
- ))}
- </div>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link
+                    href="/tools"
+                    className="btn-primary min-h-11 px-6 text-sm font-semibold"
+                  >
+                    Back to tools
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/privacy"
+                    className="btn-secondary min-h-11 px-6 text-sm font-semibold"
+                  >
+                    Privacy Policy
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="surface-card rounded-[1.25rem] p-7">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)]">
+                    <HelpCircle className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lc-accent)]">
+                      Fast answers
+                    </p>
+                    <h2 className="mt-1 font-display text-2xl font-semibold text-[var(--lc-ink)]">
+                      The questions people ask before trusting the page.
+                    </h2>
+                  </div>
+                </div>
+              </div>
 
- <div className="mt-8 flex flex-wrap gap-3">
- <Link
- href="/tools"
- className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
- >
- Back to tools
- <ArrowRight className="h-4 w-4" />
- </Link>
- <Link
- href="/privacy"
- className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
- >
- Privacy Policy
- <ArrowRight className="h-4 w-4" />
- </Link>
- </div>
- </div>
- </div>
+              {quickAnswers.map((item) => (
+                <div
+                  key={item.question}
+                  className="surface-card rounded-[1.25rem] p-5 transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
+                    Quick check
+                  </p>
+                  <h3 className="mt-2 text-base font-semibold text-[var(--lc-ink)]">{item.question}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
- <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
- <div className="rounded-lg border border-slate-200 bg-slate-50 p-7 shadow-sm">
- <div className="flex items-start gap-4">
- <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white border border-slate-200 text-blue-600 shadow-sm">
- <HelpCircle className="h-5 w-5" />
- </div>
- <div>
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
- Fast answers
- </p>
- <h2 className="mt-1 font-display text-2xl font-semibold text-slate-900">
- The questions people ask before trusting the page.
- </h2>
- </div>
- </div>
- </div>
+      <section className="px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[1.5rem] bg-[var(--lc-dark-bg)] p-6 shadow-[var(--shadow-strong)] sm:p-8 lg:p-10">
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--lc-surface)]">
+                Product boundary
+              </p>
+              <h2 className="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl text-[var(--lc-surface)]">
+                LeadCleanr can make messy data more workable. It cannot replace review, consent, or judgment.
+              </h2>
+            </div>
+            <blockquote className="rounded-xl border border-white/10 bg-white/5 p-6 text-lg leading-8 text-[#e4e4e1] sm:text-xl">
+              “Use the output like a cleaner draft. If the decision matters, verify it before you act.”
+            </blockquote>
+          </div>
+        </div>
+      </section>
 
- {quickAnswers.map((item, index) => (
- <div
- key={item.question}
- className={`rounded-xl border p-5 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 ${
- index === 0
- ? "border-blue-200/70 bg-[linear-gradient(180deg,rgba(239,246,255,0.92),rgba(255,255,255,0.96))]"
- : "border-slate-200 bg-white/92"
- }`}
- >
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
- Quick check
- </p>
- <h3 className="mt-2 text-base font-semibold text-slate-950">{item.question}</h3>
- <p className="mt-2 text-sm leading-6 text-slate-600">{item.answer}</p>
- </div>
- ))}
- </div>
- </div>
- </div>
- </section>
+      <section className="py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <div className="section-eyebrow">
+              Usage guidelines
+            </div>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
+              Designed to be easy to scan and hard to misunderstand.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-[var(--lc-muted)]">
+              These guidelines are the practical layer under the legal terms. They set the tone for how the product should be used in real workflows.
+            </p>
+          </div>
 
- <section className="px-4 py-6 sm:px-6 lg:px-8">
- <div className="mx-auto max-w-7xl overflow-hidden rounded-xl border border-slate-200 bg-[linear-gradient(135deg,#122131_0%,#17344b_52%,#214763_100%)] p-6 text-white shadow-sm sm:p-8 lg:p-10">
- <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
- <div>
- <p className="text-xs font-semibold uppercase tracking-[0.22em] text-blue-200">
- Product boundary
- </p>
- <h2 className="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl">
- LeadCleanr can make messy data more workable. It cannot replace review, consent, or judgment.
- </h2>
- </div>
- <blockquote className="rounded-xl border border-white/10 bg-white/8 p-6 text-lg leading-8 text-white/90 sm:text-xl">
- “Use the output like a cleaner draft. If the decision matters, verify it before you act.”
- </blockquote>
- </div>
- </div>
- </section>
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {usageGuidelines.map((section) => (
+              <div
+                key={section.title}
+                className="surface-card overflow-hidden rounded-[1.25rem]"
+              >
+                <div className="border-b border-[var(--lc-border)] bg-[var(--lc-bg)] px-6 py-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
+                    Guideline
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--lc-ink)]">
+                    {section.title}
+                  </h3>
+                </div>
+                <div className="space-y-5 p-6">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lc-green)]">
+                      Good use
+                    </p>
+                    <ul className="mt-3 space-y-3">
+                      {section.allow.map((item) => (
+                        <li key={item} className="flex gap-3 text-sm leading-6 text-[var(--lc-ink)]">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--lc-green)]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="border-t border-[var(--lc-border)] pt-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
+                      Avoid
+                    </p>
+                    <ul className="mt-3 space-y-3">
+                      {section.avoid.map((item) => (
+                        <li key={item} className="flex gap-3 text-sm leading-6 text-[var(--lc-ink)]">
+                          <X className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
- <section className="py-16 lg:py-20">
- <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="max-w-3xl">
- <p className="text-sm font-semibold uppercase tracking-[0.22em] text-blue-700">
- Usage guidelines
- </p>
- <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
- Designed to be easy to scan and hard to misunderstand.
- </h2>
- <p className="mt-4 text-base leading-7 text-slate-600">
- These guidelines are the practical layer under the legal terms. They set the tone for how the product should be used in real workflows.
- </p>
- </div>
+      <section className="pb-16 lg:pb-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <div className="surface-card rounded-[1.5rem] p-6 sm:p-7">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lc-bg)] border border-[var(--lc-border)] text-[var(--lc-accent)]">
+                <FileText className="h-6 w-6" />
+              </div>
+              <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
+                Plain-language legal terms.
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[var(--lc-muted)]">
+                This is the operational version of the legal page: what the product does, what you remain responsible for, and where the limits are.
+              </p>
+              <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                <div className="flex gap-3">
+                  <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                  <p className="text-sm leading-6 text-amber-950">
+                    If your workflow has legal, compliance, or contractual requirements, review both the output and your obligations before acting.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
- <div className="mt-10 grid gap-5 lg:grid-cols-3">
- {usageGuidelines.map((section, index) => (
- <div
- key={section.title}
- className={`overflow-hidden rounded-xl border shadow-sm ${
- index === 1
- ? "border-blue-200/80 bg-[linear-gradient(180deg,rgba(247,250,255,0.98),rgba(255,255,255,0.95))]"
- : "border-slate-200 bg-white/95"
- }`}
- >
- <div className="border-b border-slate-100/80 px-6 py-5">
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
- Guideline
- </p>
- <h3 className="mt-2 font-display text-2xl font-semibold text-slate-950">
- {section.title}
- </h3>
- </div>
- <div className="space-y-5 p-6">
- <div>
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
- Good use
- </p>
- <ul className="mt-3 space-y-3">
- {section.allow.map((item) => (
- <li key={item} className="flex gap-3 text-sm leading-6 text-slate-700">
- <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
- <span>{item}</span>
- </li>
- ))}
- </ul>
- </div>
- <div className="border-t border-slate-100 pt-5">
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-rose-700">
- Avoid
- </p>
- <ul className="mt-3 space-y-3">
- {section.avoid.map((item) => (
- <li key={item} className="flex gap-3 text-sm leading-6 text-slate-700">
- <X className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
- <span>{item}</span>
- </li>
- ))}
- </ul>
- </div>
- </div>
- </div>
- ))}
- </div>
- </div>
- </section>
-
- <section className="pb-16 lg:pb-20">
- <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
- <div className="lg:sticky lg:top-24 lg:self-start">
- <div className="rounded-xl border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] p-6 shadow-sm sm:p-7">
- <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
- <FileText className="h-6 w-6" />
- </div>
- <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
- Plain-language legal terms.
- </h2>
- <p className="mt-4 text-base leading-7 text-slate-600">
- This is the operational version of the legal page: what the product does, what you remain responsible for, and where the limits are.
- </p>
- <div className="mt-6 rounded-xl border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,0.95),rgba(255,247,220,0.92))] p-4">
- <div className="flex gap-3">
- <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
- <p className="text-sm leading-6 text-amber-950">
- If your workflow has legal, compliance, or contractual requirements, review both the output and your obligations before acting.
- </p>
- </div>
- </div>
- </div>
- </div>
-
- <div className="space-y-4">
- {legalTerms.map((term, index) => (
- <details
- key={term.title}
- open={index === 0}
- className="group overflow-hidden rounded-xl border border-slate-200 bg-white/95 shadow-sm transition-all duration-300 open:border-blue-200 open:shadow-sm hover:border-slate-300"
- >
- <summary className="flex cursor-pointer list-none items-center gap-4 p-5 sm:p-6">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-sm font-bold text-slate-500 transition-colors duration-300 group-open:bg-blue-100 group-open:text-blue-700">
- {String(index + 1).padStart(2, "0")}
- </div>
- <div className="min-w-0 flex-1">
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
- Term
- </p>
- <span className="mt-1 block font-display text-xl font-semibold text-slate-950 group-open:text-blue-950">
- {term.title}
- </span>
- </div>
- <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-500 transition-all duration-300 group-open:rotate-45 group-open:border-blue-200 group-open:bg-blue-50 group-open:text-blue-700">
- +
- </span>
- </summary>
- <div className="border-t border-slate-100 px-5 pb-5 pt-0 sm:px-6 sm:pb-6">
- <div className="rounded-xl bg-slate-50 p-4 sm:p-5">
- <p className="text-sm leading-7 text-slate-600 sm:text-base">{term.text}</p>
- </div>
- </div>
- </details>
- ))}
- </div>
- </div>
- </section>
-
- </PageFrame>
- );
+          <div className="space-y-4">
+            {legalTerms.map((term, index) => (
+              <details
+                key={term.title}
+                open={index === 0}
+                className="group overflow-hidden surface-card rounded-[1.25rem] transition-all duration-300 open:border-[var(--lc-border-mid)] hover:border-[var(--lc-border-mid)]"
+              >
+                <summary className="flex cursor-pointer list-none items-center gap-4 p-5 sm:p-6">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--lc-bg)] border border-[var(--lc-border)] text-sm font-bold text-[var(--lc-muted)] transition-colors duration-300 group-open:bg-[var(--lc-accent-bg)] group-open:text-[var(--lc-accent)]">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-muted)]">
+                      Term
+                    </p>
+                    <span className="mt-1 block font-display text-xl font-semibold text-[var(--lc-ink)] group-open:text-[var(--lc-accent)]">
+                      {term.title}
+                    </span>
+                  </div>
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--lc-border)] bg-[var(--lc-bg)] text-sm font-bold text-[var(--lc-muted)] transition-all duration-300 group-open:rotate-45 group-open:border-[var(--lc-accent-bg)] group-open:bg-[var(--lc-accent-bg)] group-open:text-[var(--lc-accent)]">
+                    +
+                  </span>
+                </summary>
+                <div className="border-t border-[var(--lc-border)] px-5 pb-5 pt-0 sm:px-6 sm:pb-6">
+                  <div className="rounded-xl bg-[var(--lc-bg)] p-4 sm:p-5 mt-4">
+                    <p className="text-sm leading-7 text-[var(--lc-muted)] sm:text-base">{term.text}</p>
+                  </div>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    </PageFrame>
+  );
 }
