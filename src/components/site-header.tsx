@@ -25,7 +25,7 @@ export function SiteHeader() {
 
  return (
  <header className="sticky top-4 z-50 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="glass-panel rounded-[1.75rem] px-4 py-3 transition-all duration-300 hover:shadow-[0_24px_50px_rgba(9,17,31,0.12)] sm:px-6">
+ <div className="rounded-[2rem] border border-white/50 bg-white/30 px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl transition-all duration-500 hover:bg-white/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] sm:px-6">
  <div className="flex items-center justify-between gap-5">
  
  {/* Logo / Branding */}
@@ -48,7 +48,7 @@ export function SiteHeader() {
  {/* Desktop Navigation */}
  <nav
  aria-label="Primary"
- className="hidden items-center gap-3 rounded-full border border-white/70 bg-white/62 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.78)] lg:flex"
+ className="hidden items-center gap-1.5 rounded-full border border-white/30 bg-white/20 px-2 py-1.5 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] lg:flex"
  >
  {navItems.map((item) => {
  const active = isActive(item.href);
@@ -60,8 +60,8 @@ export function SiteHeader() {
  aria-current={active ? "page" : undefined}
  className={`group relative rounded-full px-4 py-2 text-sm font-bold tracking-wide transition-colors ${
  active
- ? "bg-blue-50 text-blue-700 shadow-[inset_0_0_0_1px_rgba(59,130,246,0.12)]"
- : "text-slate-600 hover:bg-white/80 hover:text-slate-900"
+ ? "bg-white/80 text-blue-700 shadow-sm"
+ : "text-slate-600 hover:bg-white/60 hover:text-slate-900"
  }`}
  >
  {item.label}
@@ -119,7 +119,7 @@ export function SiteHeader() {
  })}
  </nav>
 
- <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/60 bg-white/65 px-4 py-3 shadow-sm">
+ <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/30 bg-white/20 px-4 py-3 shadow-sm backdrop-blur-md">
  <LocalProcessingBadge compact className="shrink-0" />
  <Link
  href={headerCta.href}
