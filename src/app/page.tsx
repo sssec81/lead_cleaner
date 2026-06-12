@@ -106,7 +106,7 @@ export default function HomePage() {
             <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-[11px] text-[var(--lc-muted)]">
               <span>✓ No account needed</span>
               <span className="text-[var(--lc-hint)]">·</span>
-              <span>✓ 2MB free</span>
+              <span>✓ 5MB free</span>
               <span className="text-[var(--lc-hint)]">·</span>
               <span>✓ Processed locally</span>
             </div>

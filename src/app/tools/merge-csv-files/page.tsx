@@ -45,7 +45,7 @@ export default function MergeCsvFilesPage() {
         <span className="text-[var(--lc-border-mid)]">·</span>
         <div className="flex items-center gap-1.5">
           <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">Up to 2MB free</span>
+          <span className="font-medium text-[var(--lc-ink)]">Up to 5MB free</span>
         </div>
       </div>
     </div>

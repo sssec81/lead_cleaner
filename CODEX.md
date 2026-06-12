@@ -12,10 +12,12 @@ Paste messy text or upload a CSV. Instantly extract, clean, deduplicate, and exp
 
 Primary planning context lives in:
 
-- `Web2 Startup/LeadCleanr — Product Requirements Document 3737115532d180f59d3eded01157a6bf.md`
-- `Web2 Startup/LeadCleanr — MVP Feature List 3737115532d180ca850cd8f8cee03ecc.md`
-- `Web2 Startup/LeadCleanr — Tech Stack Document 3737115532d1805e88b8e4685e2cd954.md`
-- `Web2 Startup/LeadCleanr — Website Page Structure 3737115532d1808aaf13cf1f3a8f4c5a.md`
+- `docs/PRD.md`
+- `docs/prd/01_Overview_and_Goals.md`
+- `docs/prd/02_Target_Audience_and_Use_Cases.md`
+- `docs/prd/03_MVP_Functional_Scope.md`
+- `docs/prd/04_Technical_Architecture_and_Hosting.md`
+- `docs/prd/05_Future_Enhancements.md`
 
 If there is any conflict, prefer the latest explicit user instruction, then this file, then the source docs.
 

@@ -39,7 +39,7 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - **Convert CSV to JSON**: Transform flat spreadsheet rows into structured JSON arrays.
 
 ### Export & UI
-- **SaaS Aesthetic**: Crisp, utilitarian interface replacing oversized glassmorphic elements for professional usability.
+- **SaaS Aesthetic**: Premium, modern interface with floating glassmorphic navbars, surface cards, and refined micro-interactions.
 - **Instant Download**: Download cleaned results as `.txt` or `.csv`.
 - **Copy**: One-click copy clean data to clipboard.
 - **Spreadsheet-Safe Export**: CSV exports guard formula-like cells while preserving leading `+` for phone fields.

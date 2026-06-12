@@ -29,8 +29,8 @@ The best initial buyers are professionals doing repeat spreadsheet cleanup work:
 - Unlimited exports
 - *Credit limit:* 0 verifications.
 
-**Pro — $19/month**
-- CSV cleaning up to **25 MB**
+**Pro — $12/month**
+- CSV cleaning for larger files (**10 MB+**)
 - **500** Email Verifications (MX + SMTP) per month included (No rollover, resets monthly)
 - Saved workspaces & cleanup history retained for **30 days** (Requires Account)
 - Export presets (HubSpot, Apollo formats)
@@ -64,7 +64,7 @@ The MVP's strongest selling point is "100% browser-side privacy." Once we introd
 |--------|------|----------|---------------------------|
 | **0: Distribution**| Landing page copy, 3 Reddit communities, PH draft | 1 week | Prep complete & targeted |
 | **1: Auth** | Supabase auth (Google + email) + account page | 3 weeks | 50 registered users who use a tool post-signup |
-| **2: Paywall** | Stripe checkout gating the 25MB file limit | 2 weeks | First 10 paying customers ($190 MRR) |
+| **2: Paywall** | Stripe checkout gating the 10MB+ file limit | 2 weeks | First 10 paying customers ($120 MRR) |
 | **3: Retention** | Saved workspaces & 30-day history UI | 3 weeks | 30% of paid users returning weekly |
 | **4: Verification**| Server-side MX/SMTP ping via Edge Functions | 4 weeks | Hit 50 Pro users (~$1k MRR) |
 | **5: Presets** | One-click HubSpot/Apollo CSV exports | 2 weeks | 20% of exports using a preset |
