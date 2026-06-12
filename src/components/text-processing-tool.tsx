@@ -15,7 +15,6 @@ import {
  RefreshCw,
  Trash2,
  Undo2,
-  ShieldCheck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -24,7 +23,7 @@ import { copyTextToClipboard } from "@/lib/clipboard";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import type { CleaningStats } from "@/lib/text-tools";
-import { ProWaitlistCard } from "@/components/pro-waitlist-card";
+import { TextWorkspaceShell } from "./text-workspace-shell";
 import type { ReactNode } from "react";
 
 type TextProcessingToolProps = {
@@ -75,9 +74,9 @@ type PersistedState = {
 
 const WORKSPACE_PREVIEW_LIMIT = 8;
 const TEXT_INPUT_BOX_CLASS_NAME =
- "rounded-xl border-2 border-dashed border-slate-300 bg-white px-4 py-4 transition-all duration-200 focus-within:border-blue-500 focus-within:bg-blue-50/30 sm:px-5 sm:py-5";
+  "rounded-2xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 overflow-hidden flex flex-col relative group";
 const TEXT_INPUT_ACTION_CLASS_NAME =
- "inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 shadow-2xs";
+  "btn-ghost inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold";
 
 export function TextProcessingTool({
  title,
@@ -366,25 +365,29 @@ export function TextProcessingTool({
  trackToolEvent(trackName, "redo_result_edit");
  }
 
- async function handleCopy() {
- if (!workspaceValues.length) {
- return;
- }
+  async function handleCopy() {
+    try {
+      if (!workspaceValues.length) {
+        return;
+      }
 
- const didCopy = await copyTextToClipboard(resultText);
+      const didCopy = await copyTextToClipboard(resultText);
 
- if (!didCopy) {
- return;
- }
+      if (!didCopy) {
+        return;
+      }
 
- trackToolEvent(trackName, "copy_results", {
- result_count: workspaceValues.length,
- });
- setCopied(true);
- window.setTimeout(() => setCopied(false), 1800);
- }
+      trackToolEvent(trackName, "copy_results", {
+        result_count: workspaceValues.length,
+      });
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch (err) {
+      console.warn("Failed to copy:", err);
+    }
+  }
 
- function handleDownloadTxt() {
+  function handleDownloadTxt() {
  if (!workspaceValues.length) {
  return;
  }
@@ -479,477 +482,376 @@ export function TextProcessingTool({
  return () => window.removeEventListener("keydown", handleKeyDown);
  });
 
- return (
- <div className="grid items-start gap-6 lg:grid-cols-[1.02fr_0.98fr]">
- <div className="flex h-full flex-col gap-6">
- <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm sm:p-8">
- <div className="mb-6 flex items-start gap-4">
- <div
- className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${iconToneClassName}`}
- >
- <Icon className="h-5 w-5" />
- </div>
- <div className="min-w-0">
- <h2 className="text-xl font-semibold text-slate-950">{title}</h2>
- <p className="mt-1 text-sm leading-6 text-slate-500">
- {description}
- </p>
- </div>
- </div>
 
- <div className="flex flex-col">
- <div className={TEXT_INPUT_BOX_CLASS_NAME}>
- <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
- <div>
- <h3 className="text-sm font-semibold text-slate-900">{inputLabel}</h3>
- <p className="text-xs text-slate-500">{inputHelpText}</p>
- </div>
- <div className="flex flex-wrap items-center gap-1.5">
- <button
- type="button"
- onClick={handlePasteFromClipboard}
- className={TEXT_INPUT_ACTION_CLASS_NAME}
- title="Paste from clipboard"
- >
- <Clipboard className="h-3.5 w-3.5" />
- <span>Paste</span>
- </button>
- <button
- type="button"
- onClick={loadSampleInput}
- className={TEXT_INPUT_ACTION_CLASS_NAME}
- title="Load sample"
- >
- <FlaskConical className="h-3.5 w-3.5" />
- <span>Sample</span>
- </button>
- <button
- type="button"
- onClick={useSelectedText}
- className={TEXT_INPUT_ACTION_CLASS_NAME}
- title="Import highlighted text from this page"
- >
- <MousePointerClick className="h-3.5 w-3.5" />
- <span>Use selected</span>
- </button>
- <button
- type="button"
- onClick={toggleBatchMode}
- className={`inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border px-2.5 text-xs font-semibold transition shadow-2xs ${
- batchMode
- ? "border-blue-200 bg-blue-50/50 text-blue-700 hover:bg-blue-50"
- : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
- }`}
- title={batchMode ? "Disable batch mode" : "Enable batch mode (one item per line)"}
- >
- <span className="font-mono text-xs leading-none">#</span>
- <span>{batchMode ? "Batch mode" : "Batch"}</span>
- </button>
- <button
- type="button"
- onClick={() => setFreshInput("")}
- disabled={!input}
- className={`${TEXT_INPUT_ACTION_CLASS_NAME} disabled:cursor-not-allowed disabled:opacity-40`}
- title="Clear input"
- >
- <Trash2 className="h-3.5 w-3.5" />
- <span>Clear</span>
- </button>
- </div>
- </div>
+  return (
+  <>
+    <TextWorkspaceShell
+      title={title}
+      description={description}
+      icon={Icon}
+      iconToneClassName={iconToneClassName}
+      inputArea={
+        <div className={TEXT_INPUT_BOX_CLASS_NAME}>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/50 px-4 py-3 sm:px-5 sm:py-3.5">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900">{inputLabel}</h3>
+            </div>
+            <div className="flex flex-wrap items-center gap-1">
+              <button type="button" onClick={handlePasteFromClipboard} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Paste from clipboard">
+                <Clipboard className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Paste</span>
+              </button>
+              <button type="button" onClick={loadSampleInput} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Load sample">
+                <FlaskConical className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Sample</span>
+              </button>
+              <button type="button" onClick={useSelectedText} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Import highlighted text from this page">
+                <MousePointerClick className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Selected</span>
+              </button>
+              <button type="button" onClick={toggleBatchMode} className={`inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold transition-colors ${batchMode ? "btn-segment-active text-indigo-700" : "btn-ghost"}`} title={batchMode ? "Disable batch mode" : "Enable batch mode"}>
+                <span className="font-mono text-[10px] leading-none px-1 rounded-sm bg-slate-200/50 text-slate-500">#</span>
+                <span>Batch</span>
+              </button>
+              <div className="w-px h-4 bg-slate-200 mx-1"></div>
+              <button type="button" onClick={() => setFreshInput("")} disabled={!input} className={`${TEXT_INPUT_ACTION_CLASS_NAME} disabled:opacity-50`} title="Clear input">
+                <Trash2 className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Clear</span>
+              </button>
+            </div>
+          </div>
+          
+          {restoredSession && (
+            <div className="px-4 pt-3 sm:px-5">
+              <p className="text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
+                Restored your last workspace on this device so you can keep cleaning without starting over.
+              </p>
+            </div>
+          )}
+          
+          {batchMode && (
+            <div className="px-4 pt-3 sm:px-5">
+              <div className="rounded-lg border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
+                <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
+                <p className="mt-0.5 leading-relaxed text-teal-700">
+                  {batchLineCount} line{batchLineCount === 1 ? "" : "s"} detected. Each line is treated as a separate item.
+                </p>
+              </div>
+            </div>
+          )}
+          
+          {inputControls && (
+            <div className="px-4 pt-3 sm:px-5">
+              {inputControls}
+            </div>
+          )}
+          
+          <textarea
+            id={`${trackName}-input`}
+            aria-label={inputLabel}
+            value={input}
+            onChange={(event) => setFreshInput(event.target.value)}
+            className={`w-full flex-1 resize-y bg-transparent p-4 sm:p-5 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none border-none focus:ring-0 min-h-[240px] ${inputMinHeightClassName}`}
+            placeholder={placeholder}
+          />
+          
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 bg-white px-4 py-3 sm:px-5 sm:py-3.5 mt-auto">
+            <div className="flex items-center gap-4 text-[13px] font-medium text-slate-500">
+              <div className="font-mono bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">
+                {input.length.toLocaleString()} / 50k
+              </div>
+              <div className="hidden sm:flex items-center gap-1.5 text-slate-500">
+                <Lock className="h-3.5 w-3.5" />
+                <span>Processed locally</span>
+              </div>
+            </div>
+            
+            <button
+              type="button"
+              onClick={replaceWorkspaceFromCurrentInput}
+              disabled={processed.results.length === 0}
+              className="btn-primary inline-flex min-h-[2.5rem] rounded-xl px-6 text-sm font-semibold active:scale-[0.98]"
+            >
+              {primaryActionLabel}
+            </button>
+          </div>
+        </div>
+      }
+      summary={
+        <>
+          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{statLabels.scanned}</p>
+            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{processed.stats.scanned.toLocaleString()}</p>
+          </div>
+          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{statLabels.found}</p>
+            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{processed.stats.found.toLocaleString()}</p>
+          </div>
+          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{statLabels.duplicatesRemoved}</p>
+            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{processed.stats.duplicatesRemoved.toLocaleString()}</p>
+          </div>
+          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{statLabels.invalidRemoved}</p>
+            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{processed.stats.invalidRemoved.toLocaleString()}</p>
+          </div>
+          {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
+            <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{statLabels.blankRemoved ?? "Blank rows removed"}</p>
+              <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{processed.stats.blankRemoved.toLocaleString()}</p>
+            </div>
+          )}
+          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Locked / Selected</p>
+            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{lockedCount.toLocaleString()} / {selectedCount.toLocaleString()}</p>
+          </div>
+          <div className="flex-1 bg-indigo-50/30 p-5 sm:px-6 transition-colors hover:bg-indigo-50/60 relative overflow-hidden min-w-[160px]">
+            <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500"></div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-600">{statLabels.finalCount}</p>
+            <p className="mt-1.5 text-3xl font-bold text-indigo-700 tabular-nums tracking-tight">{workspaceValues.length.toLocaleString()}</p>
+          </div>
+        </>
+      }
+      toolbar={
+        <>
+          <div className="flex flex-1 items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setShowBulkEditor((current) => !current)}
+              disabled={!workspaceValues.length}
+              className={`inline-flex min-h-8 items-center justify-center gap-2 rounded-md px-3 text-xs font-semibold transition-colors ${showBulkEditor ? "btn-segment-active text-indigo-700" : "btn-ghost"} disabled:opacity-50`}
+            >
+              <PencilLine className="h-3.5 w-3.5" />
+              {showBulkEditor ? "Close editor" : "Edit all"}
+            </button>
+            <div className="w-px h-4 bg-slate-200 mx-1"></div>
+            <button
+              type="button"
+              onClick={toggleSelectAllPreviewed}
+              disabled={!workspaceValues.length}
+              className="btn-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+            >
+              Select preview rows
+            </button>
+            <button
+              type="button"
+              onClick={deleteSelectedRows}
+              disabled={!selectedCount}
+              className="btn-danger-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Delete selected
+            </button>
+            <div className="w-px h-4 bg-slate-200 mx-1"></div>
+            <button
+              type="button"
+              onClick={undoWorkspace}
+              disabled={!pastWorkspace.length}
+              className="btn-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+            >
+              <Undo2 className="h-3.5 w-3.5" />
+              Undo
+            </button>
+            <button
+              type="button"
+              onClick={redoWorkspace}
+              disabled={!futureWorkspace.length}
+              className="btn-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+            >
+              <Redo2 className="h-3.5 w-3.5" />
+              Redo
+            </button>
+          </div>
+          <div className="flex items-center gap-1 rounded-xl bg-slate-100/50 p-1 border border-slate-200/60">
+            <button
+              type="button"
+              onClick={() => setResultDensity("comfortable")}
+              className={`${resultDensity === "comfortable" ? "btn-segment-active" : "btn-segment"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors`}
+            >
+              Comfortable
+            </button>
+            <button
+              type="button"
+              onClick={() => setResultDensity("compact")}
+              className={`${resultDensity === "compact" ? "btn-segment-active" : "btn-segment"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors`}
+            >
+              Compact
+            </button>
+          </div>
+        </>
+      }
+      preview={
+        <>
+          {workspaceValues.length ? (
+            showBulkEditor ? (
+              <div className="p-4">
+                <textarea
+                  aria-label="Bulk editor"
+                  value={resultText}
+                  onChange={(event) => applyBulkEditor(event.target.value)}
+                  className="min-h-[24rem] w-full rounded-xl border border-slate-200 bg-slate-50 px-6 py-6 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500/20"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col">
+                <div className="flex items-center gap-4 border-b border-slate-100 bg-slate-50 px-6 py-3">
+                  <button
+                    type="button"
+                    onClick={toggleSelectAllPreviewed}
+                    className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-slate-300 bg-white hover:border-indigo-400"
+                  >
+                    {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-3 w-3 text-indigo-500" />}
+                  </button>
+                  <div className="flex-1 flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                    <span className="w-16">STATUS</span>
+                    <span>{csvHeader.toUpperCase()}</span>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">ACTIONS</span>
+                </div>
+                <div className="divide-y divide-slate-100/60 bg-white">
+                  {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
+                    <div
+                      key={item.id}
+                      className={`group relative flex items-center gap-4 px-6 py-3 transition-colors hover:bg-slate-50/80 ${item.selected ? "bg-indigo-50/40" : ""}`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleWorkspaceSelection(item.id)}
+                        className={`flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border transition-all ${item.selected ? "border-indigo-500 bg-indigo-500 text-white" : "border-slate-300 bg-white group-hover:border-indigo-400"}`}
+                        aria-label={`Select row ${index + 1}`}
+                      >
+                        {item.selected && <Check className="h-3 w-3" />}
+                      </button>
+                      
+                      <div className="flex w-16 shrink-0 items-center gap-2">
+                        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-700 border border-emerald-200/50">
+                          Valid
+                        </span>
+                      </div>
+                      
+                      <div className="flex flex-1 items-center gap-3">
+                        <input
+                          aria-label="Edit item value"
+                          value={item.value}
+                          onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
+                          className={`w-full bg-transparent font-medium text-slate-900 outline-none focus:bg-slate-100 focus:ring-2 focus:ring-indigo-100 rounded px-2 transition-all ${resultDensity === "compact" ? "text-xs py-0.5" : "text-sm py-1"}`}
+                        />
+                      </div>
 
- {restoredSession && (
- <p className="mb-3 text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-xl px-3 py-2">
- Restored your last workspace on this device so you can keep cleaning without starting over.
- </p>
- )}
+                      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 pl-4">
+                        <button
+                          type="button"
+                          onClick={() => toggleWorkspaceLock(item.id)}
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
+                          aria-label={item.locked ? "Unlock row" : "Lock row"}
+                        >
+                          {item.locked ? <Lock className="h-4 w-4 text-amber-500" /> : <LockOpen className="h-4 w-4" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeWorkspaceItem(item.id)}
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 transition hover:bg-red-100 hover:text-red-600"
+                          aria-label={`Remove row ${index + 1}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t border-slate-100 bg-slate-50 px-6 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 text-center">
+                    SHOWING {Math.min(WORKSPACE_PREVIEW_LIMIT, workspace.length)} OUT OF {workspace.length} ROWS
+                  </p>
+                </div>
+              </div>
+            )
+          ) : (
+            <div className="flex flex-col items-center justify-center p-12 text-center h-full min-h-[300px]">
+              <p className="text-sm leading-7 text-slate-500">{emptyMessage}</p>
+            </div>
+          )}
 
- {batchMode && (
- <div className="mb-3 rounded-xl border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
- <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
- <p className="mt-0.5 leading-relaxed text-teal-700">
- {batchLineCount} line{batchLineCount === 1 ? "" : "s"} detected. Each line is treated as a separate item.
- </p>
- </div>
- )}
+          {processed.invalidResults && processed.invalidResults.length > 0 && (
+            <div className="m-6 rounded-xl border border-red-200/60 bg-red-50/50 p-6">
+              <h4 className="text-sm font-semibold text-red-900">Broken entries detected</h4>
+              <p className="mt-1 text-xs text-red-700">These items have invalid syntax and were automatically excluded from your clean workspace.</p>
+              <div className="mt-4 flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-2">
+                {processed.invalidResults.map((item, i) => (
+                  <span key={i} className="inline-flex items-center rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-medium text-red-800 shadow-sm">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
- {inputControls ? <div className="mb-3">{inputControls}</div> : null}
+          {showShortcuts ? (
+            <div className="m-6 rounded-xl border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.08)] p-4 text-sm">
+              <p className="font-semibold text-slate-900">Keyboard shortcuts</p>
+              <div className="mt-3 grid gap-2 text-slate-500 sm:grid-cols-2">
+                <p>`?` toggle shortcuts</p>
+                <p>`s` load sample</p>
+                <p>`b` toggle batch mode</p>
+                <p>`r` replace workspace</p>
+                <p>`e` edit all rows</p>
+                <p>`c` copy workspace</p>
+                <p>`t` download TXT</p>
+                <p>`d` download CSV</p>
+                <p>`z` undo</p>
+                <p>`y` redo</p>
+              </div>
+            </div>
+          ) : (
+            <p className="m-6 mt-0 text-xs uppercase tracking-[0.16em] text-slate-500">
+              Press `?` for keyboard shortcuts
+            </p>
+          )}
 
- <textarea
- id={`${trackName}-input`}
- aria-label={inputLabel}
- value={input}
- onChange={(event) => setFreshInput(event.target.value)}
- className={`w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 ${inputMinHeightClassName}`}
- placeholder={placeholder}
- />
-
- <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
- <div className="flex items-center gap-1">
- <Lock className="h-3 w-3 text-slate-400" />
- <span>Processed locally in your browser.</span>
- </div>
- <div className="font-mono text-slate-400">
- {input.length.toLocaleString()} / 50,000 characters
- </div>
- </div>
- </div>
- </div>
- </section>
-
- <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
- <h3 className="text-base font-semibold text-slate-900">Workflow</h3>
- <p className="mt-1 text-sm text-slate-500">
- Note the classic validation flow designed dashboard by words, hugging and lines. Inspired by Linear.
- </p>
- <div className="mt-8 flex items-center justify-center gap-2 sm:gap-3 py-2">
- <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 shadow-sm">
- <span className="text-xs font-semibold text-slate-700 whitespace-nowrap">Paste / Import</span>
- </div>
- <div className="h-[2px] w-4 sm:w-8 bg-slate-200 shrink-0"></div>
- <div className="flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 shadow-sm">
- <span className="text-xs font-semibold text-blue-700 whitespace-nowrap">Analyze</span>
- </div>
- <div className="h-[2px] w-4 sm:w-8 bg-slate-200 shrink-0"></div>
- <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
- <span className="text-xs font-semibold text-slate-700 whitespace-nowrap">Export</span>
- </div>
- </div>
- </section>
-
- <div className="flex flex-wrap items-center gap-3 mt-auto">
- <button
- type="button"
- onClick={replaceWorkspaceFromCurrentInput}
- disabled={processed.results.length === 0}
- className="inline-flex min-h-[3rem] flex-1 items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 text-sm font-semibold text-white hover:bg-orange-600 active:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-md sm:flex-none cursor-pointer"
- >
- <RefreshCw className="h-4 w-4" />
- {primaryActionLabel}
- </button>
-
- </div>
- </div>
-
- <div className="space-y-6">
- {/* WORKSPACE SUMMARY */}
- <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
- <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">
- WORKSPACE SUMMARY
- </p>
- <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
- <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600">
- {statLabels.finalCount}
- </p>
- <p className="mt-2 font-display text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl">
- {workspaceValues.length.toLocaleString()}
- </p>
- </div>
-
- <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
- <StatCard label={statLabels.scanned} value={processed.stats.scanned} />
- <StatCard label={statLabels.found} value={processed.stats.found} />
- <StatCard
- label={statLabels.duplicatesRemoved}
- value={processed.stats.duplicatesRemoved}
- />
- <StatCard
- label={statLabels.invalidRemoved}
- value={processed.stats.invalidRemoved}
- />
- {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
- <StatCard
- label={statLabels.blankRemoved ?? "Blank rows removed"}
- value={processed.stats.blankRemoved}
- />
- )}
- <StatCard label="Locked rows" value={lockedCount} />
- <StatCard label="Selected rows" value={selectedCount} />
- </div>
- </div>
-
- {/* MAIN RESULTS SECTION */}
- <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
- <div className="flex flex-col gap-4">
- <div>
- <h3 className="font-display text-xl font-bold text-slate-900">
- {typeof resultTitle === "function" ? resultTitle(workspaceValues.length) : resultTitle}
- </h3>
- {resultDescription && (
- <p className="mt-1 text-sm leading-6 text-slate-500">
- {typeof resultDescription === "function" ? resultDescription(workspaceValues.length) : resultDescription}
- </p>
- )}
- </div>
- <div className="flex items-center self-start gap-2 rounded-xl border border-slate-200 bg-slate-50 p-1">
- <button
- type="button"
- onClick={() => setResultDensity("comfortable")}
- className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-widest transition-colors ${
- resultDensity === "comfortable"
- ? "bg-white text-slate-900 shadow-sm"
- : "text-slate-500 hover:text-slate-700 hover:bg-slate-100/50"
- }`}
- >
- Comfortable
- </button>
- <button
- type="button"
- onClick={() => setResultDensity("compact")}
- className={`rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-widest transition-colors ${
- resultDensity === "compact"
- ? "bg-white text-slate-900 shadow-sm"
- : "text-slate-500 hover:text-slate-700 hover:bg-slate-100/50"
- }`}
- >
- Compact
- </button>
- </div>
- </div>
-
- <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-5">
- <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
- <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
- Workspace actions
- </p>
- {collapseWorkspaceActions ? (
- <button
- type="button"
- onClick={() => setShowWorkspaceActions((current) => !current)}
- disabled={!workspaceValues.length}
- className="inline-flex h-7 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
- >
- {showWorkspaceActions ? "Hide actions" : "More actions"}
- </button>
- ) : null}
- </div>
- <div className="flex flex-wrap gap-3">
- <button
- type="button"
- onClick={() => void handleCopy()}
- disabled={!workspaceValues.length}
- className="group inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
- >
- {copied ? <Check className="h-3.5 w-3.5" /> : <Clipboard className="h-3.5 w-3.5" />}
- {copied ? "Copied" : copyLabel}
- </button>
- <button
- type="button"
- onClick={handleDownloadCsv}
- disabled={!workspaceValues.length}
- className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 text-xs font-bold uppercase tracking-widest text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <Download className="h-3.5 w-3.5 text-slate-400" />
- Download CSV
- </button>
- <button
- type="button"
- onClick={handleDownloadTxt}
- disabled={!workspaceValues.length}
- className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 text-xs font-bold uppercase tracking-widest text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <FileText className="h-3.5 w-3.5 text-slate-400" />
- Download TXT
- </button>
- </div>
- {showWorkspaceActions ? (
- <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-200 pt-4">
- <button
- type="button"
- onClick={() => setShowBulkEditor((current) => !current)}
- disabled={!workspaceValues.length}
- className={`inline-flex min-h-8 cursor-pointer items-center justify-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${showBulkEditor ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}
- >
- <PencilLine className="h-3.5 w-3.5" />
- {showBulkEditor ? "Close editor" : "Edit all"}
- </button>
- <button
- type="button"
- onClick={toggleSelectAllPreviewed}
- disabled={!workspaceValues.length}
- className="inline-flex min-h-8 cursor-pointer items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
- >
- Select preview rows
- </button>
- <button
- type="button"
- onClick={deleteSelectedRows}
- disabled={!selectedCount}
- className="inline-flex min-h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 text-xs font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <Trash2 className="h-3.5 w-3.5" />
- Delete selected
- </button>
- <button
- type="button"
- onClick={undoWorkspace}
- disabled={!pastWorkspace.length}
- className="inline-flex min-h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <Undo2 className="h-3.5 w-3.5" />
- Undo
- </button>
- <button
- type="button"
- onClick={redoWorkspace}
- disabled={!futureWorkspace.length}
- className="inline-flex min-h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <Redo2 className="h-3.5 w-3.5" />
- Redo
- </button>
- </div>
- ) : null}
- </div>
-
- <div className="mt-6 flex flex-col gap-6">
- {/* Step 3 header removed to match mockup */}
-
-
- {workspaceValues.length ? (
- showBulkEditor ? (
- <div className="rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
- <textarea
- aria-label="Bulk editor"
- value={resultText}
- onChange={(event) => applyBulkEditor(event.target.value)}
- className="min-h-[24rem] w-full rounded-xl bg-slate-50 px-6 py-6 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:bg-white focus:ring-2 focus:ring-sky-500/20"
- />
- </div>
- ) : (
- <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
- <div className="flex items-center gap-4 border-b border-slate-100 bg-slate-50 px-6 py-3">
- <button
- type="button"
- onClick={toggleSelectAllPreviewed}
- className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-slate-300 bg-white hover:border-sky-400"
- >
- {/* Master checkbox placeholder */}
- </button>
- <div className="flex-1 flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">
- <span className="w-16">STATUS</span>
- <span>{csvHeader.toUpperCase()}</span>
- </div>
- <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">ACTIONS</span>
- </div>
- <div className="divide-y divide-slate-100 bg-white">
- {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
- <div
- key={item.id}
- className={`group relative flex items-center gap-4 px-6 py-3 transition-colors hover:bg-slate-50 ${
- item.selected ? "bg-sky-50/40" : ""
- }`}
- >
- <button
- type="button"
- onClick={() => toggleWorkspaceSelection(item.id)}
- className={`flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border transition-all ${
- item.selected
- ? "border-sky-500 bg-sky-500 text-white"
- : "border-slate-300 bg-white group-hover:border-sky-400"
- }`}
- aria-label={`Select row ${index + 1}`}
- >
- {item.selected && <Check className="h-3 w-3" />}
- </button>
- 
- <div className="flex w-16 shrink-0 items-center gap-2">
- <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-700 border border-emerald-200/50">
- Valid
- </span>
- </div>
- 
- <div className="flex flex-1 items-center gap-3">
- <input
- aria-label="Edit item value"
- value={item.value}
- onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
- className="w-full bg-transparent text-sm font-medium text-slate-900 outline-none focus:bg-slate-100 focus:ring-2 focus:ring-sky-100 rounded px-2 py-1 transition-all"
- />
- </div>
-
- <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 pl-4">
- <button
- type="button"
- onClick={() => toggleWorkspaceLock(item.id)}
- className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700"
- aria-label={item.locked ? "Unlock row" : "Lock row"}
- >
- {item.locked ? <Lock className="h-4 w-4 text-amber-500" /> : <LockOpen className="h-4 w-4" />}
- </button>
- <button
- type="button"
- onClick={() => removeWorkspaceItem(item.id)}
- className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-100 hover:text-red-600"
- aria-label={`Remove row ${index + 1}`}
- >
- <Trash2 className="h-4 w-4" />
- </button>
- </div>
- </div>
- ))}
- </div>
- <div className="border-t border-slate-100 bg-slate-50 px-6 py-3">
- <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">
- SHOWING {Math.min(WORKSPACE_PREVIEW_LIMIT, workspace.length)} OUT OF {workspace.length} ROWS
- </p>
- </div>
- </div>
- )
- ) : (
- <p className="text-sm leading-7 text-[color:var(--muted)]">
- {emptyMessage}
- </p>
- )}
- </div>
-
- {processed.invalidResults && processed.invalidResults.length > 0 && (
- <div className="mt-6 rounded-xl border border-red-200/60 bg-red-50/50 p-6">
- <h4 className="text-sm font-semibold text-red-900">Broken entries detected</h4>
- <p className="mt-1 text-xs text-red-700">These items have invalid syntax and were automatically excluded from your clean workspace.</p>
- <div className="mt-4 flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-2">
- {processed.invalidResults.map((item, i) => (
- <span key={i} className="inline-flex items-center rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-medium text-red-800 shadow-sm">
- {item}
- </span>
- ))}
- </div>
- </div>
- )}
-
- {showShortcuts ? (
- <div className="mt-4 rounded-xl border border-[color:rgba(15,118,110,0.16)] bg-[color:rgba(15,118,110,0.08)] p-4 text-sm">
- <p className="font-semibold text-[color:var(--foreground)]">
- Keyboard shortcuts
- </p>
- <div className="mt-3 grid gap-2 text-[color:var(--muted)] sm:grid-cols-2">
- <p>`?` toggle shortcuts</p>
- <p>`s` load sample</p>
- <p>`b` toggle batch mode</p>
- <p>`r` replace workspace</p>
- <p>`e` edit all rows</p>
- <p>`c` copy workspace</p>
- <p>`t` download TXT</p>
- <p>`d` download CSV</p>
- <p>`z` undo</p>
- <p>`y` redo</p>
- </div>
- </div>
- ) : (
- <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
- Press `?` for keyboard shortcuts
- </p>
- )}
- </div>
-
- <ProWaitlistCard
- trackSource={`text_tool_${trackName}`}
- title="Want saved workflows and export presets?"
- description="Join the Pro waitlist to get notified when we launch saved cleanup presets, CSV presets for CRM (HubSpot, Salesforce), and outreach tools."
- />
- </div>
- </div>
- );
+        </>
+      }
+      exportControls={
+        workspaceValues.length > 0 && (
+          <>
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm border border-emerald-200">
+                <Check className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Extraction Complete</h3>
+                <p className="text-sm text-slate-500 mt-0.5">{workspaceValues.length.toLocaleString()} items ready to export.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => void handleCopy()}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer flex-1 sm:flex-none"
+              >
+                {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Clipboard className="h-4 w-4" />} {copied ? "Copied" : copyLabel}
+              </button>
+              <button
+                type="button"
+                onClick={handleDownloadTxt}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer flex-1 sm:flex-none"
+              >
+                <FileText className="h-4 w-4" /> TXT
+              </button>
+              <button
+                type="button"
+                onClick={handleDownloadCsv}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] px-8 text-sm font-bold text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all duration-300 hover:bg-[position:right_center] hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(147,51,234,0.5)] cursor-pointer flex-1 sm:flex-none"
+              >
+                <Download className="h-5 w-5" /> CSV
+              </button>
+            </div>
+          </>
+        )
+      }
+    />
+      
+    </>
+  );
 }
 
 function StatCard({

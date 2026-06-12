@@ -1,0 +1,5 @@
+Jane Doe <jane@acme.com> called from +1 (415) 555-0101 about https://acme.com
+Support Team - support@acme.com - 415-555-0101
+Bad line: not-an-email and not-a-phone
+Northstar contact: john@northstar.io | +44 20 7946 0958 | northstar.io
+Duplicate email jane@acme.com and duplicate phone +14155550101

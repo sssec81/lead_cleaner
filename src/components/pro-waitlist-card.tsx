@@ -100,15 +100,15 @@ export function ProWaitlistCard({
  <button
  type="submit"
  disabled={status === "submitting"}
- className="inline-flex w-full min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 active:bg-blue-800 transition disabled:opacity-50"
+ className="btn-primary inline-flex w-full min-h-11 rounded-xl px-4 text-sm font-semibold active:bg-blue-800"
  >
  {status === "submitting" ? "Joining..." : "Join waitlist"}
  <ArrowRight className="h-4 w-4" />
  </button>
  </div>
 
- <div className={`flex items-center gap-1.5 text-[10px] ${isDark ? "text-slate-400" : "text-slate-500"}`}>
- <Shield className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+ <div className={`flex items-center gap-1.5 text-[10px] ${isDark ? "text-slate-500" : "text-slate-500"}`}>
+ <Shield className="h-3.5 w-3.5 text-slate-500 shrink-0" />
  <span>No lead data is collected through this form. Your contact details are stored securely.</span>
  </div>
  </form>

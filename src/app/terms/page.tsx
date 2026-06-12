@@ -184,7 +184,7 @@ export default function TermsPage() {
  : "border-slate-200 bg-white/92"
  }`}
  >
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">
+ <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
  Quick check
  </p>
  <h3 className="mt-2 text-base font-semibold text-slate-950">{item.question}</h3>
@@ -239,7 +239,7 @@ export default function TermsPage() {
  }`}
  >
  <div className="border-b border-slate-100/80 px-6 py-5">
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">
+ <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
  Guideline
  </p>
  <h3 className="mt-2 font-display text-2xl font-semibold text-slate-950">
@@ -316,7 +316,7 @@ export default function TermsPage() {
  {String(index + 1).padStart(2, "0")}
  </div>
  <div className="min-w-0 flex-1">
- <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">
+ <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
  Term
  </p>
  <span className="mt-1 block font-display text-xl font-semibold text-slate-950 group-open:text-blue-950">

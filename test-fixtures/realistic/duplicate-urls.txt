@@ -1,0 +1,7 @@
+https://acme.com
+https://acme.com/
+http://acme.com
+https://northstar.io
+https://northstar.io/pricing
+https://northstar.io
+not-a-url

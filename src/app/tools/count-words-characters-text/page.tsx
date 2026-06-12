@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { CountWordsCharactersTool } from "@/components/count-words-characters-tool";
 import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
-import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 export const metadata: Metadata = buildToolMetadata({
  title: "Count Words and Characters Online — Free Text Tool",
@@ -42,7 +41,7 @@ export default function CountWordsCharactersPage() {
  tool={
  <div className="flex flex-col gap-12">
  <CountWordsCharactersTool />
- <ProWaitlistCard trackSource="count-words-characters" />
+ 
  </div>
  }
  />

@@ -36,7 +36,7 @@ export default function ExtractEmailsFromCsvPage() {
 
  <div className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-950 shadow-sm">
  <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-4 py-2">
- <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+ <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
  Detected Email Column
  </span>
  <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300">

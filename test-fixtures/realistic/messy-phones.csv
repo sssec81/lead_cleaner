@@ -1,0 +1,9 @@
+name,phone,company,notes
+Jane Doe,+1 (415) 555-0101,Acme,Valid US
+Support Team,415-555-0101,Acme,Duplicate formatting
+Broken One,not-a-phone,Example Co,Bad value
+Intl,+44 20 7946 0958,Northstar,Valid UK
+Dup US,+14155550101,Acme,Duplicate normalized
+Short,12345,Tiny Co,Too short
+Blank Row,,,,
+Mixed,"Call office: +61 2 9012 3456",Harbor Pty,Embedded phone

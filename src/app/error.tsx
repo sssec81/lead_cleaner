@@ -32,7 +32,7 @@ export default function GlobalError({
  </p>
  <button
  onClick={reset}
- className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white shadow-sm transition-all hover:bg-blue-500 hover:shadow-blue-500/20 active:scale-[0.98]"
+ className="btn-primary inline-flex h-11 rounded-xl px-6 font-semibold active:scale-[0.98]"
  >
  <RotateCcw className="h-4 w-4" />
  Try Again

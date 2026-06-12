@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles, Code, MessageCircle, Mail, Shield, Lock } from "lucide-react";
+import { ArrowRight, Sparkles, MessageCircle, Mail, Shield, Lock } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -69,16 +69,17 @@ export function SiteFooter() {
  return (
  <footer className="relative mt-20 overflow-hidden bg-slate-950 pt-20 pb-10 text-white">
  {/* Background Gradients */}
- <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(37,99,235,0.15),transparent_50%)]"></div>
+ <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(14,165,233,0.16),transparent_40%),radial-gradient(ellipse_at_bottom,rgba(37,99,235,0.18),transparent_52%)]"></div>
+ <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:34px_34px]"></div>
  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
  <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:items-center">
+ <div className="grid gap-12 lg:grid-cols-[1.3fr_0.95fr] lg:items-center">
  
  {/* Brand & Value Prop */}
  <div>
  <div className="flex items-center gap-2 mb-6">
- <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
+ <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#1d4ed8,#0f766e)] shadow-[0_12px_28px_rgba(29,78,216,0.3)]">
  <Sparkles className="h-4 w-4 text-white" />
  </div>
  <p className="font-display text-xl font-bold tracking-tight">LeadCleanr</p>
@@ -92,21 +93,21 @@ export function SiteFooter() {
  </div>
 
  {/* Quick CTA */}
- <div className="lg:justify-self-end rounded-xl bg-white/5 border border-white/10 p-8 w-full max-w-sm">
+ <div className="lg:justify-self-end w-full max-w-sm rounded-[1.75rem] border border-white/12 bg-white/6 p-8 shadow-[0_24px_70px_rgba(2,6,23,0.35)] backdrop-blur-md">
  <h3 className="text-lg font-semibold mb-2">{footer.ctaHeading}</h3>
  <p className="text-sm text-slate-400 mb-6">{footer.ctaIntro}</p>
  <Link
  href={footer.ctaHref}
- className="group flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white transition-all hover:bg-blue-500 hover:shadow-sm"
+ className="btn-primary group flex w-full min-h-12 rounded-xl px-6 text-sm font-semibold"
  >
  {footer.ctaLabel}
- <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+ <ArrowRight className="h-4 w-4 text-blue-100 transition-transform group-hover:translate-x-1 group-hover:text-white" />
  </Link>
  </div>
  </div>
 
  {/* Feature Strip + Security Badge */}
- <div className="mt-16 rounded-xl bg-white/5 border border-white/10 p-6 backdrop-blur-sm">
+ <div className="mt-16 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
  <div className="grid gap-6 sm:grid-cols-3">
  <div className="flex items-start gap-3">
  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
@@ -153,14 +154,12 @@ export function SiteFooter() {
  ))}
  </div>
 
- <div className="flex flex-col md:flex-row md:items-center gap-4 text-sm text-slate-500">
+ <div className="flex flex-col gap-4 text-sm text-slate-400 md:flex-row md:items-center">
  <div className="flex items-center gap-4">
- <a href="#" className="hover:text-white transition-colors" aria-label="Twitter">
+ <span className="inline-flex items-center gap-1.5 text-slate-500">
  <MessageCircle className="h-4 w-4" />
- </a>
- <a href="#" className="hover:text-white transition-colors" aria-label="GitHub">
- <Code className="h-4 w-4" />
- </a>
+ <span className="text-xs font-medium">Community soon</span>
+ </span>
  <a href="/contact" className="hover:text-white transition-colors" aria-label="Email">
  <Mail className="h-4 w-4" />
  </a>

@@ -1,0 +1,8 @@
+first_name,last_name,email,phone,company,website
+Jane,Doe,jane@acme.com,+14155550101,Acme,https://acme.com
+Jane,Doe,jane@acme.com,+14155550101,Acme,https://acme.com
+Support,Team,support@acme.com,415-555-0101,Acme,acme.com
+Broken,Record,not-an-email,,Example Co,exampleco
+Empty,,,,,
+Alex,Johnson,alex@northstar.io,+44 20 7946 0958,Northstar,https://northstar.io
+Personal,Lead,mike@gmail.com,,Freelance,

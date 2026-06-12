@@ -1,0 +1,6 @@
+jane@acme.com
+support@acme.com
+mike@gmail.com
+alex@northstar.io
+team@riverlabs.ai
+hello@subdomain.example.org

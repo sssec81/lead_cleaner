@@ -15,9 +15,9 @@ export function LocalProcessingBadge({
  return (
  <div
  title="Your pasted text and CSV files are processed in your browser."
- className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600 ${className}`.trim()}
+ className={`inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-white/78 px-3 py-1.5 text-xs font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-sm ${className}`.trim()}
  >
- <ShieldCheck className="h-3.5 w-3.5 text-blue-500/70" />
+ <ShieldCheck className="h-3.5 w-3.5 text-blue-500" />
  <span className="hidden sm:inline">Runs locally</span>
  <span className="sm:hidden">Local</span>
  </div>

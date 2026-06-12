@@ -118,7 +118,7 @@ export default function PrivacyPage() {
  <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
  Local cleanup has a clear, physical edge.
  </h2>
- <p className="text-lg leading-8 text-slate-400">
+ <p className="text-lg leading-8 text-slate-500">
  The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don&apos;t hide behind legal fog.
  </p>
  </div>
@@ -192,7 +192,7 @@ function BoundaryCard({ number, title, text }: { number: string; title: string; 
  </div>
  <div className="relative">
  <h3 className="mb-3 text-xl font-semibold text-white">{title}</h3>
- <p className="text-base leading-relaxed text-slate-400">{text}</p>
+ <p className="text-base leading-relaxed text-slate-500">{text}</p>
  </div>
  </div>
  );

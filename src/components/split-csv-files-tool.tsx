@@ -212,7 +212,7 @@ export function SplitCsvFilesTool() {
  {fileName && (
  <div className="mt-6 flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
  <div className="flex items-center gap-3 overflow-hidden">
- <FileSpreadsheet className="h-4 w-4 text-slate-400 shrink-0" />
+ <FileSpreadsheet className="h-4 w-4 text-slate-500 shrink-0" />
  <div className="min-w-0">
  <p className="text-xs font-semibold text-slate-700 truncate">{fileName}</p>
  <p className="text-[10px] text-slate-500 mt-0.5">{rows.length.toLocaleString()} rows</p>
@@ -224,7 +224,7 @@ export function SplitCsvFilesTool() {
  {rows.length > 0 && (
  <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
  <div className="flex items-center gap-2 mb-2">
- <Settings2 className="h-4 w-4 text-slate-400" />
+ <Settings2 className="h-4 w-4 text-slate-500" />
  <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Split Settings</h3>
  </div>
  
@@ -286,7 +286,7 @@ export function SplitCsvFilesTool() {
  {rows.length === 0 ? (
  <div className="max-w-sm">
  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 shadow-inner">
- <Scissors className="h-8 w-8 text-slate-400" />
+ <Scissors className="h-8 w-8 text-slate-500" />
  </div>
  <h3 className="text-xl font-bold text-slate-800 tracking-tight">Waiting for file</h3>
  <p className="mt-2 text-sm leading-relaxed text-slate-500">

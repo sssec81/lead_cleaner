@@ -131,7 +131,7 @@ export default function ContactPage() {
  <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
  Direct inboxes
  </h2>
- <p className="text-lg leading-8 text-slate-400">
+ <p className="text-lg leading-8 text-slate-500">
  A small product deserves a direct human contact path, not an endless AI chatbot loop. Choose the best inbox for your request below.
  </p>
  </div>

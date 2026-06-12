@@ -39,7 +39,6 @@ import {
 import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import { normalizeUrlValue, parseAndFormatPhone } from "@/lib/text-tools";
-import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 
@@ -245,14 +244,22 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
  });
  }
 
- async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
  const file = event.target.files?.[0];
 
  if (!file) {
  return;
  }
 
- const inspection = await inspectCsvFile(file);
+ let inspection;
+ try {
+ inspection = await inspectCsvFile(file);
+ } catch (err) {
+ resetState();
+ setStatus("error");
+ setError(coerceUploadErrorMessage(err));
+ return;
+ }
 
  setPendingFile({
  name: file.name,
@@ -558,22 +565,22 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
               
               <div className="flex items-center justify-center gap-3">
                 {isParsing ? (
-                  <LoaderCircle className="h-6 w-6 animate-spin text-slate-400" />
+                  <LoaderCircle className="h-6 w-6 animate-spin text-slate-500" />
                 ) : (
-                  <span className="inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition group-hover:bg-blue-700 group-hover:shadow-md">
+                  <span className="btn-primary h-10 rounded-xl px-6 text-sm font-semibold">
                     Browse Files
                   </span>
                 )}
               </div>
-              <p className="mt-4 text-xs font-medium text-slate-400">Supports CSV files up to 5 MB</p>
+              <p className="mt-4 text-xs font-medium text-slate-500">Supports CSV files up to 5 MB</p>
             </label>
 
             <div className="mt-6 flex items-center justify-center gap-2">
-              <span className="text-xs text-slate-400">Don't have a file?</span>
+              <span className="text-xs text-slate-500">Don't have a file?</span>
               <button
                 type="button"
                 onClick={loadDemoCsv}
-                className="text-xs font-bold text-blue-600 hover:text-blue-700 transition hover:underline"
+                className="btn-link-inline text-xs font-bold"
               >
                 Load sample CSV
               </button>
@@ -658,10 +665,10 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
             )}
 
             <div className="flex gap-1">
-              <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-[42px] w-[42px] items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm cursor-pointer" title="Undo">
+              <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="btn-icon h-[42px] w-[42px] rounded-lg" title="Undo">
                 <Undo2 className="h-4 w-4" />
               </button>
-              <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-[42px] w-[42px] items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm cursor-pointer" title="Redo">
+              <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="btn-icon h-[42px] w-[42px] rounded-lg" title="Redo">
                 <Redo2 className="h-4 w-4" />
               </button>
             </div>
@@ -701,9 +708,9 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
             {/* Table Header Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-3 bg-white border-b border-slate-200 gap-4">
               <div className="flex p-1 bg-slate-100 rounded-lg inline-flex">
-                <button type="button" onClick={() => setPreviewMode("clean")} className={`rounded-md px-4 py-1.5 text-xs font-bold transition-all cursor-pointer ${previewMode === "clean" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>Clean Preview</button>
-                {cleaned.removedRows.length > 0 && <button type="button" onClick={() => setPreviewMode("removed")} className={`rounded-md px-4 py-1.5 text-xs font-bold transition-all cursor-pointer ${previewMode === "removed" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>Removed Rows</button>}
-                {cleaned.invalidRows.length > 0 && <button type="button" onClick={() => setPreviewMode("invalid")} className={`rounded-md px-4 py-1.5 text-xs font-bold transition-all cursor-pointer ${previewMode === "invalid" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>Invalid Data</button>}
+                <button type="button" onClick={() => setPreviewMode("clean")} className={`${previewMode === "clean" ? "btn-segment-active" : "btn-segment"} px-4 py-1.5 text-xs font-bold transition-all`}>Clean Preview</button>
+                {cleaned.removedRows.length > 0 && <button type="button" onClick={() => setPreviewMode("removed")} className={`${previewMode === "removed" ? "btn-segment-active" : "btn-segment"} px-4 py-1.5 text-xs font-bold transition-all`}>Removed Rows</button>}
+                {cleaned.invalidRows.length > 0 && <button type="button" onClick={() => setPreviewMode("invalid")} className={`${previewMode === "invalid" ? "btn-segment-active" : "btn-segment"} px-4 py-1.5 text-xs font-bold transition-all`}>Invalid Data</button>}
               </div>
               <span className="text-xs font-medium text-slate-500">{previewDescription}</span>
             </div>
@@ -724,7 +731,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
                   <tbody className="divide-y divide-slate-100">
                     {visiblePreviewRows.map((row, index) => (
                       <tr key={index} className="hover:bg-slate-50 transition-colors group">
-                        <td className="px-5 py-3 text-slate-400 bg-slate-50/50 group-hover:bg-slate-100/50 border-r border-slate-200">{index + 1}</td>
+                        <td className="px-5 py-3 text-slate-500 bg-slate-50/50 group-hover:bg-slate-100/50 border-r border-slate-200">{index + 1}</td>
                         {previewMode !== "clean" && "leadcleanr_reason" in row && (
                           <td className="px-5 py-3 border-r border-slate-200 bg-red-50/20 group-hover:bg-red-50/40">
                             <span className="inline-flex items-center rounded-md bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700">
@@ -741,7 +748,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
                   </tbody>
                 </table>
               ) : (
-                <div className="flex h-full min-h-[200px] items-center justify-center text-sm font-medium text-slate-400">
+                <div className="flex h-full min-h-[200px] items-center justify-center text-sm font-medium text-slate-500">
                   No rows available for this preview mode.
                 </div>
               )}
@@ -763,7 +770,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
                   <button
                     type="button"
                     onClick={() => downloadCsvRecords(fileName.replace(/\.csv$/i, "-removed.csv"), cleaned.removedRows)}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer flex-1 sm:flex-none"
+                    className="btn-secondary h-11 rounded-xl px-4 text-sm font-bold flex-1 sm:flex-none"
                   >
                     <Download className="h-4 w-4" /> Removed
                   </button>
@@ -772,7 +779,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
                   <button
                     type="button"
                     onClick={() => downloadCsvRecords(fileName.replace(/\.csv$/i, "-invalid.csv"), cleaned.invalidRows)}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer flex-1 sm:flex-none"
+                    className="btn-secondary h-11 rounded-xl px-4 text-sm font-bold flex-1 sm:flex-none"
                   >
                     <Download className="h-4 w-4" /> Invalid
                   </button>
@@ -787,7 +794,7 @@ export function CsvLeadCleanerTool({ heroContent }: { heroContent?: React.ReactN
                     downloadCsvRecords(buildCleanFileName(fileName), cleaned.rows);
                   }}
                   disabled={!exportReady}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 text-sm font-bold text-white shadow-md transition hover:bg-blue-700 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex-1 sm:flex-none"
+                  className="btn-primary h-12 rounded-xl px-8 text-sm font-bold flex-1 sm:flex-none"
                 >
                   <Download className="h-5 w-5" /> Export Cleaned CSV
                 </button>
@@ -1284,13 +1291,7 @@ function FileSizeNotice({
  : `This file fits inside the free 5 MB limit and looks like about ${formatRowEstimate(pendingFile.estimatedRows)} rows for browser-side cleanup.`}
  </p>
  </div>
- {pendingFile.exceedsFreeLimit && (
- <ProWaitlistCard
- trackSource="csv_cleaner_limit"
- title="Need larger CSV files?"
- description="Join the Pro waitlist to get notified when we support uploads up to 100MB / 100,000+ rows, saved cleanup workflows, and export presets."
- />
- )}
+ 
  </div>
  );
 }
@@ -1301,6 +1302,14 @@ function formatRowEstimate(value: number | null) {
  }
 
  return value.toLocaleString();
+}
+
+function coerceUploadErrorMessage(error: unknown) {
+ if (error instanceof Error && error.message.trim()) {
+ return error.message;
+ }
+
+ return "We couldn't read that file in the browser. Please try the upload again.";
 }
 
 function prettyColumnType(type: CsvColumnDetection["type"]) {
@@ -1365,7 +1374,7 @@ function WorkflowSteps({
 
  return (
  <div className="w-full">
- <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+ <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
  Workflow Steps
  </p>
  <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:gap-4">
@@ -1382,7 +1391,7 @@ function WorkflowSteps({
  ? "bg-blue-600 text-white border-blue-600 shadow-2xs"
  : isCompleted
  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
- : "bg-white text-slate-400 border-slate-200"
+ : "bg-white text-slate-500 border-slate-200"
  }`}
  >
  {isCompleted ? <Check className="h-4 w-4" /> : step.num}
@@ -1393,7 +1402,7 @@ function WorkflowSteps({
  ? "text-slate-900 font-semibold"
  : isCompleted
  ? "text-slate-500 font-medium"
- : "text-slate-400"
+ : "text-slate-500"
  }`}
  >
  {step.label}
@@ -1430,10 +1439,10 @@ function ExportActions({
  <div className={`rounded-xl border p-5 sm:p-7 transition-all duration-300 ${exportUnlocked ? 'border-emerald-200 bg-gradient-to-b from-emerald-50/60 to-white shadow-sm' : 'panel-soft'}`}>
  {/* Step 3 Header */}
  <div className="flex items-center gap-2 mb-4">
- <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportUnlocked ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-slate-400 border-slate-200'}`}>
+ <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportUnlocked ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-slate-500 border-slate-200'}`}>
  {exportUnlocked ? <Check className="h-4 w-4" /> : '3'}
  </span>
- <span className={`text-xs font-bold uppercase tracking-wider ${exportUnlocked ? 'text-emerald-800' : 'text-slate-400'}`}>Export</span>
+ <span className={`text-xs font-bold uppercase tracking-wider ${exportUnlocked ? 'text-emerald-800' : 'text-slate-500'}`}>Export</span>
  {exportUnlocked && (
  <span className="ml-auto rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 border border-emerald-200/50">
  Local only
@@ -1454,7 +1463,7 @@ function ExportActions({
  </>
  ) : (
  <div className="rounded-xl border border-slate-100 bg-slate-50 p-3.5 space-y-2 mb-4">
- <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+ <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
  Export Summary
  </p>
  <div className="space-y-1.5">
@@ -1469,11 +1478,11 @@ function ExportActions({
  <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[9px] font-bold ${
  isDone
  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
- : "bg-white text-slate-400 border-slate-200"
+ : "bg-white text-slate-500 border-slate-200"
  }`}>
  {isDone ? <Check className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
  </span>
- <span className={isDone ? "text-slate-400 font-medium" : "text-slate-600 font-medium"}>
+ <span className={isDone ? "text-slate-500 font-medium" : "text-slate-600 font-medium"}>
  {item.label}
  </span>
  </div>
@@ -1497,7 +1506,7 @@ function ExportActions({
  className={`inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
  exportUnlocked
  ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm cursor-pointer"
- : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+ : "bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed"
  }`}
  >
  <Download className="h-4 w-4" />
@@ -1531,7 +1540,7 @@ function ExportActions({
  )}
  </div>
 
- <p className="mt-4 text-xs leading-relaxed text-slate-400 text-center">
+ <p className="mt-4 text-xs leading-relaxed text-slate-500 text-center">
  {exportUnlocked
  ? "Processed in your browser. CSV never uploaded."
  : "Export unlocks after upload and cleanup."}
@@ -1582,7 +1591,7 @@ function StatCard({
  <span className="text-xs font-bold uppercase tracking-wider text-slate-500 leading-tight">
  {label}
  </span>
- {icon && <div className="text-slate-400 shrink-0">{icon}</div>}
+ {icon && <div className="text-slate-500 shrink-0">{icon}</div>}
  </div>
  <div className="mt-3 text-2xl font-bold tabular-nums text-slate-900">
  {value.toLocaleString()}

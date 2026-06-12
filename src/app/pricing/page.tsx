@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Zap, Info, Check, ShieldCheck } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
-import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 import { getSiteUrl } from "@/lib/seo";
 
 const freePoints = [
@@ -152,7 +151,7 @@ export default function PricingPage() {
 
  <Link
  href="/tools/csv-lead-cleaner"
- className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md"
+ className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] px-6 text-sm font-semibold text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all duration-300 hover:bg-[position:right_center] hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(147,51,234,0.5)]"
  >
  <span>Try the free workflow</span>
  <ArrowRight className="h-4 w-4" />
@@ -171,7 +170,7 @@ export default function PricingPage() {
  <h3 className="text-sm font-bold uppercase tracking-widest text-sky-400">Pro</h3>
  <div className="mt-4 flex items-baseline gap-2">
  <span className="text-6xl font-display font-bold tracking-tight text-white">$12</span>
- <span className="text-lg text-slate-400">/mo</span>
+ <span className="text-lg text-slate-500">/mo</span>
  </div>
  </div>
  <div className="inline-flex items-center justify-center rounded-full bg-sky-400/10 border border-sky-400/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-sky-400">
@@ -179,7 +178,7 @@ export default function PricingPage() {
  </div>
  </div>
 
- <p className="mb-8 text-base leading-relaxed text-slate-400">
+ <p className="mb-8 text-base leading-relaxed text-slate-500">
  Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
  </p>
 
@@ -206,12 +205,7 @@ export default function PricingPage() {
  </div>
  </div>
 
- <ProWaitlistCard
- trackSource="pricing_pro_card"
- theme="dark"
- title="Join the Pro Waitlist"
- description="Join the waitlist to get notified when we launch paid limits, saved workflows, and export presets."
- />
+ 
  </div>
  </div>
 

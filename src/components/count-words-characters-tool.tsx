@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Type, FileText, Hash, Pilcrow, AlignLeft } from "lucide-react";
 import { trackToolEvent } from "@/lib/telemetry";
+import { copyTextToClipboard } from "@/lib/clipboard";
 
 export function CountWordsCharactersTool() {
  const [text, setText] = useState("");
@@ -29,7 +30,7 @@ export function CountWordsCharactersTool() {
 
  function handleCopy() {
  if (!text) return;
- navigator.clipboard.writeText(text);
+ copyTextToClipboard(text);
  trackToolEvent("count-words", "copy");
  }
 

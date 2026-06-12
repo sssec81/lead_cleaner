@@ -1,0 +1,9 @@
+name,email,company,notes
+Jane Doe,jane@acme.com,Acme,Primary contact
+Support Team,support@acme.com,Acme,Role inbox
+Broken One,not-an-email,Example Co,Bad syntax
+Dup Jane,jane@acme.com,Acme,Duplicate email
+Trailing Space,  alex@northstar.io  ,Northstar,Needs trim
+Embedded,"Reach me at sam@riverlabs.ai",River Labs,Email inside sentence
+Blank Row,,,,
+Personal,mike@gmail.com,Freelance,Personal inbox

@@ -57,7 +57,7 @@ export function TextTransformationPreviewCard({
 
  <div className="overflow-hidden rounded-xl border border-slate-800 bg-[#0B1020]">
  <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2">
- <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
+ <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
  {resultLabel}
  </p>
  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300 transition-shadow duration-200 group-hover:shadow-sm">

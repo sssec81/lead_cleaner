@@ -275,7 +275,7 @@ export function MergeCsvFilesTool() {
 
  <p className="mt-3 text-xs leading-relaxed text-slate-500 text-center">
  Processed locally in your browser. Files are never uploaded.<br />
- <span className="text-[11px] text-slate-400 font-medium">Any unique columns across files will be kept.</span>
+ <span className="text-[11px] text-slate-500 font-medium">Any unique columns across files will be kept.</span>
  </p>
 
  {fileEntries.length > 0 && (
@@ -290,7 +290,7 @@ export function MergeCsvFilesTool() {
  {fileEntries.map((f, i) => (
  <div key={i} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
  <div className="flex items-center gap-3 overflow-hidden">
- <FileSpreadsheet className="h-4 w-4 text-slate-400 shrink-0" />
+ <FileSpreadsheet className="h-4 w-4 text-slate-500 shrink-0" />
  <div className="min-w-0">
  <p className="text-xs font-semibold text-slate-700 truncate">{f.name}</p>
  <p className="text-[10px] text-slate-500 mt-0.5">{f.rows.toLocaleString()} rows</p>
@@ -366,7 +366,7 @@ export function MergeCsvFilesTool() {
  {mergedRows.length === 0 ? (
  <div className="max-w-sm">
  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 shadow-inner">
- <Combine className="h-8 w-8 text-slate-400" />
+ <Combine className="h-8 w-8 text-slate-500" />
  </div>
  <h3 className="text-xl font-bold text-slate-800 tracking-tight">Waiting for files</h3>
  <p className="mt-2 text-sm leading-relaxed text-slate-500">

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { SplitCsvFilesTool } from "@/components/split-csv-files-tool";
 import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
-import { ProWaitlistCard } from "@/components/pro-waitlist-card";
 
 export const metadata: Metadata = buildToolMetadata({
  title: "Split CSV into Multiple Files | LeadCleanr",
@@ -42,7 +41,7 @@ export default function SplitCsvPage() {
  tool={
  <div className="flex flex-col gap-12">
  <SplitCsvFilesTool />
- <ProWaitlistCard trackSource="split-csv-files" />
+ 
  </div>
  }
  />

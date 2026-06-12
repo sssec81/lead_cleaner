@@ -1,0 +1,5 @@
+LeadCleanr helps teams clean pasted text, spreadsheet exports, and recruiter lists before import.
+
+This sample includes multiple paragraphs, punctuation, repeated spacing, and line breaks so the word counter can be checked against realistic content.
+
+Numbers: 123 456 789.
