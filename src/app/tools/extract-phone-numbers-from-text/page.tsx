@@ -53,6 +53,7 @@ export default function ExtractPhoneNumbersFromTextPage() {
  <TextToolPageShell
  eyebrow="Phone Number Extractor"
  title="Free Phone Number Extractor from Text"
+ heroVariant="streamlined"
  intro="Paste messy notes, copied pages, logs, or research scraps to extract phone numbers, remove duplicates, and export a clean list."
  quote="Extract clean phone numbers from messy text in your browser."
  asideDescription="Choose a default country and output format before export when you need more consistent phone normalization across international and local number patterns."

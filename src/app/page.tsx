@@ -5,6 +5,7 @@ import {
   BarChart3,
   CheckCircle2,
   FileSpreadsheet,
+  FileText,
   Globe,
   Lock,
   Mail,
@@ -85,6 +86,12 @@ const trustPoints = [
   },
 ];
 
+const heroProofs = [
+  { label: "Processed locally", value: "Browser-only", icon: Shield },
+  { label: "Free path", value: "No signup", icon: Lock },
+  { label: "First success", value: "Try sample fast", icon: Zap },
+];
+
 export const metadata: Metadata = {
   title: "LeadCleanr — Private CSV Lead Cleaner for CRM & Outreach Lists",
   description:
@@ -134,59 +141,108 @@ export default function HomePage() {
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 No signup required. Clean locally and review before export.
               </div>
+
+              <div className="mt-7 grid gap-3 sm:grid-cols-3">
+                {heroProofs.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.label}
+                      className="rounded-[1.2rem] border border-slate-200/80 bg-white/82 px-4 py-3 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                        <Icon className="h-3.5 w-3.5 text-blue-600" />
+                        {item.label}
+                      </div>
+                      <p className="mt-2 text-sm font-semibold text-slate-900">{item.value}</p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="glass-panel rounded-[1.75rem] p-6 sm:p-7">
               <div className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.22em] text-blue-700">
                 <BarChart3 className="h-4 w-4" />
-                How To Start
+                Live Demo
               </div>
-              <div className="space-y-3">
-                {workflowSteps.map((item) => (
-                  <div key={item.step} className="rounded-2xl border border-slate-200/80 bg-white/82 px-4 py-4 shadow-sm">
-                    <div className="mb-1 flex items-center gap-3">
-                      <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold tracking-widest text-blue-700">
-                        {item.step}
-                      </span>
-                      <h2 className="text-sm font-semibold text-slate-900">{item.title}</h2>
+              <div className="rounded-[1.5rem] border border-slate-200/80 bg-white/86 p-4 shadow-sm">
+                <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
+                  <div className="rounded-[1.2rem] border border-slate-200 bg-slate-50/85 p-4">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                          Messy Input
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-slate-900">Raw pasted lead notes</p>
+                      </div>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                        <FileText className="h-5 w-5" />
+                      </div>
                     </div>
-                    <p className="text-sm leading-6 text-slate-600">{item.text}</p>
+                    <div className="space-y-2 rounded-[1rem] border border-slate-200 bg-white px-4 py-3 font-mono text-xs leading-6 text-slate-500">
+                      <p>Jane - JANE@acme.com, copied from footer</p>
+                      <p>support@northstar.io after the demo call</p>
+                      <p>(415) 555-0101 in notes again</p>
+                      <p>www.riverlabs.ai/contact from research</p>
+                    </div>
                   </div>
-                ))}
-              </div>
 
-              <div className="section-divider my-6" />
-
-              <div className="rounded-[1.5rem] border border-slate-200/80 bg-slate-950 p-5 text-white shadow-[0_24px_60px_rgba(15,23,42,0.2)]">
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-blue-200">
-                      Live Preview
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-white">What the workflow looks like</p>
+                  <div className="flex items-center justify-center">
+                    <div className="flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
+                      <Upload className="h-3.5 w-3.5" />
+                      Clean
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/15 text-blue-200">
-                    <FileSpreadsheet className="h-5 w-5" />
+
+                  <div className="rounded-[1.2rem] border border-slate-800 bg-slate-950 p-4 text-white shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-200">
+                          Clean Output
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-white">Structured, export-ready values</p>
+                      </div>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/15 text-blue-200">
+                        <FileSpreadsheet className="h-5 w-5" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      {[
+                        { label: "Email", value: "jane@acme.com" },
+                        { label: "Email", value: "support@northstar.io" },
+                        { label: "Phone", value: "+14155550101" },
+                        { label: "Domain", value: "riverlabs.ai" },
+                      ].map((row) => (
+                        <div
+                          key={row.value}
+                          className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/6 px-4 py-3"
+                        >
+                          <div className="min-w-0">
+                            <span className="rounded-full bg-blue-500/12 px-2.5 py-1 text-[11px] font-bold tracking-wide text-blue-100">
+                              {row.label}
+                            </span>
+                            <p className="mt-2 truncate font-mono text-sm text-slate-100">{row.value}</p>
+                          </div>
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  {[
-                    { label: "Cleaned", value: "michael.chen@acmecorp.com" },
-                    { label: "Cleaned", value: "sarah.jenkins@techlogistics.net" },
-                    { label: "Role Inbox", value: "contact@innovatesolutions.io" },
-                  ].map((row) => (
-                    <div
-                      key={row.value}
-                      className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/6 px-4 py-3"
-                    >
-                      <div className="min-w-0">
-                        <span className="rounded-full bg-blue-500/12 px-2.5 py-1 text-[11px] font-bold tracking-wide text-blue-100">
-                          {row.label}
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {workflowSteps.map((item) => (
+                    <div key={item.step} className="rounded-[1.15rem] border border-slate-200/80 bg-white px-4 py-4">
+                      <div className="mb-2 flex items-center gap-3">
+                        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold tracking-widest text-blue-700">
+                          {item.step}
                         </span>
-                        <p className="mt-2 truncate font-mono text-sm text-slate-100">{row.value}</p>
+                        <h2 className="text-sm font-semibold text-slate-900">{item.title}</h2>
                       </div>
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />
+                      <p className="text-sm leading-6 text-slate-600">{item.text}</p>
                     </div>
                   ))}
                 </div>

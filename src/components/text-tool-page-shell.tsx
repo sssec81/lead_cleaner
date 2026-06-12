@@ -13,6 +13,7 @@ type TextToolPageShellProps = {
   asideDescription?: string;
   asideContent?: ReactNode;
   toolSupportingContent?: ReactNode;
+  heroVariant?: "default" | "streamlined";
 };
 
 export function TextToolPageShell({
@@ -24,30 +25,57 @@ export function TextToolPageShell({
   asideContent,
   tool,
   toolSupportingContent,
+  heroVariant = "default",
 }: TextToolPageShellProps) {
+  const isStreamlined = heroVariant === "streamlined";
+
   return (
     <PageFrame>
-      <main className="grid-glow relative min-h-screen overflow-hidden pt-12 pb-20 lg:pt-16 lg:pb-28">
+      <main
+        className={`grid-glow relative min-h-screen overflow-hidden pb-20 lg:pb-28 ${
+          isStreamlined ? "pt-10 lg:pt-14" : "pt-12 lg:pt-16"
+        }`}
+      >
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.82),var(--background))]" />
         <div className="absolute top-0 right-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-blue-400/20 blur-[120px]" />
         <div className="absolute bottom-0 left-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-400/20 blur-[120px]" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <section className="pb-10 lg:pb-14">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
-              <div className="max-w-2xl pt-2 xl:pt-5">
+          <section className={isStreamlined ? "pb-8 lg:pb-10" : "pb-10 lg:pb-14"}>
+            <div
+              className={`grid lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start ${
+                isStreamlined ? "gap-6" : "gap-8"
+              }`}
+            >
+              <div className={`max-w-2xl ${isStreamlined ? "pt-1 xl:pt-3" : "pt-2 xl:pt-5"}`}>
                 <div className="metric-chip mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-blue-700">
                   <Zap className="h-4 w-4" />
                   <span>{eyebrow}</span>
                 </div>
-                <h1 className="aurora-text mb-5 font-display text-[2.15rem] font-bold tracking-tight leading-[1.02] sm:text-[2.7rem] lg:text-[3.2rem]">
+                <h1
+                  className={`aurora-text font-display font-bold tracking-tight leading-[1.02] ${
+                    isStreamlined
+                      ? "mb-4 text-[2rem] sm:text-[2.45rem] lg:text-[2.95rem]"
+                      : "mb-5 text-[2.15rem] sm:text-[2.7rem] lg:text-[3.2rem]"
+                  }`}
+                >
                   {title}
                 </h1>
-                <p className="mb-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                <p
+                  className={`max-w-2xl text-base leading-7 text-slate-600 sm:text-lg ${
+                    isStreamlined ? "mb-5" : "mb-6"
+                  }`}
+                >
                   {intro}
                 </p>
 
-                <div className="mb-6 grid gap-3 sm:grid-cols-3">
+                <div
+                  className={
+                    isStreamlined
+                      ? "mb-5 flex flex-wrap gap-2.5"
+                      : "mb-6 grid gap-3 sm:grid-cols-3"
+                  }
+                >
                   {[
                     "Paste or upload the raw input",
                     "Run one focused cleanup action",
@@ -55,9 +83,17 @@ export function TextToolPageShell({
                   ].map((item, index) => (
                     <div
                       key={item}
-                      className="rounded-[1.15rem] border border-slate-200/80 bg-white/88 p-4 shadow-sm"
+                      className={
+                        isStreamlined
+                          ? "inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/88 px-3 py-2 shadow-sm"
+                          : "rounded-[1.15rem] border border-slate-200/80 bg-white/88 p-4 shadow-sm"
+                      }
                     >
-                      <div className="mb-3 inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-bold tracking-widest text-blue-700">
+                      <div
+                        className={`inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-bold tracking-widest text-blue-700 ${
+                          isStreamlined ? "" : "mb-3"
+                        }`}
+                      >
                         0{index + 1}
                       </div>
                       <p className="text-sm font-medium leading-6 text-slate-700">{item}</p>
@@ -65,7 +101,7 @@ export function TextToolPageShell({
                   ))}
                 </div>
 
-                <div className="glass-panel mb-6 overflow-hidden rounded-[1.25rem]">
+                <div className={`glass-panel overflow-hidden rounded-[1.25rem] ${isStreamlined ? "mb-5" : "mb-6"}`}>
                   <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
                     <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">
                       <Quote className="h-4 w-4 text-blue-600" />
@@ -90,7 +126,7 @@ export function TextToolPageShell({
                 </div>
               </div>
 
-              <div className="lg:pt-3">
+              <div className={isStreamlined ? "lg:pt-1" : "lg:pt-3"}>
                 {asideContent ? (
                   asideContent
                 ) : (
@@ -137,7 +173,7 @@ export function TextToolPageShell({
 
           {tool}
           {toolSupportingContent ? (
-            <div className="mt-10">{toolSupportingContent}</div>
+            <div className={isStreamlined ? "mt-8" : "mt-10"}>{toolSupportingContent}</div>
           ) : null}
         </div>
       </main>

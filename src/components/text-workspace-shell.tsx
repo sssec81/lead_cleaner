@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { FlaskConical, ShieldCheck } from "lucide-react";
 import React from "react";
 
 export interface TextWorkspaceShellProps {
@@ -62,6 +62,16 @@ export function TextWorkspaceShell({
         <p className="text-sm leading-6 text-slate-500 mb-6 max-w-3xl">
           {description}
         </p>
+        <div className="mb-5 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Browser-only processing
+          </span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+            <FlaskConical className="h-3.5 w-3.5" />
+            Try sample to see output fast
+          </span>
+        </div>
         <div className="mb-6 flex flex-wrap items-center gap-2">
           {[
             "Paste the raw input",

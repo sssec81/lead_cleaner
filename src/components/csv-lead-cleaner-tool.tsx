@@ -553,6 +553,16 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               Drop your raw lead list here. The data is parsed and cleaned entirely on your device for maximum privacy.
             </p>
 
+            <div className="mb-5 flex flex-wrap items-center justify-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+                <ShieldCheck className="h-3.5 w-3.5" />
+                Browser-only processing
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+                Free limit: 5 MB per CSV
+              </span>
+            </div>
+
             <label
               htmlFor="csv-upload"
               className={`group relative flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 transition-all ${
@@ -573,6 +583,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
                 )}
               </div>
               <p className="mt-4 text-xs font-medium text-slate-500">Supports CSV files up to 5 MB</p>
+              <p className="mt-2 text-[11px] font-medium text-slate-400">Larger files are part of the Pro workflow.</p>
             </label>
 
             <div className="mt-6 flex items-center justify-center gap-2">
@@ -582,7 +593,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
                 onClick={loadDemoCsv}
                 className="btn-link-inline text-xs font-bold"
               >
-                Load sample CSV
+                Try sample CSV
               </button>
             </div>
 

@@ -51,6 +51,7 @@ export default function ExtractEmailsFromTextPage() {
  <TextToolPageShell
  eyebrow="Extract Emails from Text"
  title="Pull the useful email addresses out of messy copied text."
+ heroVariant="streamlined"
  intro="Paste copied website text, CRM notes, resumes, or lead blocks. This is the text-first path for the moment before the data becomes a spreadsheet again."
  quote="This is the tool for when the list still looks like a paragraph."
  asideContent={

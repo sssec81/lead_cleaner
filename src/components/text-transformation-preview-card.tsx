@@ -23,7 +23,7 @@ export function TextTransformationPreviewCard({
  resultTone === "green" ? "text-emerald-300" : "text-cyan-300";
 
  return (
- <div className="group rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm sm:p-6">
+ <div className="group rounded-[1.35rem] border border-[#E5E7EB] bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm sm:p-5">
  <div className="flex items-center justify-between gap-3">
  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
  {messyLabel}
@@ -33,7 +33,7 @@ export function TextTransformationPreviewCard({
  </span>
  </div>
 
- <div className="mt-3 max-h-28 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-xs leading-6 text-slate-500">
+ <div className="mt-3 max-h-24 overflow-hidden rounded-[1rem] border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-xs leading-6 text-slate-500">
  {messyLines.map((line) => (
  <div key={line} className="truncate">
  {line}
@@ -41,7 +41,7 @@ export function TextTransformationPreviewCard({
  ))}
  </div>
 
- <div className="my-4 flex items-center justify-center gap-3">
+ <div className="my-3.5 flex items-center justify-center gap-2.5">
  <div className="h-px flex-1 bg-slate-200" />
  <div className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5">
  <ArrowDown className="h-3.5 w-3.5 text-emerald-600 transition-transform duration-200 group-hover:translate-y-0.5" />
@@ -55,7 +55,7 @@ export function TextTransformationPreviewCard({
  <div className="h-px flex-1 bg-slate-200" />
  </div>
 
- <div className="overflow-hidden rounded-xl border border-slate-800 bg-[#0B1020]">
+ <div className="overflow-hidden rounded-[1rem] border border-slate-800 bg-[#0B1020]">
  <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2">
  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
  {resultLabel}
@@ -74,7 +74,7 @@ export function TextTransformationPreviewCard({
  </div>
  </div>
 
- <div className="mt-4 grid gap-2 sm:grid-cols-3">
+ <div className="mt-3.5 grid gap-2 sm:grid-cols-3">
  {[
  { icon: LockKeyhole, label: "Browser only" },
  { icon: Zap, label: "Local processing" },

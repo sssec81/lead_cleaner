@@ -503,7 +503,7 @@ export function TextProcessingTool({
               </button>
               <button type="button" onClick={loadSampleInput} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Load sample">
                 <FlaskConical className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Sample</span>
+                <span className="hidden sm:inline">Try sample</span>
               </button>
               <button type="button" onClick={useSelectedText} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Import highlighted text from this page">
                 <MousePointerClick className="h-3.5 w-3.5" />

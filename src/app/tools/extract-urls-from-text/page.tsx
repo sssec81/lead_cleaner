@@ -52,6 +52,7 @@ export default function ExtractUrlsFromTextPage() {
  <TextToolPageShell
  eyebrow="Extract URLs from Text"
  title="Pull the links out of copied text and make the list less chaotic."
+ heroVariant="streamlined"
  intro="Paste copied website text, notes, research documents, or lead blocks. This tool isolates URLs, normalizes them into a cleaner shape, removes duplicates, and keeps export simple."
  quote="The first cleanup step is often just separating the links from everything pretending to be useful around them."
  asideContent={
