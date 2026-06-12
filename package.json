@@ -1,6 +1,6 @@
 {
   "name": "lead_cleaner",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "LeadCleanr browser-first lead cleaning tools",
   "private": true,
   "type": "module",
