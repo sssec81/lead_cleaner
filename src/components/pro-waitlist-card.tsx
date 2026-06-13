@@ -20,11 +20,18 @@ export function ProWaitlistCard({
  theme = "light",
 }: ProWaitlistCardProps) {
  const [email, setEmail] = useState("");
- const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+ const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+ const [errorMessage, setErrorMessage] = useState("");
 
  const handleSubmit = async (e: React.FormEvent) => {
  e.preventDefault();
- if (!email.trim() || !email.includes("@")) return;
+ setErrorMessage("");
+
+ if (!email.trim() || !email.includes("@")) {
+ setStatus("error");
+ setErrorMessage("Enter a valid work email so we can notify you.");
+ return;
+ }
 
  setStatus("submitting");
 
@@ -44,10 +51,12 @@ export function ProWaitlistCard({
  });
 
  setStatus("success");
+ setErrorMessage("");
  setEmail("");
  } catch (err) {
  console.error("Waitlist submit failed", err);
- setStatus("idle");
+ setStatus("error");
+ setErrorMessage("We could not join the waitlist right now. Please try again in a moment.");
  }
  };
 
@@ -69,7 +78,7 @@ export function ProWaitlistCard({
  <h4 className={`font-display text-lg font-semibold ${isDark ? "text-white" : "text-slate-900"}`}>
  You&apos;re on the list!
  </h4>
- <p className={`mt-2 text-xs sm:text-sm max-w-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+ <p className={`mt-2 text-sm max-w-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}>
  Thank you for joining the Pro waitlist. We will notify you when advanced limits and export presets go live.
  </p>
  </div>
@@ -79,24 +88,48 @@ export function ProWaitlistCard({
  <h4 className={`font-display text-lg font-semibold ${isDark ? "text-white" : "text-slate-900"}`}>
  {title}
  </h4>
- <p className={`mt-1 text-xs sm:text-sm leading-relaxed ${isDark ? "text-slate-350" : "text-slate-600"}`}>
+ <p className={`mt-1 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}>
  {description}
  </p>
  </div>
 
  <div className="flex w-full flex-col gap-3">
+ <label
+ htmlFor={`waitlist-email-${trackSource}`}
+ className={`text-sm font-medium ${isDark ? "text-slate-200" : "text-slate-700"}`}
+ >
+ Work email
+ </label>
  <input
+ id={`waitlist-email-${trackSource}`}
  type="email"
  required
  placeholder="Enter your work email"
  value={email}
- onChange={(e) => setEmail(e.target.value)}
+ onChange={(e) => {
+ setEmail(e.target.value);
+ if (status === "error") {
+ setStatus("idle");
+ setErrorMessage("");
+ }
+ }}
+ aria-describedby={`waitlist-note-${trackSource}${errorMessage ? ` waitlist-error-${trackSource}` : ""}`}
+ aria-invalid={status === "error"}
  className={`w-full min-w-0 rounded-xl border px-4 py-2.5 text-sm outline-hidden focus:ring-1 transition ${
  isDark
  ? "border-slate-700 bg-slate-950 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-blue-500"
  : "border-slate-200 bg-white text-slate-950 placeholder-slate-400 focus:border-blue-500 focus:ring-blue-500"
  }`}
  />
+ {errorMessage ? (
+ <p
+ id={`waitlist-error-${trackSource}`}
+ role="alert"
+ className={`text-sm ${isDark ? "text-rose-300" : "text-rose-700"}`}
+ >
+ {errorMessage}
+ </p>
+ ) : null}
  <button
  type="submit"
  disabled={status === "submitting"}
@@ -107,7 +140,10 @@ export function ProWaitlistCard({
  </button>
  </div>
 
- <div className={`flex items-center gap-1.5 text-[10px] ${isDark ? "text-slate-500" : "text-slate-500"}`}>
+ <div
+ id={`waitlist-note-${trackSource}`}
+ className={`flex items-center gap-1.5 text-[11px] ${isDark ? "text-slate-400" : "text-slate-500"}`}
+ >
  <Shield className="h-3.5 w-3.5 text-slate-500 shrink-0" />
  <span>No lead data is collected through this form. Your contact details are stored securely.</span>
  </div>

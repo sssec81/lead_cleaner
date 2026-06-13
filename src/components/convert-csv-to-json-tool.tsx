@@ -250,11 +250,11 @@ export function ConvertCsvToJsonTool() {
  <span className="mt-4 text-base font-semibold text-slate-800">
  {isParsing ? "Parsing your CSV..." : "Drag and drop your CSV file here"}
  </span>
- <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
+ <span className="mt-2 max-w-sm text-sm leading-relaxed text-[color:var(--muted)]">
  or click to browse local files.
  </span>
  {!isParsing && (
- <div className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+ <div className="btn-primary mt-5 inline-flex min-h-11 rounded-xl px-6 text-sm font-semibold shadow-sm hover:-translate-y-0.5 cursor-pointer">
  Upload CSV to Convert
  </div>
  )}
@@ -272,7 +272,7 @@ export function ConvertCsvToJsonTool() {
  <div className="mt-4 flex flex-col gap-2 border-b border-slate-200 pb-5">
  <div className="flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
  <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
- <p className="text-xs font-semibold leading-relaxed text-slate-700">
+ <p className="text-sm font-semibold leading-relaxed text-slate-700">
  Your CSV is processed locally in your browser and is never uploaded to our servers.
  </p>
  </div>
@@ -286,7 +286,7 @@ export function ConvertCsvToJsonTool() {
  </div>
 
  <div className="mt-4 rounded-xl border border-[color:var(--line)] bg-slate-50 p-3">
- <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+ <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
  Quick start
  </p>
  <div className="mt-2">
@@ -351,7 +351,7 @@ export function ConvertCsvToJsonTool() {
  </div>
  </div>
 
- <p className="text-[11px] leading-relaxed text-slate-500">
+ <p className="text-xs leading-relaxed text-slate-500">
  {jsonStructure === "ndjson"
  ? "One JSON object per line. Great for streaming and log-style data."
  : jsonFormat === "pretty"
@@ -397,7 +397,7 @@ export function ConvertCsvToJsonTool() {
 
  {headers.length ? (
  <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
- <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+ <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
  Active File
  </p>
  <p className="mt-1 text-sm font-semibold truncate text-slate-800">
@@ -421,7 +421,7 @@ export function ConvertCsvToJsonTool() {
  <div>
  <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 mb-2">
  <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-sm"></span>
- <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">JSON Output</p>
+ <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600">JSON Output</p>
  </div>
  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
  {hasData ? "Conversion Complete" : "JSON Preview"}
@@ -438,7 +438,7 @@ export function ConvertCsvToJsonTool() {
  type="button"
  onClick={handleCopy}
  disabled={!rows.length}
- className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:hover:bg-blue-600"
+ className="btn-primary group inline-flex min-h-11 rounded-xl px-5 text-sm font-semibold shadow-sm disabled:hover:bg-[var(--lc-accent)]"
  >
  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
  {copied ? "Copied" : "Copy JSON"}
@@ -485,13 +485,13 @@ export function ConvertCsvToJsonTool() {
  {jsonStructure === "ndjson" ? "output.ndjson" : "output.json"}
  </span>
  </div>
- <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+ <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
  {jsonFormat === "pretty" ? "Pretty" : "Minified"} · {jsonStructure === "ndjson" ? "NDJSON" : "Array"}
  </span>
  </div>
  <div className="p-4 overflow-y-auto max-h-[22rem]">
  {rows.length > previewRowCount ? (
- <p className="mb-3 text-[11px] font-medium text-slate-500">
+ <p className="mb-3 text-xs font-medium text-slate-500">
  Showing the first {previewRowCount} of {rows.length.toLocaleString()} {jsonStructure === "ndjson" ? "lines" : "JSON objects"}.
  </p>
  ) : null}

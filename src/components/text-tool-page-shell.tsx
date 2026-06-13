@@ -37,7 +37,7 @@ export function TextToolPageShell({
             
             {/* Left Column 7/12 */}
             <div className="lg:col-span-7 pt-2">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-3">
+              <p className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)]">
                 {eyebrow}
               </p>
               <h1 className="font-display font-bold text-[clamp(1.75rem,3vw,2.5rem)] text-[var(--lc-ink)] tracking-[-0.025em] leading-tight mb-3">
@@ -46,12 +46,10 @@ export function TextToolPageShell({
               <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-lg mb-6">
                 {intro}
               </p>
-              <div className="flex flex-wrap items-center gap-4 font-mono text-[11px] text-[var(--lc-muted)]">
-                <span>✓ Browser-only</span>
-                <span className="text-[var(--lc-border-mid)]">·</span>
-                <span>✓ No account needed</span>
-                <span className="text-[var(--lc-border-mid)]">·</span>
-                <span>✓ Processed locally</span>
+              <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--lc-muted)]">
+                <span className="rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5">Browser-only</span>
+                <span className="rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5">No account needed</span>
+                <span className="rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5">Processed locally in your browser</span>
               </div>
             </div>
 
@@ -60,8 +58,8 @@ export function TextToolPageShell({
               {asideContent ? (
                 asideContent
               ) : (
-                <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-6">
-                  <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
+                <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-6 shadow-[var(--shadow)]">
+                  <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)]">
                     Use This When
                   </p>
                   <h3 className="font-sans font-semibold text-[1.125rem] text-[var(--lc-ink)]">

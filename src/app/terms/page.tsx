@@ -124,7 +124,7 @@ export default function TermsPage() {
                       key={rule}
                       className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-4"
                     >
-                      <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
                         Rule {index + 1}
                       </p>
                       <p className="mt-2 text-sm leading-6 text-[var(--lc-ink)]">{rule}</p>
@@ -172,7 +172,7 @@ export default function TermsPage() {
                   key={item.question}
                   className="surface-card rounded-[1.25rem] p-5 transition-transform duration-200 hover:-translate-y-0.5"
                 >
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
                     Quick check
                   </p>
                   <h3 className="mt-2 text-base font-semibold text-[var(--lc-ink)]">{item.question}</h3>
@@ -223,7 +223,7 @@ export default function TermsPage() {
                 className="surface-card overflow-hidden rounded-[1.25rem]"
               >
                 <div className="border-b border-[var(--lc-border)] bg-[var(--lc-bg)] px-6 py-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
                     Guideline
                   </p>
                   <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--lc-ink)]">
@@ -300,7 +300,7 @@ export default function TermsPage() {
                     {String(index + 1).padStart(2, "0")}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--lc-muted)]">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lc-muted)]">
                       Term
                     </p>
                     <span className="mt-1 block font-display text-xl font-semibold text-[var(--lc-ink)] group-open:text-[var(--lc-accent)]">

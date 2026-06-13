@@ -65,7 +65,7 @@ export function SiteFooter() {
           <div className="mt-6">
             <Link
               href={cta.href}
-              className="inline-flex min-h-12 items-center justify-center gap-1.5 rounded-lg bg-[var(--lc-accent)] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              className="btn-primary min-h-12 rounded-lg px-5 py-2.5 text-sm font-medium hover:opacity-90"
             >
               {cta.label}
               <ArrowRight className="h-4 w-4" />
@@ -81,7 +81,7 @@ export function SiteFooter() {
                 <Shield className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-sm font-semibold">Browser-first processing</p>
+                <p className="text-sm font-semibold">Browser-only processing</p>
                 <p className="mt-1 text-xs text-[var(--lc-hint)]">
                   CSV files are parsed and cleaned locally in your browser.
                 </p>
@@ -92,7 +92,7 @@ export function SiteFooter() {
                 <Lock className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-sm font-semibold">No signup required</p>
+                <p className="text-sm font-semibold">No account needed</p>
                 <p className="mt-1 text-xs text-[var(--lc-hint)]">
                   Start cleaning immediately. No account, no credit card.
                 </p>

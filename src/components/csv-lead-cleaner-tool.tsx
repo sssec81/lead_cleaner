@@ -681,10 +681,10 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
                 </div>
               )}
               <div className="flex gap-1">
-                <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-[38px] w-[38px] items-center justify-center rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] disabled:opacity-50" title="Undo">
+                <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] disabled:opacity-50" title="Undo">
                   <Undo2 className="h-4 w-4" />
                 </button>
-                <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-[38px] w-[38px] items-center justify-center rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] disabled:opacity-50" title="Redo">
+                <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] disabled:opacity-50" title="Redo">
                   <Redo2 className="h-4 w-4" />
                 </button>
               </div>
@@ -695,19 +695,19 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
           <div className="mx-6 mb-6">
             <div className="grid grid-cols-2 md:grid-cols-4 border border-[var(--lc-border)] rounded-xl overflow-hidden bg-[var(--lc-surface)]">
               <div className="px-5 py-4 border-r border-[var(--lc-border)] last:border-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--lc-hint)]">TOTAL ROWS</p>
+                <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--lc-hint)]">TOTAL ROWS</p>
                 <p className="mt-1 font-display text-[1.75rem] font-semibold text-[var(--lc-ink)] tabular-nums">{cleaned.summary.totalRows.toLocaleString()}</p>
               </div>
               <div className="px-5 py-4 border-r border-[var(--lc-border)] last:border-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--lc-hint)]">DUPLICATES REMOVED</p>
+                <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--lc-hint)]">DUPLICATES REMOVED</p>
                 <p className="mt-1 font-display text-[1.75rem] font-semibold text-[var(--lc-ink)] tabular-nums">{cleaned.summary.duplicatesRemoved.toLocaleString()}</p>
               </div>
               <div className="px-5 py-4 border-r border-[var(--lc-border)] last:border-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--lc-hint)]">INVALID ENTRIES</p>
+                <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--lc-hint)]">INVALID ENTRIES</p>
                 <p className="mt-1 font-display text-[1.75rem] font-semibold text-[var(--lc-ink)] tabular-nums">{(cleaned.summary.invalidRowsRemoved + cleaned.summary.emptyRowsRemoved + cleaned.summary.filteredRowsRemoved).toLocaleString()}</p>
               </div>
               <div className="px-5 py-4 bg-[var(--lc-accent-bg)] border-r border-[var(--lc-border)] last:border-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--lc-accent)]">CLEAN RECORDS READY</p>
+                <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--lc-accent)]">CLEAN RECORDS READY</p>
                 <p className="mt-1 font-display text-[1.75rem] font-semibold text-[var(--lc-accent)] tabular-nums">{cleaned.summary.cleanRowsReady.toLocaleString()}</p>
               </div>
             </div>
@@ -725,13 +725,13 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
           <div className="flex-1 flex flex-col px-6 pb-6">
             <div className="flex flex-col border border-[var(--lc-border)] rounded-xl overflow-hidden flex-1 bg-[var(--lc-surface)]">
               {/* Tab Row */}
-              <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--lc-bg)] pt-2 px-2">
-                <div className="flex items-center gap-1">
+              <div className="flex flex-col items-start gap-2 border-b border-[var(--lc-border)] bg-[var(--lc-bg)] px-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-1">
                   <button type="button" onClick={() => setPreviewMode("clean")} className={`px-4 py-2 text-[13px] rounded-t-md transition-colors ${previewMode === "clean" ? "bg-[var(--lc-surface)] border border-[var(--lc-border)] border-b-[var(--lc-surface)] text-[var(--lc-ink)] font-medium translate-y-px" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] border border-transparent"}`}>Clean Preview</button>
                   {cleaned.removedRows.length > 0 && <button type="button" onClick={() => setPreviewMode("removed")} className={`px-4 py-2 text-[13px] rounded-t-md transition-colors ${previewMode === "removed" ? "bg-[var(--lc-surface)] border border-[var(--lc-border)] border-b-[var(--lc-surface)] text-[var(--lc-ink)] font-medium translate-y-px" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] border border-transparent"}`}>Removed Rows</button>}
                   {cleaned.invalidRows.length > 0 && <button type="button" onClick={() => setPreviewMode("invalid")} className={`px-4 py-2 text-[13px] rounded-t-md transition-colors ${previewMode === "invalid" ? "bg-[var(--lc-surface)] border border-[var(--lc-border)] border-b-[var(--lc-surface)] text-[var(--lc-ink)] font-medium translate-y-px" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] border border-transparent"}`}>Invalid Data</button>}
                 </div>
-                <span className="font-mono text-[11px] text-[var(--lc-hint)] pb-1 pr-2">{previewDescription}</span>
+                <span className="pb-2 pr-2 font-mono text-[11px] text-[var(--lc-hint)] sm:pb-1">{previewDescription}</span>
               </div>
               
               {/* The Table */}
@@ -740,12 +740,12 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
                   <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
                     <thead className="sticky top-0 z-10 bg-[var(--lc-bg)]">
                       <tr>
-                        <th className="px-3 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
-                        {previewMode !== "clean" && <th className="px-3 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">REASON</th>}
+                        <th className="px-3 py-2.5 font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
+                        {previewMode !== "clean" && <th className="px-3 py-2.5 font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">REASON</th>}
                         {reportHeaders.map((header) => {
                           const isComputed = header.startsWith("leadcleanr_");
                           return (
-                            <th key={header} title={isComputed ? "Added by LeadCleanr" : undefined} className={`px-3 py-2.5 font-mono text-[10px] font-bold uppercase tracking-wider border-b border-[var(--lc-border)] ${isComputed ? "text-[var(--lc-accent)]" : "text-[var(--lc-hint)]"}`}>
+                            <th key={header} title={isComputed ? "Added by LeadCleanr" : undefined} className={`px-3 py-2.5 font-mono text-[11px] font-bold uppercase tracking-wider border-b border-[var(--lc-border)] ${isComputed ? "text-[var(--lc-accent)]" : "text-[var(--lc-hint)]"}`}>
                               {isComputed && <span className="mr-1">✦</span>}
                               {prettyHeader(header)}
                             </th>

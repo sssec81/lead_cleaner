@@ -28,9 +28,9 @@
   --accent-soft: var(--lc-accent-bg);
   --muted: var(--lc-muted);
   --muted-strong: var(--lc-hint);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-strong: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-elevated: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow: 0 10px 30px rgba(17, 17, 16, 0.06), 0 2px 8px rgba(17, 17, 16, 0.04);
+  --shadow-strong: 0 18px 44px rgba(17, 17, 16, 0.08), 0 4px 14px rgba(17, 17, 16, 0.05);
+  --shadow-elevated: 0 22px 54px rgba(17, 17, 16, 0.1), 0 6px 18px rgba(17, 17, 16, 0.06);
   --panel: #ffffff;
   --panel-strong: #ffffff;
   --panel-dark: #141412;
@@ -198,7 +198,7 @@ pre {
 
 .surface-card:hover {
   transform: translateY(-1px);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-strong);
 }
 
 .btn-primary {
@@ -215,7 +215,7 @@ pre {
 
 .btn-primary:hover {
   background: #1d42b8;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-strong);
 }
 
 .btn-primary *,
@@ -250,7 +250,7 @@ pre {
   transform: translateY(-1px);
   border-color: var(--lc-border-mid);
   background: #ffffff;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-strong);
 }
 
 .btn-ghost {

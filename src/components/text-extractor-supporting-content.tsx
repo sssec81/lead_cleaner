@@ -30,7 +30,7 @@ export function TextExtractorSupportingContent({
  return (
  <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
  <div className="max-w-4xl">
- <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">
+ <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
  Browser-first text cleanup
  </p>
  <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
@@ -76,7 +76,7 @@ export function TextExtractorSupportingContent({
 
  {relatedTools.length ? (
  <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50/50 p-5">
- <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
+ <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">
  Related tools
  </p>
  <div className="mt-4 flex flex-wrap gap-3">

@@ -35,10 +35,10 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`text-sm transition-colors ${
+              className={`rounded-full px-3 py-2 text-sm font-medium transition-colors ${
                 isActive(item.href)
-                  ? "text-[var(--lc-ink)]"
-                  : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"
+                  ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]"
+                  : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
               }`}
             >
               {item.label}
@@ -47,7 +47,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--lc-accent-bg)] px-3 py-1 font-mono text-[11px] text-[var(--lc-accent)]">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--lc-accent-bg)] px-3 py-1 font-mono text-xs text-[var(--lc-accent)]">
             <ShieldCheck className="h-3.5 w-3.5" />
             Browser-only
           </div>
@@ -80,8 +80,10 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`text-sm ${
-                    isActive(item.href) ? "text-[var(--lc-ink)]" : "text-[var(--lc-muted)]"
+                  className={`rounded-lg px-3 py-2 text-sm font-medium ${
+                    isActive(item.href)
+                      ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]"
+                      : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
                   }`}
                 >
                   {item.label}
@@ -90,7 +92,7 @@ export function SiteHeader() {
             </nav>
 
             <div className="mt-4 flex flex-col gap-3">
-              <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--lc-accent-bg)] px-3 py-1 font-mono text-[11px] text-[var(--lc-accent)]">
+              <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--lc-accent-bg)] px-3 py-1 font-mono text-xs text-[var(--lc-accent)]">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 Browser-only
               </div>

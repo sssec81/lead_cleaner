@@ -130,7 +130,7 @@ export default function PricingPage() {
   </div>
 
   <div className="mb-8 rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-4">
-  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--lc-accent)]">
+  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--lc-accent)]">
   Good for
   </p>
   <div className="mt-3 grid gap-2">
@@ -187,7 +187,7 @@ export default function PricingPage() {
   </div>
 
   <div className="mb-8 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#e4e4e1]">
+  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#e4e4e1]">
   Good for
   </p>
   <div className="mt-3 grid gap-2">

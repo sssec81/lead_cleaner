@@ -55,33 +55,33 @@ export function CsvWorkspaceShell({
   return (
     <div className="workspace-shell w-full overflow-hidden rounded-[1.75rem] flex flex-col">
       {/* ── Workspace Header ── */}
-      <div className="workspace-topbar flex items-center justify-between border-b border-slate-200/80 px-6 py-4">
+      <div className="workspace-topbar flex flex-col gap-4 border-b border-slate-200/80 px-4 py-4 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#1d4ed8,#0f766e)] text-white shadow-[0_14px_28px_rgba(29,78,216,0.24)]">
             <FileSpreadsheet className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-slate-900 leading-tight">LeadCleanr Workspace</h1>
+            <h1 className="text-lg font-bold text-slate-900 leading-tight">CSV workspace</h1>
             <div className="flex items-center gap-2 text-xs font-medium text-slate-500 mt-0.5">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Processed locally in browser</span>
+              <span>Processed locally in your browser</span>
             </div>
           </div>
         </div>
 
         {hasLoadedFile && (
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col items-end">
+          <div className="flex w-full flex-col items-start gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex flex-col items-start sm:items-end">
               <span className="text-sm font-semibold text-slate-900 truncate max-w-[200px] sm:max-w-[300px]" title={fileName}>
                 {fileName}
               </span>
               <span className="text-xs text-slate-500">{rowCount.toLocaleString()} rows</span>
             </div>
-            <div className="h-8 w-px bg-slate-200"></div>
+            <div className="hidden h-8 w-px bg-slate-200 sm:block"></div>
             <button
               type="button"
               onClick={onReplaceFile}
-              className="btn-secondary h-9 rounded-lg px-3 text-xs font-semibold"
+              className="btn-secondary min-h-11 w-full rounded-lg px-3 text-xs font-semibold sm:w-auto"
             >
               Replace file
             </button>
@@ -91,7 +91,7 @@ export function CsvWorkspaceShell({
 
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
-      <div className="workspace-subtle flex flex-1 flex-col items-center justify-center p-6 sm:p-12 lg:p-16">
+      <div className="workspace-subtle flex flex-1 flex-col items-center justify-center p-4 sm:p-12 lg:p-16">
           <div className="glass-panel relative flex w-full max-w-2xl flex-col overflow-hidden rounded-[1.75rem] transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 group">
             
             {/* ── Header Section ── */}
@@ -107,7 +107,7 @@ export function CsvWorkspaceShell({
                   type="button"
                   onClick={onLoadDemo}
                   disabled={isParsing}
-                  className="btn-ghost h-8 rounded-md px-3 text-xs font-semibold"
+                  className="btn-ghost min-h-10 rounded-md px-3 text-xs font-semibold"
                 >
                   <FileSpreadsheet className="h-3.5 w-3.5" />
                   Try Sample CSV
@@ -211,7 +211,7 @@ export function CsvWorkspaceShell({
       ) : (
         /* ── Unified Application Workspace ── */
         <div className="workspace-subtle flex flex-1 flex-col">
-          <div className="border-b border-slate-200/80 bg-blue-50/55 px-6 py-3 backdrop-blur-sm">
+          <div className="border-b border-slate-200/80 bg-blue-50/55 px-4 py-3 backdrop-blur-sm sm:px-6">
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600">
               <span className="rounded-full bg-white px-3 py-1 shadow-sm text-blue-700">1. Upload</span>
               <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
@@ -222,7 +222,7 @@ export function CsvWorkspaceShell({
           </div>
           
           {/* Cleanup Controls Toolbar */}
-          <div className="border-b border-slate-200/80 bg-white/86 px-6 py-4 flex flex-wrap items-end gap-4 shadow-sm z-10 backdrop-blur-sm">
+          <div className="border-b border-slate-200/80 bg-white/86 px-4 py-4 flex flex-wrap items-end gap-4 shadow-sm z-10 backdrop-blur-sm sm:px-6">
             {toolbar}
           </div>
 
@@ -245,7 +245,7 @@ export function CsvWorkspaceShell({
             
             {/* Export Section */}
             {exportControls && (
-              <div className="border-t border-slate-200 bg-white/70 p-6 flex flex-col sm:flex-row items-center justify-between gap-6 z-10 shadow-[0_-1px_2px_rgba(0,0,0,0.02)] backdrop-blur-sm">
+              <div className="border-t border-slate-200 bg-white/70 p-4 flex flex-col items-stretch justify-between gap-6 z-10 shadow-[0_-1px_2px_rgba(0,0,0,0.02)] backdrop-blur-sm sm:p-6 sm:flex-row sm:items-center">
                 {exportControls}
               </div>
             )}

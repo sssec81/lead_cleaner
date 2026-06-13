@@ -33,7 +33,7 @@ export function LocalProcessingBadge({
  <HardDriveDownload className="h-4 w-4" />
  </div>
  <div>
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+ <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
  Local Processing
  </p>
  <p className="mt-1 text-sm font-semibold text-[color:#102534]">

@@ -153,7 +153,7 @@ export function RemoveEmptyRowsCsvTool() {
       error={error}
       warning=""
       emptyStateTitle="Remove Empty Rows"
-      emptyStateSubtitle="Upload your CSV to instantly drop blank rows. Processed locally."
+      emptyStateSubtitle="Upload your CSV to instantly drop blank rows. Processed locally in your browser."
       emptyStateIcon={<Eraser className="h-8 w-8" />}
       onFileUpload={handleFileUpload}
       onLoadDemo={loadDemoCsv}
@@ -161,22 +161,22 @@ export function RemoveEmptyRowsCsvTool() {
       toolbar={
         <div className="flex-1">
           <p className="text-sm font-semibold text-slate-800">Removing rows where ALL columns are empty</p>
-          <p className="text-xs text-slate-500 mt-1">Empty rows are automatically dropped.</p>
+          <p className="mt-1 text-sm text-slate-500">Empty rows are automatically dropped.</p>
         </div>
       }
       summary={
         <>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Rows Scanned</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Rows Scanned</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{rows.length.toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Empty Rows Removed</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Empty Rows Removed</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{emptyRowsCount.toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-indigo-50/30 p-5 sm:px-6 transition-colors hover:bg-indigo-50/60 relative overflow-hidden min-w-[160px]">
             <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500"></div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-600">Clean Rows Ready</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Clean Rows Ready</p>
             <p className="mt-1.5 text-3xl font-bold text-indigo-700 tabular-nums tracking-tight">{cleanRowsCount.toLocaleString()}</p>
           </div>
         </>
@@ -210,7 +210,7 @@ export function RemoveEmptyRowsCsvTool() {
             <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
               <FileMinus className="h-8 w-8 text-amber-500 mb-3" />
               <h4 className="text-sm font-semibold text-slate-900 mb-1">No clean rows found</h4>
-              <p className="max-w-md text-xs leading-relaxed text-slate-500">
+              <p className="max-w-md text-sm leading-relaxed text-slate-500">
                 This file uploaded successfully, but all rows were empty.
               </p>
             </div>

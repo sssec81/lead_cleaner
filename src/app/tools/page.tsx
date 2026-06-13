@@ -15,11 +15,8 @@ import {
   Phone,
   Rows3,
   Scissors,
-  ShieldCheck,
   Sparkles,
   Type,
-  Users,
-  Zap,
   Combine,
 } from "lucide-react";
 
@@ -146,6 +143,24 @@ export const metadata: Metadata = {
   },
 };
 
+const workflowSteps = [
+  {
+    question: "Have a spreadsheet?",
+    label: "Use CSV Lead Cleaner",
+    href: "/tools/csv-lead-cleaner",
+  },
+  {
+    question: "Copied or pasted text?",
+    label: "Use text extractors",
+    href: "#text-extraction",
+  },
+  {
+    question: "Done extracting?",
+    label: "Return to CSV cleaner",
+    href: "/tools/csv-lead-cleaner",
+  },
+];
+
 export default function ToolsPage() {
   return (
     <PageFrame>
@@ -161,15 +176,18 @@ export default function ToolsPage() {
         <section className="pt-16 pb-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
-              <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-3">
-                All Tools
-              </p>
-              <h1 className="font-display text-[2.75rem] font-bold tracking-[-0.025em] text-[var(--lc-ink)] leading-tight mb-4">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-[var(--lc-muted)]">
+                  All Tools
+                </span>
+                <div className="h-px flex-1 max-w-28 bg-[var(--lc-border)]" />
+              </div>
+              <h1 className="font-display text-[clamp(2.25rem,7vw,2.75rem)] font-bold tracking-[-0.025em] text-[var(--lc-ink)] leading-tight mb-4">
                 Pick the right tool in one pass.
               </h1>
               <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-xl">
-                Start with CSV if you already have a spreadsheet.<br />
-                Use text helpers when the data is still copied text.
+                Upload your spreadsheet or paste raw text. LeadCleanr helps you
+                clean, deduplicate, and prep it for your CRM in seconds.
               </p>
             </div>
           </div>
@@ -182,57 +200,62 @@ export default function ToolsPage() {
 
               {/* Left Card 7/12 */}
               <div className="lg:col-span-7">
-                <div className="h-full bg-[var(--lc-ink)] text-white rounded-xl p-8 flex flex-col items-start relative overflow-hidden">
-                  <div className="mb-6 inline-block bg-white/10 text-white/70 font-mono text-[10px] uppercase rounded-full px-3 py-1 tracking-wider">
+                <div className="h-full rounded-xl bg-[var(--lc-ink)] p-6 text-white sm:p-7 flex flex-col items-start relative overflow-hidden">
+                  <div className="mb-4 inline-flex items-center rounded-full border border-blue-400/30 bg-blue-500/18 px-3 py-1 text-[11px] font-mono font-medium uppercase tracking-[0.14em] text-blue-200">
                     ↗ Start Here
                   </div>
-                  <h2 className="font-display text-[1.75rem] font-bold text-white mb-2">
+                  <h2 className="mb-2 font-display text-[1.75rem] font-bold text-white">
                     CSV Lead Cleaner
                   </h2>
-                  <p className="font-sans text-[15px] text-white/70 max-w-md leading-relaxed">
+                  <p className="max-w-md font-sans text-[15px] leading-relaxed text-white/72">
                     The default path for CRM imports, recruiter sheets, agency handoffs, and outreach lists that need a full cleanup pass.
                   </p>
+                  <p className="mt-3 text-sm text-white/55">
+                    Deduplicate · Review · Export - all in-browser
+                  </p>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    <span className="bg-white/10 text-white/80 rounded-md px-3 py-1.5 text-sm font-sans">Deduplicate & clean columns</span>
-                    <span className="bg-white/10 text-white/80 rounded-md px-3 py-1.5 text-sm font-sans">Review before export</span>
-                    <span className="bg-white/10 text-white/80 rounded-md px-3 py-1.5 text-sm font-sans">Browser-local processing</span>
-                  </div>
-
-                  <Link href="/tools/csv-lead-cleaner" className="mt-8 inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition-colors rounded-lg px-5 py-2.5 text-sm font-medium">
-                    Open main workflow <ArrowRight className="h-4 w-4" />
+                  <Link
+                    href="/tools/csv-lead-cleaner"
+                    className="btn-primary mt-6 min-h-11 rounded-lg px-5 py-2.5 text-sm font-medium shadow-[var(--shadow-strong)]"
+                  >
+                    Open CSV workflow
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               </div>
 
               {/* Right Panel 5/12 */}
               <div className="lg:col-span-5">
-                <div className="h-full bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-6">
-                  <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-6">
+                <div className="h-full bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 sm:p-6">
+                  <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-6">
                     Workflow Logic
                   </p>
 
-                  <div className="flex flex-col">
-                    <div className="flex flex-col gap-1 border-b border-[var(--lc-border)] py-3">
-                      <span className="font-sans text-[13px] text-[var(--lc-muted)]">○ Have a spreadsheet?</span>
-                      <div className="flex items-center gap-1 font-sans text-[13px] font-medium text-[var(--lc-ink)]">
-                        <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> Use CSV Lead Cleaner
+                  <div className="flex flex-col gap-3">
+                    {workflowSteps.map((step, index) => (
+                      <div
+                        key={step.question}
+                        className="rounded-lg border border-[var(--lc-border)] bg-[var(--lc-bg)] px-4 py-3"
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--lc-accent-bg)] text-[11px] font-semibold text-[var(--lc-accent)]">
+                            {index + 1}
+                          </span>
+                          <div className="min-w-0 flex-1 border-l-2 border-[var(--lc-accent)] pl-3">
+                            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--lc-muted)]">
+                              {step.question}
+                            </p>
+                            <Link
+                              href={step.href}
+                              className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-[var(--lc-accent)] hover:underline"
+                            >
+                              {step.label}
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1 border-b border-[var(--lc-border)] py-3">
-                      <span className="font-sans text-[13px] text-[var(--lc-muted)]">○ Copied/pasted text?</span>
-                      <div className="flex items-center gap-1 font-sans text-[13px] font-medium text-[var(--lc-ink)]">
-                        <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> Use text extractors
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1 py-3">
-                      <span className="font-sans text-[13px] text-[var(--lc-muted)]">○ Done extracting?</span>
-                      <div className="flex items-center gap-1 font-sans text-[13px] font-medium text-[var(--lc-ink)]">
-                        <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> Return to CSV cleaner
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -242,24 +265,27 @@ export default function ToolsPage() {
         </section>
 
         {/* Zone 3: Tool Directory */}
-        <section className="pt-16 pb-16 border-t border-[var(--lc-border)]">
+        <section className="border-t border-[var(--lc-border)] pt-16 pb-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
-                  CSV Helpers
-                </p>
+                <div className="mb-3 flex items-center gap-3">
+                  <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-[var(--lc-muted)]">
+                    CSV Helpers
+                  </span>
+                  <div className="h-px w-16 bg-[var(--lc-border)]" />
+                </div>
                 <h2 className="font-sans text-[1.25rem] font-semibold text-[var(--lc-ink)]">
                   One focused action on your spreadsheet.
                 </h2>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-full px-3 py-1 text-xs font-medium border bg-[var(--lc-ink)] text-white border-[var(--lc-ink)]">
-                  All
-                </button>
-                <button className="rounded-full px-3 py-1 text-xs font-medium border bg-transparent text-[var(--lc-muted)] border-[var(--lc-border)]">
-                  Most used
-                </button>
+                <span className="rounded-full border border-[var(--lc-ink)] bg-[var(--lc-ink)] px-3 py-1 text-xs font-medium text-white">
+                  Showing all
+                </span>
+                <span className="rounded-full border border-[var(--lc-border)] bg-transparent px-3 py-1 text-xs font-medium text-[var(--lc-muted)]">
+                  CSV-first order
+                </span>
               </div>
             </div>
 
@@ -272,7 +298,7 @@ export default function ToolsPage() {
                       <div className="bg-[var(--lc-accent-bg)] rounded-lg p-1.5">
                         <Icon className="h-5 w-5 text-[var(--lc-accent)]" />
                       </div>
-                      <span className="font-mono text-[10px] uppercase bg-[var(--lc-bg)] text-[var(--lc-muted)] rounded px-2 py-0.5 border border-[var(--lc-border)]">
+                      <span className="rounded border border-[var(--lc-border)] bg-[var(--lc-bg)] px-2 py-0.5 font-mono text-[11px] uppercase text-[var(--lc-muted)]">
                         {tool.tag}
                       </span>
                     </div>
@@ -292,18 +318,18 @@ export default function ToolsPage() {
           </div>
         </section>
 
-        <section className="pt-16 pb-16 border-t border-[var(--lc-border)]">
+        <section id="text-extraction" className="pt-16 pb-16 border-t border-[var(--lc-border)]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-2">
 
-              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-6">
-                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
+              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-5 sm:p-6">
+                <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
                   Text Extraction
                 </p>
                 <h2 className="font-sans text-[1.25rem] font-semibold text-[var(--lc-ink)] mb-2">
                   Input is still messy copied text.
                 </h2>
-                <p className="font-sans text-[13px] text-[var(--lc-muted)] mb-6 truncate">
+                <p className="mb-6 font-sans text-sm text-[var(--lc-muted)]">
                   Use these when you have notes, pasted pages, or signatures.
                 </p>
 
@@ -315,7 +341,7 @@ export default function ToolsPage() {
                         <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>
-                          <p className="font-sans text-[13px] text-[var(--lc-muted)] truncate">{tool.description}</p>
+                          <p className="font-sans text-sm text-[var(--lc-muted)]">{tool.description}</p>
                         </div>
                         <ChevronRight className="h-4 w-4 mt-1 text-[var(--lc-hint)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0 ml-auto" />
                       </Link>
@@ -324,14 +350,14 @@ export default function ToolsPage() {
                 </div>
               </div>
 
-              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-6">
-                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
+              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-5 sm:p-6">
+                <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
                   Quick Cleanup
                 </p>
                 <h2 className="font-sans text-[1.25rem] font-semibold text-[var(--lc-ink)] mb-2">
                   You only need one cleanup utility.
                 </h2>
-                <p className="font-sans text-[13px] text-[var(--lc-muted)] mb-6 truncate">
+                <p className="mb-6 font-sans text-sm text-[var(--lc-muted)]">
                   Small sharp tools for validation, dedupe, or quick measurement.
                 </p>
 
@@ -343,7 +369,7 @@ export default function ToolsPage() {
                         <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>
-                          <p className="font-sans text-[13px] text-[var(--lc-muted)] truncate">{tool.description}</p>
+                          <p className="font-sans text-sm text-[var(--lc-muted)]">{tool.description}</p>
                         </div>
                         <ChevronRight className="h-4 w-4 mt-1 text-[var(--lc-hint)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0 ml-auto" />
                       </Link>

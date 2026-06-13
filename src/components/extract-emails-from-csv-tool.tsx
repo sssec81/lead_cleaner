@@ -299,7 +299,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       error={error}
       warning={warning}
       emptyStateTitle="Extract Emails from CSV"
-      emptyStateSubtitle="Upload your CSV to isolate and export email addresses instantly. Processed locally."
+      emptyStateSubtitle="Upload your CSV to isolate and export email addresses instantly. Processed locally in your browser."
       emptyStateIcon={<Mail className="h-8 w-8" />}
       onFileUpload={handleFileUpload}
       onLoadDemo={loadDemoCsv}
@@ -307,7 +307,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       uploadId="csv-email-upload"
       toolbar={
         <div className="flex-1 min-w-[200px]">
-          <label htmlFor="email-column-select" className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-2">
+          <label htmlFor="email-column-select" className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-500">
             Target Column
           </label>
           <select
@@ -341,20 +341,20 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       summary={
         <>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Rows Scanned</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Rows Scanned</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{extracted.summary.totalRows.toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Duplicates Removed</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Duplicates Removed</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{extracted.summary.duplicatesRemoved.toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Invalid / Blank</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Invalid / Blank</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{(extracted.summary.blankRowsSkipped + extracted.summary.invalidEmailsRemoved).toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-indigo-50/30 p-5 sm:px-6 transition-colors hover:bg-indigo-50/60 relative overflow-hidden min-w-[160px]">
             <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500"></div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-600">Clean Emails</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Clean Emails</p>
             <p className="mt-1.5 text-3xl font-bold text-indigo-700 tabular-nums tracking-tight">{extracted.summary.cleanEmailsReady.toLocaleString()}</p>
           </div>
         </>
@@ -375,7 +375,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
                   <tr key={idx} className="hover:bg-slate-50/80 transition-colors group">
                     <td className="px-5 py-3 text-slate-500 bg-slate-50/30 group-hover:bg-slate-100/50 border-r border-slate-200">{idx + 1}</td>
                     <td className="px-5 py-3 border-r border-slate-200">
-                      <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/50 bg-emerald-50/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                      <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/50 bg-emerald-50/80 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700">
                         Valid
                       </span>
                     </td>
@@ -388,7 +388,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
             <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
               <AlertCircle className="h-8 w-8 text-amber-500 mb-3" />
               <h4 className="text-sm font-semibold text-slate-900 mb-1">No clean emails found</h4>
-              <p className="max-w-md text-xs leading-relaxed text-slate-500">
+              <p className="max-w-md text-sm leading-relaxed text-slate-500">
                 This file uploaded successfully, but the chosen column did not contain any valid email addresses.
               </p>
             </div>

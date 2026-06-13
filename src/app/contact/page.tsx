@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight, MessageSquare, LifeBuoy, Bug, Briefcase, FileSpreadsheet, AlertCircle, PlayCircle, Code2, Copy } from "lucide-react";
+import { ArrowRight, MessageSquare, LifeBuoy, Bug, Briefcase, FileSpreadsheet, AlertCircle, PlayCircle, Code2 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
 import { getSiteUrl } from "@/lib/seo";
@@ -124,7 +124,7 @@ export default function ContactPage() {
   Direct inboxes
   </h2>
   <p className="text-lg leading-8 text-[#e4e4e1]">
-  A small product deserves a direct human contact path, not an endless AI chatbot loop. Choose the best inbox for your request below.
+  A small product deserves a direct human contact path. Choose the best inbox for your request below.
   </p>
   </div>
 
@@ -150,9 +150,8 @@ export default function ContactPage() {
   {item.description}
   </p>
   
-  <div className="mb-6 rounded-xl bg-black/40 px-4 py-3 font-mono text-sm text-[#e4e4e1] border border-white/10 flex items-center justify-between">
-  <span className="truncate">{item.value}</span>
-  <Copy className="h-4 w-4 text-[#e4e4e1] hover:text-[var(--lc-surface)] cursor-pointer transition-colors" />
+  <div className="mb-6 rounded-xl bg-black/40 px-4 py-3 font-mono text-sm text-[#e4e4e1] border border-white/10">
+  <span className="block truncate">{item.value}</span>
   </div>
 
   <a

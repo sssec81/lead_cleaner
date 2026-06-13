@@ -258,7 +258,7 @@ export function MergeCsvFilesTool() {
  <span className="mt-4 text-base font-semibold text-slate-800">
  {isParsing ? "Parsing files..." : "Drop CSV files here"}
  </span>
- <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
+ <span className="mt-2 max-w-sm text-sm leading-relaxed text-[color:var(--muted)]">
  You can select up to 5 files at once (max 5 MB each).
  </span>
  </div>
@@ -273,15 +273,15 @@ export function MergeCsvFilesTool() {
  />
  </label>
 
- <p className="mt-3 text-xs leading-relaxed text-slate-500 text-center">
+ <p className="mt-3 text-sm leading-relaxed text-slate-500 text-center">
  Processed locally in your browser. Files are never uploaded.<br />
- <span className="text-[11px] text-slate-500 font-medium">Any unique columns across files will be kept.</span>
+ <span className="text-xs font-medium text-slate-500">Any unique columns across files will be kept.</span>
  </p>
 
  {fileEntries.length > 0 && (
  <div className="mt-6 flex flex-col gap-3">
  <div className="flex items-center justify-between">
- <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+ <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
  Loaded Files ({fileEntries.length})
  </p>
  <button onClick={resetState} className="text-xs text-red-600 hover:text-red-700 font-medium">Clear all</button>
@@ -293,7 +293,7 @@ export function MergeCsvFilesTool() {
  <FileSpreadsheet className="h-4 w-4 text-slate-500 shrink-0" />
  <div className="min-w-0">
  <p className="text-xs font-semibold text-slate-700 truncate">{f.name}</p>
- <p className="text-[10px] text-slate-500 mt-0.5">{f.rows.toLocaleString()} rows</p>
+ <p className="mt-0.5 text-[11px] text-slate-500">{f.rows.toLocaleString()} rows</p>
  </div>
  </div>
  </div>
@@ -304,7 +304,7 @@ export function MergeCsvFilesTool() {
 
  {mergedHeaders.length > 0 && (
  <div className="mt-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
- <label htmlFor="duplicate-mode" className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+ <label htmlFor="duplicate-mode" className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
  Deduplicate
  </label>
  <select
@@ -320,7 +320,7 @@ export function MergeCsvFilesTool() {
 
  {duplicateMode === "column" && (
  <div className="mt-3">
- <label htmlFor="selected-column" className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+ <label htmlFor="selected-column" className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
  Column to check
  </label>
  <select
@@ -351,7 +351,7 @@ export function MergeCsvFilesTool() {
  <div>
  <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 mb-3">
  <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-sm"></span>
- <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">CSV Merger</p>
+ <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600">CSV Merger</p>
  </div>
  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
  Master Dataset
@@ -392,7 +392,7 @@ export function MergeCsvFilesTool() {
  <button
  type="button"
  onClick={handleExport}
- className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800"
+ className="btn-primary group inline-flex min-h-12 rounded-xl px-6 text-sm font-semibold shadow-sm"
  >
  <Download className="h-4 w-4" />
  Download Merged CSV
@@ -426,7 +426,7 @@ export function MergeCsvFilesTool() {
  <td className="py-3 text-slate-600">
  <div className="flex flex-wrap gap-1.5">
  {foundIn.map((entry, idx) => (
- <span key={idx} className="inline-flex items-center rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[10px] text-slate-500">
+ <span key={idx} className="inline-flex items-center rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[11px] text-slate-500">
  {entry.fileName}: {entry.originalHeader}
  </span>
  ))}

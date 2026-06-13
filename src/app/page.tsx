@@ -64,7 +64,7 @@ const quickStarts = [
 export const metadata: Metadata = {
   title: "LeadCleanr — Private CSV Lead Cleaner for CRM & Outreach Lists",
   description:
-    "Paste a messy list or upload a CSV. LeadCleanr extracts emails, phones, and domains in your browser with no signup required.",
+    "Paste a messy list or upload a CSV. LeadCleanr extracts emails, phones, and domains in your browser with no account needed.",
   alternates: { canonical: "https://leadcleanr.com" },
 };
 
@@ -84,7 +84,7 @@ export default function HomePage() {
             </h1>
             <p className="mt-4 max-w-sm text-base leading-7 text-[var(--lc-muted)]">
               Paste a messy list or upload a CSV. LeadCleanr extracts emails,
-              phones, and domains in your browser, nothing uploaded.
+              phones, and domains in your browser. Nothing gets uploaded.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -103,20 +103,21 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-[11px] text-[var(--lc-muted)]">
+            <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--lc-muted)]">
               <span>✓ No account needed</span>
               <span className="text-[var(--lc-hint)]">·</span>
               <span>✓ 5MB free</span>
               <span className="text-[var(--lc-hint)]">·</span>
-              <span>✓ Processed locally</span>
+              <span>✓ Processed locally in your browser</span>
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)]">
-            <div className="grid lg:grid-cols-2">
+          <div className="relative">
+            <div className="overflow-hidden rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)]">
+              <div className="grid lg:grid-cols-2">
               <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col">
                 <div className="border-b border-[var(--lc-border)] bg-[#F4F4F2] px-4 py-2">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
                     Messy Input
                   </p>
                 </div>
@@ -129,11 +130,8 @@ export default function HomePage() {
               </div>
 
               <div className="relative flex flex-col bg-[#141412]">
-                <div className="absolute left-1/2 top-0 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--lc-border-mid)] bg-white px-3 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--lc-accent)] lg:inline-flex">
-                  Clean
-                </div>
                 <div className="bg-[var(--lc-ink)] px-4 py-2 shrink-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
                     Clean Output
                   </p>
                 </div>
@@ -150,7 +148,7 @@ export default function HomePage() {
                       style={{ animationDelay: `${index * 120}ms` }}
                     >
                       <div className="min-w-0">
-                        <span className={`rounded-full px-2 py-1 font-mono text-[10px] ${item.tone}`}>
+                        <span className={`rounded-full px-2 py-1 font-mono text-[11px] ${item.tone}`}>
                           {item.type}
                         </span>
                         <p className="mt-2 truncate font-mono text-[13px] text-white">
@@ -162,23 +160,24 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-            </div>
+              </div>
 
-            <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-4">
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/tools/extract-emails-from-text?sample=1"
-                  className="btn-secondary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
-                >
-                  Try text sample
-                </Link>
-                <Link
-                  href="/tools/csv-lead-cleaner?sample=1"
-                  className="btn-primary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
-                >
-                  Open CSV sample
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+              <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-4">
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href="/tools/extract-emails-from-text?sample=1"
+                    className="btn-secondary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
+                  >
+                    Try text sample
+                  </Link>
+                  <Link
+                    href="/tools/csv-lead-cleaner?sample=1"
+                    className="btn-primary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
+                  >
+                    Open CSV sample
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

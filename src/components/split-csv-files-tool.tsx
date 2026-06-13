@@ -195,7 +195,7 @@ export function SplitCsvFilesTool() {
  <span className="mt-4 text-base font-semibold text-slate-800">
  {isParsing ? "Parsing file..." : "Drop a CSV file here"}
  </span>
- <span className="mt-2 max-w-sm text-xs leading-relaxed text-[color:var(--muted)]">
+ <span className="mt-2 max-w-sm text-sm leading-relaxed text-[color:var(--muted)]">
  Up to 5 MB. All data stays in your browser.
  </span>
  </div>
@@ -215,7 +215,7 @@ export function SplitCsvFilesTool() {
  <FileSpreadsheet className="h-4 w-4 text-slate-500 shrink-0" />
  <div className="min-w-0">
  <p className="text-xs font-semibold text-slate-700 truncate">{fileName}</p>
- <p className="text-[10px] text-slate-500 mt-0.5">{rows.length.toLocaleString()} rows</p>
+ <p className="mt-0.5 text-[11px] text-slate-500">{rows.length.toLocaleString()} rows</p>
  </div>
  </div>
  </div>
@@ -229,7 +229,7 @@ export function SplitCsvFilesTool() {
  </div>
  
  <div>
- <label htmlFor="rows-per-file" className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
+ <label htmlFor="rows-per-file" className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
  Rows per chunk
  </label>
  <select
@@ -271,7 +271,7 @@ export function SplitCsvFilesTool() {
  <div>
  <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 mb-3">
  <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-sm"></span>
- <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">CSV Splitter</p>
+ <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600">CSV Splitter</p>
  </div>
  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
  Export Chunks
@@ -309,7 +309,7 @@ export function SplitCsvFilesTool() {
  <button
  type="button"
  onClick={handleExport}
- className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800"
+ className="btn-primary group inline-flex min-h-12 rounded-xl px-6 text-sm font-semibold shadow-sm"
  >
  <Download className="h-4 w-4" />
  Download ZIP

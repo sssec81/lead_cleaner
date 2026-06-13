@@ -599,30 +599,30 @@ export function TextProcessingTool({
         <div className="flex w-full items-stretch divide-x-2 divide-transparent">
           <div className="flex flex-1 items-stretch divide-x divide-[var(--lc-border)]">
             <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.scanned}</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.scanned}</p>
               <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.scanned.toLocaleString()}</p>
             </div>
             <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.found}</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.found}</p>
               <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.found.toLocaleString()}</p>
             </div>
             <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.duplicatesRemoved}</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.duplicatesRemoved}</p>
               <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.duplicatesRemoved.toLocaleString()}</p>
             </div>
             <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.invalidRemoved}</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.invalidRemoved}</p>
               <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.invalidRemoved.toLocaleString()}</p>
             </div>
             {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
               <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.blankRemoved ?? "Blank rows removed"}</p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.blankRemoved ?? "Blank rows removed"}</p>
                 <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.blankRemoved.toLocaleString()}</p>
               </div>
             )}
           </div>
           <div className="flex-1 bg-[var(--lc-accent-bg)] p-5 sm:px-6 transition-colors hover:bg-[var(--lc-accent-bg)]/80 relative overflow-hidden min-w-[160px] border-l-2 border-[var(--lc-border)]">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--lc-accent)]">{statLabels.finalCount}</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-accent)]">{statLabels.finalCount}</p>
             <p className="mt-1.5 text-3xl font-bold text-[var(--lc-accent)] tabular-nums tracking-tight">{workspaceValues.length.toLocaleString()}</p>
           </div>
         </div>
@@ -634,7 +634,7 @@ export function TextProcessingTool({
               type="button"
               onClick={() => setShowBulkEditor((current) => !current)}
               disabled={!workspaceValues.length}
-              className={`inline-flex min-h-8 items-center justify-center gap-2 rounded-md px-3 text-xs font-semibold transition-colors ${showBulkEditor ? "btn-segment-active text-indigo-700" : "btn-ghost"} disabled:opacity-50`}
+              className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-xs font-semibold transition-colors ${showBulkEditor ? "btn-segment-active text-indigo-700" : "btn-ghost"} disabled:opacity-50`}
             >
               <PencilLine className="h-3.5 w-3.5" />
               {showBulkEditor ? "Close editor" : "Edit all"}
@@ -644,7 +644,7 @@ export function TextProcessingTool({
               type="button"
               onClick={toggleSelectAllPreviewed}
               disabled={!workspaceValues.length}
-              className="btn-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+              className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
             >
               Select preview rows
             </button>
@@ -652,7 +652,7 @@ export function TextProcessingTool({
               type="button"
               onClick={deleteSelectedRows}
               disabled={!selectedCount}
-              className="btn-danger-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+              className="btn-danger-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Delete selected
@@ -662,7 +662,7 @@ export function TextProcessingTool({
               type="button"
               onClick={undoWorkspace}
               disabled={!pastWorkspace.length}
-              className="btn-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+              className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
             >
               <Undo2 className="h-3.5 w-3.5" />
               Undo
@@ -671,7 +671,7 @@ export function TextProcessingTool({
               type="button"
               onClick={redoWorkspace}
               disabled={!futureWorkspace.length}
-              className="btn-ghost inline-flex min-h-8 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
+              className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
             >
               <Redo2 className="h-3.5 w-3.5" />
               Redo
@@ -681,14 +681,14 @@ export function TextProcessingTool({
             <button
               type="button"
               onClick={() => setResultDensity("comfortable")}
-              className={`${resultDensity === "comfortable" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors`}
+              className={`${resultDensity === "comfortable" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-colors`}
             >
               Comfortable
             </button>
             <button
               type="button"
               onClick={() => setResultDensity("compact")}
-              className={`${resultDensity === "compact" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors`}
+              className={`${resultDensity === "compact" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-colors`}
             >
               Compact
             </button>
@@ -717,11 +717,11 @@ export function TextProcessingTool({
                   >
                     {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-3 w-3 text-[var(--lc-accent)]" />}
                   </button>
-                  <div className="flex-1 flex items-center gap-4 font-mono text-[10px] uppercase tracking-widest text-[var(--lc-hint)]">
+                  <div className="flex-1 flex items-center gap-4 font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)]">
                     <span className="w-16">STATUS</span>
                     <span>{csvHeader.toUpperCase()}</span>
                   </div>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--lc-hint)]">ACTIONS</span>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)]">ACTIONS</span>
                 </div>
                 <div className="divide-y divide-[var(--lc-border)] bg-[var(--lc-surface)]">
                   {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
@@ -739,7 +739,7 @@ export function TextProcessingTool({
                       </button>
                       
                       <div className="flex w-16 shrink-0 items-center gap-2">
-                        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-700 border border-emerald-200/50">
+                        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-emerald-700 border border-emerald-200/50">
                           Valid
                         </span>
                       </div>
@@ -753,11 +753,11 @@ export function TextProcessingTool({
                         />
                       </div>
 
-                      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 pl-4">
+                      <div className="flex shrink-0 items-center gap-1 pl-4 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
                         <button
                           type="button"
                           onClick={() => toggleWorkspaceLock(item.id)}
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)]"
+                          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)]"
                           aria-label={item.locked ? "Unlock row" : "Lock row"}
                         >
                           {item.locked ? <Lock className="h-4 w-4 text-amber-500" /> : <LockOpen className="h-4 w-4" />}
@@ -765,7 +765,7 @@ export function TextProcessingTool({
                         <button
                           type="button"
                           onClick={() => removeWorkspaceItem(item.id)}
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[var(--lc-muted)] transition hover:bg-red-50 hover:text-red-600"
+                          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-[var(--lc-muted)] transition hover:bg-red-50 hover:text-red-600"
                           aria-label={`Remove row ${index + 1}`}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -775,7 +775,7 @@ export function TextProcessingTool({
                   ))}
                 </div>
                 <div className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] px-6 py-3">
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--lc-hint)] text-center">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)] text-center">
                     SHOWING {Math.min(WORKSPACE_PREVIEW_LIMIT, workspace.length)} OUT OF {workspace.length} ROWS
                   </p>
                 </div>

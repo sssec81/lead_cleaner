@@ -54,7 +54,7 @@ export function PhoneExtractorTool() {
  <div className="space-y-3">
  <div className="grid gap-3 sm:grid-cols-2">
  <label className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
- <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+ <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
  Default country
  </span>
  <select
@@ -72,7 +72,7 @@ export function PhoneExtractorTool() {
  </label>
 
  <label className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
- <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+ <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
  Output format
  </span>
  <select
@@ -87,7 +87,7 @@ export function PhoneExtractorTool() {
  </label>
  </div>
 
- <p className="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-xs leading-relaxed text-amber-900">
+ <p className="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-sm leading-relaxed text-amber-900">
  This tool extracts likely phone numbers from text. For country-specific validation, choose a default country before export.
  </p>
  </div>
