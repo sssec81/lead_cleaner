@@ -76,7 +76,7 @@ export default function ExtractEmailsFromTextPage() {
  tool={<EmailExtractorTool />}
  toolSupportingContent={
  <TextExtractorSupportingContent
- title="Extract email addresses from messy text and copied pages"
+ title="Stop copying emails by hand and clean the list in one pass."
  description="Paste website copy, CRM notes, resumes, inbox exports, event lists, or lead research. LeadCleanr finds email addresses, lowercases duplicates, removes repeated matches, and prepares a clean export-ready email list."
  useCases={[
  {

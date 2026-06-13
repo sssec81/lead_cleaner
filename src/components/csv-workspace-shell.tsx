@@ -53,11 +53,11 @@ export function CsvWorkspaceShell({
   exportControls,
 }: CsvWorkspaceShellProps) {
   return (
-    <div className="workspace-shell w-full overflow-hidden rounded-[1.75rem] flex flex-col">
+    <div className="workspace-shell workspace-frame w-full overflow-hidden flex flex-col">
       {/* ── Workspace Header ── */}
       <div className="workspace-topbar flex flex-col gap-4 border-b border-slate-200/80 px-4 py-4 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#1d4ed8,#0f766e)] text-white shadow-[0_14px_28px_rgba(29,78,216,0.24)]">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#1d4ed8,#0f766e)] text-white shadow-[0_14px_28px_rgba(29,78,216,0.24)]">
             <FileSpreadsheet className="h-5 w-5" />
           </div>
           <div>
@@ -92,7 +92,7 @@ export function CsvWorkspaceShell({
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
       <div className="workspace-subtle flex flex-1 flex-col items-center justify-center p-4 sm:p-12 lg:p-16">
-          <div className="glass-panel relative flex w-full max-w-2xl flex-col overflow-hidden rounded-[1.75rem] transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 group">
+          <div className="glass-panel workspace-frame relative flex w-full max-w-2xl flex-col overflow-hidden transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 group">
             
             {/* ── Header Section ── */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white/60 px-5 py-3.5">
@@ -121,12 +121,12 @@ export function CsvWorkspaceShell({
                 {emptyStateSubtitle}
               </p>
 
-              <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+              <div className="trust-chip-row mb-4 justify-center">
+                <span className="trust-chip border-emerald-200 bg-emerald-50 text-emerald-800">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   Browser-only processing
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+                <span className="trust-chip border-blue-200 bg-blue-50 text-blue-700">
                   Free limit: 5 MB per CSV
                 </span>
               </div>

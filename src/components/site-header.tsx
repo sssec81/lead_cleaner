@@ -12,6 +12,21 @@ const navItems = [
   { href: "/contact", label: "Contact" },
 ];
 
+const TOOL_NEXT_STEP: Array<{ match: string; href: string; label: string }> = [
+  { match: "/tools/validate-email-list", href: "/tools/remove-duplicate-emails", label: "Deduplicate Emails" },
+  { match: "/tools/extract-emails-from-text", href: "/tools/clean-email-list", label: "Clean Email List" },
+  { match: "/tools/extract-emails-from-csv", href: "/tools/remove-duplicate-emails", label: "Deduplicate Emails" },
+  { match: "/tools/extract-phone-numbers-from-text", href: "/tools/remove-duplicate-phone-numbers", label: "Deduplicate Numbers" },
+  { match: "/tools/extract-phone-numbers-from-csv", href: "/tools/remove-duplicate-phone-numbers", label: "Deduplicate Numbers" },
+  { match: "/tools/remove-duplicate-emails", href: "/tools/validate-email-list", label: "Validate List" },
+  { match: "/tools/remove-duplicate-phone-numbers", href: "/tools/csv-lead-cleaner", label: "Clean CSV Free" },
+  { match: "/tools/remove-duplicate-urls", href: "/tools/extract-urls-from-text", label: "Extract More URLs" },
+  { match: "/tools/merge-csv-files", href: "/tools/csv-lead-cleaner", label: "Clean Merged CSV" },
+  { match: "/tools/split-csv-files", href: "/tools/csv-lead-cleaner", label: "Clean the Split" },
+  { match: "/tools/convert-csv-to-json", href: "/tools/csv-lead-cleaner", label: "Clean CSV Free" },
+  { match: "/tools/clean-email-list", href: "/tools/validate-email-list", label: "Validate List" },
+];
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -113,16 +128,10 @@ export function SiteHeader() {
 }
 
 function getHeaderCta(pathname: string) {
-  if (pathname.startsWith("/tools/validate-email-list")) {
-    return { href: "/tools/remove-duplicate-emails", label: "Deduplicate Emails" };
-  }
-
-  if (pathname.startsWith("/tools/extract-phone-numbers-from-text")) {
-    return { href: "/tools/remove-duplicate-phone-numbers", label: "Deduplicate Numbers" };
-  }
-
-  if (pathname.startsWith("/tools/convert-csv-to-json")) {
-    return { href: "/tools/csv-lead-cleaner", label: "Clean CSV Free" };
+  for (const step of TOOL_NEXT_STEP) {
+    if (pathname.startsWith(step.match)) {
+      return { href: step.href, label: step.label };
+    }
   }
 
   return { href: "/tools/csv-lead-cleaner", label: "Clean CSV Free" };

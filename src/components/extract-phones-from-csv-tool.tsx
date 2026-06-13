@@ -336,20 +336,20 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       summary={
         <div className="flex min-w-full flex-nowrap items-stretch">
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Rows Scanned</p>
+            <p className="stat-kicker text-slate-500">Rows Scanned</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{extracted.summary.totalRows.toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Duplicates Removed</p>
+            <p className="stat-kicker text-slate-500">Duplicates Removed</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{extracted.summary.duplicatesRemoved.toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Invalid / Blank</p>
+            <p className="stat-kicker text-slate-500">Invalid / Blank</p>
             <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{(extracted.summary.blankRowsSkipped + extracted.summary.invalidPhonesRemoved).toLocaleString()}</p>
           </div>
           <div className="flex-1 bg-indigo-50/30 p-5 sm:px-6 transition-colors hover:bg-indigo-50/60 relative overflow-hidden min-w-[160px]">
             <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500"></div>
-            <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Clean Phones</p>
+            <p className="stat-kicker text-indigo-600">Clean Phones</p>
             <p className="mt-1.5 text-3xl font-bold text-indigo-700 tabular-nums tracking-tight">{extracted.summary.cleanPhonesReady.toLocaleString()}</p>
           </div>
         </div>

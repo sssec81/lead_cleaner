@@ -155,8 +155,8 @@ const workflowSteps = [
     href: "#text-extraction",
   },
   {
-    question: "Done extracting?",
-    label: "Return to CSV cleaner",
+    question: "Done extracting text?",
+    label: "Now clean your CSV",
     href: "/tools/csv-lead-cleaner",
   },
 ];
@@ -176,11 +176,11 @@ export default function ToolsPage() {
         <section className="pt-16 pb-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
-              <div className="mb-4 flex items-center gap-3">
-                <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-[var(--lc-muted)]">
+              <div className="section-anchor-row mb-4">
+                <span className="section-anchor-label">
                   All Tools
                 </span>
-                <div className="h-px flex-1 max-w-28 bg-[var(--lc-border)]" />
+                <div className="section-anchor-line h-px flex-1 max-w-28" />
               </div>
               <h1 className="font-display text-[clamp(2.25rem,7vw,2.75rem)] font-bold tracking-[-0.025em] text-[var(--lc-ink)] leading-tight mb-4">
                 Pick the right tool in one pass.
@@ -293,7 +293,12 @@ export default function ToolsPage() {
               {csvTools.map((tool) => {
                 const Icon = tool.icon;
                 return (
-                  <Link key={tool.href} href={tool.href} className="group bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 flex flex-col gap-3 transition-all duration-150 hover:border-[var(--lc-border-mid)] hover:shadow-sm">
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    aria-label={`Open ${tool.title}`}
+                    className="group bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 flex flex-col gap-3 transition-all duration-150 hover:border-[var(--lc-border-mid)] hover:shadow-sm"
+                  >
                     <div className="flex items-start justify-between">
                       <div className="bg-[var(--lc-accent-bg)] rounded-lg p-1.5">
                         <Icon className="h-5 w-5 text-[var(--lc-accent)]" />
@@ -308,9 +313,12 @@ export default function ToolsPage() {
                     <p className="font-sans text-[13px] leading-relaxed text-[var(--lc-muted)]">
                       {tool.description}
                     </p>
-                    <div className="mt-auto pt-3 text-[var(--lc-accent)] text-sm font-medium group-hover:underline">
+                    <span
+                      aria-hidden="true"
+                      className="mt-auto pt-3 text-[var(--lc-accent)] text-sm font-medium group-hover:underline"
+                    >
                       Open tool →
-                    </div>
+                    </span>
                   </Link>
                 );
               })}
@@ -322,7 +330,7 @@ export default function ToolsPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-2">
 
-              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-5 sm:p-6">
+              <div className="panel-accent-left p-5 sm:p-6">
                 <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
                   Text Extraction
                 </p>
@@ -350,7 +358,7 @@ export default function ToolsPage() {
                 </div>
               </div>
 
-              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] border-l-2 border-l-[var(--lc-accent)] rounded-xl p-5 sm:p-6">
+              <div className="panel-accent-left p-5 sm:p-6">
                 <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
                   Quick Cleanup
                 </p>

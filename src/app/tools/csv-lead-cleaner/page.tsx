@@ -42,7 +42,7 @@ const seoUseCases = [
 export default function CsvLeadCleanerPage() {
   const pageHeader = (
     <div className="mx-auto max-w-2xl pt-12 pb-6 text-center sm:text-left sm:mx-0">
-      <div className="mb-4 text-[0.75rem] font-bold tracking-[0.22em] uppercase text-[var(--lc-accent)]">
+      <div className="section-eyebrow mb-4">
         CSV TOOL
       </div>
       <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
@@ -52,20 +52,18 @@ export default function CsvLeadCleanerPage() {
         Upload your spreadsheet to remove duplicates, clean emails, and export a CRM-ready file.
       </p>
       
-      <div className="mt-6 flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-[var(--lc-muted)]">
-        <div className="flex items-center gap-1.5">
+      <div className="trust-chip-row mt-6 justify-center sm:justify-start">
+        <div className="trust-chip">
           <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">Browser-only</span>
+          <span>Browser-only</span>
         </div>
-        <span className="text-[var(--lc-border-mid)]">·</span>
-        <div className="flex items-center gap-1.5">
+        <div className="trust-chip">
           <Users className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">No account needed</span>
+          <span>No account needed</span>
         </div>
-        <span className="text-[var(--lc-border-mid)]">·</span>
-        <div className="flex items-center gap-1.5">
+        <div className="trust-chip">
           <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">Up to 5MB free</span>
+          <span>Up to 5MB free</span>
         </div>
       </div>
     </div>
@@ -99,8 +97,9 @@ export default function CsvLeadCleanerPage() {
   <section className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] pt-16 pb-16">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div className="max-w-2xl mb-12">
-  <div className="mb-4 text-[0.75rem] font-bold tracking-[0.22em] uppercase text-[var(--lc-accent)]">
-  WHO USES THIS
+  <div className="section-anchor-row mb-4">
+  <span className="section-anchor-label">Who Uses This</span>
+  <div className="section-anchor-line h-px w-20"></div>
   </div>
   <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl mb-4">
   Clean lead CSVs before importing to your CRM

@@ -75,7 +75,7 @@ type PersistedState = {
 
 const WORKSPACE_PREVIEW_LIMIT = 8;
 const TEXT_INPUT_BOX_CLASS_NAME =
-  "rounded-2xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 overflow-hidden flex flex-col relative group";
+  "rounded-xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 overflow-hidden flex flex-col relative group";
 const TEXT_INPUT_ACTION_CLASS_NAME =
   "btn-ghost inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold";
 
@@ -130,6 +130,8 @@ export function TextProcessingTool({
  const currentPreview = processed.results.slice(0, 4);
  const selectedCount = workspace.filter((item) => item.selected).length;
  const lockedCount = workspace.filter((item) => item.locked).length;
+ const currentStep: 0 | 1 | 2 =
+ input.trim().length === 0 ? 0 : workspaceValues.length === 0 ? 1 : 2;
 
  useEffect(() => {
  if (typeof window === "undefined") {
@@ -159,7 +161,7 @@ export function TextProcessingTool({
  setInput(nextInput);
  setBatchMode(Boolean(parsed.batchMode));
  setWorkspace(nextWorkspace);
- setRestoredSession(true);
+ setRestoredSession(nextInput.trim().length > 0 && nextInput !== sampleInput);
  } catch {
  setInput(sampleInput);
  setWorkspace(
@@ -508,6 +510,9 @@ export function TextProcessingTool({
       description={description}
       icon={Icon}
       iconToneClassName={iconToneClassName}
+      currentStep={currentStep}
+      showShortcuts={showShortcuts}
+      onToggleShortcuts={() => setShowShortcuts((current) => !current)}
       inputArea={
         <div className={TEXT_INPUT_BOX_CLASS_NAME}>
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/50 px-4 py-3 sm:px-5 sm:py-3.5">
@@ -599,30 +604,34 @@ export function TextProcessingTool({
         <div className="flex w-full items-stretch divide-x-2 divide-transparent">
           <div className="flex flex-1 items-stretch divide-x divide-[var(--lc-border)]">
             <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.scanned}</p>
+              <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.scanned}</p>
               <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.scanned.toLocaleString()}</p>
             </div>
             <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.found}</p>
+              <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.found}</p>
               <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.found.toLocaleString()}</p>
             </div>
-            <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.duplicatesRemoved}</p>
-              <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.duplicatesRemoved.toLocaleString()}</p>
-            </div>
-            <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.invalidRemoved}</p>
-              <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.invalidRemoved.toLocaleString()}</p>
-            </div>
+            {processed.stats.duplicatesRemoved > 0 && (
+              <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
+                <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.duplicatesRemoved}</p>
+                <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.duplicatesRemoved.toLocaleString()}</p>
+              </div>
+            )}
+            {processed.stats.invalidRemoved > 0 && (
+              <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
+                <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.invalidRemoved}</p>
+                <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.invalidRemoved.toLocaleString()}</p>
+              </div>
+            )}
             {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
               <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-hint)]">{statLabels.blankRemoved ?? "Blank rows removed"}</p>
+                <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.blankRemoved ?? "Blank rows removed"}</p>
                 <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.blankRemoved.toLocaleString()}</p>
               </div>
             )}
           </div>
           <div className="flex-1 bg-[var(--lc-accent-bg)] p-5 sm:px-6 transition-colors hover:bg-[var(--lc-accent-bg)]/80 relative overflow-hidden min-w-[160px] border-l-2 border-[var(--lc-border)]">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-accent)]">{statLabels.finalCount}</p>
+            <p className="stat-kicker text-[var(--lc-accent)]">{statLabels.finalCount}</p>
             <p className="mt-1.5 text-3xl font-bold text-[var(--lc-accent)] tabular-nums tracking-tight">{workspaceValues.length.toLocaleString()}</p>
           </div>
         </div>
@@ -646,7 +655,7 @@ export function TextProcessingTool({
               disabled={!workspaceValues.length}
               className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
             >
-              Select preview rows
+              Select all
             </button>
             <button
               type="button"
@@ -655,40 +664,53 @@ export function TextProcessingTool({
               className="btn-danger-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Delete selected
+              Delete
             </button>
             <div className="w-px h-4 bg-slate-200 mx-1"></div>
-            <button
-              type="button"
-              onClick={undoWorkspace}
-              disabled={!pastWorkspace.length}
-              className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
-            >
-              <Undo2 className="h-3.5 w-3.5" />
-              Undo
-            </button>
-            <button
-              type="button"
-              onClick={redoWorkspace}
-              disabled={!futureWorkspace.length}
-              className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
-            >
-              <Redo2 className="h-3.5 w-3.5" />
-              Redo
-            </button>
+            <div className="flex items-center gap-1 rounded-lg border border-[var(--lc-border)] bg-white p-1">
+              <button
+                type="button"
+                onClick={undoWorkspace}
+                disabled={!pastWorkspace.length}
+                className="btn-ghost inline-flex h-8 w-8 rounded-md disabled:opacity-50"
+                aria-label="Undo"
+                title="Undo"
+              >
+                <Undo2 className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={redoWorkspace}
+                disabled={!futureWorkspace.length}
+                className="btn-ghost inline-flex h-8 w-8 rounded-md disabled:opacity-50"
+                aria-label="Redo"
+                title="Redo"
+              >
+                <Redo2 className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowShortcuts(true)}
+                className="btn-ghost inline-flex h-8 w-8 rounded-md"
+                aria-label="Show keyboard shortcuts"
+                title="Keyboard shortcuts (?)"
+              >
+                <Keyboard className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
           <div className="flex items-center gap-1 rounded-xl bg-[var(--lc-bg)] p-1 border border-[var(--lc-border)]">
             <button
               type="button"
               onClick={() => setResultDensity("comfortable")}
-              className={`${resultDensity === "comfortable" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-colors`}
+              className={`${resultDensity === "comfortable" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors`}
             >
               Comfortable
             </button>
             <button
               type="button"
               onClick={() => setResultDensity("compact")}
-              className={`${resultDensity === "compact" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-colors`}
+              className={`${resultDensity === "compact" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors`}
             >
               Compact
             </button>
@@ -776,7 +798,9 @@ export function TextProcessingTool({
                 </div>
                 <div className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] px-6 py-3">
                   <p className="font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)] text-center">
-                    SHOWING {Math.min(WORKSPACE_PREVIEW_LIMIT, workspace.length)} OUT OF {workspace.length} ROWS
+                    {workspace.length > WORKSPACE_PREVIEW_LIMIT
+                      ? `SHOWING ${WORKSPACE_PREVIEW_LIMIT} OUT OF ${workspace.length} ROWS`
+                      : `ALL ${workspace.length} RESULTS SHOWN`}
                   </p>
                 </div>
               </div>
@@ -819,14 +843,14 @@ export function TextProcessingTool({
               <button
                 type="button"
                 onClick={() => void handleCopy()}
-                className="btn-secondary h-11 rounded-xl px-4 text-sm font-semibold flex-1 sm:flex-none"
+                className="btn-secondary h-11 rounded-xl px-4 text-sm font-semibold"
               >
                 {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Clipboard className="h-4 w-4 text-[var(--lc-muted)]" />} {copied ? "Copied" : copyLabel}
               </button>
               <button
                 type="button"
                 onClick={handleDownloadTxt}
-                className="btn-secondary h-11 rounded-xl px-4 text-sm font-semibold flex-1 sm:flex-none"
+                className="btn-secondary h-11 rounded-xl px-4 text-sm font-semibold"
               >
                 <FileText className="h-4 w-4 text-[var(--lc-muted)]" /> TXT
               </button>

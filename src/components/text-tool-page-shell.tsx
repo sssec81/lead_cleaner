@@ -46,10 +46,10 @@ export function TextToolPageShell({
               <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-lg mb-6">
                 {intro}
               </p>
-              <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--lc-muted)]">
-                <span className="rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5">Browser-only</span>
-                <span className="rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5">No account needed</span>
-                <span className="rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5">Processed locally in your browser</span>
+              <div className="trust-chip-row font-mono text-xs text-[var(--lc-muted)]">
+                <span className="trust-chip">Browser-only</span>
+                <span className="trust-chip">No account needed</span>
+                <span className="trust-chip">Processed locally in your browser</span>
               </div>
             </div>
 

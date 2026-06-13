@@ -20,7 +20,7 @@ export function EmailExtractorTool() {
  trackName="extract-emails-from-text"
  processInput={extractEmailsFromText}
  statLabels={{
- scanned: "Items scanned",
+ scanned: "Text blocks parsed",
  found: "Found",
  duplicatesRemoved: "Duplicates removed",
  invalidRemoved: "Invalid removed",

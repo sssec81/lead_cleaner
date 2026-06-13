@@ -52,7 +52,7 @@ const seoUseCases = [
 export default function ConvertCsvToJsonPage() {
   const pageHeader = (
     <div className="mx-auto max-w-3xl pt-12 pb-8 text-center">
-      <div className="mb-4 text-[0.75rem] font-bold tracking-[0.22em] uppercase text-[var(--lc-accent)]">
+      <div className="section-eyebrow mb-4">
         CSV TOOL
       </div>
       <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
@@ -62,20 +62,18 @@ export default function ConvertCsvToJsonPage() {
         Upload a CSV file and convert it into a structured JSON array instantly. Runs locally in your browser, with no signup and no server upload.
       </p>
       
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-[var(--lc-muted)]">
-        <div className="flex items-center gap-1.5">
+      <div className="trust-chip-row mt-6 justify-center">
+        <div className="trust-chip">
           <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">Browser-only</span>
+          <span>Browser-only</span>
         </div>
-        <span className="text-[var(--lc-border-mid)]">·</span>
-        <div className="flex items-center gap-1.5">
+        <div className="trust-chip">
           <Users className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">No account needed</span>
+          <span>No account needed</span>
         </div>
-        <span className="text-[var(--lc-border-mid)]">·</span>
-        <div className="flex items-center gap-1.5">
+        <div className="trust-chip">
           <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span className="font-medium text-[var(--lc-ink)]">Up to 5MB free</span>
+          <span>Up to 5MB free</span>
         </div>
       </div>
     </div>

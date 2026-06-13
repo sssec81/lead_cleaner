@@ -12,29 +12,72 @@ const links = [
   { href: "/contact", label: "Contact Us" },
 ];
 
+const TOOL_NEXT_STEP: Array<{ match: string; href: string; label: string; intro: string }> = [
+  {
+    match: "/tools/validate-email-list",
+    href: "/tools/remove-duplicate-emails",
+    label: "Remove Duplicate Emails",
+    intro: "Next step after validation for cleaner export lists.",
+  },
+  {
+    match: "/tools/extract-emails-from-text",
+    href: "/tools/clean-email-list",
+    label: "Clean Email List",
+    intro: "Turn the extracted emails into a cleaner list before export.",
+  },
+  {
+    match: "/tools/extract-emails-from-csv",
+    href: "/tools/remove-duplicate-emails",
+    label: "Deduplicate Emails",
+    intro: "Strip repeat rows before you export the final column.",
+  },
+  {
+    match: "/tools/extract-phone-numbers-from-text",
+    href: "/tools/remove-duplicate-phone-numbers",
+    label: "Remove Duplicate Numbers",
+    intro: "Take the extracted list into the next cleanup step.",
+  },
+  {
+    match: "/tools/extract-phone-numbers-from-csv",
+    href: "/tools/remove-duplicate-phone-numbers",
+    label: "Deduplicate Numbers",
+    intro: "Normalize the extracted numbers, then remove the repeats.",
+  },
+  {
+    match: "/tools/remove-duplicate-emails",
+    href: "/tools/validate-email-list",
+    label: "Validate Email List",
+    intro: "Check structure and formatting before the list leaves your browser.",
+  },
+  {
+    match: "/tools/merge-csv-files",
+    href: "/tools/csv-lead-cleaner",
+    label: "Clean Merged CSV",
+    intro: "Run the combined sheet through the main cleanup workflow next.",
+  },
+  {
+    match: "/tools/split-csv-files",
+    href: "/tools/csv-lead-cleaner",
+    label: "Clean the Split",
+    intro: "Take one of the smaller files into the cleaner for the next pass.",
+  },
+  {
+    match: "/tools/convert-csv-to-json",
+    href: "/tools/csv-lead-cleaner",
+    label: "Clean CSV First",
+    intro: "Fix duplicates and broken fields before you convert.",
+  },
+];
+
 function getFooterCta(pathname: string) {
-  if (pathname.startsWith("/tools/validate-email-list")) {
-    return {
-      href: "/tools/remove-duplicate-emails",
-      label: "Remove Duplicate Emails",
-      intro: "Next step after validation for cleaner export lists.",
-    };
-  }
-
-  if (pathname.startsWith("/tools/extract-phone-numbers-from-text")) {
-    return {
-      href: "/tools/remove-duplicate-phone-numbers",
-      label: "Remove Duplicate Numbers",
-      intro: "Take the extracted list into the next cleanup step.",
-    };
-  }
-
-  if (pathname.startsWith("/tools/convert-csv-to-json")) {
-    return {
-      href: "/tools/csv-lead-cleaner",
-      label: "Clean CSV First",
-      intro: "Fix duplicates and broken fields before you convert.",
-    };
+  for (const step of TOOL_NEXT_STEP) {
+    if (pathname.startsWith(step.match)) {
+      return {
+        href: step.href,
+        label: step.label,
+        intro: step.intro,
+      };
+    }
   }
 
   return {

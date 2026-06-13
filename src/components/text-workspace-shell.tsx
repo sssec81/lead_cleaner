@@ -1,7 +1,5 @@
-"use client";
-
 import { ShieldCheck } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 export interface TextWorkspaceShellProps {
   // Header
@@ -25,6 +23,9 @@ export interface TextWorkspaceShellProps {
 
   // Export
   exportControls?: React.ReactNode;
+  currentStep?: 0 | 1 | 2;
+  showShortcuts?: boolean;
+  onToggleShortcuts?: () => void;
 }
 
 export function TextWorkspaceShell({
@@ -38,8 +39,11 @@ export function TextWorkspaceShell({
   toolbar,
   preview,
   exportControls,
+  currentStep = 0,
+  showShortcuts = false,
+  onToggleShortcuts,
 }: TextWorkspaceShellProps) {
-  const [showShortcuts, setShowShortcuts] = useState(false);
+  const steps = ["Paste", "Review", "Export"];
 
   return (
     <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl w-full flex flex-col">
@@ -69,12 +73,7 @@ export function TextWorkspaceShell({
             aria-label="Keyboard shortcuts"
             aria-expanded={showShortcuts}
             aria-haspopup="dialog"
-            onClick={() => setShowShortcuts((current) => !current)}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                setShowShortcuts(false);
-              }
-            }}
+            onClick={onToggleShortcuts}
           >
             <span className="font-mono text-sm font-semibold">?</span>
             {(showShortcuts) ? (
@@ -96,16 +95,29 @@ export function TextWorkspaceShell({
           </button>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-1 border-b border-[var(--lc-border)]">
-          <div className="px-4 py-2 text-sm font-medium border-b-2 border-[var(--lc-accent)] text-[var(--lc-accent)]">
-            1. Paste
-          </div>
-          <div className="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-[var(--lc-muted)] hover:text-[var(--lc-ink)]">
-            2. Review
-          </div>
-          <div className="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-[var(--lc-muted)] hover:text-[var(--lc-ink)]">
-            3. Export
-          </div>
+        <div className="mt-6 flex flex-wrap items-center gap-2 border-b border-[var(--lc-border)] pb-3">
+          {steps.map((label, index) => {
+            const isDone = index < currentStep;
+            const isCurrent = index === currentStep;
+
+            return (
+              <div
+                key={label}
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  isDone
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : isCurrent
+                      ? "border-[var(--lc-accent)] bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]"
+                      : "border-[var(--lc-border)] bg-white text-[var(--lc-muted)]"
+                }`}
+              >
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-current text-[10px] font-bold">
+                  {isDone ? "✓" : index + 1}
+                </span>
+                <span>{label}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
