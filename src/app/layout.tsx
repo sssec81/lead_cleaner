@@ -75,12 +75,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
  return (
- <html
- lang="en"
- data-scroll-behavior="smooth"
- className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable}`}
- >
- <body>
+ <html lang="en" data-scroll-behavior="smooth">
+ <body className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable}`}>
  <a href="#main-content" className="skip-link">
  Skip to main content
  </a>

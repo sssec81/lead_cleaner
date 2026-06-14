@@ -403,6 +403,7 @@ export function MergeCsvFilesTool() {
 
  <div className="mt-6 w-full rounded-xl border border-slate-200 bg-slate-50 p-6 overflow-x-auto">
  <h3 className="text-sm font-semibold text-slate-800 mb-4">Column Mapping Preview</h3>
+ <div className="overflow-x-auto rounded-lg">
  <table className="w-full text-left text-sm whitespace-nowrap">
  <thead>
  <tr className="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -437,6 +438,7 @@ export function MergeCsvFilesTool() {
  })}
  </tbody>
  </table>
+ </div>
  </div>
  </div>
  )}
