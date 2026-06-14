@@ -16,13 +16,6 @@ declare global {
  targetId: string,
  config?: Record<string, unknown>,
  ) => void;
- plausible?: (
- eventName: string,
- options?: {
- props?: Record<string, TelemetryValue>;
- u?: string;
- },
- ) => void;
  }
 }
 
@@ -69,19 +62,8 @@ export function trackEvent(name: string, props: TelemetryProps = {}) {
 
  const normalizedProps = normalizeProps(props);
  const gaId = process.env.NEXT_PUBLIC_GA_ID;
- const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
 
  dispatchWithRetry([
- () => {
- if (!plausibleDomain) {
- return true;
- }
- if (!window.plausible) {
- return false;
- }
- window.plausible(name, { props: normalizedProps });
- return true;
- },
  () => {
  if (!gaId) {
  return true;
@@ -102,19 +84,8 @@ export function trackPageView(path: string) {
 
  const pageUrl = new URL(path, window.location.origin).toString();
  const gaId = process.env.NEXT_PUBLIC_GA_ID;
- const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
 
  dispatchWithRetry([
- () => {
- if (!plausibleDomain) {
- return true;
- }
- if (!window.plausible) {
- return false;
- }
- window.plausible("pageview", { u: pageUrl });
- return true;
- },
  () => {
  if (!gaId) {
  return true;

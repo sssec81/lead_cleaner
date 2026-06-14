@@ -4,7 +4,7 @@ import { ArrowRight, MessageSquare, LifeBuoy, Bug, Briefcase, FileSpreadsheet, A
 import { PageFrame } from "@/components/page-frame";
 import { getSiteUrl } from "@/lib/seo";
 
-const launchInbox = "hello@leadcleanr.xyz";
+const launchInbox = "leadcleanrapp@gmail.com";
 
 const contactItems = [
  {

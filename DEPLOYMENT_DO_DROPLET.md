@@ -156,9 +156,9 @@ Suggested values:
 
 ```env
 NEXT_PUBLIC_SITE_URL=https://leadcleanr.com
-NEXT_PUBLIC_PLAUSIBLE_DOMAIN=leadcleanr.com
 NEXT_PUBLIC_GA_ID=
 ERROR_TRACKING_WEBHOOK_URL=
+WAITLIST_WEBHOOK_URL=
 
 # Phase 2 Additions (Supabase, Stripe, Resend)
 NEXT_PUBLIC_SUPABASE_URL=
