@@ -29,6 +29,8 @@ export interface CsvWorkspaceShellProps {
   summary: React.ReactNode;
   preview: React.ReactNode;
   exportControls?: React.ReactNode;
+  steps?: string[];
+  currentStep?: number;
 }
 
 export function CsvWorkspaceShell({
@@ -51,7 +53,46 @@ export function CsvWorkspaceShell({
   summary,
   preview,
   exportControls,
+  steps = ["Upload CSV", "Choose cleanup rules", "Review rows", "Export"],
+  currentStep = 1,
 }: CsvWorkspaceShellProps) {
+  const normalizedCurrentStep = Math.min(
+    Math.max(currentStep, 1),
+    Math.max(steps.length, 1),
+  );
+
+  const stepper = (
+    <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wider">
+      {steps.map((step, index) => {
+        const stepNumber = index + 1;
+        const isDone = stepNumber < normalizedCurrentStep;
+        const isCurrent = stepNumber === normalizedCurrentStep;
+
+        return (
+          <React.Fragment key={step}>
+            <span
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 ${
+                isDone
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                  : isCurrent
+                    ? "border-[var(--lc-accent)] bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]"
+                    : "border-[var(--lc-border)] bg-[var(--lc-surface)] text-[var(--lc-muted)]"
+              }`}
+            >
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-current text-[10px]">
+                {isDone ? "✓" : stepNumber}
+              </span>
+              <span>{step}</span>
+            </span>
+            {index < steps.length - 1 ? (
+              <ArrowRight className="h-3.5 w-3.5 text-[var(--lc-border-mid)]" />
+            ) : null}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className="w-full bg-[var(--lc-surface)] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] border border-[var(--lc-border)] overflow-hidden flex flex-col">
       {!hasLoadedFile ? (
@@ -109,6 +150,10 @@ export function CsvWorkspaceShell({
             <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> 5MB free</span>
           </div>
 
+          <div className="mt-6 flex justify-center">
+            {stepper}
+          </div>
+
           {error && (
             <div className="mt-6 w-full max-w-2xl rounded-lg border border-red-200 bg-red-50 p-4 text-left shadow-sm">
               <div className="flex items-start gap-3">
@@ -153,15 +198,7 @@ export function CsvWorkspaceShell({
 
           {/* Cleanup Controls Toolbar */}
           <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-4 z-10">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--lc-muted)]">
-              <span className="text-[var(--lc-ink)]">1 Upload CSV</span>
-              <span className="text-[var(--lc-border-mid)]">→</span>
-              <span className="text-[var(--lc-ink)]">2 Choose cleanup rules</span>
-              <span className="text-[var(--lc-border-mid)]">→</span>
-              <span>3 Review rows</span>
-              <span className="text-[var(--lc-border-mid)]">→</span>
-              <span>4 Export</span>
-            </div>
+            {stepper}
             
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] mb-2">Cleaning Rules</h3>

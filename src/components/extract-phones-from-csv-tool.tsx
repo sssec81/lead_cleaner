@@ -291,6 +291,8 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
         setError("");
         setWarning("");
       }}
+      steps={["Upload CSV", "Choose column", "Review results", "Export"]}
+      currentStep={currentStep}
       error={error}
       warning={warning}
       emptyStateTitle="Extract Phones from CSV"
@@ -424,7 +426,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               }}
               className="inline-flex items-center justify-center rounded-md bg-[var(--lc-ink)] px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed gap-2 flex-1 sm:flex-none"
             >
-              Export CSV <Download className="h-4 w-4" />
+              Export Phones CSV <Download className="h-4 w-4" />
             </button>
           </>
         )

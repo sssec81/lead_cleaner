@@ -49,6 +49,11 @@ export function RemoveEmptyRowsCsvTool() {
 
  const emptyRowsCount = rows.filter((r) => Object.values(r).every((v) => v === "")).length;
  const cleanRowsCount = rows.length - emptyRowsCount;
+ const currentStep = status === "idle" || status === "parsing"
+ ? 1
+ : cleanRowsCount > 0
+ ? 4
+ : 3;
 
  function resetState(nextFileName = "") {
  setFileName(nextFileName);
@@ -150,6 +155,8 @@ export function RemoveEmptyRowsCsvTool() {
         setStatus("idle");
         setError("");
       }}
+      steps={["Upload CSV", "Confirm rule", "Review rows", "Export"]}
+      currentStep={currentStep}
       error={error}
       warning=""
       emptyStateTitle="Remove Empty Rows"
@@ -174,6 +181,11 @@ export function RemoveEmptyRowsCsvTool() {
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Empty rows removed</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{emptyRowsCount.toLocaleString()}</p>
+          </div>
+          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Columns preserved</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{headers.length.toLocaleString()}</p>
           </div>
           <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
