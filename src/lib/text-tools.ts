@@ -353,8 +353,11 @@ export function normalizeUrlValue(input: string) {
  }
 
  const lowerTrimmed = trimmed.toLowerCase();
+ const bareDomainPattern = /^[a-z0-9.-]+\.[a-z]{2,}(?:[/?#].*)?$/i;
  const withProtocol = lowerTrimmed.startsWith("www.")
  ? `https://${lowerTrimmed.slice(4)}`
+ : bareDomainPattern.test(lowerTrimmed)
+ ? `https://${lowerTrimmed}`
  : lowerTrimmed;
 
  if (

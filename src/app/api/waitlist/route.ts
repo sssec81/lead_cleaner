@@ -19,6 +19,13 @@ function isRateLimited(ip: string): boolean {
  return record.count > limit;
 }
 
+function sanitizeWaitlistField(value: unknown) {
+ return String(value ?? "")
+ .replace(/[\r\n]+/g, " ")
+ .replace(/,/g, " ")
+ .trim();
+}
+
 export async function POST(request: Request) {
  try {
  const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -38,14 +45,16 @@ export async function POST(request: Request) {
  return NextResponse.json({ ok: false, error: "Invalid email format" }, { status: 400 });
  }
 
- const maskedEmail = email.replace(/(^..)(.*)(@.*)$/, "$1***$3");
- console.log(`[WAITLIST] New signup: ${maskedEmail} from ${source}`);
+ const normalizedEmail = email.trim().toLowerCase();
+ const safeSource = sanitizeWaitlistField(source) || "unknown";
+ const maskedEmail = normalizedEmail.replace(/(^..)(.*)(@.*)$/, "$1***$3");
+ console.log(`[WAITLIST] New signup: ${maskedEmail} from ${safeSource}`);
 
  // For MVP testing without a DB, store to a local text file.
  // The user can read waitlist.txt from their Droplet/server.
  try {
  const filePath = path.join(process.cwd(), "waitlist.txt");
- fs.appendFileSync(filePath, `${new Date().toISOString()},${email},${source}\n`);
+ fs.appendFileSync(filePath, `${new Date().toISOString()},${normalizedEmail},${safeSource}\n`);
  } catch (e) {
  console.error("Failed to write to waitlist.txt", e);
  return NextResponse.json(

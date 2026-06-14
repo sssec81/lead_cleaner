@@ -214,13 +214,13 @@ function detectCsvColumn(header: string, rows: CsvRow[]): CsvColumnDetection {
  const sampleValues = rows
  .map((row) => String(row[header] ?? "").trim())
  .filter(Boolean)
- .slice(0, 3);
+ .slice(0, 50);
 
  const nameSignals = {
  email: /email|e-?mail|contact/i.test(normalizedHeader),
  phone: /phone|tel|mobile|cell|fax/i.test(normalizedHeader),
  url: /url|website|site|link/i.test(normalizedHeader),
- domain: /domain|company|company domain/i.test(normalizedHeader),
+ domain: /domain|company domain/i.test(normalizedHeader),
  };
 
  const valueMatches = sampleValues.reduce(
@@ -307,13 +307,23 @@ function collectWarnings(errors: ParseError[], warnings: Set<string>) {
 }
 
 function removePhantomTrailingRows(rows: CsvRow[], errors: ParseError[]) {
- const phantomRowIndexes = new Set<number>();
+ let lastNonBlankIndex = -1;
 
+ rows.forEach((row, index) => {
+ if (!isBlankRow(row)) {
+ lastNonBlankIndex = index;
+ }
+ });
+
+ const phantomRowIndexes = new Set<number>();
  const rowsToKeep = rows.filter((row, index) => {
- if (isBlankRow(row)) {
+ const shouldDrop = index > lastNonBlankIndex && isBlankRow(row);
+
+ if (shouldDrop) {
  phantomRowIndexes.add(index);
  return false;
  }
+
  return true;
  });
 

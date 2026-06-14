@@ -20,7 +20,7 @@ export const metadata: Metadata = buildToolMetadata({
 
 export default function RemoveEmptyRowsFromCsvPage() {
   const pageHeader = (
-    <div className="mx-auto max-w-3xl pt-12 pb-8 text-center">
+    <div className="mx-auto max-w-2xl pt-12 pb-6 text-center sm:text-left sm:mx-0">
       <div className="section-eyebrow mb-4">
         CSV TOOL
       </div>
@@ -31,7 +31,7 @@ export default function RemoveEmptyRowsFromCsvPage() {
         Upload your messy CSV file. We'll automatically find and delete any row that is completely empty, saving you the hassle of sorting and filtering in Excel.
       </p>
       
-      <div className="trust-chip-row mt-6 justify-center">
+      <div className="trust-chip-row mt-6 justify-center sm:justify-start">
         <div className="trust-chip">
           <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
           <span>Browser-only</span>
@@ -66,9 +66,11 @@ export default function RemoveEmptyRowsFromCsvPage() {
       <main className="relative min-h-screen pt-4 pb-24 lg:pb-32 bg-[var(--lc-bg)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {pageHeader}
-          <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>
-            <RemoveEmptyRowsCsvTool />
-          </Suspense>
+          <div className="mb-16">
+            <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>
+              <RemoveEmptyRowsCsvTool />
+            </Suspense>
+          </div>
         </div>
       </main>
     </PageFrame>

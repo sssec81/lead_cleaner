@@ -307,8 +307,8 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       uploadId="csv-email-upload"
       toolbar={
         <div className="flex-1 min-w-[200px]">
-          <label htmlFor="email-column-select" className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-500">
-            Target Column
+          <label htmlFor="email-column-select" className="block text-[13px] font-medium text-[var(--lc-muted)] mb-1">
+            Target column
           </label>
           <select
             id="email-column-select"
@@ -320,7 +320,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               });
             }}
             disabled={!headers.length || isParsing}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+            className="w-full max-w-sm rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] px-3 py-2 text-sm text-[var(--lc-ink)] focus:border-[var(--lc-accent)] focus:ring-1 focus:ring-[var(--lc-accent)] focus:outline-none transition-colors cursor-pointer"
           >
             {headers.map((header) => (
               <option key={header} value={header}>{header}</option>
@@ -330,9 +330,9 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
             <button
               type="button"
               onClick={() => setSelectedColumn(recommendedDetection.header)}
-              className="btn-link-inline mt-2.5 flex items-center gap-1.5 text-xs"
+              className="mt-2 flex items-center gap-1.5 text-xs text-[var(--lc-accent)] hover:underline"
             >
-              <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+              <Sparkles className="h-3 w-3" />
               Use suggested: {recommendedDetection.header} ({recommendedDetection.confidence}%)
             </button>
           )}
@@ -340,60 +340,62 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       }
       summary={
         <>
-          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="stat-kicker text-slate-500">Rows Scanned</p>
-            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{extracted.summary.totalRows.toLocaleString()}</p>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Rows scanned</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{extracted.summary.totalRows.toLocaleString()}</p>
           </div>
-          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="stat-kicker text-slate-500">Duplicates Removed</p>
-            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{extracted.summary.duplicatesRemoved.toLocaleString()}</p>
+          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Duplicates removed</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{extracted.summary.duplicatesRemoved.toLocaleString()}</p>
           </div>
-          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="stat-kicker text-slate-500">Invalid / Blank</p>
-            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{(extracted.summary.blankRowsSkipped + extracted.summary.invalidEmailsRemoved).toLocaleString()}</p>
+          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Invalid / Blank</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{(extracted.summary.blankRowsSkipped + extracted.summary.invalidEmailsRemoved).toLocaleString()}</p>
           </div>
-          <div className="flex-1 bg-indigo-50/30 p-5 sm:px-6 transition-colors hover:bg-indigo-50/60 relative overflow-hidden min-w-[160px]">
-            <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500"></div>
-            <p className="stat-kicker text-indigo-600">Clean Emails</p>
-            <p className="mt-1.5 text-3xl font-bold text-indigo-700 tabular-nums tracking-tight">{extracted.summary.cleanEmailsReady.toLocaleString()}</p>
+          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-1">Clean emails</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-accent)] tabular-nums">{extracted.summary.cleanEmailsReady.toLocaleString()}</p>
           </div>
         </>
       }
       preview={
-        <div className="flex-1 overflow-auto bg-white min-h-[300px]">
+        <div className="flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]">
           {extracted.results.length ? (
             <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
-              <thead className="sticky top-0 z-10 bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">
+              <thead className="sticky top-0 z-10 bg-[#FDFDFD]">
                 <tr>
-                  <th className="px-5 py-3.5 font-bold text-slate-500 w-16 border-r border-slate-200">#</th>
-                  <th className="px-5 py-3.5 font-bold text-slate-500 w-24 border-r border-slate-200">STATUS</th>
-                  <th className="px-5 py-3.5 font-bold text-slate-900">EMAIL</th>
+                  <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
+                  <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">STATUS</th>
+                  <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">EMAIL</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100/60">
+              <tbody>
                 {extracted.results.slice(0, PREVIEW_LIMIT).map((email, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/80 transition-colors group">
-                    <td className="px-5 py-3 text-slate-500 bg-slate-50/30 group-hover:bg-slate-100/50 border-r border-slate-200">{idx + 1}</td>
-                    <td className="px-5 py-3 border-r border-slate-200">
-                      <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/50 bg-emerald-50/80 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                  <tr key={idx} className="hover:bg-[var(--lc-bg)] border-b border-[var(--lc-border)] last:border-0 transition-colors group">
+                    <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] w-8">{idx + 1}</td>
+                    <td className="px-3 py-2.5">
+                      <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-medium text-emerald-700">
                         Valid
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-slate-700 max-w-[280px] truncate" title={email}>{email}</td>
+                    <td className="px-3 py-2.5 font-mono text-[13px] text-[var(--lc-ink)] max-w-[280px] truncate" title={email}>{email}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : status === "ready" && headers.length ? (
             <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
-              <AlertCircle className="h-8 w-8 text-amber-500 mb-3" />
-              <h4 className="text-sm font-semibold text-slate-900 mb-1">No clean emails found</h4>
-              <p className="max-w-md text-sm leading-relaxed text-slate-500">
+              <AlertCircle className="h-8 w-8 text-[var(--lc-muted)] mb-3" />
+              <h4 className="text-sm font-semibold text-[var(--lc-ink)] mb-1">No clean emails found</h4>
+              <p className="max-w-md text-sm leading-relaxed text-[var(--lc-muted)]">
                 This file uploaded successfully, but the chosen column did not contain any valid email addresses.
               </p>
             </div>
           ) : (
-            <div className="flex h-full min-h-[300px] items-center justify-center text-sm font-medium text-slate-500">
+            <div className="flex h-full min-h-[300px] items-center justify-center text-sm font-medium text-[var(--lc-muted)]">
               Select a column to preview extracted emails.
             </div>
           )}
@@ -401,46 +403,35 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       }
       exportControls={
         extracted.results.length > 0 && (
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 w-full">
-            <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm border border-emerald-200">
-                <Check className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-slate-900">Extraction Complete</h3>
-                <p className="text-sm text-slate-500 mt-0.5">{extracted.summary.cleanEmailsReady.toLocaleString()} valid emails found.</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="btn-secondary h-11 rounded-xl px-4 text-sm font-bold flex-1 sm:flex-none"
-              >
-                {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Clipboard className="h-4 w-4" />} {copied ? "Copied" : "Copy"}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  trackToolEvent("extract-emails-from-csv", "download_txt", { result_count: extracted.results.length });
-                  downloadTextFile(buildExportName(fileName, "txt"), extracted.results.join("\n"));
-                }}
-                className="btn-secondary h-11 rounded-xl px-4 text-sm font-bold flex-1 sm:flex-none"
-              >
-                <FileText className="h-4 w-4" /> TXT
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  trackToolEvent("extract-emails-from-csv", "download_csv", { result_count: extracted.results.length });
-                  downloadCsvFile(buildExportName(fileName, "csv"), extracted.results, "email");
-                }}
-                className="btn-primary h-12 rounded-xl px-8 text-sm font-bold flex-1 sm:flex-none"
-              >
-                <Download className="h-5 w-5" /> Download CSV
-              </button>
-            </div>
-          </div>
+          <>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] px-4 text-[13px] font-medium text-[var(--lc-ink)] transition-colors hover:bg-[var(--lc-bg)] flex-1 sm:flex-none gap-2"
+            >
+              {copied ? <Check className="h-4 w-4 text-[var(--lc-green)]" /> : <Clipboard className="h-4 w-4" />} {copied ? "Copied" : "Copy"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                trackToolEvent("extract-emails-from-csv", "download_txt", { result_count: extracted.results.length });
+                downloadTextFile(buildExportName(fileName, "txt"), extracted.results.join("\n"));
+              }}
+              className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] px-4 text-[13px] font-medium text-[var(--lc-ink)] transition-colors hover:bg-[var(--lc-bg)] flex-1 sm:flex-none gap-2"
+            >
+              <FileText className="h-4 w-4" /> TXT
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                trackToolEvent("extract-emails-from-csv", "download_csv", { result_count: extracted.results.length });
+                downloadCsvFile(buildExportName(fileName, "csv"), extracted.results, "email");
+              }}
+              className="inline-flex items-center justify-center rounded-md bg-[var(--lc-ink)] px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed gap-2 flex-1 sm:flex-none"
+            >
+              Export CSV <Download className="h-4 w-4" />
+            </button>
+          </>
         )
       }
     />

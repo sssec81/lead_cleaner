@@ -53,182 +53,127 @@ export function CsvWorkspaceShell({
   exportControls,
 }: CsvWorkspaceShellProps) {
   return (
-    <div className="workspace-shell workspace-frame w-full overflow-hidden flex flex-col">
-      {/* ── Workspace Header ── */}
-      <div className="workspace-topbar flex flex-col gap-4 border-b border-slate-200/80 px-4 py-4 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#1d4ed8,#0f766e)] text-white shadow-[0_14px_28px_rgba(29,78,216,0.24)]">
-            <FileSpreadsheet className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-slate-900 leading-tight">CSV workspace</h1>
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-500 mt-0.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Processed locally in your browser</span>
-            </div>
-          </div>
-        </div>
-
-        {hasLoadedFile && (
-          <div className="flex w-full flex-col items-start gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex flex-col items-start sm:items-end">
-              <span className="text-sm font-semibold text-slate-900 truncate max-w-[200px] sm:max-w-[300px]" title={fileName}>
-                {fileName}
-              </span>
-              <span className="text-xs text-slate-500">{rowCount.toLocaleString()} rows</span>
-            </div>
-            <div className="hidden h-8 w-px bg-slate-200 sm:block"></div>
-            <button
-              type="button"
-              onClick={onReplaceFile}
-              className="btn-secondary min-h-11 w-full rounded-lg px-3 text-xs font-semibold sm:w-auto"
-            >
-              Replace file
-            </button>
-          </div>
-        )}
-      </div>
-
+    <div className="w-full bg-[var(--lc-surface)] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] border border-[var(--lc-border)] overflow-hidden flex flex-col">
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
-      <div className="workspace-subtle flex flex-1 flex-col items-center justify-center p-4 sm:p-12 lg:p-16">
-          <div className="glass-panel workspace-frame relative flex w-full max-w-2xl flex-col overflow-hidden transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 group">
+        <div className="flex flex-col items-center justify-center p-12 lg:p-24 bg-[var(--lc-surface)] rounded-xl border border-[var(--lc-border)] shadow-sm">
+          <label
+            htmlFor={uploadId}
+            className={`group relative flex w-full max-w-2xl cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-12 text-center transition-all ${
+              isParsing
+                ? "border-[var(--lc-border-mid)] bg-[var(--lc-bg)] opacity-60 cursor-not-allowed"
+                : "border-[var(--lc-border-mid)] bg-[var(--lc-bg)] hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)]"
+            }`}
+          >
+            <input id={uploadId} type="file" accept=".csv,text/csv" className="sr-only" onChange={onFileUpload} disabled={isParsing} />
             
-            {/* ── Header Section ── */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white/60 px-5 py-3.5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-700 shadow-sm">
-                  {emptyStateIcon}
-                </div>
-                <h3 className="text-sm font-semibold text-slate-900">{emptyStateTitle}</h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={onLoadDemo}
-                  disabled={isParsing}
-                  className="btn-ghost min-h-10 rounded-md px-3 text-xs font-semibold"
-                >
-                  <FileSpreadsheet className="h-3.5 w-3.5" />
-                  Try Sample CSV
-                </button>
-              </div>
+            <div className="mb-4 text-[var(--lc-accent)]">
+              {emptyStateIcon}
             </div>
-
-            {/* ── Middle Section (Dropzone) ── */}
-            <div className="flex min-h-[320px] flex-1 flex-col items-center justify-center p-6 sm:p-8">
-              <p className="mb-6 max-w-md text-center text-sm leading-relaxed text-slate-500">
-                {emptyStateSubtitle}
-              </p>
-
-              <div className="trust-chip-row mb-4 justify-center">
-                <span className="trust-chip border-emerald-200 bg-emerald-50 text-emerald-800">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  Browser-only processing
-                </span>
-                <span className="trust-chip border-blue-200 bg-blue-50 text-blue-700">
-                  Free limit: 5 MB per CSV
-                </span>
-              </div>
-
-              <div className="mb-5 flex flex-wrap items-center justify-center gap-2 text-xs font-semibold text-slate-600">
-                <span className="rounded-full border border-slate-200/80 bg-white/84 px-3 py-1.5 shadow-sm">1. Upload</span>
-                <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
-                <span className="rounded-full border border-slate-200/80 bg-white/84 px-3 py-1.5 shadow-sm">2. Review</span>
-                <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
-                <span className="rounded-full border border-slate-200/80 bg-white/84 px-3 py-1.5 shadow-sm">3. Export</span>
-              </div>
-
-              <label
-                htmlFor={uploadId}
-                className={`group relative flex w-full max-w-md cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 transition-all ${
-                  isParsing
-                    ? "border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed"
-                    : "border-slate-300 bg-white/60 hover:border-blue-500 hover:bg-blue-50/60 hover:shadow-[0_18px_40px_rgba(59,130,246,0.12)]"
-                }`}
-              >
-                <input id={uploadId} type="file" accept=".csv,text/csv" className="sr-only" onChange={onFileUpload} disabled={isParsing} />
-                
-                <div className="flex items-center justify-center gap-3">
-                  {isParsing ? (
-                    <LoaderCircle className="h-6 w-6 animate-spin text-slate-500" />
-                  ) : (
-                    <span className="inline-flex h-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#09111f,#1d4ed8)] px-6 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(29,78,216,0.24)] transition-all duration-300 group-hover:-translate-y-0.5">
-                      Browse Files
-                    </span>
-                  )}
-                </div>
-                <p className="mt-4 text-xs font-medium text-slate-500">Supports CSV files up to 5 MB</p>
-                <p className="mt-2 text-[11px] font-medium text-slate-400">Larger files are reserved for the Pro workflow.</p>
-              </label>
-
-              {isParsing && (
-                <div className="mt-6 w-full max-w-md rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm text-left">
-                  <div className="flex items-center justify-between gap-3 text-sm">
-                    <span className="font-semibold text-slate-900">Reading rows</span>
-                    <span className="tabular-nums text-slate-500">{progress.percentage}%</span>
-                  </div>
-                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
-                    <div
-                      className="h-full rounded-full bg-blue-600 transition-[width]"
-                      style={{ width: `${progress.percentage}%` }}
-                    />
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-500">
-                    {progress.rowsProcessed.toLocaleString()} rows processed so far.
-                  </p>
-                </div>
-              )}
-
-              {error && (
-                <div className="mt-6 w-full max-w-md rounded-2xl border border-red-200 bg-red-50 p-4 text-left shadow-sm">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-semibold text-red-900">Upload failed</h4>
-                      <p className="mt-1 text-sm text-red-700">{error}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {pendingFileNotice && (
-                <div className="mt-6 w-full max-w-md text-left">
-                  {pendingFileNotice}
-                </div>
+            
+            <p className="text-[16px] font-semibold text-[var(--lc-ink)] mb-1">
+              {emptyStateTitle}
+            </p>
+            <p className="text-[14px] text-[var(--lc-muted)] mb-6">
+              {emptyStateSubtitle}
+            </p>
+            
+            <div className="flex items-center justify-center gap-3">
+              {isParsing ? (
+                <LoaderCircle className="h-6 w-6 animate-spin text-[var(--lc-muted)]" />
+              ) : (
+                <>
+                  <span className="inline-flex h-10 items-center justify-center rounded-lg bg-[var(--lc-accent)] px-5 text-sm font-medium text-white transition-opacity hover:opacity-90">
+                    Browse CSV
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onLoadDemo();
+                    }}
+                    className="inline-flex h-10 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 text-sm font-medium text-[var(--lc-ink)] transition-colors hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)]"
+                  >
+                    Try sample CSV
+                  </button>
+                </>
               )}
             </div>
+          </label>
 
-            {/* ── Footer Section ── */}
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 bg-white/84 px-5 py-4">
-              <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-                <ShieldCheck className="h-4 w-4" />
-                <span>Processed locally in your browser</span>
-              </div>
-            </div>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 font-mono text-xs text-[var(--lc-muted)]">
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> No upload</span>
+            <span className="text-[var(--lc-hint)]">·</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> Processed locally</span>
+            <span className="text-[var(--lc-hint)]">·</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> 5MB free</span>
           </div>
+
+          {error && (
+            <div className="mt-6 w-full max-w-2xl rounded-lg border border-red-200 bg-red-50 p-4 text-left shadow-sm">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-semibold text-red-900">Upload failed</h4>
+                  <p className="mt-1 text-sm text-red-700">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {pendingFileNotice && (
+            <div className="mt-6 w-full max-w-2xl">
+              {pendingFileNotice}
+            </div>
+          )}
         </div>
       ) : (
-        /* ── Unified Application Workspace ── */
-        <div className="workspace-subtle flex flex-1 flex-col">
-          <div className="border-b border-slate-200/80 bg-blue-50/55 px-4 py-3 backdrop-blur-sm sm:px-6">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600">
-              <span className="rounded-full bg-white px-3 py-1 shadow-sm text-blue-700">1. Upload</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
-              <span className="rounded-full bg-white px-3 py-1 shadow-sm text-blue-700">2. Review</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
-              <span className="rounded-full bg-white px-3 py-1 shadow-sm text-blue-700">3. Export</span>
-            </div>
-          </div>
+        <div className="flex flex-col flex-1 bg-[var(--lc-surface)] rounded-xl border border-[var(--lc-border)] shadow-sm">
           
+          {/* ── Workspace Header ── */}
+          <div className="flex items-center justify-between border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] rounded-t-xl">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+                <FileSpreadsheet className="h-4 w-4" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-[14px] text-[var(--lc-ink)] truncate max-w-[200px] sm:max-w-[300px]" title={fileName}>
+                  {fileName}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={onReplaceFile}
+              className="inline-flex h-8 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-[var(--lc-surface)] px-3 text-[13px] font-medium text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] gap-1.5"
+            >
+              Replace CSV
+            </button>
+          </div>
+
           {/* Cleanup Controls Toolbar */}
-          <div className="border-b border-slate-200/80 bg-white/86 px-4 py-4 flex flex-wrap items-end gap-4 shadow-sm z-10 backdrop-blur-sm sm:px-6">
-            {toolbar}
+          <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-4 z-10">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--lc-muted)]">
+              <span className="text-[var(--lc-ink)]">1 Upload CSV</span>
+              <span className="text-[var(--lc-border-mid)]">→</span>
+              <span className="text-[var(--lc-ink)]">2 Choose cleanup rules</span>
+              <span className="text-[var(--lc-border-mid)]">→</span>
+              <span>3 Review rows</span>
+              <span className="text-[var(--lc-border-mid)]">→</span>
+              <span>4 Export</span>
+            </div>
+            
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] mb-2">Cleaning Rules</h3>
+              {toolbar}
+            </div>
           </div>
 
           {/* Results Summary Row */}
-          <div className="flex flex-nowrap items-stretch divide-x divide-slate-100 bg-white/88 border-b border-slate-200 z-0 overflow-x-auto backdrop-blur-sm">
-            {summary}
+          <div className="p-4 border-b border-[var(--lc-border)] bg-[var(--lc-surface)]">
+            <div className="flex flex-wrap gap-x-8 gap-y-4 items-center">
+              {summary}
+            </div>
           </div>
 
           {/* Warning Banner */}
@@ -239,17 +184,37 @@ export function CsvWorkspaceShell({
             </div>
           )}
 
-          {/* Data Preview Area */}
-          <div className="flex-1 flex flex-col min-h-[400px]">
-            {preview}
-            
-            {/* Export Section */}
-            {exportControls && (
-              <div className="border-t border-slate-200 bg-white/70 p-4 flex flex-col items-stretch justify-between gap-6 z-10 shadow-[0_-1px_2px_rgba(0,0,0,0.02)] backdrop-blur-sm sm:p-6 sm:flex-row sm:items-center">
+          {/* Workspace Body */}
+          <div className="flex flex-1 flex-col overflow-hidden bg-[var(--lc-bg)]">
+            <div className="flex-1 overflow-auto p-4 flex flex-col">
+              <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl overflow-hidden shadow-sm flex flex-col max-h-[800px]">
+                
+                {/* Table Header */}
+                <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)]">Review</h3>
+                  </div>
+                </div>
+
+                {/* The Table */}
+                <div className={`flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]`}>
+                   {preview}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Export Footer */}
+          {exportControls && (
+            <div className="border-t border-[var(--lc-border)] p-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#FDFDFD] rounded-b-xl">
+              <div className="flex items-center gap-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] hidden sm:block">Export</h3>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-end gap-3 w-full sm:w-auto">
                 {exportControls}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>

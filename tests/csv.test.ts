@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { detectCsvColumns, parseCsvText } from "../src/lib/csv.ts";
+import { normalizeUrlValue } from "../src/lib/text-tools.ts";
 
 test("parseCsvText returns headers and rows from a basic CSV", () => {
   const result = parseCsvText("name,email\nJane,jane@acme.com\nJohn,john@acme.com");
@@ -44,14 +45,16 @@ test("parseCsvText preserves quoted commas inside fields", () => {
   });
 });
 
-test("parseCsvText removes fully empty rows from the result set", () => {
+test("parseCsvText preserves interior blank rows and drops phantom trailing blanks", () => {
   const result = parseCsvText("name,email\n\nJane,jane@acme.com\n,\nJohn,john@acme.com\n");
 
-  assert.equal(result.rows.length, 2);
-  assert.deepEqual(
-    result.rows.map((row) => row.email),
-    ["jane@acme.com", "john@acme.com"],
-  );
+  assert.equal(result.rows.length, 4);
+  assert.deepEqual(result.rows[0], { name: "", email: "" });
+  assert.deepEqual(result.rows[2], { name: "", email: "" });
+  assert.deepEqual(result.rows[3], {
+    name: "John",
+    email: "john@acme.com",
+  });
 });
 
 test("parseCsvText keeps duplicate headers by using renamed field keys", () => {
@@ -85,4 +88,17 @@ test("parseCsvText handles large CSV inputs without dropping rows", () => {
   assert.equal(result.rows.length, 2500);
   assert.equal(result.rows[0]?.email, "user0@example.com");
   assert.equal(result.rows[2499]?.email, "user2499@example.com");
+});
+
+test("detectCsvColumns does not treat company names as a domain column", () => {
+  const parsed = parseCsvText("company\nAcme Inc\nNorthstar Labs");
+  const detections = detectCsvColumns(parsed.headers, parsed.rows);
+
+  assert.equal(detections[0]?.header, "company");
+  assert.equal(detections[0]?.type, "unknown");
+});
+
+test("normalizeUrlValue accepts bare domains for website-style CSV cells", () => {
+  assert.equal(normalizeUrlValue("northstar.io"), "https://northstar.io/");
+  assert.equal(normalizeUrlValue("WWW.ACME.COM"), "https://acme.com/");
 });

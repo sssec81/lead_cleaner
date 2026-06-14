@@ -160,62 +160,63 @@ export function RemoveEmptyRowsCsvTool() {
       uploadId="csv-empty-upload"
       toolbar={
         <div className="flex-1">
-          <p className="text-sm font-semibold text-slate-800">Removing rows where ALL columns are empty</p>
-          <p className="mt-1 text-sm text-slate-500">Empty rows are automatically dropped.</p>
+          <p className="text-[13px] font-medium text-[var(--lc-ink)] mb-1">Removing rows where ALL columns are empty</p>
+          <p className="text-[12px] text-[var(--lc-muted)]">Empty rows are automatically dropped.</p>
         </div>
       }
       summary={
         <>
-          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="stat-kicker text-slate-500">Rows Scanned</p>
-            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{rows.length.toLocaleString()}</p>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Rows scanned</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{rows.length.toLocaleString()}</p>
           </div>
-          <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-slate-50/50 min-w-[140px]">
-            <p className="stat-kicker text-slate-500">Empty Rows Removed</p>
-            <p className="mt-1.5 text-2xl font-bold text-slate-900 tabular-nums">{emptyRowsCount.toLocaleString()}</p>
+          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Empty rows removed</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{emptyRowsCount.toLocaleString()}</p>
           </div>
-          <div className="flex-1 bg-indigo-50/30 p-5 sm:px-6 transition-colors hover:bg-indigo-50/60 relative overflow-hidden min-w-[160px]">
-            <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500"></div>
-            <p className="stat-kicker text-indigo-600">Clean Rows Ready</p>
-            <p className="mt-1.5 text-3xl font-bold text-indigo-700 tabular-nums tracking-tight">{cleanRowsCount.toLocaleString()}</p>
+          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-1">Clean rows ready</p>
+            <p className="font-mono text-xl font-semibold text-[var(--lc-accent)] tabular-nums">{cleanRowsCount.toLocaleString()}</p>
           </div>
         </>
       }
       preview={
-        <div className="flex-1 overflow-auto bg-white min-h-[300px]">
+        <div className="flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]">
           {cleanRowsCount > 0 ? (
             <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
-              <thead className="sticky top-0 z-10 bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">
+              <thead className="sticky top-0 z-10 bg-[#FDFDFD]">
                 <tr>
-                  <th className="px-5 py-3.5 font-bold text-slate-500 w-16 border-r border-slate-200">#</th>
+                  <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
                   {headers.slice(0, 5).map(header => (
-                    <th key={header} className="px-5 py-3.5 font-bold text-slate-900 max-w-[200px] truncate border-r border-slate-200">{header}</th>
+                    <th key={header} className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] max-w-[200px] truncate border-b border-[var(--lc-border)]">{header}</th>
                   ))}
-                  {headers.length > 5 && <th className="px-5 py-3.5 font-bold text-slate-500">...</th>}
+                  {headers.length > 5 && <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">...</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100/60">
+              <tbody>
                 {rows.filter((r) => !Object.values(r).every((v) => v === "")).slice(0, 100).map((row, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-5 py-3 text-slate-500 bg-slate-50/50 border-r border-slate-200">{idx + 1}</td>
+                  <tr key={idx} className="hover:bg-[var(--lc-bg)] border-b border-[var(--lc-border)] last:border-0 transition-colors group">
+                    <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] w-8">{idx + 1}</td>
                     {headers.slice(0, 5).map(header => (
-                      <td key={header} className="px-5 py-3 text-slate-700 max-w-[200px] truncate border-r border-slate-200">{row[header]}</td>
+                      <td key={header} className="px-3 py-2.5 font-mono text-[13px] text-[var(--lc-ink)] max-w-[200px] truncate">{row[header]}</td>
                     ))}
-                    {headers.length > 5 && <td className="px-5 py-3 text-slate-500 italic">...</td>}
+                    {headers.length > 5 && <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] italic">...</td>}
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : status === "ready" && headers.length ? (
             <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
-              <FileMinus className="h-8 w-8 text-amber-500 mb-3" />
-              <h4 className="text-sm font-semibold text-slate-900 mb-1">No clean rows found</h4>
-              <p className="max-w-md text-sm leading-relaxed text-slate-500">
+              <FileMinus className="h-8 w-8 text-[var(--lc-muted)] mb-3" />
+              <h4 className="text-sm font-semibold text-[var(--lc-ink)] mb-1">No clean rows found</h4>
+              <p className="max-w-md text-sm leading-relaxed text-[var(--lc-muted)]">
                 This file uploaded successfully, but all rows were empty.
               </p>
             </div>
           ) : (
-            <div className="flex h-full min-h-[300px] items-center justify-center text-sm font-medium text-slate-500">
+            <div className="flex h-full min-h-[300px] items-center justify-center text-sm font-medium text-[var(--lc-muted)]">
               Upload a file to see preview.
             </div>
           )}
@@ -224,24 +225,13 @@ export function RemoveEmptyRowsCsvTool() {
       exportControls={
         cleanRowsCount > 0 && (
           <>
-            <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm border border-emerald-200">
-                <Check className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-slate-900">Ready to Export</h3>
-                <p className="text-sm text-slate-500 mt-0.5">{cleanRowsCount.toLocaleString()} clean rows remaining.</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-              <button
-                type="button"
-                onClick={handleExport}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] px-8 text-sm font-bold text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all duration-300 hover:bg-[position:right_center] hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(147,51,234,0.5)] cursor-pointer flex-1 sm:flex-none"
-              >
-                <Download className="h-5 w-5" /> Download Clean CSV
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleExport}
+              className="inline-flex items-center justify-center rounded-md bg-[var(--lc-ink)] px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed gap-2 flex-1 sm:flex-none"
+            >
+              Export CSV <Download className="h-4 w-4" />
+            </button>
           </>
         )
       }

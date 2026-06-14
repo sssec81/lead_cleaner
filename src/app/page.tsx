@@ -40,24 +40,28 @@ const quickStarts = [
     title: "Full CSV cleanup",
     text: "Best for CRM imports, recruiter sheets, and agency delivery.",
     icon: FileSpreadsheet,
+    cta: "Clean CSV"
   },
   {
     href: "/tools/extract-emails-from-text?sample=1",
     title: "Emails from pasted text",
     text: "Use when the contacts still live in copied notes or rough blocks.",
     icon: Mail,
+    cta: "Extract emails"
   },
   {
     href: "/tools/extract-phone-numbers-from-text?sample=1",
     title: "Phones from pasted text",
     text: "Pull phone numbers out of raw sourcing notes or messy directories.",
     icon: Phone,
+    cta: "Extract phones"
   },
   {
     href: "/tools/extract-domains-from-emails?sample=1",
     title: "Domains for enrichment",
     text: "Turn messy emails and URLs into a clean company-domain list.",
     icon: Globe,
+    cta: "Extract domains"
   },
 ];
 
@@ -113,32 +117,31 @@ export default function HomePage() {
               <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col">
                 <div className="border-b border-[var(--lc-border)] bg-[#F4F4F2] px-4 py-2">
                   <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
-                    Messy Input
+                    Messy CSV
                   </p>
                 </div>
                 <div className="flex-1 px-4 py-4 font-mono text-[13px] leading-relaxed text-[var(--lc-muted)]">
-                  <p>Jane - JANE@acme.com, copied from footer</p>
-                  <p>support@northstar.io after demo call</p>
-                  <p>(415) 555-0101 in notes again</p>
-                  <p>www.riverlabs.ai/contact from research</p>
+                  <p>name,email,company,status</p>
+                  <p>Jane,JANE@acme.com,Acme,</p>
+                  <p>Jane,jane@acme.com,Acme,</p>
+                  <p>Bob,bob@gmail.com,Northstar,</p>
                 </div>
               </div>
 
               <div className="relative flex flex-col bg-[#141412]">
                 <div className="bg-[var(--lc-ink)] px-4 py-2 shrink-0">
                   <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
-                    Clean Output
+                    Cleaned CSV
                   </p>
                 </div>
                 <div className="flex-1 px-4 py-4">
                   {[
-                    { type: "Email", value: "jane@acme.com", tone: "bg-blue-950 text-blue-300" },
-                    { type: "Email", value: "support@northstar.io", tone: "bg-blue-950 text-blue-300" },
-                    { type: "Phone", value: "+14155550101", tone: "bg-emerald-950 text-emerald-300" },
-                    { type: "Domain", value: "riverlabs.ai", tone: "bg-violet-950 text-violet-300" },
+                    { type: "Clean row", value: "jane@acme.com", tone: "bg-emerald-950 text-emerald-300", extra: "business email" },
+                    { type: "Removed", value: "jane@acme.com", tone: "bg-amber-950 text-amber-300", extra: "duplicate" },
+                    { type: "Removed", value: "bob@gmail.com", tone: "bg-red-950 text-red-300", extra: "personal email" },
                   ].map((item, index) => (
                     <div
-                      key={item.value}
+                      key={item.value + item.extra}
                       className="homepage-demo-row mb-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 last:mb-0"
                       style={{ animationDelay: `${index * 120}ms` }}
                     >
@@ -147,7 +150,7 @@ export default function HomePage() {
                           {item.type}
                         </span>
                         <p className="mt-2 truncate font-mono text-[13px] text-white">
-                          {item.value}
+                          {item.value} <span className="text-[var(--lc-muted)]">· {item.extra}</span>
                         </p>
                       </div>
                       <Check className="h-4 w-4 shrink-0 text-[var(--lc-green)]" />
@@ -160,17 +163,17 @@ export default function HomePage() {
               <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-4">
                 <div className="flex flex-wrap gap-3">
                   <Link
-                    href="/tools/extract-emails-from-text?sample=1"
-                    className="btn-secondary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
-                  >
-                    Try text sample
-                  </Link>
-                  <Link
                     href="/tools/csv-lead-cleaner?sample=1"
                     className="btn-primary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
                   >
                     Open CSV sample
                     <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/tools/extract-emails-from-text?sample=1"
+                    className="btn-secondary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
+                  >
+                    Try text sample
                   </Link>
                 </div>
               </div>
@@ -228,7 +231,7 @@ export default function HomePage() {
                 <h3 className="mt-5 text-lg font-semibold text-[var(--lc-ink)]">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">{item.text}</p>
                 <div className="mt-5 inline-flex items-center gap-2 rounded-md border border-[var(--lc-border-mid)] px-3 py-1 text-sm font-medium text-[var(--lc-ink)] transition-colors hover:border-[var(--lc-accent)]">
-                  Open path
+                  {item.cta}
                   <ArrowRight className="h-4 w-4" />
                 </div>
               </Link>

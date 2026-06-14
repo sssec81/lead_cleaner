@@ -623,8 +623,19 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
           </div>
 
           {/* Cleanup Controls Toolbar */}
-          <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-2 z-10">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] mb-2">Cleaning Rules</h3>
+          <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-4 z-10">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--lc-muted)]">
+              <span className="text-[var(--lc-ink)]">1 Upload CSV</span>
+              <span className="text-[var(--lc-border-mid)]">→</span>
+              <span className="text-[var(--lc-ink)]">2 Choose cleanup rules</span>
+              <span className="text-[var(--lc-border-mid)]">→</span>
+              <span>3 Review rows</span>
+              <span className="text-[var(--lc-border-mid)]">→</span>
+              <span>4 Export</span>
+            </div>
+            
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] mb-2">Cleaning Rules</h3>
             <div className="flex flex-wrap items-end gap-4">
               <div className="flex-1 min-w-[200px]">
                 <label htmlFor="column-select" className="block text-[13px] font-medium text-[var(--lc-muted)] mb-1">Target column</label>
@@ -696,6 +707,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               </div>
             </div>
           </div>
+          </div>
 
           {/* Results Summary Row */}
           <div className="p-4 border-b border-[var(--lc-border)] bg-[var(--lc-surface)]">
@@ -711,7 +723,12 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               </div>
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Invalid removed</p>
-                <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{(cleaned.summary.invalidRowsRemoved + cleaned.summary.emptyRowsRemoved + cleaned.summary.filteredRowsRemoved).toLocaleString()}</p>
+                <div className="group relative w-fit">
+                  <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums cursor-help border-b border-dashed border-[var(--lc-border-mid)]">{(cleaned.summary.invalidRowsRemoved + cleaned.summary.emptyRowsRemoved + cleaned.summary.filteredRowsRemoved).toLocaleString()}</p>
+                  <div className="absolute top-full left-0 mt-1 hidden w-48 rounded bg-[var(--lc-ink)] px-2 py-1 text-[11px] text-white group-hover:block z-50">
+                    Includes invalid, blank, and filtered rows
+                  </div>
+                </div>
               </div>
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-1">Clean rows</p>
@@ -880,18 +897,6 @@ function cleanCsvRows(
 
  nonEmptyRows.forEach((row) => {
  const normalizedRow = normalizeCsvRow(row, headers, selectedColumn);
- const selectedValue = normalizedRow[selectedColumn];
-
- if (!selectedValue) {
- invalidRowsRemoved += 1;
- const nextRow = {
- ...normalizedRow,
- leadcleanr_reason: "invalid" as const,
- };
- removedRows.push(nextRow);
- invalidRows.push(nextRow);
- return;
- }
 
  const duplicateKey = buildDuplicateKey(
  normalizedRow,
@@ -1040,7 +1045,7 @@ function buildDuplicateKey(
  duplicateMode: DuplicateMode,
 ) {
  if (duplicateMode === "selected") {
- return row[selectedColumn]?.trim() || "";
+ return normalizeSelectedValue(row[selectedColumn] ?? "", selectedColumn);
  }
 
  if (duplicateMode === "entire_row") {
