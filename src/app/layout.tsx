@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DM_Sans, Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { AnalyticsScripts } from "@/components/analytics-scripts";
@@ -8,6 +9,24 @@ import { getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
+const fontDisplay = DM_Sans({
+ subsets: ["latin"],
+ weight: ["400", "500", "700"],
+ variable: "--font-display",
+ display: "swap",
+});
+const fontBody = Inter({
+ subsets: ["latin"],
+ weight: ["400", "500", "600"],
+ variable: "--font-body",
+ display: "swap",
+});
+const fontMono = JetBrains_Mono({
+ subsets: ["latin"],
+ weight: ["400", "500"],
+ variable: "--font-mono",
+ display: "swap",
+});
 
 export const metadata: Metadata = {
  metadataBase: new URL(siteUrl),
@@ -56,7 +75,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
  return (
- <html lang="en" data-scroll-behavior="smooth">
+ <html
+ lang="en"
+ data-scroll-behavior="smooth"
+ className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable}`}
+ >
  <body>
  <a href="#main-content" className="skip-link">
  Skip to main content

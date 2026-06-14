@@ -42,25 +42,23 @@ test("cleanCsvRows accepts URL-like values in domain columns", () => {
   assert.equal(result.summary.invalidRowsRemoved, 0);
 });
 
-test("cleanCsvRows business_only removes rows without a business email", () => {
+test("cleanCsvRows business_only on phone-only CSV keeps rows and warns", () => {
   const rows = [
-    { email: "jane@acme.com", phone: "", website: "", name: "Business" },
-    { email: "sara@gmail.com", phone: "", website: "", name: "Personal" },
-    { email: "", phone: "+14155550101", website: "", name: "No Email" },
+    { email: "", phone: "+14155550101", website: "", name: "Jane" },
+    { email: "", phone: "+14155550102", website: "", name: "Sara" },
   ];
 
   const result = cleanCsvRows(
     rows,
     ["email", "phone", "website", "name"],
-    "email",
-    "selected",
+    "phone",
+    "phone",
     "business_only",
   );
 
-  assert.equal(result.rows.length, 1);
-  assert.equal(result.rows[0]?.email, "jane@acme.com");
-  assert.equal(result.summary.filteredRowsRemoved, 1);
-  assert.equal(result.summary.invalidRowsRemoved, 1);
+  assert.equal(result.rows.length, 2);
+  assert.equal(result.summary.filteredRowsRemoved, 0);
+  assert.equal(result.warning, "Email filter ignored because no email column was found.");
 });
 
 test("normalizeDomainValue accepts bare domains and URL-like domain values", () => {
@@ -104,23 +102,67 @@ test("cleanCsvRows covers different duplicate modes", () => {
   assert.equal(resultEntireRow.summary.duplicatesRemoved, 0);
 });
 
-test("cleanCsvRows personal_only filter", () => {
+test("cleanCsvRows personal_only on phone-only CSV keeps rows and warns", () => {
   const rows = [
-    { email: "jane@acme.com", phone: "", website: "", name: "Business" },
-    { email: "sara@gmail.com", phone: "", website: "", name: "Personal" },
+    { email: "", phone: "+14155550101", website: "", name: "Jane" },
+    { email: "", phone: "+14155550102", website: "", name: "Sara" },
   ];
 
   const result = cleanCsvRows(
     rows,
     ["email", "phone", "website", "name"],
-    "email",
+    "phone",
+    "phone",
+    "personal_only",
+  );
+
+  assert.equal(result.rows.length, 2);
+  assert.equal(result.summary.filteredRowsRemoved, 0);
+  assert.equal(result.warning, "Email filter ignored because no email column was found.");
+});
+
+test("cleanCsvRows business_only removes personal and missing-email rows when email data exists", () => {
+  const rows = [
+    { name: "Business", email: "jane@acme.com", phone: "+14155550101" },
+    { name: "Personal", email: "sara@gmail.com", phone: "+14155550102" },
+    { name: "Missing", email: "", phone: "+14155550103" },
+  ];
+
+  const result = cleanCsvRows(
+    rows,
+    ["name", "email", "phone"],
+    "name",
+    "selected",
+    "business_only",
+  );
+
+  assert.equal(result.rows.length, 1);
+  assert.equal(result.rows[0]?.email, "jane@acme.com");
+  assert.equal(result.summary.filteredRowsRemoved, 2);
+  assert.equal(result.summary.invalidRowsRemoved, 0);
+  assert.equal(result.warning, undefined);
+});
+
+test("cleanCsvRows personal_only removes business and missing-email rows when email data exists", () => {
+  const rows = [
+    { name: "Business", email: "jane@acme.com", phone: "+14155550101" },
+    { name: "Personal", email: "sara@gmail.com", phone: "+14155550102" },
+    { name: "Missing", email: "", phone: "+14155550103" },
+  ];
+
+  const result = cleanCsvRows(
+    rows,
+    ["name", "email", "phone"],
+    "name",
     "selected",
     "personal_only",
   );
 
   assert.equal(result.rows.length, 1);
   assert.equal(result.rows[0]?.email, "sara@gmail.com");
-  assert.equal(result.summary.filteredRowsRemoved, 1);
+  assert.equal(result.summary.filteredRowsRemoved, 2);
+  assert.equal(result.summary.invalidRowsRemoved, 0);
+  assert.equal(result.warning, undefined);
 });
 
 test("cleanCsvRows handles blank rows and categorizes them correctly", () => {

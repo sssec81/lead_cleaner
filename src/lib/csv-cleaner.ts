@@ -43,6 +43,7 @@ export type CleanedResult = {
   invalidRows: Array<PreviewRow & { leadcleanr_reason: "invalid" }>;
   blankRows: Array<PreviewRow & { leadcleanr_reason: "blank" }>;
   duplicateRows: Array<PreviewRow & { leadcleanr_reason: "duplicate" }>;
+  warning?: string;
 };
 
 const PERSONAL_EMAIL_DOMAINS = new Set([
@@ -102,12 +103,17 @@ export function cleanCsvRows(
       invalidRows: [],
       blankRows: [],
       duplicateRows: [],
+      warning: undefined,
     };
   }
 
   const nonEmptyRows = rows.filter((row) =>
     headers.some((header) => String(row[header] ?? "").trim() !== ""),
   );
+  const hasAnyEmailData = nonEmptyRows.some((row) =>
+    Boolean(getEmailCandidate(normalizeCsvRow(row, headers, selectedColumn), headers, selectedColumn)),
+  );
+  const shouldIgnoreEmailFilter = emailFilter !== "all" && !hasAnyEmailData;
 
   const emptyRowsRemoved = rows.length - nonEmptyRows.length;
   let invalidRowsRemoved = 0;
@@ -196,7 +202,11 @@ export function cleanCsvRows(
       }
     }
 
-    if (emailFilter === "business_only" && nextRow.leadcleanr_email_type !== "business") {
+    if (
+      !shouldIgnoreEmailFilter &&
+      emailFilter === "business_only" &&
+      nextRow.leadcleanr_email_type !== "business"
+    ) {
       filteredRowsRemoved += 1;
       if (nextRow.leadcleanr_email_type === "personal") {
         removedRows.push({
@@ -214,7 +224,11 @@ export function cleanCsvRows(
       return;
     }
 
-    if (emailFilter === "personal_only" && nextRow.leadcleanr_email_type !== "personal") {
+    if (
+      !shouldIgnoreEmailFilter &&
+      emailFilter === "personal_only" &&
+      nextRow.leadcleanr_email_type !== "personal"
+    ) {
       filteredRowsRemoved += 1;
       if (nextRow.leadcleanr_email_type === "business") {
         removedRows.push({
@@ -253,6 +267,9 @@ export function cleanCsvRows(
     invalidRows,
     blankRows,
     duplicateRows,
+    warning: shouldIgnoreEmailFilter
+      ? "Email filter ignored because no email column was found."
+      : undefined,
   };
 }
 

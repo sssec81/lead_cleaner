@@ -201,28 +201,30 @@ function loadDemoCsv() {
       preview={
         <div className="flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]">
           {cleanRowsCount > 0 ? (
-            <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
-              <thead className="sticky top-0 z-10 bg-[#FDFDFD]">
-                <tr>
-                  <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
-                  {headers.slice(0, 5).map(header => (
-                    <th key={header} className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] max-w-[200px] truncate border-b border-[var(--lc-border)]">{header}</th>
-                  ))}
-                  {headers.length > 5 && <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">...</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.filter((r) => !Object.values(r).every((v) => v === "")).slice(0, 100).map((row, idx) => (
-                  <tr key={idx} className="hover:bg-[var(--lc-bg)] border-b border-[var(--lc-border)] last:border-0 transition-colors group">
-                    <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] w-8">{idx + 1}</td>
+            <div className="overflow-x-auto rounded-lg">
+              <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
+                <thead className="sticky top-0 z-10 bg-[#FDFDFD]">
+                  <tr>
+                    <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
                     {headers.slice(0, 5).map(header => (
-                      <td key={header} className="px-3 py-2.5 font-mono text-[13px] text-[var(--lc-ink)] max-w-[200px] truncate">{row[header]}</td>
+                      <th key={header} className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] max-w-[200px] truncate border-b border-[var(--lc-border)]">{header}</th>
                     ))}
-                    {headers.length > 5 && <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] italic">...</td>}
+                    {headers.length > 5 && <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">...</th>}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rows.filter((r) => !Object.values(r).every((v) => v === "")).slice(0, 100).map((row, idx) => (
+                    <tr key={idx} className="hover:bg-[var(--lc-bg)] border-b border-[var(--lc-border)] last:border-0 transition-colors group">
+                      <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] w-8">{idx + 1}</td>
+                      {headers.slice(0, 5).map(header => (
+                        <td key={header} className="px-3 py-2.5 font-mono text-[13px] text-[var(--lc-ink)] max-w-[200px] truncate">{row[header]}</td>
+                      ))}
+                      {headers.length > 5 && <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] italic">...</td>}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : status === "ready" && headers.length ? (
             <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
               <FileMinus className="h-8 w-8 text-[var(--lc-muted)] mb-3" />

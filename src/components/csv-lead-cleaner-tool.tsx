@@ -204,6 +204,7 @@ export function CsvLeadCleanerTool() {
     [duplicateMode, headers, rows, selectedColumn, emailFilter],
   );
   const summary: CleaningSummary = cleaned.summary;
+  const workspaceWarning = [warning, cleaned.warning].filter(Boolean).join(" ");
 
   const previewRows = cleaned.rows.slice(0, PREVIEW_LIMIT);
   const isParsing = status === "parsing";
@@ -664,10 +665,10 @@ export function CsvLeadCleanerTool() {
           </div>
 
           {/* Warning Banner */}
-          {warning && (
+          {workspaceWarning && (
             <div className="flex items-center gap-2 bg-amber-50/50 px-4 py-2 border-b border-[var(--lc-border)] text-amber-900">
               <AlertTriangle className="h-4 w-4 text-[var(--lc-warning)] shrink-0" />
-              <p className="text-xs font-medium">{warning}</p>
+              <p className="text-xs font-medium">{workspaceWarning}</p>
             </div>
           )}
 
@@ -686,6 +687,7 @@ export function CsvLeadCleanerTool() {
               {/* The Table */}
               <div className="flex-1 overflow-auto bg-white min-h-[300px]">
                 {reportHeaders.length && visiblePreviewRows.length ? (
+                  <div className="overflow-x-auto rounded-lg">
                   <table className="min-w-full text-left text-xs whitespace-nowrap border-collapse">
                     <thead className="sticky top-0 z-10 bg-[#FDFDFD] border-b border-[var(--lc-border)]">
                       <tr>
@@ -722,6 +724,7 @@ export function CsvLeadCleanerTool() {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 ) : (
                   <div className="flex h-[200px] items-center justify-center text-xs text-[var(--lc-muted)]">
                     No rows available.
