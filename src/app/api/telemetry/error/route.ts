@@ -74,13 +74,16 @@ export async function POST(request: Request) {
 
  if (webhookUrl) {
  try {
- await fetch(webhookUrl, {
+ const response = await fetch(webhookUrl, {
  method: "POST",
  headers: {
  "Content-Type": "application/json",
  },
  body: JSON.stringify(payload),
  });
+ if (!response.ok) {
+ throw new Error(`Webhook responded with status ${response.status}`);
+ }
  } catch (error) {
  console.error("LeadCleanr error webhook failed", error, payload);
  return NextResponse.json(

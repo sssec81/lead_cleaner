@@ -39,9 +39,54 @@ function sanitizeWaitlistField(value: unknown) {
  .trim();
 }
 
+function getClientIp(request: Request) {
+ const forwardedFor = request.headers.get("x-forwarded-for");
+ return forwardedFor?.split(",")[0]?.trim() || "unknown";
+}
+
+async function deliverWaitlistSignup(payload: {
+ email: string;
+ source: string;
+ receivedAt: string;
+}) {
+ const webhookUrl = process.env.WAITLIST_WEBHOOK_URL?.trim();
+ if (webhookUrl) {
+ const response = await fetch(webhookUrl, {
+ method: "POST",
+ headers: {
+ "Content-Type": "application/json",
+ },
+ body: JSON.stringify(payload),
+ });
+
+ if (!response.ok) {
+ throw new Error(`Waitlist webhook failed with status ${response.status}`);
+ }
+
+ return;
+ }
+
+ const storagePath = process.env.WAITLIST_FILE_PATH?.trim();
+ const canUseLocalFileFallback = Boolean(storagePath) || process.env.NODE_ENV !== "production";
+
+ if (!canUseLocalFileFallback) {
+ throw new Error(
+ "Waitlist storage is not configured. Set WAITLIST_WEBHOOK_URL in production, or WAITLIST_FILE_PATH for single-server file storage.",
+ );
+ }
+
+ const filePath = storagePath
+ ? path.resolve(storagePath)
+ : path.join(process.cwd(), "waitlist.txt");
+ fs.appendFileSync(
+ filePath,
+ `${payload.receivedAt},${payload.email},${payload.source}\n`,
+ );
+}
+
 export async function POST(request: Request) {
  try {
- const ip = request.headers.get("x-forwarded-for") || "unknown";
+ const ip = getClientIp(request);
 
  if (isRateLimited(ip)) {
  return NextResponse.json({ ok: false, error: "Too many requests" }, { status: 429 });
@@ -60,16 +105,18 @@ export async function POST(request: Request) {
 
  const normalizedEmail = email.trim().toLowerCase();
  const safeSource = sanitizeWaitlistField(source) || "unknown";
+ const receivedAt = new Date().toISOString();
  const maskedEmail = normalizedEmail.replace(/(^..)(.*)(@.*)$/, "$1***$3");
  console.log(`[WAITLIST] New signup: ${maskedEmail} from ${safeSource}`);
 
- // For MVP testing without a DB, store to a local text file.
- // The user can read waitlist.txt from their Droplet/server.
  try {
- const filePath = path.join(process.cwd(), "waitlist.txt");
- fs.appendFileSync(filePath, `${new Date().toISOString()},${normalizedEmail},${safeSource}\n`);
+ await deliverWaitlistSignup({
+ email: normalizedEmail,
+ source: safeSource,
+ receivedAt,
+ });
  } catch (e) {
- console.error("Failed to write to waitlist.txt", e);
+ console.error("Failed to persist waitlist signup", e);
  return NextResponse.json(
  { ok: false, error: "Could not store your signup right now." },
  { status: 500 },

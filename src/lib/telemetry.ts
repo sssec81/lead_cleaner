@@ -26,6 +26,11 @@ declare global {
  }
 }
 
+type AnalyticsDispatch = () => boolean;
+
+const ANALYTICS_RETRY_DELAY_MS = 250;
+const ANALYTICS_RETRY_ATTEMPTS = 20;
+
 function normalizeProps(props: TelemetryProps = {}) {
  return Object.fromEntries(
  Object.entries(props).filter((entry): entry is [string, TelemetryValue] => {
@@ -42,19 +47,52 @@ function sanitizeErrorText(value: string) {
  .replace(/\+?\d[\d()\-\s]{6,}\d/g, "[redacted-number]");
 }
 
+function dispatchWithRetry(dispatchers: AnalyticsDispatch[], attemptsLeft = ANALYTICS_RETRY_ATTEMPTS) {
+ if (typeof window === "undefined") {
+ return;
+ }
+
+ const pendingDispatchers = dispatchers.filter((dispatch) => !dispatch());
+ if (!pendingDispatchers.length || attemptsLeft <= 0) {
+ return;
+ }
+
+ window.setTimeout(() => {
+ dispatchWithRetry(pendingDispatchers, attemptsLeft - 1);
+ }, ANALYTICS_RETRY_DELAY_MS);
+}
+
 export function trackEvent(name: string, props: TelemetryProps = {}) {
  if (typeof window === "undefined") {
  return;
  }
 
  const normalizedProps = normalizeProps(props);
-
- window.plausible?.(name, { props: normalizedProps });
-
  const gaId = process.env.NEXT_PUBLIC_GA_ID;
- if (gaId && window.gtag) {
- window.gtag("event", name, normalizedProps);
+ const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+
+ dispatchWithRetry([
+ () => {
+ if (!plausibleDomain) {
+ return true;
  }
+ if (!window.plausible) {
+ return false;
+ }
+ window.plausible(name, { props: normalizedProps });
+ return true;
+ },
+ () => {
+ if (!gaId) {
+ return true;
+ }
+ if (!window.gtag) {
+ return false;
+ }
+ window.gtag("event", name, normalizedProps);
+ return true;
+ },
+ ]);
 }
 
 export function trackPageView(path: string) {
@@ -63,17 +101,35 @@ export function trackPageView(path: string) {
  }
 
  const pageUrl = new URL(path, window.location.origin).toString();
-
- window.plausible?.("pageview", { u: pageUrl });
-
  const gaId = process.env.NEXT_PUBLIC_GA_ID;
- if (gaId && window.gtag) {
+ const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+
+ dispatchWithRetry([
+ () => {
+ if (!plausibleDomain) {
+ return true;
+ }
+ if (!window.plausible) {
+ return false;
+ }
+ window.plausible("pageview", { u: pageUrl });
+ return true;
+ },
+ () => {
+ if (!gaId) {
+ return true;
+ }
+ if (!window.gtag) {
+ return false;
+ }
  window.gtag("config", gaId, {
  page_path: path,
  page_location: pageUrl,
  page_title: document.title,
  });
- }
+ return true;
+ },
+ ]);
 }
 
 export function trackToolEvent(
