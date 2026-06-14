@@ -688,42 +688,42 @@ export function CsvLeadCleanerTool() {
               <div className="flex-1 overflow-auto bg-white min-h-[300px]">
                 {reportHeaders.length && visiblePreviewRows.length ? (
                   <div className="overflow-x-auto rounded-lg">
-                  <table className="min-w-full text-left text-xs whitespace-nowrap border-collapse">
-                    <thead className="sticky top-0 z-10 bg-[#FDFDFD] border-b border-[var(--lc-border)]">
-                      <tr>
-                        <th className="px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-[var(--lc-hint)] w-8">#</th>
-                        {previewMode !== "clean" && <th className="px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-[var(--lc-hint)]">REASON</th>}
-                        {reportHeaders.map((header) => {
-                          const isComputed = header.startsWith("leadcleanr_");
-                          return (
-                            <th key={header} title={isComputed ? "Added by LeadCleanr" : undefined} className={`px-3 py-2 font-mono text-[10px] uppercase tracking-wider ${isComputed ? "text-[var(--lc-accent)]" : "text-[var(--lc-hint)]"}`}>
-                              {isComputed && <span className="mr-1">✦</span>}
-                              {prettyHeader(header)}
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {visiblePreviewRows.map((row, index) => (
-                        <tr key={index} className="hover:bg-black/[0.01] border-b border-[var(--lc-border)] last:border-0 transition-colors">
-                          <td className="px-3 py-2 font-mono text-[11px] text-[var(--lc-hint)] w-8">{index + 1}</td>
-                          {previewMode !== "clean" && "leadcleanr_reason" in row && (
-                            <td className="px-3 py-2">
-                              <span className="inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-[10px] font-medium text-red-700">
-                                {(row as any).leadcleanr_reason}
-                              </span>
-                            </td>
-                          )}
+                    <table className="min-w-full text-left text-xs whitespace-nowrap border-collapse">
+                      <thead className="sticky top-0 z-10 bg-[#FDFDFD] border-b border-[var(--lc-border)]">
+                        <tr>
+                          <th className="px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-[var(--lc-hint)] w-8">#</th>
+                          {previewMode !== "clean" && <th className="px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-[var(--lc-hint)]">REASON</th>}
                           {reportHeaders.map((header) => {
-                            const val = row[header];
-                            const isMono = header.toLowerCase().includes("email") || header.toLowerCase().includes("phone") || header.toLowerCase().includes("domain");
-                            return <td key={header} className={`px-3 py-2 text-[13px] text-[var(--lc-ink)] max-w-[280px] truncate ${isMono ? "font-mono text-[12px] text-black/80" : ""}`} title={String(val || "")}>{val || <span className="text-black/20">—</span>}</td>;
+                            const isComputed = header.startsWith("leadcleanr_");
+                            return (
+                              <th key={header} title={isComputed ? "Added by LeadCleanr" : undefined} className={`px-3 py-2 font-mono text-[10px] uppercase tracking-wider ${isComputed ? "text-[var(--lc-accent)]" : "text-[var(--lc-hint)]"}`}>
+                                {isComputed && <span className="mr-1">✦</span>}
+                                {prettyHeader(header)}
+                              </th>
+                            );
                           })}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {visiblePreviewRows.map((row, index) => (
+                          <tr key={index} className="hover:bg-black/[0.01] border-b border-[var(--lc-border)] last:border-0 transition-colors">
+                            <td className="px-3 py-2 font-mono text-[11px] text-[var(--lc-hint)] w-8">{index + 1}</td>
+                            {previewMode !== "clean" && "leadcleanr_reason" in row && (
+                              <td className="px-3 py-2">
+                                <span className="inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-[10px] font-medium text-red-700">
+                                  {(row as any).leadcleanr_reason}
+                                </span>
+                              </td>
+                            )}
+                            {reportHeaders.map((header) => {
+                              const val = row[header];
+                              const isMono = header.toLowerCase().includes("email") || header.toLowerCase().includes("phone") || header.toLowerCase().includes("domain");
+                              return <td key={header} className={`px-3 py-2 text-[13px] text-[var(--lc-ink)] max-w-[280px] truncate ${isMono ? "font-mono text-[12px] text-black/80" : ""}`} title={String(val || "")}>{val || <span className="text-black/20">—</span>}</td>;
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 ) : (
                   <div className="flex h-[200px] items-center justify-center text-xs text-[var(--lc-muted)]">
