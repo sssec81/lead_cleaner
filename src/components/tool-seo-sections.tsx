@@ -118,27 +118,27 @@ export function ToolSeoSections({
         </div>
       </section>
 
-      <section>
-        <div className="max-w-3xl">
-          <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">
+      <section className="max-w-[760px]">
+        <div>
+          <h2 className="font-sans text-2xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-3xl">
             FAQ
           </h2>
-          <p className="mt-4 text-[15px] leading-7 text-[var(--lc-muted)]">
-            Short answers to the questions people usually ask before they clean
-            or export the file.
+          <p className="mt-2 text-[14px] text-[var(--lc-muted)]">
+            Short answers to the questions people usually ask before they clean or export the file.
           </p>
         </div>
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 border-t border-[var(--lc-border)]">
           {faqs.map((faq, index) => (
             <details
               key={faq.question}
-              className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4"
+              className="group border-b border-[var(--lc-border)] py-4"
               open={index === 0}
             >
-              <summary className="cursor-pointer list-none text-sm font-semibold text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[14px] text-[var(--lc-ink)] hover:text-[var(--lc-accent)] transition-colors [&::-webkit-details-marker]:hidden">
                 {faq.question}
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45 shrink-0 ml-4 font-mono text-[16px]">+</span>
               </summary>
-              <p className="mt-3 text-sm leading-6 text-[var(--lc-muted)]">
+              <p className="mt-2 text-[13px] leading-relaxed text-[var(--lc-muted)]">
                 {faq.answer}
               </p>
             </details>

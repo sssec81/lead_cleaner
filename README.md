@@ -5,7 +5,7 @@
 LeadCleanr is an online utility SaaS tool that helps sales teams, recruiters, marketers, agencies, and virtual assistants clean messy lead lists by extracting emails, phone numbers, URLs, and domains from text or CSV files.
 
 ## 🛡️ Privacy-First Processing
-Basic cleaning runs entirely in your browser. **We do not store your pasted text or uploaded CSV files.** Data is processed locally using browser APIs to ensure maximum security for sensitive lead lists.
+Basic cleaning runs entirely in your browser. **We do not store your pasted text or uploaded CSV files.** Data cleanup happens locally on your device; separate product behavior like anonymous telemetry, sanitized error reporting, or waitlist submissions does not include raw pasted text or uploaded CSV contents.
 
 ## 🎯 Target Audience
 - Sales Teams & Cold Outreach

@@ -133,107 +133,108 @@ export default function HomePage() {
   return (
     <PageFrame>
       <FaqJsonLd faqEntries={homepageFaqs} />
-      <section className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 lg:px-8 lg:pt-28">
-        <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
+      <section className="mx-auto max-w-7xl px-4 pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-20">
+        <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-16">
           <div>
-            <h1 className="section-title mt-4 max-w-none font-display text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-[var(--lc-ink)]">
-              Clean messy lead CSVs before CRM import
+            <h1 className="font-sans text-[34px] font-bold tracking-tight text-[var(--lc-ink)] sm:text-[48px] lg:text-[56px] leading-[1.1]">
+              Clean messy lead lists instantly.
             </h1>
-            <p className="mt-4 max-w-sm text-base leading-7 text-[var(--lc-muted)]">
-              Remove duplicates, invalid emails, blank rows, and personal email addresses — 100% in your browser.
+            <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-[var(--lc-muted)] sm:text-[18px]">
+              Private CSV and contact-list cleaning that runs in your browser.
             </p>
-
+ 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tools/csv-lead-cleaner"
-                className="btn-primary min-h-11 rounded-lg px-5 py-2.5 text-[15px] font-medium"
+                className="lc-button-primary py-2.5 px-6"
               >
-                Clean CSV Free
+                Try CSV Cleaner
               </Link>
               <Link
-                href="/tools/csv-lead-cleaner?sample=1"
-                className="btn-secondary min-h-11 rounded-lg px-5 py-2.5 text-[15px] font-medium"
+                href="/tools"
+                className="lc-button-secondary py-2.5 px-6"
               >
-                Try Sample CSV
+                Browse Tools
               </Link>
             </div>
-
-            <div className="mt-6 flex flex-wrap items-center gap-3 font-mono text-xs text-[var(--lc-muted)]">
-              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> No signup</span>
-              <span className="text-[var(--lc-hint)]">·</span>
-              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> No upload</span>
-              <span className="text-[var(--lc-hint)]">·</span>
-              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> Browser-only</span>
-              <span className="text-[var(--lc-hint)]">·</span>
-              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> 5MB free</span>
+ 
+            <div className="mt-6 flex flex-wrap items-center gap-2 font-sans text-xs text-[var(--lc-muted)]">
+              <span className="lc-chip">Runs locally</span>
+              <span className="lc-chip">No signup</span>
+              <span className="lc-chip">CSV + text tools</span>
             </div>
           </div>
-
+ 
           <div className="relative">
-            <div className="overflow-hidden rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)]">
+            <div className="lc-workspace-shell">
               <div className="grid lg:grid-cols-2">
-              <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col">
-                <div className="border-b border-[var(--lc-border)] bg-[#F4F4F2] px-4 py-2">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
-                    Messy CSV
-                  </p>
-                </div>
-                <div className="flex-1 px-4 py-4 font-mono text-[13px] leading-relaxed text-[var(--lc-muted)]">
-                  <p>name,email,company,status</p>
-                  <p>Jane,JANE@acme.com,Acme,</p>
-                  <p>Jane,jane@acme.com,Acme,</p>
-                  <p>Bob,bob@gmail.com,Northstar,</p>
-                </div>
-              </div>
-
-              <div className="relative flex flex-col bg-[#141412]">
-                <div className="bg-[var(--lc-ink)] px-4 py-2 shrink-0">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--lc-hint)]">
-                    Cleaned CSV
-                  </p>
-                </div>
-                <div className="flex-1 px-4 py-4">
-                  {[
-                    { type: "Clean row", value: "jane@acme.com", tone: "bg-emerald-950 text-emerald-300", extra: "business email" },
-                    { type: "Removed", value: "jane@acme.com", tone: "bg-amber-950 text-amber-300", extra: "duplicate" },
-                    { type: "Removed", value: "bob@gmail.com", tone: "bg-red-950 text-red-300", extra: "personal email" },
-                  ].map((item, index) => (
-                    <div
-                      key={item.value + item.extra}
-                      className="homepage-demo-row mb-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 last:mb-0"
-                      style={{ animationDelay: `${index * 120}ms` }}
-                    >
-                      <div className="min-w-0">
-                        <span className={`rounded-full px-2 py-1 font-mono text-[11px] ${item.tone}`}>
-                          {item.type}
-                        </span>
-                        <p className="mt-2 truncate font-mono text-[13px] text-white">
-                          {item.value} <span className="text-[var(--lc-muted)]">· {item.extra}</span>
-                        </p>
+                {/* Left Panel: Upload/Paste/Options */}
+                <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col bg-[#F9F9FB] p-5">
+                  <div className="border border-dashed border-black/10 rounded-xl p-6 text-center bg-white flex flex-col items-center justify-center">
+                    <Upload className="h-6 w-6 text-[var(--lc-accent)] mb-2" />
+                    <p className="text-[13px] font-semibold text-[var(--lc-ink)]">Drop CSV here</p>
+                    <p className="text-[11px] text-[var(--lc-muted)] mt-0.5">or choose a file</p>
+                  </div>
+                  
+                  <div className="mt-4 space-y-3">
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)]">Target Column</span>
+                      <div className="mt-1 w-full rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-[var(--lc-ink)] flex items-center justify-between">
+                        <span>Email</span>
+                        <span className="text-black/30">▼</span>
                       </div>
-                      <Check className="h-4 w-4 shrink-0 text-[var(--lc-green)]" />
                     </div>
-                  ))}
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)]">Deduplicate</span>
+                      <div className="mt-1 w-full rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-[var(--lc-ink)] flex items-center justify-between">
+                        <span>Remove duplicates</span>
+                        <span className="text-black/30">▼</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+ 
+                {/* Right Panel: Clean Preview / Export */}
+                <div className="relative flex flex-col bg-white p-5">
+                  <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)] mb-2">Cleaned Rows Preview</span>
+                  <div className="flex-1 space-y-2">
+                    {[
+                      { type: "Clean", value: "jane@acme.com", tone: "bg-emerald-50 text-emerald-700 border border-emerald-100", extra: "business" },
+                      { type: "Removed", value: "jane@acme.com", tone: "bg-amber-50 text-amber-700 border border-amber-100", extra: "duplicate" },
+                      { type: "Removed", value: "bob@gmail.com", tone: "bg-red-50 text-red-700 border border-red-100", extra: "personal" },
+                    ].map((item, index) => (
+                      <div
+                        key={item.value + item.extra}
+                        className="homepage-demo-row flex items-center justify-between gap-2 rounded-lg border border-black/5 bg-black/[0.01] px-2.5 py-1.5 last:mb-0"
+                        style={{ animationDelay: `${index * 120}ms` }}
+                      >
+                        <div className="min-w-0">
+                          <span className={`rounded px-1.5 py-0.5 font-sans text-[10px] font-medium ${item.tone}`}>
+                            {item.type}
+                          </span>
+                          <p className="mt-1 truncate font-mono text-[11px] text-[var(--lc-ink)]">
+                            {item.value} <span className="text-[var(--lc-muted)]">· {item.extra}</span>
+                          </p>
+                        </div>
+                        <Check className="h-3.5 w-3.5 shrink-0 text-[var(--lc-green)]" />
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-4 border-t border-black/5 pt-3 flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-emerald-700">1,145 ready leads</span>
+                    <button className="lc-button-primary py-1 px-3.5 text-xs font-semibold">Download CSV</button>
+                  </div>
                 </div>
               </div>
-              </div>
-
-              <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-4">
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/tools/csv-lead-cleaner?sample=1"
-                    className="btn-primary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
-                  >
-                    Open CSV sample
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/tools/extract-emails-from-text?sample=1"
-                    className="btn-secondary min-h-10 rounded-md px-4 py-2 text-sm font-medium"
-                  >
-                    Try text sample
-                  </Link>
-                </div>
+ 
+              {/* Bottom: Slim Stats Strip */}
+              <div className="border-t border-[var(--lc-border)] bg-[#F9F9FB] px-4 py-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[var(--lc-muted)] font-medium">
+                <span>1,361 total rows</span>
+                <span className="text-black/10">·</span>
+                <span>184 duplicates removed</span>
+                <span className="text-black/10">·</span>
+                <span>32 invalid removed</span>
               </div>
             </div>
           </div>

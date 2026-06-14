@@ -75,9 +75,9 @@ type PersistedState = {
 
 const WORKSPACE_PREVIEW_LIMIT = 8;
 const TEXT_INPUT_BOX_CLASS_NAME =
-  "rounded-xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 overflow-hidden flex flex-col relative group";
+  "rounded-2xl border border-[var(--lc-border)] bg-white overflow-hidden flex flex-col relative group";
 const TEXT_INPUT_ACTION_CLASS_NAME =
-  "btn-ghost inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold";
+  "inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors";
 
 export function TextProcessingTool({
  title,
@@ -499,401 +499,384 @@ export function TextProcessingTool({
  }
 
  window.addEventListener("keydown", handleKeyDown);
- return () => window.removeEventListener("keydown", handleKeyDown);
+return () => window.removeEventListener("keydown", handleKeyDown);
  });
 
 
   return (
-  <>
-    <TextWorkspaceShell
-      title={title}
-      description={description}
-      icon={Icon}
-      iconToneClassName={iconToneClassName}
-      currentStep={currentStep}
-      showShortcuts={showShortcuts}
-      onToggleShortcuts={() => setShowShortcuts((current) => !current)}
-      inputArea={
-        <div className={TEXT_INPUT_BOX_CLASS_NAME}>
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/50 px-4 py-3 sm:px-5 sm:py-3.5">
-            <div>
-              <h3 className="text-sm font-semibold text-slate-900">{inputLabel}</h3>
-            </div>
-            <div className="flex flex-wrap items-center gap-1">
-              <button type="button" onClick={handlePasteFromClipboard} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Paste from clipboard">
-                <Clipboard className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Paste</span>
-              </button>
-              <button type="button" onClick={loadSampleInput} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Load sample">
-                <FlaskConical className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Try sample</span>
-              </button>
-              <button type="button" onClick={useSelectedText} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Import highlighted text from this page">
-                <MousePointerClick className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Selected</span>
-              </button>
-              <button type="button" onClick={toggleBatchMode} className={`inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold transition-colors ${batchMode ? "btn-segment-active text-indigo-700" : "btn-ghost"}`} title={batchMode ? "Disable batch mode" : "Enable batch mode"}>
-                <span className="font-mono text-[10px] leading-none px-1 rounded-sm bg-slate-200/50 text-slate-500">#</span>
-                <span>Batch</span>
-              </button>
-              <div className="w-px h-4 bg-slate-200 mx-1"></div>
-              <button type="button" onClick={() => setFreshInput("")} disabled={!input} className={`${TEXT_INPUT_ACTION_CLASS_NAME} disabled:opacity-50`} title="Clear input">
-                <Trash2 className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Clear</span>
-              </button>
-            </div>
-          </div>
-          
-          {restoredSession && (
-            <div className="px-4 pt-3 sm:px-5">
-              <p className="text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
-                Restored your last workspace on this device so you can keep cleaning without starting over.
-              </p>
-            </div>
-          )}
-          
-          {batchMode && (
-            <div className="px-4 pt-3 sm:px-5">
-              <div className="rounded-lg border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
-                <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
-                <p className="mt-0.5 leading-relaxed text-teal-700">
-                  {batchLineCount} line{batchLineCount === 1 ? "" : "s"} detected. Each line is treated as a separate item.
-                </p>
+    <>
+      <TextWorkspaceShell
+        title={title}
+        description={description}
+        icon={Icon}
+        iconToneClassName={iconToneClassName}
+        currentStep={currentStep}
+        showShortcuts={showShortcuts}
+        onToggleShortcuts={() => setShowShortcuts((current) => !current)}
+        inputArea={
+          <div className={TEXT_INPUT_BOX_CLASS_NAME}>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-[#FDFDFD] px-4 py-2.5">
+              <div>
+                <h3 className="text-[13px] font-semibold text-[var(--lc-ink)]">{inputLabel}</h3>
               </div>
-            </div>
-          )}
-          
-          {inputControls && (
-            <div className="px-4 pt-3 sm:px-5">
-              {inputControls}
-            </div>
-          )}
-          
-          <textarea
-            id={`${trackName}-input`}
-            aria-label={inputLabel}
-            value={input}
-            onChange={(event) => setFreshInput(event.target.value)}
-            className={`w-full flex-1 resize-y bg-transparent p-4 sm:p-5 font-mono text-sm leading-relaxed text-[var(--lc-ink)] placeholder-[var(--lc-muted)] outline-none border-none focus:ring-0 min-h-[240px] ${inputMinHeightClassName}`}
-            placeholder={placeholder}
-          />
-          
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 bg-white px-4 py-3 sm:px-5 sm:py-3.5 mt-auto">
-            <div className="flex items-center gap-4 text-[13px] font-medium text-slate-500">
-              <div className="font-mono bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">
-                {input.length.toLocaleString()} / 50k
-              </div>
-              <div className="hidden sm:flex items-center gap-1.5 text-slate-500">
-                <Lock className="h-3.5 w-3.5" />
-                <span>Processed locally</span>
+              <div className="flex flex-wrap items-center gap-1">
+                <button type="button" onClick={handlePasteFromClipboard} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Paste from clipboard">
+                  <Clipboard className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Paste</span>
+                </button>
+                <button type="button" onClick={loadSampleInput} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Load sample">
+                  <FlaskConical className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Try sample</span>
+                </button>
+                <button type="button" onClick={useSelectedText} className={TEXT_INPUT_ACTION_CLASS_NAME} title="Import highlighted text from this page">
+                  <MousePointerClick className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Selected</span>
+                </button>
+                <button type="button" onClick={toggleBatchMode} className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold transition-colors ${batchMode ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]" : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"}`} title={batchMode ? "Disable batch mode" : "Enable batch mode"}>
+                  <span className="font-mono text-[10px] leading-none px-1 rounded bg-black/5 text-[var(--lc-muted)]">#</span>
+                  <span>Batch</span>
+                </button>
+                <div className="w-px h-4 bg-black/5 mx-1"></div>
+                <button type="button" onClick={() => setFreshInput("")} disabled={!input} className={`${TEXT_INPUT_ACTION_CLASS_NAME} disabled:opacity-50`} title="Clear input">
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Clear</span>
+                </button>
               </div>
             </div>
             
-            <button
-              type="button"
-              onClick={replaceWorkspaceFromCurrentInput}
-              disabled={processed.results.length === 0}
-              className="btn-primary inline-flex min-h-[2.5rem] rounded-xl px-6 text-sm font-semibold active:scale-[0.98]"
-            >
-              {primaryActionLabel}
-            </button>
-          </div>
-        </div>
-      }
-      summary={
-        <div className="flex w-full items-stretch divide-x-2 divide-transparent">
-          <div className="flex flex-1 items-stretch divide-x divide-[var(--lc-border)]">
-            <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.scanned}</p>
-              <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.scanned.toLocaleString()}</p>
-            </div>
-            <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-              <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.found}</p>
-              <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.found.toLocaleString()}</p>
-            </div>
-            {processed.stats.duplicatesRemoved > 0 && (
-              <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-                <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.duplicatesRemoved}</p>
-                <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.duplicatesRemoved.toLocaleString()}</p>
+            {restoredSession && (
+              <div className="px-4 pt-3 sm:px-5">
+                <p className="text-xs leading-5 text-emerald-700 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
+                  Restored your last workspace on this device.
+                </p>
               </div>
             )}
-            {processed.stats.invalidRemoved > 0 && (
-              <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-                <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.invalidRemoved}</p>
-                <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.invalidRemoved.toLocaleString()}</p>
-              </div>
-            )}
-            {processed.stats.blankRemoved !== undefined && processed.stats.blankRemoved > 0 && (
-              <div className="flex-1 bg-transparent p-5 sm:px-6 transition-colors hover:bg-[var(--lc-bg)] min-w-[140px]">
-                <p className="stat-kicker text-[var(--lc-hint)]">{statLabels.blankRemoved ?? "Blank rows removed"}</p>
-                <p className="mt-1.5 text-2xl font-bold text-[var(--lc-ink)] tabular-nums">{processed.stats.blankRemoved.toLocaleString()}</p>
-              </div>
-            )}
-          </div>
-          <div className="flex-1 bg-[var(--lc-accent-bg)] p-5 sm:px-6 transition-colors hover:bg-[var(--lc-accent-bg)]/80 relative overflow-hidden min-w-[160px] border-l-2 border-[var(--lc-border)]">
-            <p className="stat-kicker text-[var(--lc-accent)]">{statLabels.finalCount}</p>
-            <p className="mt-1.5 text-3xl font-bold text-[var(--lc-accent)] tabular-nums tracking-tight">{workspaceValues.length.toLocaleString()}</p>
-          </div>
-        </div>
-      }
-      toolbar={
-        <>
-          <div className="flex flex-1 items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setShowBulkEditor((current) => !current)}
-              disabled={!workspaceValues.length}
-              className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-xs font-semibold transition-colors ${showBulkEditor ? "btn-segment-active text-indigo-700" : "btn-ghost"} disabled:opacity-50`}
-            >
-              <PencilLine className="h-3.5 w-3.5" />
-              {showBulkEditor ? "Close editor" : "Edit all"}
-            </button>
-            <div className="w-px h-4 bg-slate-200 mx-1"></div>
-            <button
-              type="button"
-              onClick={toggleSelectAllPreviewed}
-              disabled={!workspaceValues.length}
-              className="btn-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
-            >
-              Select all
-            </button>
-            <button
-              type="button"
-              onClick={deleteSelectedRows}
-              disabled={!selectedCount}
-              className="btn-danger-ghost inline-flex min-h-10 rounded-md px-3 text-xs font-semibold disabled:opacity-50"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-              Delete
-            </button>
-            <div className="w-px h-4 bg-slate-200 mx-1"></div>
-            <div className="flex items-center gap-1 rounded-lg border border-[var(--lc-border)] bg-white p-1">
-              <button
-                type="button"
-                onClick={undoWorkspace}
-                disabled={!pastWorkspace.length}
-                className="btn-ghost inline-flex h-8 w-8 rounded-md disabled:opacity-50"
-                aria-label="Undo"
-                title="Undo"
-              >
-                <Undo2 className="h-3.5 w-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={redoWorkspace}
-                disabled={!futureWorkspace.length}
-                className="btn-ghost inline-flex h-8 w-8 rounded-md disabled:opacity-50"
-                aria-label="Redo"
-                title="Redo"
-              >
-                <Redo2 className="h-3.5 w-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowShortcuts(true)}
-                className="btn-ghost inline-flex h-8 w-8 rounded-md"
-                aria-label="Show keyboard shortcuts"
-                title="Keyboard shortcuts (?)"
-              >
-                <Keyboard className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 rounded-xl bg-[var(--lc-bg)] p-1 border border-[var(--lc-border)]">
-            <button
-              type="button"
-              onClick={() => setResultDensity("comfortable")}
-              className={`${resultDensity === "comfortable" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors`}
-            >
-              Comfortable
-            </button>
-            <button
-              type="button"
-              onClick={() => setResultDensity("compact")}
-              className={`${resultDensity === "compact" ? "bg-[var(--lc-surface)] text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-[var(--lc-surface)]/50"} rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors`}
-            >
-              Compact
-            </button>
-          </div>
-        </>
-      }
-      preview={
-        <>
-          {workspaceValues.length ? (
-            showBulkEditor ? (
-              <div className="p-4">
-                <textarea
-                  aria-label="Bulk editor"
-                  value={resultText}
-                  onChange={(event) => applyBulkEditor(event.target.value)}
-                  className="min-h-[24rem] w-full rounded-xl border border-slate-200 bg-slate-50 px-6 py-6 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500/20"
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col">
-                <div className="flex items-center gap-4 border-b border-[var(--lc-border)] bg-[var(--lc-surface)] px-6 py-3">
-                  <button
-                    type="button"
-                    onClick={toggleSelectAllPreviewed}
-                    className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] hover:border-[var(--lc-accent)] transition-colors"
-                  >
-                    {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-3 w-3 text-[var(--lc-accent)]" />}
-                  </button>
-                  <div className="flex-1 flex items-center gap-4 font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)]">
-                    <span className="w-16">STATUS</span>
-                    <span>{csvHeader.toUpperCase()}</span>
-                  </div>
-                  <span className="font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)]">ACTIONS</span>
-                </div>
-                <div className="divide-y divide-[var(--lc-border)] bg-[var(--lc-surface)]">
-                  {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
-                    <div
-                      key={item.id}
-                      className={`group relative flex items-center gap-4 px-6 py-3 transition-colors hover:bg-[var(--lc-bg)] ${item.selected ? "bg-[var(--lc-accent-bg)]" : ""}`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleWorkspaceSelection(item.id)}
-                        className={`flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border transition-all ${item.selected ? "border-[var(--lc-accent)] bg-[var(--lc-accent)] text-white" : "border-[var(--lc-border-mid)] bg-[var(--lc-surface)] group-hover:border-[var(--lc-accent)]"}`}
-                        aria-label={`Select row ${index + 1}`}
-                      >
-                        {item.selected && <Check className="h-3 w-3" />}
-                      </button>
-                      
-                      <div className="flex w-16 shrink-0 items-center gap-2">
-                        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-emerald-700 border border-emerald-200/50">
-                          Valid
-                        </span>
-                      </div>
-                      
-                      <div className="flex flex-1 items-center gap-3">
-                        <input
-                          aria-label="Edit item value"
-                          value={item.value}
-                          onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
-                          className={`w-full bg-transparent font-medium text-[var(--lc-ink)] outline-none focus:bg-[var(--lc-bg)] focus:ring-2 focus:ring-[var(--lc-accent)]/20 rounded px-2 transition-all ${resultDensity === "compact" ? "text-xs py-0.5" : "text-sm py-1"}`}
-                        />
-                      </div>
-
-                      <div className="flex shrink-0 items-center gap-1 pl-4 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
-                        <button
-                          type="button"
-                          onClick={() => toggleWorkspaceLock(item.id)}
-                          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-[var(--lc-muted)] transition hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)]"
-                          aria-label={item.locked ? "Unlock row" : "Lock row"}
-                        >
-                          {item.locked ? <Lock className="h-4 w-4 text-amber-500" /> : <LockOpen className="h-4 w-4" />}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => removeWorkspaceItem(item.id)}
-                          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-[var(--lc-muted)] transition hover:bg-red-50 hover:text-red-600"
-                          aria-label={`Remove row ${index + 1}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] px-6 py-3">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-[var(--lc-hint)] text-center">
-                    {workspace.length > WORKSPACE_PREVIEW_LIMIT
-                      ? `SHOWING ${WORKSPACE_PREVIEW_LIMIT} OUT OF ${workspace.length} ROWS`
-                      : `ALL ${workspace.length} RESULTS SHOWN`}
+            
+            {batchMode && (
+              <div className="px-4 pt-3 sm:px-5">
+                <div className="rounded-lg border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
+                  <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
+                  <p className="mt-0.5 leading-relaxed text-teal-700">
+                    {batchLineCount} line{batchLineCount === 1 ? "" : "s"} detected.
                   </p>
                 </div>
               </div>
-            )
-          ) : (
-            <div className="flex flex-col items-center justify-center p-12 text-center h-full min-h-[300px]">
-              <p className="text-sm leading-7 text-[var(--lc-muted)]">{emptyMessage}</p>
-            </div>
-          )}
-
-          {processed.invalidResults && processed.invalidResults.length > 0 && (
-            <div className="m-6 rounded-xl border border-amber-200 bg-amber-50 p-6">
-              <h4 className="text-sm font-semibold text-amber-900">Broken entries detected</h4>
-              <p className="mt-1 text-xs text-amber-700">These items have invalid syntax and were automatically excluded from your clean workspace.</p>
-              <div className="mt-4 flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-2">
-                {processed.invalidResults.map((item, i) => (
-                  <span key={i} className="inline-flex items-center rounded-lg border border-amber-200 bg-[var(--lc-surface)] px-2.5 py-1.5 font-mono text-[11px] font-medium text-amber-800 shadow-sm">
-                    {item}
-                  </span>
-                ))}
+            )}
+            
+            {inputControls && (
+              <div className="px-4 pt-3 sm:px-5">
+                {inputControls}
               </div>
-            </div>
-          )}
-
-        </>
-      }
-      exportControls={
-        workspaceValues.length > 0 && (
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 w-full">
-            <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--lc-green-bg)] text-emerald-600 shadow-sm border border-emerald-200">
-                <Check className="h-5 w-5" />
+            )}
+            
+            <textarea
+              id={`${trackName}-input`}
+              aria-label={inputLabel}
+              value={input}
+              onChange={(event) => setFreshInput(event.target.value)}
+              className={`w-full flex-1 resize-y bg-transparent p-4 sm:p-5 font-mono text-sm leading-relaxed text-[var(--lc-ink)] placeholder-[var(--lc-muted)] outline-none border-none focus:ring-0 min-h-[200px] ${inputMinHeightClassName}`}
+              placeholder={placeholder}
+            />
+            
+            <div className="flex flex-wrap items-center justify-between gap-4 border-t border-black/[0.06] bg-white px-4 py-3 mt-auto">
+              <div className="flex items-center gap-4 text-xs font-medium text-[var(--lc-muted)]">
+                <div className="font-mono bg-black/5 border border-black/5 px-2 py-0.5 rounded-md">
+                  {input.length.toLocaleString()} / 50k
+                </div>
+                <div className="hidden sm:flex items-center gap-1 text-[var(--lc-muted)]">
+                  <Lock className="h-3.5 w-3.5" />
+                  <span>Processed locally</span>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-[var(--lc-ink)]">Extraction Complete</h3>
-                <p className="text-sm text-[var(--lc-muted)] mt-0.5">{workspaceValues.length.toLocaleString()} items ready to export.</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+              
               <button
                 type="button"
-                onClick={() => void handleCopy()}
-                className="btn-secondary h-11 rounded-xl px-4 text-sm font-semibold"
+                onClick={replaceWorkspaceFromCurrentInput}
+                disabled={processed.results.length === 0}
+                className="lc-button-primary py-2 px-5"
               >
-                {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Clipboard className="h-4 w-4 text-[var(--lc-muted)]" />} {copied ? "Copied" : copyLabel}
-              </button>
-              <button
-                type="button"
-                onClick={handleDownloadTxt}
-                className="btn-secondary h-11 rounded-xl px-4 text-sm font-semibold"
-              >
-                <FileText className="h-4 w-4 text-[var(--lc-muted)]" /> TXT
-              </button>
-              <button
-                type="button"
-                onClick={handleDownloadCsv}
-                className="btn-primary h-11 rounded-xl px-8 text-sm font-semibold flex-1 sm:flex-none"
-              >
-                <Download className="h-4 w-4" /> CSV
+                {primaryActionLabel}
               </button>
             </div>
           </div>
-        )
-      }
-    />
-      
+        }
+        summary={
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 py-2 text-xs text-[var(--lc-muted)] font-medium">
+            <span>{statLabels.scanned}: <strong>{processed.stats.scanned.toLocaleString()}</strong></span>
+            <span className="text-black/10">·</span>
+            <span>{statLabels.found}: <strong>{processed.stats.found.toLocaleString()}</strong></span>
+            {processed.stats.duplicatesRemoved > 0 && (
+              <>
+                <span className="text-black/10">·</span>
+                <span>{statLabels.duplicatesRemoved}: <strong>{processed.stats.duplicatesRemoved.toLocaleString()}</strong></span>
+              </>
+            )}
+            {processed.stats.invalidRemoved > 0 && (
+              <>
+                <span className="text-black/10">·</span>
+                <span>{statLabels.invalidRemoved}: <strong>{processed.stats.invalidRemoved.toLocaleString()}</strong></span>
+              </>
+            )}
+            <span className="text-black/10">·</span>
+            <span className="text-[var(--lc-accent)] font-semibold">{statLabels.finalCount}: <strong>{workspaceValues.length.toLocaleString()}</strong></span>
+          </div>
+        }
+        toolbar={
+          <>
+            <div className="flex flex-1 flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setShowBulkEditor((current) => !current)}
+                disabled={!workspaceValues.length}
+                className={`inline-flex min-h-8 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold transition-colors ${showBulkEditor ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]" : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"} disabled:opacity-50`}
+              >
+                <PencilLine className="h-3.5 w-3.5" />
+                {showBulkEditor ? "Close editor" : "Edit all"}
+              </button>
+              <div className="w-px h-4 bg-black/5 mx-1"></div>
+              <button
+                type="button"
+                onClick={toggleSelectAllPreviewed}
+                disabled={!workspaceValues.length}
+                className="inline-flex min-h-8 items-center justify-center rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
+              >
+                Select all
+              </button>
+              <button
+                type="button"
+                onClick={deleteSelectedRows}
+                disabled={!selectedCount}
+                className="inline-flex min-h-8 items-center justify-center rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-danger)] hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Delete
+              </button>
+              <div className="w-px h-4 bg-black/5 mx-1"></div>
+              <div className="flex items-center gap-1 rounded-lg border border-[var(--lc-border)] bg-white p-0.5">
+                <button
+                  type="button"
+                  onClick={undoWorkspace}
+                  disabled={!pastWorkspace.length}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
+                  aria-label="Undo"
+                  title="Undo"
+                >
+                  <Undo2 className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={redoWorkspace}
+                  disabled={!futureWorkspace.length}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
+                  aria-label="Redo"
+                  title="Redo"
+                >
+                  <Redo2 className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowShortcuts(true)}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors"
+                  aria-label="Show keyboard shortcuts"
+                  title="Keyboard shortcuts (?)"
+                >
+                  <Keyboard className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 rounded-lg bg-[var(--lc-bg)] p-0.5 border border-[var(--lc-border)]">
+              <button
+                type="button"
+                onClick={() => setResultDensity("comfortable")}
+                className={`${resultDensity === "comfortable" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} rounded-md px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide transition-colors`}
+              >
+                Comfortable
+              </button>
+              <button
+                type="button"
+                onClick={() => setResultDensity("compact")}
+                className={`${resultDensity === "compact" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} rounded-md px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide transition-colors`}
+              >
+                Compact
+              </button>
+            </div>
+          </>
+        }
+        preview={
+          <>
+            {workspaceValues.length ? (
+              showBulkEditor ? (
+                <div className="p-4">
+                  <textarea
+                    aria-label="Bulk editor"
+                    value={resultText}
+                    onChange={(event) => applyBulkEditor(event.target.value)}
+                    className="min-h-[200px] w-full rounded-xl border border-[var(--lc-border)] bg-[#FDFDFD] px-4 py-3 font-mono text-sm leading-relaxed text-[var(--lc-ink)] outline-none focus:bg-white focus:border-[var(--lc-accent)] focus:ring-1 focus:ring-[var(--lc-accent)] transition-colors"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-4 border-b border-[var(--lc-border)] bg-[#FDFDFD] px-6 py-2">
+                    <button
+                      type="button"
+                      onClick={toggleSelectAllPreviewed}
+                      className="flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded border border-[var(--lc-border-mid)] bg-white hover:border-[var(--lc-accent)] transition-colors"
+                    >
+                      {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-2.5 w-2.5 text-[var(--lc-accent)]" />}
+                    </button>
+                    <div className="flex-1 flex items-center gap-4 font-mono text-[9px] uppercase tracking-wider text-[var(--lc-hint)]">
+                      <span className="w-16">STATUS</span>
+                      <span>{csvHeader.toUpperCase()}</span>
+                    </div>
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-[var(--lc-hint)]">ACTIONS</span>
+                  </div>
+                  <div className="divide-y divide-[var(--lc-border)] bg-white">
+                    {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
+                      <div
+                        key={item.id}
+                        className={`group relative flex items-center gap-4 px-6 py-2 transition-colors hover:bg-black/[0.005] ${item.selected ? "bg-[var(--lc-accent-bg)]" : ""}`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => toggleWorkspaceSelection(item.id)}
+                          className={`flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded border transition-all ${item.selected ? "border-[var(--lc-accent)] bg-[var(--lc-accent)] text-white" : "border-[var(--lc-border-mid)] bg-white group-hover:border-[var(--lc-accent)]"}`}
+                          aria-label={`Select row ${index + 1}`}
+                        >
+                          {item.selected && <Check className="h-2.5 w-2.5" />}
+                        </button>
+                        
+                        <div className="flex w-16 shrink-0 items-center">
+                          <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-100">
+                            Valid
+                          </span>
+                        </div>
+                        
+                        <div className="flex flex-1 items-center">
+                          <input
+                            aria-label="Edit item value"
+                            value={item.value}
+                            onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
+                            className={`w-full bg-transparent font-mono text-[13px] text-[var(--lc-ink)] outline-none focus:bg-black/[0.02] focus:ring-1 focus:ring-[var(--lc-accent)]/20 rounded px-1.5 transition-all ${resultDensity === "compact" ? "py-0.5" : "py-1"}`}
+                          />
+                        </div>
+ 
+                        <div className="flex shrink-0 items-center gap-0.5 pl-4 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+                          <button
+                            type="button"
+                            onClick={() => toggleWorkspaceLock(item.id)}
+                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
+                            aria-label={item.locked ? "Unlock row" : "Lock row"}
+                          >
+                            {item.locked ? <Lock className="h-3.5 w-3.5 text-amber-500" /> : <LockOpen className="h-3.5 w-3.5" />}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeWorkspaceItem(item.id)}
+                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded text-[var(--lc-muted)] hover:bg-red-50 hover:text-red-600"
+                            aria-label={`Remove row ${index + 1}`}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t border-[var(--lc-border)] bg-[#FDFDFD] px-6 py-2">
+                    <p className="font-mono text-[9px] uppercase tracking-wider text-[var(--lc-hint)] text-center">
+                      {workspace.length > WORKSPACE_PREVIEW_LIMIT
+                        ? `SHOWING ${WORKSPACE_PREVIEW_LIMIT} OUT OF ${workspace.length} ROWS`
+                        : `ALL ${workspace.length} RESULTS SHOWN`}
+                    </p>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="flex flex-col items-center justify-center p-12 text-center h-full min-h-[200px]">
+                <p className="text-xs text-[var(--lc-muted)]">{emptyMessage}</p>
+              </div>
+            )}
+ 
+            {processed.invalidResults && processed.invalidResults.length > 0 && (
+              <div className="m-4 rounded-2xl border border-amber-100 bg-amber-50/50 p-4">
+                <h4 className="text-xs font-semibold text-amber-950">Broken entries detected</h4>
+                <p className="mt-0.5 text-[11px] text-amber-700">These items have invalid syntax and were automatically excluded.</p>
+                <div className="mt-3 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-2">
+                  {processed.invalidResults.map((item, i) => (
+                    <span key={i} className="inline-flex items-center rounded border border-amber-200 bg-white px-2 py-0.5 font-mono text-[10px] text-amber-800">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        }
+        exportControls={
+          workspaceValues.length > 0 && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--lc-green-bg)] text-emerald-600 border border-emerald-100">
+                  <Check className="h-4.5 w-4.5" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-bold text-[var(--lc-ink)]">Extraction Complete</h3>
+                  <p className="text-xs text-[var(--lc-muted)] mt-0.5">{workspaceValues.length.toLocaleString()} items ready to export.</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => void handleCopy()}
+                  className="lc-button-secondary py-1.5 px-4 text-xs font-semibold"
+                >
+                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Clipboard className="h-3.5 w-3.5 text-[var(--lc-muted)]" />} {copied ? "Copied" : copyLabel}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadTxt}
+                  className="lc-button-secondary py-1.5 px-4 text-xs font-semibold"
+                >
+                  <FileText className="h-3.5 w-3.5 text-[var(--lc-muted)]" /> TXT
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadCsv}
+                  className="lc-button-primary py-1.5 px-6 text-xs font-semibold"
+                >
+                  <Download className="h-3.5 w-3.5" /> CSV
+                </button>
+              </div>
+            </div>
+          )
+        }
+      />
     </>
   );
 }
 
 function StatCard({
- label,
- value,
- accent = false,
+  label,
+  value,
+  accent = false,
 }: {
- label: string;
- value: number;
- accent?: boolean;
+  label: string;
+  value: number;
+  accent?: boolean;
 }) {
- return (
- <div
- className={`rounded-xl border p-4 transition-all hover:shadow-xs ${
- accent
- ? "border-[color:rgba(15,118,110,0.1)] bg-[color:rgba(15,118,110,0.04)]"
- : "border-[color:rgba(16,37,52,0.05)] bg-white"
- }`}
- >
- <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)]">{label}</div>
- <div className="mt-2 text-2xl font-bold tabular-nums text-[color:var(--foreground)]">
- {value.toLocaleString()}
- </div>
- </div>
- );
+  return (
+    <div
+      className={`rounded-xl border p-4 transition-all hover:shadow-xs ${
+        accent
+          ? "border-[color:rgba(15,118,110,0.1)] bg-[color:rgba(15,118,110,0.04)]"
+          : "border-[color:rgba(16,37,52,0.05)] bg-white"
+      }`}
+    >
+      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)]">{label}</div>
+      <div className="mt-2 text-2xl font-bold tabular-nums text-[color:var(--foreground)]">
+        {value.toLocaleString()}
+      </div>
+    </div>
+  );
 }
 
 function createWorkspaceFromValues(values: string[], source: string): WorkspaceItem[] {

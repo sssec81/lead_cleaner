@@ -2,44 +2,48 @@
 @import "tailwindcss";
 
 :root {
-  --lc-bg: #f8f8f7;
-  --lc-surface: #ffffff;
-  --lc-border: #e4e4e1;
-  --lc-border-mid: #cececa;
-  --lc-ink: #1a1a18;
-  --lc-muted: #6b6b67;
-  --lc-hint: #a3a39e;
-  --lc-accent: #1d4ed8;
-  --lc-accent-bg: #eff4ff;
-  --lc-green: #16a34a;
-  --lc-green-bg: #f0fdf4;
-  --lc-dark-bg: #111110;
-  --lc-dark-surface: #1c1c1a;
+  --lc-bg: #F5F5F7;
+  --lc-surface: #FFFFFF;
+  --lc-border: rgba(0, 0, 0, 0.06);
+  --lc-border-mid: rgba(0, 0, 0, 0.12);
+  --lc-ink: #1D1D1F;
+  --lc-muted: #6E6E73;
+  --lc-hint: #86868B;
+  --lc-accent: #0071E3;
+  --lc-accent-bg: rgba(0, 113, 227, 0.08);
+  --lc-green: #248A3D;
+  --lc-green-bg: rgba(36, 138, 61, 0.08);
+  --lc-warning: #B76E00;
+  --lc-warning-bg: rgba(183, 110, 0, 0.08);
+  --lc-danger: #D70015;
+  --lc-danger-bg: rgba(215, 0, 21, 0.08);
+  --lc-dark-bg: #1D1D1F;
+  --lc-dark-surface: #2D2D2F;
   --background: var(--lc-bg);
-  --background-strong: #f2f2f0;
+  --background-strong: #E8E8ED;
   --foreground: var(--lc-ink);
   --surface: var(--lc-surface);
-  --surface-strong: #ffffff;
+  --surface-strong: #FFFFFF;
   --line: var(--lc-border);
   --line-strong: var(--lc-border-mid);
   --brand: var(--lc-accent);
-  --brand-strong: #1e40af;
+  --brand-strong: #0056B3;
   --accent: var(--lc-accent);
   --accent-soft: var(--lc-accent-bg);
   --muted: var(--lc-muted);
   --muted-strong: var(--lc-hint);
-  --shadow: 0 10px 30px rgba(17, 17, 16, 0.06), 0 2px 8px rgba(17, 17, 16, 0.04);
-  --shadow-strong: 0 18px 44px rgba(17, 17, 16, 0.08), 0 4px 14px rgba(17, 17, 16, 0.05);
-  --shadow-elevated: 0 22px 54px rgba(17, 17, 16, 0.1), 0 6px 18px rgba(17, 17, 16, 0.06);
-  --panel: #ffffff;
-  --panel-strong: #ffffff;
-  --panel-dark: #141412;
-  --font-display: "DM Sans", "Inter", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --radius-card: 0.75rem;
-  --radius-panel: 0.75rem;
-  --radius-workspace: 1.25rem;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 24px 80px rgba(0, 0, 0, 0.08);
+  --panel: #FFFFFF;
+  --panel-strong: #FFFFFF;
+  --panel-dark: #1D1D1F;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, monospace;
+  --radius-card: 16px;
+  --radius-panel: 20px;
+  --radius-workspace: 28px;
 }
 
 * {
@@ -537,3 +541,139 @@ a[aria-disabled="true"] {
   min-height: 44px;
   min-width: 44px;
 }
+
+/* Reusable LeadCleanr Apple-inspired classes */
+.lc-workspace-shell {
+  border-radius: var(--radius-workspace);
+  background-color: var(--lc-surface);
+  border: 1px solid var(--lc-border);
+  box-shadow: var(--shadow-elevated);
+  overflow: hidden;
+}
+
+.lc-surface {
+  background-color: var(--lc-surface);
+  color: var(--lc-ink);
+}
+
+.lc-status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.875rem 1.25rem;
+  background-color: var(--lc-surface);
+  border-bottom: 1px solid var(--lc-border);
+  font-size: 13px;
+  color: var(--lc-muted);
+}
+
+.lc-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 14px;
+  color: #FFFFFF !important;
+  background-color: var(--lc-accent);
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  transition: background-color 150ms ease, opacity 150ms ease;
+  cursor: pointer;
+  border: none;
+}
+
+.lc-button-primary:hover {
+  background-color: #0066CC;
+}
+
+.lc-button-primary:active {
+  opacity: 0.85;
+}
+
+.lc-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--lc-ink);
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  transition: background-color 150ms ease, border-color 150ms ease;
+  cursor: pointer;
+}
+
+.lc-button-secondary:hover {
+  background-color: var(--lc-bg);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.lc-button-secondary:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.lc-input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: var(--lc-surface);
+  color: var(--lc-ink);
+  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.lc-input:focus {
+  outline: none;
+  border-color: var(--lc-accent);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+}
+
+.lc-select {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: var(--lc-surface);
+  color: var(--lc-ink);
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236E6E73' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  transition: border-color 150ms ease;
+}
+
+.lc-select:focus {
+  outline: none;
+  border-color: var(--lc-accent);
+}
+
+.lc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--lc-muted);
+}
+
+.lc-chip-accent {
+  background-color: var(--lc-accent-bg);
+  color: var(--lc-accent);
+}
+
+.lc-chip-success {
+  background-color: var(--lc-green-bg);
+  color: var(--lc-green);
+}
+

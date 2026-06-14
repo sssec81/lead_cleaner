@@ -90,87 +90,84 @@ function getFooterCta(pathname: string) {
 export function SiteFooter() {
   const pathname = usePathname();
   const cta = getFooterCta(pathname);
-
+ 
   return (
-    <footer className="mt-20 bg-[var(--lc-dark-bg)] text-white">
+    <footer className="mt-20 border-t border-[var(--lc-border)] bg-[#F5F5F7] text-[var(--lc-ink)]">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-blue-300" />
-          <p className="text-sm font-medium">LeadCleanr</p>
+          <Sparkles className="h-4.5 w-4.5 text-[var(--lc-accent)]" />
+          <p className="text-[15px] font-semibold tracking-tight">LeadCleanr</p>
         </div>
-
+ 
         <div className="mt-8 max-w-3xl">
-          <h2 className="font-display text-4xl font-semibold leading-tight tracking-[-0.03em]">
-            Your next CRM import
-            <br />
-            starts here.
+          <h2 className="font-sans text-[28px] font-bold leading-tight tracking-tight text-[var(--lc-ink)] sm:text-[34px]">
+            Your next CRM import starts here.
           </h2>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
             <Link
               href={cta.href}
-              className="btn-primary min-h-12 rounded-lg px-5 py-2.5 text-sm font-medium hover:opacity-90"
+              className="lc-button-primary"
             >
               {cta.label}
-              <ArrowRight className="h-4 w-4" />
             </Link>
-            <p className="mt-3 text-sm text-[var(--lc-hint)]">{cta.intro}</p>
+            <p className="text-[13px] text-[var(--lc-muted)]">{cta.intro}</p>
           </div>
         </div>
-
-        <div className="mt-12 border-t border-[#2A2A28] pt-6">
-          <div className="grid gap-6 sm:grid-cols-3">
+ 
+        <div className="mt-12 border-t border-black/5 pt-8">
+          <div className="grid gap-8 sm:grid-cols-3">
             <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/6 text-blue-300">
-                <Shield className="h-4 w-4" />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-black/[0.03] text-[var(--lc-accent)]">
+                <Shield className="h-4.5 w-4.5" />
               </div>
               <div>
-                <p className="text-sm font-semibold">Browser-only processing</p>
-                <p className="mt-1 text-xs text-[var(--lc-hint)]">
+                <p className="text-sm font-semibold text-[var(--lc-ink)]">Browser-only processing</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-[var(--lc-muted)]">
                   CSV files are parsed and cleaned locally in your browser.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/6 text-emerald-300">
-                <Lock className="h-4 w-4" />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-black/[0.03] text-emerald-600">
+                <Lock className="h-4.5 w-4.5" />
               </div>
               <div>
-                <p className="text-sm font-semibold">No account needed</p>
-                <p className="mt-1 text-xs text-[var(--lc-hint)]">
+                <p className="text-sm font-semibold text-[var(--lc-ink)]">No account needed</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-[var(--lc-muted)]">
                   Start cleaning immediately. No account, no credit card.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/6 text-blue-300">
-                <ArrowRight className="h-4 w-4" />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-black/[0.03] text-[var(--lc-accent)]">
+                <ArrowRight className="h-4.5 w-4.5" />
               </div>
               <div>
-                <p className="text-sm font-semibold">Export to any CRM</p>
-                <p className="mt-1 text-xs text-[var(--lc-hint)]">
+                <p className="text-sm font-semibold text-[var(--lc-ink)]">Export to any CRM</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-[var(--lc-muted)]">
                   Clean CSV works with HubSpot, Apollo, Clay, and more.
                 </p>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="mt-10 flex flex-col gap-6 border-t border-white/10 pt-6 md:flex-row md:items-center md:justify-between">
+ 
+        <div className="mt-12 flex flex-col gap-6 border-t border-black/5 pt-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-[var(--lc-hint)] transition-colors hover:text-white"
+                className="text-[13px] text-[var(--lc-muted)] transition-colors hover:text-[var(--lc-ink)]"
               >
                 {link.label}
               </Link>
             ))}
           </div>
-
+ 
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 text-sm text-[var(--lc-hint)] transition-colors hover:text-white"
+            className="inline-flex items-center gap-2 text-[13px] text-[var(--lc-muted)] transition-colors hover:text-[var(--lc-ink)]"
           >
             <Mail className="h-4 w-4" />
             Contact support

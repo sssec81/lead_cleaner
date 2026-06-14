@@ -37,59 +37,58 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-4 z-50 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between rounded-[1.25rem] border border-[var(--lc-border)] bg-white/85 px-4 shadow-sm backdrop-blur-md sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5">
-          <Sparkles className="h-5 w-5 text-[var(--lc-accent)]" />
-          <span className="text-sm font-medium text-[var(--lc-ink)]">LeadCleanr</span>
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border)] bg-white/72 backdrop-blur-md transition-all duration-300">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2">
+          <Sparkles className="h-4.5 w-4.5 text-[var(--lc-accent)]" />
+          <span className="text-[15px] font-semibold tracking-tight text-[var(--lc-ink)]">LeadCleanr</span>
         </Link>
-
+ 
         <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`rounded-full px-3 py-2 text-sm font-medium transition-colors ${
+              className={`px-1 py-1 text-[14px] font-medium transition-colors ${
                 isActive(item.href)
-                  ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]"
-                  : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
+                  ? "text-[var(--lc-accent)]"
+                  : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"
               }`}
             >
               {item.label}
             </Link>
           ))}
         </nav>
-
-        <div className="hidden items-center gap-3 lg:flex">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--lc-accent-bg)] px-3 py-1 font-mono text-xs text-[var(--lc-accent)]">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            Browser-only
+ 
+        <div className="hidden items-center gap-4 lg:flex">
+          <div className="inline-flex items-center gap-1 rounded-full bg-black/[0.03] border border-black/5 px-2.5 py-0.5 font-sans text-[11px] text-[var(--lc-muted)]">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+            Processed locally
           </div>
           <Link
             href={headerCta.href}
-            className="btn-primary min-h-10 px-4 py-2 text-sm"
+            className="lc-button-primary"
           >
             {headerCta.label}
-            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-
+ 
         <button
           type="button"
           onClick={() => setMobileOpen((current) => !current)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[var(--lc-border)] bg-white text-[var(--lc-ink)] lg:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-ink)] lg:hidden"
           aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
           aria-expanded={mobileOpen}
         >
           {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
       </div>
-
+ 
       {mobileOpen ? (
-        <div className="mx-auto mt-2 max-w-7xl rounded-[1.25rem] border border-[var(--lc-border)] bg-white/95 shadow-sm backdrop-blur-md lg:hidden">
+        <div className="border-t border-[var(--lc-border)] bg-white/95 backdrop-blur-md lg:hidden">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
-            <nav aria-label="Mobile primary" className="flex flex-col gap-3">
+            <nav aria-label="Mobile primary" className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -105,19 +104,18 @@ export function SiteHeader() {
                 </Link>
               ))}
             </nav>
-
+ 
             <div className="mt-4 flex flex-col gap-3">
-              <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--lc-accent-bg)] px-3 py-1 font-mono text-xs text-[var(--lc-accent)]">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                Browser-only
+              <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-black/[0.03] border border-black/5 px-2.5 py-0.5 font-sans text-[11px] text-[var(--lc-muted)]">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                Processed locally
               </div>
               <Link
                 href={headerCta.href}
                 onClick={() => setMobileOpen(false)}
-                className="btn-primary w-full min-h-10 px-4 py-2 text-sm"
+                className="lc-button-primary w-full text-center"
               >
                 {headerCta.label}
-                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
