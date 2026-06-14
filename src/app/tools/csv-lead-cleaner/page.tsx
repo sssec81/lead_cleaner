@@ -79,6 +79,54 @@ export default function CsvLeadCleanerPage() {
             </Suspense>
           </div>
 
+          <section className="rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6 sm:p-8">
+            <div className="max-w-3xl">
+              <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">
+                What the CSV Lead Cleaner catches before import
+              </h2>
+              <p className="mt-4 text-[15px] leading-7 text-[var(--lc-muted)]">
+                This is the broader cleanup workspace for people who need more
+                than one narrow fix. Instead of hopping between tools before a
+                CRM import, you can review the most common contact-list
+                problems in one place and export only when the sheet looks
+                ready.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {[
+                {
+                  title: "Duplicate rows",
+                  text: "Useful when merged exports or teammate handoffs repeat the same contact more than once.",
+                },
+                {
+                  title: "Invalid email formatting",
+                  text: "Flags broken addresses before they create bad records or failed sends in your outbound stack.",
+                },
+                {
+                  title: "Blank rows and thin records",
+                  text: "Removes structural noise so the spreadsheet is easier to review and safer to import.",
+                },
+                {
+                  title: "Personal and role inboxes",
+                  text: "Filters addresses like Gmail, Yahoo, info@, or support@ when you want a more business-focused list.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-5"
+                >
+                  <h3 className="text-base font-semibold text-[var(--lc-ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           <ToolSeoSections
             howItWorksTitle="Clean lead CSVs before importing to HubSpot, Salesforce, or Apollo"
             howItWorksIntro="This workflow is built for the last cleanup pass before CRM import. Upload the spreadsheet, choose the cleanup rules that matter, review what changed, and export only when the rows look right. LeadCleanr keeps the process short while still letting you inspect duplicates, invalid emails, blank rows, and filtered personal inboxes before the file leaves your browser."
