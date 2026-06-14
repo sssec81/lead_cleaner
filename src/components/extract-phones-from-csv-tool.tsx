@@ -293,6 +293,9 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       }}
       steps={["Upload CSV", "Choose column", "Review results", "Export"]}
       currentStep={currentStep}
+      rulesTitle="Extraction Options"
+      reviewTitle="Review Results"
+      exportTitle="Export Phones"
       error={error}
       warning={warning}
       emptyStateTitle="Extract Phones from CSV"

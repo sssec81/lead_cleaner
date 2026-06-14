@@ -15,9 +15,9 @@ const navItems = [
 const TOOL_NEXT_STEP: Array<{ match: string; href: string; label: string }> = [
   { match: "/tools/validate-email-list", href: "/tools/remove-duplicate-emails", label: "Deduplicate Emails" },
   { match: "/tools/extract-emails-from-text", href: "/tools/clean-email-list", label: "Clean Email List" },
-  { match: "/tools/extract-emails-from-csv", href: "/tools/remove-duplicate-emails", label: "Deduplicate Emails" },
+  { match: "/tools/extract-emails-from-csv", href: "/tools/validate-email-list", label: "Validate List" },
   { match: "/tools/extract-phone-numbers-from-text", href: "/tools/remove-duplicate-phone-numbers", label: "Deduplicate Numbers" },
-  { match: "/tools/extract-phone-numbers-from-csv", href: "/tools/remove-duplicate-phone-numbers", label: "Deduplicate Numbers" },
+  { match: "/tools/extract-phone-numbers-from-csv", href: "/tools/csv-lead-cleaner", label: "Clean CSV Free" },
   { match: "/tools/remove-duplicate-emails", href: "/tools/validate-email-list", label: "Validate List" },
   { match: "/tools/remove-duplicate-phone-numbers", href: "/tools/csv-lead-cleaner", label: "Clean CSV Free" },
   { match: "/tools/remove-duplicate-urls", href: "/tools/extract-urls-from-text", label: "Extract More URLs" },

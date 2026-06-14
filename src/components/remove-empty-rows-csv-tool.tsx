@@ -157,6 +157,9 @@ export function RemoveEmptyRowsCsvTool() {
       }}
       steps={["Upload CSV", "Confirm rule", "Review rows", "Export"]}
       currentStep={currentStep}
+      rulesTitle="Row Rule"
+      reviewTitle="Review Rows"
+      exportTitle="Export Clean CSV"
       error={error}
       warning=""
       emptyStateTitle="Remove Empty Rows"

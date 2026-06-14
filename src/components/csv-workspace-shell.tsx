@@ -31,6 +31,9 @@ export interface CsvWorkspaceShellProps {
   exportControls?: React.ReactNode;
   steps?: string[];
   currentStep?: number;
+  rulesTitle?: string;
+  reviewTitle?: string;
+  exportTitle?: string;
 }
 
 export function CsvWorkspaceShell({
@@ -55,6 +58,9 @@ export function CsvWorkspaceShell({
   exportControls,
   steps = ["Upload CSV", "Choose cleanup rules", "Review rows", "Export"],
   currentStep = 1,
+  rulesTitle = "Cleaning Rules",
+  reviewTitle = "Review",
+  exportTitle = "Export",
 }: CsvWorkspaceShellProps) {
   const normalizedCurrentStep = Math.min(
     Math.max(currentStep, 1),
@@ -201,7 +207,7 @@ export function CsvWorkspaceShell({
             {stepper}
             
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] mb-2">Cleaning Rules</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] mb-2">{rulesTitle}</h3>
               {toolbar}
             </div>
           </div>
@@ -229,7 +235,7 @@ export function CsvWorkspaceShell({
                 {/* Table Header */}
                 <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex items-center justify-between">
                   <div>
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)]">Review</h3>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)]">{reviewTitle}</h3>
                   </div>
                 </div>
 
@@ -245,7 +251,7 @@ export function CsvWorkspaceShell({
           {exportControls && (
             <div className="border-t border-[var(--lc-border)] p-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#FDFDFD] rounded-b-xl">
               <div className="flex items-center gap-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] hidden sm:block">Export</h3>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)] hidden sm:block">{exportTitle}</h3>
               </div>
               <div className="flex flex-col sm:flex-row items-center justify-end gap-3 w-full sm:w-auto">
                 {exportControls}
