@@ -41,10 +41,13 @@ import {
  parseCsvText,
 } from "@/lib/csv";
 import {
- cleanCsvRows,
- type DuplicateMode,
- type EmailFilterMode,
- type PreviewRow,
+  cleanCsvRows,
+  type CleanedResult,
+  type CleaningSummary,
+  type DuplicateMode,
+  type EmailFilterMode,
+  type PreviewRow,
+  type RemovalReason,
 } from "@/lib/csv-cleaner";
 import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
@@ -196,16 +199,17 @@ export function CsvLeadCleanerTool() {
     }, 0);
   }, []);
 
-  const cleaned = useMemo(
+  const cleaned: CleanedResult = useMemo(
     () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode, emailFilter),
     [duplicateMode, headers, rows, selectedColumn, emailFilter],
   );
+  const summary: CleaningSummary = cleaned.summary;
 
   const previewRows = cleaned.rows.slice(0, PREVIEW_LIMIT);
   const isParsing = status === "parsing";
   const showEmailEnrichment =
     selectedColumn &&
-    (selectedColumn.toLowerCase().includes("email") || cleaned.summary.generatedDomains > 0);
+    (selectedColumn.toLowerCase().includes("email") || summary.generatedDomains > 0);
 
   useEffect(() => {
     if (typeof window === "undefined" || !selectedColumn) {
@@ -650,13 +654,13 @@ export function CsvLeadCleanerTool() {
 
           {/* Results Summary Strip */}
           <div className="lc-status-strip" role="status" aria-label="Cleanup results summary">
-            <span><strong>{cleaned.summary.totalRows.toLocaleString()}</strong> total rows</span>
+            <span><strong>{summary.totalRows.toLocaleString()}</strong> total rows</span>
             <span className="text-black/10" aria-hidden="true">·</span>
-            <span><strong>{cleaned.summary.duplicatesRemoved.toLocaleString()}</strong> duplicates removed</span>
+            <span><strong>{summary.duplicatesRemoved.toLocaleString()}</strong> duplicates removed</span>
             <span className="text-black/10" aria-hidden="true">·</span>
-            <span><strong>{(cleaned.summary.invalidRowsRemoved + cleaned.summary.emptyRowsRemoved + cleaned.summary.filteredRowsRemoved).toLocaleString()}</strong> invalid/blank removed</span>
+            <span><strong>{(summary.invalidRowsRemoved + summary.emptyRowsRemoved + summary.filteredRowsRemoved).toLocaleString()}</strong> invalid/blank removed</span>
             <span className="text-black/10" aria-hidden="true">·</span>
-            <span className="text-[var(--lc-accent)] font-semibold"><strong>{cleaned.summary.cleanRowsReady.toLocaleString()}</strong> ready</span>
+            <span className="text-[var(--lc-accent)] font-semibold"><strong>{summary.cleanRowsReady.toLocaleString()}</strong> ready</span>
           </div>
 
           {/* Warning Banner */}
@@ -1012,8 +1016,8 @@ function ExportActions({
   fileName,
 }: {
   cleanedRows: PreviewRow[];
-  removedRows: PreviewRow[];
-  invalidRows: PreviewRow[];
+  removedRows: Array<PreviewRow & { leadcleanr_reason: RemovalReason }>;
+  invalidRows: Array<PreviewRow & { leadcleanr_reason: "invalid" }>;
   duplicateMode: DuplicateMode;
   fileName: string;
 }) {
