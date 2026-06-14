@@ -56,3 +56,15 @@ test("buildCsvTextFromRecords keeps leading plus for phone-like columns", () => 
   assert.ok(!csv.includes("'+14155550101"));
   assert.ok(!csv.includes("'+442079460958"));
 });
+
+test("buildCsvTextFromRecords quotes comma-containing cells while keeping formula-safe guards", () => {
+  const csv = buildCsvTextFromRecords([
+    {
+      name: "Jane Doe",
+      note: "=SUM(A1:A2), with comma",
+    },
+  ]);
+
+  assert.ok(csv.includes('"\'=SUM(A1:A2), with comma"'));
+  assert.ok(csv.includes("Jane Doe"));
+});

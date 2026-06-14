@@ -1,4 +1,4 @@
-# LeadCleanr (v1.1.1)
+# LeadCleanr (v1.1.2)
 
 **Clean messy lead lists instantly.**
 
@@ -14,7 +14,7 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - Agencies & Freelancers
 - Virtual Assistants & Data Entry Workers
 
-## ✨ Core Features (v1.1.1)
+## ✨ Core Features (v1.1.2)
 
 ### Text Input Tools
 - **Extract Emails**: Detect and return email addresses from pasted text.
@@ -112,13 +112,14 @@ leadcleanr/
 
 ## 📝 Release Notes
 
-### v1.1.1
+### v1.1.2
 - Waitlist signups now fail honestly if persistence fails instead of returning a false success response.
 - CSV lead cleaner now reports rows removed by email-type filters and fully resets cleanup settings.
 - Merge CSV column deduplication now normalizes emails, phones, URLs, and domains before comparing values.
 - CSV extractors now pull embedded emails and phone numbers out of messy cell text instead of requiring the entire cell to be a single clean value.
 - Phone values keep their leading `+` in both single-column exports and record-based CSV downloads.
 - Text tools now use a simpler V1 replace-workspace flow without the old append action.
+- Free browser-side CSV processing is capped at 5 MB per file in the current release.
 
 ## ⚠️ Acceptable Use Policy
 **LeadCleanr is for cleaning data you own or have permission to process.** Do not use it for spam, scraping abuse, or sending unsolicited messages. Ensure you comply with email marketing and privacy laws in your region.

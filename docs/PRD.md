@@ -5,7 +5,7 @@
 **Product Name:** LeadCleanr
 **Product Type:** Browser-First Online Utility SaaS Tool
 **Tagline:** Clean messy lead lists instantly.
-**Status:** ✅ Active Release (`v1.1.1`)
+**Status:** ✅ Active Release (`v1.1.2`)
 
 ### Core Promise
 Paste messy text or upload a CSV file to instantly extract, clean, deduplicate, and export lead data. Core processing occurs locally within the browser, keeping raw working data on-device during normal tool use.
@@ -201,7 +201,7 @@ To protect the brand and domain authority:
 
 ### Success Metrics
 *   **Deployment Success:** 8 functional SEO tool pages, Homepage, Pricing, Privacy, Terms, and Contact pages live.
-*   **Performance:** Client-side CSV parser processing a 2MB file and showing previews/stats in under 2 seconds.
+*   **Performance:** Client-side CSV parser processing a 5 MB file and showing previews/stats quickly enough for an interactive browser workflow on a modern laptop.
 *   **Usability:** Zero latency shifts or hydration errors when local storage recovers workspaces across sessions.
 
 ### Core Acceptance Criteria
