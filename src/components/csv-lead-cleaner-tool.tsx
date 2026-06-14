@@ -26,7 +26,7 @@ import {
  Upload,
  X,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import {
@@ -203,205 +203,195 @@ export function CsvLeadCleanerTool() {
  const [toastVisible, setToastVisible] = useState(false);
  const [mounted, setMounted] = useState(false);
 
- useEffect(() => {
-   setMounted(true);
- }, []);
+  const resetState = useCallback((nextFileName = "") => {
+    setFileName(nextFileName);
+    setHeaders([]);
+    setRows([]);
+    setDetections([]);
+    setSelectedColumn("");
+    setDuplicateMode("selected");
+    setEmailFilter("all");
+    setWarning("");
+    setPastConfigs([]);
+    setFutureConfigs([]);
+    setPreviewMode("clean");
+    setProgress({
+      percentage: 0,
+      rowsProcessed: 0,
+    });
+  }, []);
 
- const cleaned = useMemo(
- () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode, emailFilter),
- [duplicateMode, headers, rows, selectedColumn, emailFilter],
- );
+  const loadDemoCsv = useCallback(() => {
+    const result = parseCsvText(DEMO_CSV, { preserveBlankRows: true });
+    const nextDetections = detectCsvColumns(result.headers, result.rows);
 
- const previewRows = cleaned.rows.slice(0, PREVIEW_LIMIT);
- const isParsing = status === "parsing";
- const showEmailEnrichment =
- selectedColumn &&
- (selectedColumn.toLowerCase().includes("email") || cleaned.summary.generatedDomains > 0);
+    resetState("leadcleanr-demo.csv");
+    setPendingFile({
+      name: "leadcleanr-demo.csv",
+      sizeMb: DEMO_CSV.length / (1024 * 1024),
+      exceedsFreeLimit: false,
+      estimatedRows: result.rows.length,
+      estimatedRowsWithinFreeLimit: result.rows.length,
+    });
+    setError("");
+    setHeaders(result.headers);
+    setRows(result.rows);
+    setDetections(nextDetections);
+    setSelectedColumn(pickDefaultColumn(result.headers, nextDetections));
+    setStatus("ready");
 
- useEffect(() => {
- if (typeof window === "undefined" || !selectedColumn) {
- return;
- }
+    if (result.warnings.length) {
+      setWarning(buildWarningSummary(result.warnings));
+    }
 
- window.localStorage.setItem(
- "leadcleanr:csv-cleaner:preferred-column",
- selectedColumn,
- );
- }, [selectedColumn]);
+    trackToolEvent("csv-lead-cleaner", "load_demo");
+  }, [resetState]);
 
- useEffect(() => {
- if (typeof window === "undefined") {
- return;
- }
+  useEffect(() => {
+    setTimeout(() => {
+      setMounted(true);
+    }, 0);
+  }, []);
 
- window.localStorage.setItem(
- "leadcleanr:csv-cleaner:duplicate-mode",
- duplicateMode,
- );
- }, [duplicateMode]);
+  const cleaned = useMemo(
+    () => cleanCsvRows(rows, headers, selectedColumn, duplicateMode, emailFilter),
+    [duplicateMode, headers, rows, selectedColumn, emailFilter],
+  );
 
- useEffect(() => {
- if (!shouldLoadSampleFromQuery || hasAppliedQuerySample) {
- return;
- }
+  const previewRows = cleaned.rows.slice(0, PREVIEW_LIMIT);
+  const isParsing = status === "parsing";
+  const showEmailEnrichment =
+    selectedColumn &&
+    (selectedColumn.toLowerCase().includes("email") || cleaned.summary.generatedDomains > 0);
 
- loadDemoCsv();
- setHasAppliedQuerySample(true);
- }, [hasAppliedQuerySample, shouldLoadSampleFromQuery]);
+  useEffect(() => {
+    if (typeof window === "undefined" || !selectedColumn) {
+      return;
+    }
 
- function resetState(nextFileName = "") {
- setFileName(nextFileName);
- setHeaders([]);
- setRows([]);
- setDetections([]);
- setSelectedColumn("");
- setDuplicateMode("selected");
- setEmailFilter("all");
- setWarning("");
- setPastConfigs([]);
- setFutureConfigs([]);
- setPreviewMode("clean");
- setProgress({
- percentage: 0,
- rowsProcessed: 0,
- });
- }
+    window.localStorage.setItem(
+      "leadcleanr:csv-cleaner:preferred-column",
+      selectedColumn,
+    );
+  }, [selectedColumn]);
 
-async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
- const file = event.target.files?.[0];
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
 
- if (!file) {
- return;
- }
+    window.localStorage.setItem(
+      "leadcleanr:csv-cleaner:duplicate-mode",
+      duplicateMode,
+    );
+  }, [duplicateMode]);
 
- let inspection;
- try {
- inspection = await inspectCsvFile(file);
- } catch (err) {
- resetState();
- setStatus("error");
- setError(coerceUploadErrorMessage(err));
- return;
- }
+  useEffect(() => {
+    if (!shouldLoadSampleFromQuery || hasAppliedQuerySample) {
+      return;
+    }
 
- setPendingFile({
- name: file.name,
- sizeMb: file.size / (1024 * 1024),
- exceedsFreeLimit: file.size > MAX_CSV_FILE_SIZE,
- estimatedRows: inspection.estimatedRows,
- estimatedRowsWithinFreeLimit: inspection.estimatedRowsWithinFreeLimit,
- });
+    setTimeout(() => {
+      loadDemoCsv();
+      setHasAppliedQuerySample(true);
+    }, 0);
+  }, [hasAppliedQuerySample, shouldLoadSampleFromQuery, loadDemoCsv]);
 
- trackToolEvent("csv-lead-cleaner", "upload_started", {
- file_size_bucket: getFileSizeBucket(file.size),
- });
 
- if (!isLikelyCsvFile(file)) {
- resetState();
- setStatus("error");
- setError("Please upload a real CSV file with a .csv extension.");
- return;
- }
 
- if (file.size > MAX_CSV_FILE_SIZE) {
- resetState();
- setStatus("error");
- setError(
- "The free CSV limit is 5 MB. Upgrade to Pro when you need larger file cleanup.",
- );
- return;
- }
 
- resetState(file.name);
- setError("");
- setStatus("parsing");
+  async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
 
- parseCsvFile({
- file,
- preserveBlankRows: true,
- onProgress: setProgress,
- onComplete: (result) => {
- if (!result.headers.length) {
- resetState(file.name);
- setStatus("error");
- setError("We could not detect any CSV columns in that file.");
- trackToolEvent("csv-lead-cleaner", "upload_failed", {
- reason: "missing_headers",
- });
- return;
- }
+    if (!file) {
+      return;
+    }
 
- const nextDetections = detectCsvColumns(result.headers, result.rows);
- const storedPreferredColumn =
- typeof window !== "undefined"
- ? window.localStorage.getItem("leadcleanr:csv-cleaner:preferred-column")
- : null;
- const storedDuplicateMode =
- typeof window !== "undefined"
- ? window.localStorage.getItem("leadcleanr:csv-cleaner:duplicate-mode")
- : null;
- setHeaders(result.headers);
- setRows(result.rows);
- setDetections(nextDetections);
- setSelectedColumn(
- storedPreferredColumn && result.headers.includes(storedPreferredColumn)
- ? storedPreferredColumn
- : pickDefaultColumn(result.headers, nextDetections),
- );
- if (isDuplicateMode(storedDuplicateMode)) {
- setDuplicateMode(storedDuplicateMode);
- }
- setStatus("ready");
+    let inspection;
+    try {
+      inspection = await inspectCsvFile(file);
+    } catch (err) {
+      resetState();
+      setStatus("error");
+      setError(err instanceof Error ? err.message : "Failed to read file.");
+      trackToolEvent("csv-lead-cleaner", "upload_failed", {
+        reason: "inspection_error",
+      });
+      return;
+    }
 
- if (!result.rows.length) {
- setWarning(
- "We found the header row, but there are no data rows to clean yet.",
- );
- } else if (result.warnings.length) {
- setWarning(buildWarningSummary(result.warnings));
- }
+    if (!isLikelyCsvFile(file)) {
+      resetState();
+      setStatus("error");
+      setError("Please upload a valid CSV file (.csv extension or comma/semicolon/tab separated text).");
+      trackToolEvent("csv-lead-cleaner", "upload_failed", {
+        reason: "invalid_mime",
+      });
+      return;
+    }
 
- trackToolEvent("csv-lead-cleaner", "upload_completed", {
- row_count_bucket: getRowCountBucket(result.rows.length),
- warning_count: result.warnings.length,
- });
- },
- onError: (message) => {
- resetState(file.name);
- setStatus("error");
- setError(message);
- trackToolEvent("csv-lead-cleaner", "upload_failed", {
- reason: "parse_error",
- });
- },
- });
- }
+    resetState(file.name);
+    setPendingFile({
+      name: file.name,
+      sizeMb: file.size / (1024 * 1024),
+      exceedsFreeLimit: file.size > MAX_CSV_FILE_SIZE,
+      estimatedRows: inspection.estimatedRows,
+      estimatedRowsWithinFreeLimit: inspection.estimatedRowsWithinFreeLimit,
+    });
 
-function loadDemoCsv() {
- const result = parseCsvText(DEMO_CSV, { preserveBlankRows: true });
- const nextDetections = detectCsvColumns(result.headers, result.rows);
+    if (file.size > MAX_CSV_FILE_SIZE) {
+      setStatus("error");
+      setError(`CSV files up to 5 MB can be cleaned completely free in the browser. This file exceeds the limit.`);
+      trackToolEvent("csv-lead-cleaner", "upload_failed", {
+        reason: "file_too_large",
+      });
+      return;
+    }
 
- resetState("leadcleanr-demo.csv");
- setPendingFile({
- name: "leadcleanr-demo.csv",
- sizeMb: DEMO_CSV.length / (1024 * 1024),
- exceedsFreeLimit: false,
- estimatedRows: result.rows.length,
- estimatedRowsWithinFreeLimit: result.rows.length,
- });
- setError("");
- setHeaders(result.headers);
- setRows(result.rows);
- setDetections(nextDetections);
- setSelectedColumn(pickDefaultColumn(result.headers, nextDetections));
- setStatus("ready");
+    setStatus("parsing");
+    setProgress({ percentage: 0, rowsProcessed: 0 });
 
- if (result.warnings.length) {
- setWarning(buildWarningSummary(result.warnings));
- }
+    parseCsvFile({
+      file,
+      preserveBlankRows: true,
+      onProgress: (prog) => {
+        setProgress(prog);
+      },
+      onComplete: (result) => {
+        setStatus("ready");
+        setError("");
+        setHeaders(result.headers);
+        setRows(result.rows);
 
- trackToolEvent("csv-lead-cleaner", "load_demo");
- }
+        const nextDetections = detectCsvColumns(result.headers, result.rows);
+        setDetections(nextDetections);
+        setSelectedColumn(pickDefaultColumn(result.headers, nextDetections));
+
+        if (!result.rows.length) {
+          setWarning(
+            "We found the header row, but there are no data rows to clean yet.",
+          );
+        } else if (result.warnings.length) {
+          setWarning(buildWarningSummary(result.warnings));
+        }
+
+        trackToolEvent("csv-lead-cleaner", "upload_completed", {
+          row_count_bucket: getRowCountBucket(result.rows.length),
+          warning_count: result.warnings.length,
+        });
+      },
+      onError: (message) => {
+        resetState(file.name);
+        setStatus("error");
+        setError(message);
+        trackToolEvent("csv-lead-cleaner", "upload_failed", {
+          reason: "parse_error",
+        });
+      },
+    });
+  }
+
+
 
  function applyConfigChange(nextConfig: {
  selectedColumn: string;
@@ -554,7 +544,7 @@ function loadDemoCsv() {
               Drop your messy lead CSV
             </p>
             <p className="text-[13px] text-[var(--lc-muted)] mb-5">
-              We'll detect email, phone, URL, and domain columns automatically.
+              We&apos;ll detect email, phone, URL, and domain columns automatically.
             </p>
             
             <div className="flex items-center justify-center gap-3">
@@ -716,13 +706,13 @@ function loadDemoCsv() {
           </div>
 
           {/* Results Summary Strip */}
-          <div className="lc-status-strip">
+          <div className="lc-status-strip" role="status" aria-label="Cleanup results summary">
             <span><strong>{cleaned.summary.totalRows.toLocaleString()}</strong> total rows</span>
-            <span className="text-black/10">·</span>
+            <span className="text-black/10" aria-hidden="true">·</span>
             <span><strong>{cleaned.summary.duplicatesRemoved.toLocaleString()}</strong> duplicates removed</span>
-            <span className="text-black/10">·</span>
+            <span className="text-black/10" aria-hidden="true">·</span>
             <span><strong>{(cleaned.summary.invalidRowsRemoved + cleaned.summary.emptyRowsRemoved + cleaned.summary.filteredRowsRemoved).toLocaleString()}</strong> invalid/blank removed</span>
-            <span className="text-black/10">·</span>
+            <span className="text-black/10" aria-hidden="true">·</span>
             <span className="text-[var(--lc-accent)] font-semibold"><strong>{cleaned.summary.cleanRowsReady.toLocaleString()}</strong> ready</span>
           </div>
 
@@ -1376,7 +1366,7 @@ function WorkflowSteps({
 
  return (
  <div className="w-full">
- <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
+ <p className="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)]">
  Workflow Steps
  </p>
  <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:gap-4">
@@ -1390,10 +1380,10 @@ function WorkflowSteps({
  <div
  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold border transition ${
  isActive
- ? "bg-blue-600 text-white border-blue-600 shadow-2xs"
+ ? "bg-[var(--lc-accent)] text-white border-[var(--lc-accent)] shadow-2xs"
  : isCompleted
- ? "bg-emerald-50 text-emerald-700 border-emerald-200"
- : "bg-white text-slate-500 border-slate-200"
+ ? "bg-[var(--lc-green-bg)] text-[var(--lc-green)] border-[var(--lc-green-bg)]"
+ : "bg-white text-[var(--lc-muted)] border-[var(--lc-border)]"
  }`}
  >
  {isCompleted ? <Check className="h-4 w-4" /> : step.num}
@@ -1401,17 +1391,17 @@ function WorkflowSteps({
  <span
  className={`text-xs font-medium transition ${
  isActive
- ? "text-slate-900 font-semibold"
+ ? "text-[var(--lc-ink)] font-semibold"
  : isCompleted
- ? "text-slate-500 font-medium"
- : "text-slate-500"
+ ? "text-[var(--lc-muted)] font-medium"
+ : "text-[var(--lc-muted)]"
  }`}
  >
  {step.label}
  </span>
  </div>
  {index < steps.length - 1 && (
- <div className="hidden h-px w-6 bg-slate-200 sm:block" />
+ <div className="hidden h-px w-6 bg-[var(--lc-border)] sm:block" />
  )}
  </div>
  );
@@ -1422,215 +1412,131 @@ function WorkflowSteps({
 }
 
 function ExportActions({
- cleanedRows,
- removedRows,
- invalidRows,
- duplicateMode,
- fileName,
+  cleanedRows,
+  removedRows,
+  invalidRows,
+  duplicateMode,
+  fileName,
 }: {
- cleanedRows: PreviewRow[];
- removedRows: PreviewRow[];
- invalidRows: PreviewRow[];
- duplicateMode: DuplicateMode;
- fileName: string;
+  cleanedRows: PreviewRow[];
+  removedRows: PreviewRow[];
+  invalidRows: PreviewRow[];
+  duplicateMode: DuplicateMode;
+  fileName: string;
 }) {
- const fileUploaded = Boolean(fileName);
- const exportUnlocked = cleanedRows.length > 0;
+  const fileUploaded = Boolean(fileName);
+  const exportUnlocked = cleanedRows.length > 0;
 
- return (
- <div className={`rounded-xl border p-5 sm:p-7 transition-all duration-300 ${exportUnlocked ? 'border-emerald-200 bg-gradient-to-b from-emerald-50/60 to-white shadow-sm' : 'panel-soft'}`}>
- {/* Step 3 Header */}
- <div className="flex items-center gap-2 mb-4">
- <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportUnlocked ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-slate-500 border-slate-200'}`}>
- {exportUnlocked ? <Check className="h-4 w-4" /> : '3'}
- </span>
- <span className={`text-xs font-bold uppercase tracking-wider ${exportUnlocked ? 'text-emerald-800' : 'text-slate-500'}`}>Export</span>
- {exportUnlocked && (
- <span className="ml-auto rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 border border-emerald-200/50">
- Local only
- </span>
- )}
- </div>
+  return (
+    <div className={`rounded-xl border p-5 sm:p-7 transition-all duration-300 ${exportUnlocked ? 'border-[var(--lc-green)]/30 bg-[var(--lc-green-bg)]/20 shadow-sm' : 'panel-soft'}`}>
+      {/* Step 3 Header */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border ${exportUnlocked ? 'bg-[var(--lc-green)] text-white border-[var(--lc-green)]' : 'bg-white text-[var(--lc-muted)] border-[var(--lc-border)]'}`}>
+          {exportUnlocked ? <Check className="h-4 w-4" /> : '3'}
+        </span>
+        <span className={`text-xs font-bold uppercase tracking-wider ${exportUnlocked ? 'text-[var(--lc-green)]' : 'text-[var(--lc-muted)]'}`}>Export</span>
+        {exportUnlocked && (
+          <span className="ml-auto rounded-full bg-[var(--lc-green-bg)] px-2.5 py-0.5 text-xs font-semibold text-[var(--lc-green)] border border-[var(--lc-green)]/10">
+            Local only
+          </span>
+        )}
+      </div>
 
- {exportUnlocked ? (
- <>
- {/* Success Count */}
- <div className="rounded-xl bg-white border border-emerald-100 p-4 mb-4">
- <p className="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1">Clean leads ready</p>
- <p className="font-display text-3xl font-bold text-emerald-700 tabular-nums">
- {cleanedRows.length.toLocaleString()}
- </p>
- <p className="mt-1 text-[11px] text-slate-500">Ready for CRM, outreach, or recruiting import.</p>
- </div>
- </>
- ) : (
- <div className="rounded-xl border border-slate-100 bg-slate-50 p-3.5 space-y-2 mb-4">
- <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
- Export Summary
- </p>
- <div className="space-y-1.5">
- {[
- { label: "Waiting for CSV", checked: fileUploaded },
- { label: "Clean rows not ready yet", checked: exportUnlocked },
- { label: "Export locked", checked: exportUnlocked },
- ].map((item, i) => {
- const isDone = item.checked;
- return (
- <div key={i} className="flex items-center gap-2 text-xs">
- <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[9px] font-bold ${
- isDone
- ? "bg-emerald-50 text-emerald-700 border-emerald-200"
- : "bg-white text-slate-500 border-slate-200"
- }`}>
- {isDone ? <Check className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
- </span>
- <span className={isDone ? "text-slate-500 font-medium" : "text-slate-600 font-medium"}>
- {item.label}
- </span>
- </div>
- );
- })}
- </div>
- </div>
- )}
+      {exportUnlocked ? (
+        <>
+          {/* Success Count */}
+          <div className="rounded-xl bg-white border border-[var(--lc-green)]/10 p-4 mb-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-[var(--lc-green)] mb-1">Clean leads ready</p>
+            <p className="font-display text-3xl font-bold text-[var(--lc-green)] tabular-nums">
+              {cleanedRows.length.toLocaleString()}
+            </p>
+            <p className="mt-1 text-[11px] text-[var(--lc-muted)]">Ready for CRM, outreach, or recruiting import.</p>
+          </div>
+        </>
+      ) : (
+        <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-3.5 space-y-2 mb-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-[var(--lc-muted)]">
+            Export Summary
+          </p>
+          <div className="space-y-1.5">
+            {[
+              { label: "Waiting for CSV", checked: fileUploaded },
+              { label: "Clean rows not ready yet", checked: exportUnlocked },
+              { label: "Export locked", checked: exportUnlocked },
+            ].map((item, i) => {
+              const isDone = item.checked;
+              return (
+                <div key={i} className="flex items-center gap-2 text-xs">
+                  <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[9px] font-bold ${
+                    isDone
+                      ? "bg-[var(--lc-green-bg)] text-[var(--lc-green)] border-[var(--lc-green)]/20"
+                      : "bg-white text-[var(--lc-muted)] border-[var(--lc-border)]"
+                  }`}>
+                    {isDone ? <Check className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+                  </span>
+                  <span className={isDone ? "text-[var(--lc-muted)] font-medium" : "text-[var(--lc-ink)] font-medium"}>
+                    {item.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
- <div className="space-y-3">
- <button
- type="button"
- onClick={() => {
- trackToolEvent("csv-lead-cleaner", "export_csv", {
- row_count_bucket: getRowCountBucket(cleanedRows.length),
- duplicate_mode: duplicateMode,
- });
- downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
- }}
- disabled={!exportUnlocked}
- className={`inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
- exportUnlocked
- ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm cursor-pointer"
- : "bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed"
- }`}
- >
- <Download className="h-4 w-4" />
- Export Clean CSV
- </button>
+      <div className="space-y-3">
+        <button
+          type="button"
+          onClick={() => {
+            trackToolEvent("csv-lead-cleaner", "export_csv", {
+              row_count_bucket: getRowCountBucket(cleanedRows.length),
+              duplicate_mode: duplicateMode,
+            });
+            downloadCsvRecords(buildCleanFileName(fileName), cleanedRows);
+          }}
+          disabled={!exportUnlocked}
+          className={`w-full ${
+            exportUnlocked
+              ? "lc-button-primary cursor-pointer"
+              : "bg-[var(--lc-bg)] text-[var(--lc-muted)] border border-[var(--lc-border)] cursor-not-allowed inline-flex h-11 items-center justify-center gap-1.5 rounded-full text-sm font-semibold"
+          }`}
+        >
+          <Download className="h-4 w-4" />
+          Export Clean CSV
+        </button>
 
- {removedRows.length > 0 && (
- <button
- type="button"
- onClick={() => {
- downloadCsvRecords(fileName.replace(/\.csv$/i, "-removed.csv"), removedRows);
- }}
- className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
- >
- <Download className="h-4 w-4" />
- Download Removed Rows
- </button>
- )}
+        {removedRows.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              downloadCsvRecords(fileName.replace(/\.csv$/i, "-removed.csv"), removedRows);
+            }}
+            className="lc-button-secondary w-full"
+          >
+            <Download className="h-4 w-4" />
+            Download Removed Rows
+          </button>
+        )}
 
- {invalidRows.length > 0 && (
- <button
- type="button"
- onClick={() => {
- downloadCsvRecords(fileName.replace(/\.csv$/i, "-invalid.csv"), invalidRows);
- }}
- className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition shadow-xs cursor-pointer"
- >
- <Download className="h-4 w-4" />
- Download Invalid Rows
- </button>
- )}
- </div>
+        {invalidRows.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              downloadCsvRecords(fileName.replace(/\.csv$/i, "-invalid.csv"), invalidRows);
+            }}
+            className="lc-button-secondary w-full"
+          >
+            <Download className="h-4 w-4" />
+            Download Invalid Rows
+          </button>
+        )}
+      </div>
 
- <p className="mt-4 text-xs leading-relaxed text-slate-500 text-center">
- {exportUnlocked
- ? "Processed in your browser. CSV never uploaded."
- : "Export unlocks after upload and cleanup."}
- </p>
- </div>
- );
-}
-
-function ChecklistMetric({
- label,
- value,
-}: {
- label: string;
- value: number;
-}) {
- return (
- <div className="rounded-xl border border-[color:rgba(15,118,110,0.1)] bg-white/82 px-3 py-3">
- <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--muted)]">
- {label}
- </p>
- <p className="mt-1 text-xl font-semibold tabular-nums text-[color:var(--foreground)]">
- {value.toLocaleString()}
- </p>
- </div>
- );
-}
-
-function StatCard({
- label,
- value,
- icon,
- accent = false,
-}: {
- label: string;
- value: number;
- icon?: React.ReactNode;
- accent?: boolean;
-}) {
- return (
- <div
- className={`rounded-xl border p-4 transition-all duration-300 hover:shadow-xs ${
- accent
- ? "border-emerald-100 bg-emerald-50/40"
- : "border-slate-200 bg-white hover:border-slate-300"
- }`}
- >
- <div className="flex items-start justify-between gap-2">
- <span className="text-xs font-bold uppercase tracking-wider text-slate-500 leading-tight">
- {label}
- </span>
- {icon && <div className="text-slate-500 shrink-0">{icon}</div>}
- </div>
- <div className="mt-3 text-2xl font-bold tabular-nums text-slate-900">
- {value.toLocaleString()}
- </div>
- </div>
- );
-}
-
-function InsightTile({
- label,
- value,
- tone,
- icon,
-}: {
- label: string;
- value: number;
- tone: "teal" | "amber" | "slate";
- icon?: React.ReactNode;
-}) {
- const actualTone = value === 0 && tone === "amber" ? "slate" : tone;
- const palette = {
- teal: "border-teal-100 bg-teal-50/30 text-teal-800 hover:border-teal-200",
- amber: "border-amber-100 bg-amber-50/30 text-amber-800 hover:border-amber-200",
- slate: "border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300",
- }[actualTone];
-
- return (
- <div className={`rounded-xl border px-4 py-4 transition-all duration-300 hover:shadow-xs ${palette}`}>
- <div className="flex items-start justify-between gap-2">
- <span className="text-xs font-bold uppercase tracking-wider leading-tight">
- {label}
- </span>
- {icon && <div className="opacity-80 shrink-0">{icon}</div>}
- </div>
- <p className="mt-3 text-2xl font-bold tabular-nums">
- {value.toLocaleString()}
- </p>
- </div>
- );
+      <p className="mt-4 text-xs leading-relaxed text-[var(--lc-muted)] text-center">
+        {exportUnlocked
+          ? "Processed in your browser. CSV never uploaded."
+          : "Export unlocks after upload and cleanup."}
+      </p>
+    </div>
+  );
 }

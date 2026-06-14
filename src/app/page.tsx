@@ -167,6 +167,16 @@ export default function HomePage() {
  
           <div className="relative">
             <div className="lc-workspace-shell">
+              {/* App Window Top Bar */}
+              <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[#F1F1F4] px-4 py-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-black/10"></span>
+                  <span className="h-2 w-2 rounded-full bg-black/10"></span>
+                  <span className="h-2 w-2 rounded-full bg-black/10"></span>
+                </div>
+                <span className="text-[11px] font-medium text-[var(--lc-muted)] font-sans">leadcleanr-demo.csv</span>
+                <div className="w-10"></div>
+              </div>
               <div className="grid lg:grid-cols-2">
                 {/* Left Panel: Upload/Paste/Options */}
                 <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col bg-[#F9F9FB] p-5">

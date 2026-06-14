@@ -17,7 +17,7 @@ import {
  Undo2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
@@ -181,14 +181,7 @@ export function TextProcessingTool({
  return () => window.clearTimeout(restoreTimer);
  }, [processInput, sampleInput, shouldLoadSampleFromQuery, storageKey]);
 
- useEffect(() => {
- if (!isHydrated || !shouldLoadSampleFromQuery || hasAppliedQuerySample) {
- return;
- }
 
- loadSampleInput();
- setHasAppliedQuerySample(true);
- }, [hasAppliedQuerySample, isHydrated, shouldLoadSampleFromQuery]);
 
  useEffect(() => {
  if (!isHydrated || typeof window === "undefined") {
@@ -238,19 +231,30 @@ export function TextProcessingTool({
  });
  }
 
- function loadSampleInput() {
- setFreshInput(sampleInput);
- const sampleWorkspace = createWorkspaceFromValues(
- processInput(sampleInput).results,
- "Sample",
- );
- setWorkspace(sampleWorkspace);
- setPastWorkspace([]);
- setFutureWorkspace([]);
- setShowBulkEditor(false);
- setRestoredSession(false);
- trackToolEvent(trackName, "load_sample_input");
- }
+  const loadSampleInput = useCallback(() => {
+    setFreshInput(sampleInput);
+    const sampleWorkspace = createWorkspaceFromValues(
+      processInput(sampleInput).results,
+      "Sample",
+    );
+    setWorkspace(sampleWorkspace);
+    setPastWorkspace([]);
+    setFutureWorkspace([]);
+    setShowBulkEditor(false);
+    setRestoredSession(false);
+    trackToolEvent(trackName, "load_sample_input");
+  }, [sampleInput, processInput, trackName]);
+
+  useEffect(() => {
+    if (!isHydrated || !shouldLoadSampleFromQuery || hasAppliedQuerySample) {
+      return;
+    }
+
+    setTimeout(() => {
+      loadSampleInput();
+      setHasAppliedQuerySample(true);
+    }, 0);
+  }, [hasAppliedQuerySample, isHydrated, shouldLoadSampleFromQuery, loadSampleInput]);
 
  function useSelectedText() {
  const selection = window.getSelection?.()?.toString().trim() ?? "";
