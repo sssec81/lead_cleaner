@@ -27,9 +27,9 @@ const TOOL_NEXT_STEP: Array<{ match: string; href: string; label: string; intro:
   },
   {
     match: "/tools/extract-emails-from-csv",
-    href: "/tools/remove-duplicate-emails",
-    label: "Deduplicate Emails",
-    intro: "Strip repeat rows before you export the final column.",
+    href: "/tools/validate-email-list",
+    label: "Validate List",
+    intro: "Check the extracted emails for structure and formatting before you export.",
   },
   {
     match: "/tools/extract-phone-numbers-from-text",
@@ -39,9 +39,9 @@ const TOOL_NEXT_STEP: Array<{ match: string; href: string; label: string; intro:
   },
   {
     match: "/tools/extract-phone-numbers-from-csv",
-    href: "/tools/remove-duplicate-phone-numbers",
-    label: "Deduplicate Numbers",
-    intro: "Normalize the extracted numbers, then remove the repeats.",
+    href: "/tools/csv-lead-cleaner",
+    label: "Clean CSV Free",
+    intro: "Run the full sheet through the main cleanup workflow next.",
   },
   {
     match: "/tools/remove-duplicate-emails",

@@ -12,6 +12,7 @@ import {
   Upload,
   Users,
   Wand2,
+  Plus,
 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
@@ -208,6 +209,73 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="max-w-3xl">
+          <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-4xl">
+            Built for messy lead workflows
+          </h2>
+          <p className="mt-4 text-[17px] leading-relaxed text-[var(--lc-muted)]">
+            LeadCleanr is designed for the small cleanup jobs that happen before CRM imports, outreach campaigns, recruiting handoffs, and agency delivery.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Sales teams</p>
+            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
+              Clean scraped prospect CSVs before importing into Apollo, Outreach, HubSpot, or another sales tool.
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Recruiters</p>
+            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
+              Extract candidate emails and phone numbers from sourcing lists, ATS exports, and copied profile notes.
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Marketers</p>
+            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
+              Turn messy email lists into cleaner company-domain lists for ABM, enrichment, and campaign prep.
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Agencies & VAs</p>
+            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
+              Clean client lead sheets before delivery without uploading private contact data to a third-party server.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-4xl">
+              What LeadCleanr fixes
+            </h2>
+            <p className="mt-4 text-[17px] leading-relaxed text-[var(--lc-muted)]">
+              Common CSV problems that slow down CRM imports and outreach workflows.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              "Duplicate emails and repeated rows",
+              "Blank rows and missing lead fields",
+              "Invalid email formats",
+              "Personal email domains like Gmail/Yahoo",
+              "Messy phone numbers",
+              "Domains extracted from emails",
+              "CSV exports ready for CRM import",
+              "Browser-only processing with no upload"
+            ].map(item => (
+              <div key={item} className="flex items-start gap-3 rounded-lg border border-[var(--lc-border)] bg-[var(--lc-surface)] p-4 shadow-sm">
+                <Check className="h-5 w-5 shrink-0 text-[var(--lc-green)]" />
+                <span className="text-[14px] font-medium text-[var(--lc-ink)]">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <p className="section-eyebrow">Quick Start Paths</p>
         <div className="mt-3 flex items-end justify-between gap-6">
@@ -240,7 +308,88 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 border-t border-[var(--lc-border)]">
+        <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
+          <div>
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)]">
+              Frequently asked questions
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-[var(--lc-muted)]">
+              Answers about privacy, file limits, exports, and how browser-only CSV cleaning works.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4">
+            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4" open>
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+                Is my CSV uploaded to a server?
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
+                  <Plus className="h-4 w-4" />
+                </span>
+              </summary>
+              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                No. LeadCleanr processes CSV files locally in your browser. Your pasted text and uploaded files are not sent to our server for cleaning.
+              </div>
+            </details>
+            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+                Do I need an account?
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
+                  <Plus className="h-4 w-4" />
+                </span>
+              </summary>
+              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                No. The free tools can be used without signup, login, or a credit card.
+              </div>
+            </details>
+            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+                What CSV size is supported?
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
+                  <Plus className="h-4 w-4" />
+                </span>
+              </summary>
+              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                The free browser workflow supports CSV files up to 5MB.
+              </div>
+            </details>
+            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+                Can LeadCleanr remove Gmail and Yahoo addresses?
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
+                  <Plus className="h-4 w-4" />
+                </span>
+              </summary>
+              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                Yes. The CSV Lead Cleaner can filter personal email domains so you can focus on business emails.
+              </div>
+            </details>
+            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+                Can I review removed rows before export?
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
+                  <Plus className="h-4 w-4" />
+                </span>
+              </summary>
+              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                Yes. The CSV workflow lets you review clean rows, removed duplicates, invalid rows, and filtered rows before downloading.
+              </div>
+            </details>
+            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
+                What can I export?
+                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
+                  <Plus className="h-4 w-4" />
+                </span>
+              </summary>
+              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
+                Depending on the tool, you can export cleaned results as CSV, TXT, or copied text.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 lg:px-8 border-t border-[var(--lc-border)]">
         <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
