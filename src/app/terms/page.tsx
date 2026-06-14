@@ -135,14 +135,14 @@ export default function TermsPage() {
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
                     href="/tools"
-                    className="btn-primary min-h-11 px-6 text-sm font-semibold"
+                    className="lc-button-primary min-h-11 px-6 text-sm font-semibold"
                   >
                     Back to tools
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/privacy"
-                    className="btn-secondary min-h-11 px-6 text-sm font-semibold"
+                    className="lc-button-secondary min-h-11 px-6 text-sm font-semibold"
                   >
                     Privacy Policy
                     <ArrowRight className="h-4 w-4" />

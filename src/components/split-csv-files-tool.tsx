@@ -309,7 +309,7 @@ export function SplitCsvFilesTool() {
  <button
  type="button"
  onClick={handleExport}
- className="btn-primary group inline-flex min-h-12 rounded-xl px-6 text-sm font-semibold shadow-sm"
+ className="lc-button-primary group inline-flex min-h-12 px-6 text-sm font-semibold"
  >
  <Download className="h-4 w-4" />
  Download ZIP

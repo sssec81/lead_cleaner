@@ -216,7 +216,7 @@ export default function ToolsPage() {
 
                   <Link
                     href="/tools/csv-lead-cleaner"
-                    className="btn-primary mt-6 min-h-11 rounded-lg px-5 py-2.5 text-sm font-medium shadow-[var(--shadow-strong)]"
+                    className="lc-button-primary mt-6 min-h-11 px-5 py-2.5 text-sm font-medium"
                   >
                     Open CSV workflow
                     <ArrowRight className="h-4 w-4" />

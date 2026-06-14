@@ -147,7 +147,7 @@ export default function PricingPage() {
   <div className="mt-auto pt-4">
   <Link
   href="/tools/csv-lead-cleaner"
-  className="btn-primary w-full min-h-12 text-sm font-semibold"
+  className="lc-button-primary w-full min-h-12 text-sm font-semibold"
   >
   <span>Try the free workflow</span>
   <ArrowRight className="h-4 w-4" />

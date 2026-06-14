@@ -254,7 +254,7 @@ export function ConvertCsvToJsonTool() {
  or click to browse local files.
  </span>
  {!isParsing && (
- <div className="btn-primary mt-5 inline-flex min-h-11 rounded-xl px-6 text-sm font-semibold shadow-sm hover:-translate-y-0.5 cursor-pointer">
+ <div className="lc-button-primary mt-5 inline-flex min-h-11 px-6 text-sm font-semibold cursor-pointer">
  Upload CSV to Convert
  </div>
  )}
@@ -293,7 +293,7 @@ export function ConvertCsvToJsonTool() {
  <button
  type="button"
  onClick={loadDemoCsv}
- className="btn-secondary w-full min-h-10 rounded-xl px-4 text-xs font-semibold"
+ className="lc-button-secondary w-full min-h-10 px-4 text-xs font-semibold"
  >
  <FlaskConical className="h-3.5 w-3.5" />
  Try sample CSV
@@ -438,7 +438,7 @@ export function ConvertCsvToJsonTool() {
  type="button"
  onClick={handleCopy}
  disabled={!rows.length}
- className="btn-primary group inline-flex min-h-11 rounded-xl px-5 text-sm font-semibold shadow-sm disabled:hover:bg-[var(--lc-accent)]"
+ className="lc-button-primary group inline-flex min-h-11 px-5 text-sm font-semibold disabled:hover:bg-[var(--lc-accent)]"
  >
  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
  {copied ? "Copied" : "Copy JSON"}

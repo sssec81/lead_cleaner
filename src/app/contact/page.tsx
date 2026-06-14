@@ -156,7 +156,7 @@ export default function ContactPage() {
 
   <a
   href={`mailto:${item.value}`}
-  className="btn-primary w-full min-h-12 text-sm font-semibold border-white/10 hover:border-[var(--lc-accent)]"
+  className="lc-button-primary w-full min-h-12 text-sm font-semibold"
   >
   {item.cta}
   <ArrowRight className="h-4 w-4" />
