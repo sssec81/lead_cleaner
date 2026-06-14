@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { FaqJsonLd, type FaqItem, getSiteUrl } from "@/lib/seo";
 
 const processSteps = [
   {
@@ -67,15 +68,71 @@ const quickStarts = [
 ];
 
 export const metadata: Metadata = {
-  title: "LeadCleanr — Private CSV Lead Cleaner for CRM & Outreach Lists",
+  title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
   description:
-    "Paste a messy list or upload a CSV. LeadCleanr extracts emails, phones, and domains in your browser with no account needed.",
-  alternates: { canonical: "https://leadcleanr.com" },
+    "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser — no signup or upload.",
+  alternates: { canonical: `${getSiteUrl()}/` },
+  openGraph: {
+    title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+    description:
+      "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser — no signup or upload.",
+    url: `${getSiteUrl()}/`,
+    siteName: "LeadCleanr",
+    type: "website",
+    images: [
+      {
+        url: `${getSiteUrl()}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "LeadCleanr homepage preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+    description:
+      "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser — no signup or upload.",
+    images: [`${getSiteUrl()}/twitter-image`],
+  },
 };
+
+const homepageFaqs: FaqItem[] = [
+  {
+    question: "Is my CSV uploaded to a server?",
+    answer:
+      "No. LeadCleanr processes CSV files locally in your browser. Your pasted text and uploaded files are not sent to our server for cleaning.",
+  },
+  {
+    question: "Do I need an account?",
+    answer:
+      "No. The free tools can be used without signup, login, or a credit card.",
+  },
+  {
+    question: "What CSV size is supported?",
+    answer: "The free browser workflow supports CSV files up to 5MB.",
+  },
+  {
+    question: "Can LeadCleanr remove Gmail and Yahoo addresses?",
+    answer:
+      "Yes. The CSV Lead Cleaner can filter personal email domains so you can focus on business emails.",
+  },
+  {
+    question: "Can I review removed rows before export?",
+    answer:
+      "Yes. The CSV workflow lets you review clean rows, removed duplicates, invalid rows, and filtered rows before downloading.",
+  },
+  {
+    question: "What can I export?",
+    answer:
+      "Depending on the tool, you can export cleaned results as CSV, TXT, or copied text.",
+  },
+];
 
 export default function HomePage() {
   return (
     <PageFrame>
+      <FaqJsonLd faqEntries={homepageFaqs} />
       <section className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 lg:px-8 lg:pt-28">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
           <div>

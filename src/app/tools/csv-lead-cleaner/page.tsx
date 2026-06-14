@@ -1,130 +1,163 @@
 import type { Metadata } from "next";
+import { BarChart3, Shield, Users } from "lucide-react";
 import { Suspense } from "react";
-import { Zap, Users, Briefcase, Database, BarChart3, Shield, X, AlertTriangle, CopyMinus, MailX, Eraser, Building, MailWarning, LayoutGrid } from "lucide-react";
+
 import { CsvLeadCleanerTool } from "@/components/csv-lead-cleaner-tool";
 import { PageFrame } from "@/components/page-frame";
-import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
+import { ToolSeoSections } from "@/components/tool-seo-sections";
+import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
- title: "Free CSV Lead Cleaner for Sales, CRM & Outreach Lists",
- description:
- "Remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes before importing to HubSpot, Salesforce, Apollo, or outreach tools.",
- path: "/tools/csv-lead-cleaner",
- keywords: [
- "csv lead cleaner",
- "clean csv online",
- "dedupe csv leads",
- "lead list csv cleanup",
- "invalid emails",
- "CRM import",
- "outreach lists"
- ],
+  title: "Free CSV Lead Cleaner for Sales, CRM & Outreach Lists",
+  description:
+    "Clean messy lead CSVs before CRM import. Remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes locally in your browser.",
+  path: "/tools/csv-lead-cleaner",
+  keywords: [
+    "csv lead cleaner",
+    "clean csv online",
+    "dedupe csv leads",
+    "crm import cleanup",
+    "lead list csv cleanup",
+  ],
 });
 
-const seoUseCases = [
- {
- icon: Briefcase,
- title: "For sales teams",
- text: "Clean prospecting lists before outreach to protect sender scores and improve deliverability.",
- },
- {
- icon: Users,
- title: "For recruiters",
- text: "Remove duplicate or invalid candidate emails before uploading into ATS or outreach sequences.",
- },
- {
- icon: Database,
- title: "For CRM imports",
- text: "Avoid messy imports and bad contact records in HubSpot, Salesforce, or Close.",
- },
-];
-
 export default function CsvLeadCleanerPage() {
-  const pageHeader = (
-    <div className="mx-auto max-w-2xl pt-12 pb-6 text-center sm:text-left sm:mx-0">
-      <div className="section-eyebrow mb-4">
-        CSV TOOL
-      </div>
-      <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
-        CSV lead cleaner
-      </h1>
-      <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
-        Upload your spreadsheet to remove duplicates, clean emails, and export a CRM-ready file.
-      </p>
-      
-      <div className="trust-chip-row mt-6 justify-center sm:justify-start">
-        <div className="trust-chip">
-          <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span>Browser-only</span>
-        </div>
-        <div className="trust-chip">
-          <Users className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span>No account needed</span>
-        </div>
-        <div className="trust-chip">
-          <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
-          <span>Up to 5MB free</span>
-        </div>
-      </div>
-    </div>
-  );
-
- return (
- <PageFrame>
- <BreadcrumbJsonLd
- items={[
- { name: "Home", url: "/" },
- { name: "Tools", url: "/tools" },
- { name: "CSV Lead Cleaner", url: "/tools/csv-lead-cleaner" },
- ]}
- />
- <ToolJsonLd
- title="Free CSV Lead Cleaner for Sales, CRM & Outreach Lists"
- description="Remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes before importing to HubSpot, Salesforce, Apollo, or outreach tools."
- path="/tools/csv-lead-cleaner"
- category="BusinessApplication"
- />
-  <main className="relative min-h-screen pt-4 pb-24 lg:pb-32 bg-[var(--lc-bg)]">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-  {pageHeader}
-  <div className="mb-16">
-    <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>
-      <CsvLeadCleanerTool />
-    </Suspense>
-  </div>
-  
-  {/* SEO Use-Case Section */}
-  <section className="border-t border-[var(--lc-border)] pt-16">
-  <div className="max-w-2xl mb-12">
-  <div className="section-anchor-row mb-4">
-  <span className="section-anchor-label">How it works</span>
-  <div className="section-anchor-line h-px w-20"></div>
-  </div>
-  <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl mb-4">
-  Clean lead CSVs before importing to your CRM
-  </h2>
-  <p className="text-[15px] leading-relaxed text-[var(--lc-muted)]">
-  LeadCleanr helps remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes before importing contact lists into HubSpot, Salesforce, Apollo, Instantly, Lemlist, or other outreach tools.
-  </p>
-  </div>
-
-  <div className="grid gap-5 sm:grid-cols-3">
-  {seoUseCases.map((useCase) => {
-  const Icon = useCase.icon;
   return (
-  <div key={useCase.title} className="bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 transition-all hover:border-[var(--lc-border-mid)] hover:shadow-sm">
-  <div className="bg-[var(--lc-accent-bg)] rounded-lg p-2.5 w-fit mb-4 text-[var(--lc-accent)]">
-  <Icon className="h-5 w-5" />
-  </div>
-  <h3 className="font-medium text-[15px] text-[var(--lc-ink)]">{useCase.title}</h3>
-  <p className="text-[13px] leading-relaxed text-[var(--lc-muted)] mt-1">{useCase.text}</p>
-  </div>
+    <PageFrame>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Tools", url: "/tools" },
+          { name: "CSV Lead Cleaner", url: "/tools/csv-lead-cleaner" },
+        ]}
+      />
+      <ToolJsonLd
+        name="CSV Lead Cleaner"
+        title="Free CSV Lead Cleaner for Sales, CRM & Outreach Lists"
+        description="Clean messy lead CSVs before CRM import. Remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes locally in your browser."
+        path="/tools/csv-lead-cleaner"
+        category="BusinessApplication"
+      />
+      <main className="relative min-h-screen bg-[var(--lc-bg)] pb-24 pt-4 lg:pb-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl pb-6 pt-12 text-center sm:mx-0 sm:text-left">
+            <div className="section-eyebrow mb-4">CSV TOOL</div>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
+              CSV lead cleaner
+            </h1>
+            <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
+              Upload your spreadsheet to remove duplicates, clean emails, review
+              filtered rows, and export a CRM-ready file without uploading lead
+              data to a server.
+            </p>
+
+            <div className="trust-chip-row mt-6 justify-center sm:justify-start">
+              <div className="trust-chip">
+                <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
+                <span>Browser-only</span>
+              </div>
+              <div className="trust-chip">
+                <Users className="h-4 w-4 text-[var(--lc-accent)]" />
+                <span>No account needed</span>
+              </div>
+              <div className="trust-chip">
+                <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
+                <span>Up to 5MB free</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-16">
+            <Suspense
+              fallback={
+                <div className="flex h-96 items-center justify-center text-[var(--lc-muted)]">
+                  Loading tool...
+                </div>
+              }
+            >
+              <CsvLeadCleanerTool />
+            </Suspense>
+          </div>
+
+          <ToolSeoSections
+            howItWorksTitle="Clean lead CSVs before importing to HubSpot, Salesforce, or Apollo"
+            howItWorksIntro="This workflow is built for the last cleanup pass before CRM import. Upload the spreadsheet, choose the cleanup rules that matter, review what changed, and export only when the rows look right. LeadCleanr keeps the process short while still letting you inspect duplicates, invalid emails, blank rows, and filtered personal inboxes before the file leaves your browser."
+            howItWorksSteps={[
+              {
+                title: "Upload the raw spreadsheet",
+                text: "Start with the CSV you already have from prospecting, recruiting, enrichment, or a teammate handoff.",
+              },
+              {
+                title: "Choose the cleanup rules",
+                text: "Turn on the filters you need for duplicates, personal domains, role-based inboxes, blank rows, or invalid email formatting.",
+              },
+              {
+                title: "Review before export",
+                text: "Check the clean rows and the removed rows separately so you can export a file that is easier to trust in your CRM.",
+              },
+            ]}
+            useCasesTitle="Common use cases"
+            useCases={[
+              {
+                title: "Sales operations",
+                text: "Clean scraped prospect lists before importing them into outbound tools, sequences, or contact databases.",
+              },
+              {
+                title: "Recruiting handoffs",
+                text: "Remove noisy candidate rows before ATS imports or recruiter outreach so the team is not working from duplicate records.",
+              },
+              {
+                title: "Agency delivery",
+                text: "Tidy client lead sheets locally when you need a fast cleanup pass without uploading private data to another platform.",
+              },
+            ]}
+            relatedTools={[
+              {
+                href: "/tools/extract-emails-from-csv",
+                title: "Extract Emails from CSV",
+                description: "Pull only the email addresses out of a larger spreadsheet when you do not need the full row cleanup workflow.",
+              },
+              {
+                href: "/tools/validate-email-list",
+                title: "Validate Email List",
+                description: "Run a focused syntax pass on pasted email lists when you need a quick check before sending or importing.",
+              },
+              {
+                href: "/tools/remove-empty-rows-from-csv",
+                title: "Remove Empty Rows from CSV",
+                description: "Use the narrow blank-row cleanup path when the main problem is spreadsheet spacing rather than email quality.",
+              },
+              {
+                href: "/tools/merge-csv-files",
+                title: "Merge CSV Files",
+                description: "Combine several source files into one sheet before you run the full LeadCleanr cleanup workflow.",
+              },
+            ]}
+            faqs={[
+              {
+                question: "Does the CSV Lead Cleaner upload my file?",
+                answer:
+                  "No. The cleanup runs in your browser, so the CSV is processed locally on the device you are using.",
+              },
+              {
+                question: "Can I review removed rows before I export?",
+                answer:
+                  "Yes. The workflow is designed to show both the clean output and the removed records so you can spot-check the result before download.",
+              },
+              {
+                question: "What does this tool remove?",
+                answer:
+                  "It can remove duplicate rows, invalid email formats, blank rows, personal inboxes like Gmail or Yahoo, and role-based inboxes when those rules are enabled.",
+              },
+              {
+                question: "When should I use a smaller tool instead?",
+                answer:
+                  "Use a smaller tool when you only need one step, such as extracting emails from a CSV or removing empty rows without a broader CRM import cleanup pass.",
+              },
+            ]}
+          />
+        </div>
+      </main>
+    </PageFrame>
   );
-  })}
-  </div>
-  </section>
-  </div>
-  </main>
-  </PageFrame>
- );
 }

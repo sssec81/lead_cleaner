@@ -4,9 +4,19 @@ export type ToolMetadataInput = {
  title: string;
  description: string;
  path: string;
+ name?: string;
  category?: string;
  keywords?: string[];
 };
+
+function JsonLd({ data }: { data: Record<string, unknown> }) {
+ return (
+ <script
+ type="application/ld+json"
+ dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+ />
+ );
+}
 
 const DEFAULT_SITE_URL = "https://leadcleanr.com";
 
@@ -69,20 +79,27 @@ export function buildToolMetadata({
 }
 
 export function ToolJsonLd({
+ name,
  title,
  description,
  path,
  category = "WebApplication",
 }: ToolMetadataInput) {
  const siteUrl = getSiteUrl();
+ const toolName = name ?? title.split("—")[0]?.split("|")[0]?.trim() ?? title;
  const jsonLd = {
  "@context": "https://schema.org",
  "@type": "SoftwareApplication",
- name: title,
+ name: toolName,
  description,
  url: new URL(path, `${siteUrl}/`).toString(),
  applicationCategory: category,
- operatingSystem: "WebBrowser",
+ operatingSystem: "Any",
+ brand: {
+ "@type": "Brand",
+ name: "LeadCleanr",
+ },
+ isAccessibleForFree: true,
  offers: {
  "@type": "Offer",
  price: "0",
@@ -90,12 +107,7 @@ export function ToolJsonLd({
  },
  };
 
- return (
- <script
- type="application/ld+json"
- dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
- />
- );
+ return <JsonLd data={jsonLd} />;
 }
 
 export type FaqItem = {
@@ -117,12 +129,7 @@ export function FaqJsonLd({ faqEntries }: { faqEntries: FaqItem[] }) {
  })),
  };
 
- return (
- <script
- type="application/ld+json"
- dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
- />
- );
+ return <JsonLd data={jsonLd} />;
 }
 
 export type BreadcrumbItem = {
@@ -145,10 +152,5 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
  })),
  };
 
- return (
- <script
- type="application/ld+json"
- dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
- />
- );
+ return <JsonLd data={jsonLd} />;
 }

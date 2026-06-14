@@ -13,25 +13,22 @@ export const metadata: Metadata = {
  metadataBase: new URL(siteUrl),
  applicationName: "LeadCleanr",
  title: {
- default: "LeadCleanr | Clean Messy Lead Lists Instantly",
+ default: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
  template: "%s | LeadCleanr",
  },
  description:
- "Paste text or upload a CSV to extract emails, phone numbers, URLs, domains, and remove duplicates in your browser.",
+ "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser.",
  keywords: [
  "lead cleaner",
  "csv lead cleaner",
- "email extractor",
+ "crm import cleanup",
  "lead list cleanup",
- "csv dedupe",
+ "browser-based csv cleaner",
  ],
- alternates: {
- canonical: "/",
- },
  openGraph: {
- title: "LeadCleanr | Clean Messy Lead Lists Instantly",
+ title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
  description:
- "Paste text or upload a CSV to extract emails, phone numbers, URLs, domains, and remove duplicates in your browser.",
+ "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser.",
  url: siteUrl,
  siteName: "LeadCleanr",
  type: "website",
@@ -46,9 +43,9 @@ export const metadata: Metadata = {
  },
  twitter: {
  card: "summary_large_image",
- title: "LeadCleanr | Clean Messy Lead Lists Instantly",
+ title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
  description:
- "Paste text or upload a CSV to extract emails, phone numbers, URLs, domains, and remove duplicates in your browser.",
+ "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser.",
  images: ["/twitter-image"],
  },
  manifest: "/manifest.webmanifest",
