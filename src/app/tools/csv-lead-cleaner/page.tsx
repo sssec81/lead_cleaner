@@ -87,18 +87,17 @@ export default function CsvLeadCleanerPage() {
   <main className="relative min-h-screen pt-4 pb-24 lg:pb-32 bg-[var(--lc-bg)]">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   {pageHeader}
-  <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>
-    <CsvLeadCleanerTool />
-  </Suspense>
+  <div className="mb-16">
+    <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>
+      <CsvLeadCleanerTool />
+    </Suspense>
   </div>
-  </main>
-
+  
   {/* SEO Use-Case Section */}
-  <section className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] pt-16 pb-16">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <section className="border-t border-[var(--lc-border)] pt-16">
   <div className="max-w-2xl mb-12">
   <div className="section-anchor-row mb-4">
-  <span className="section-anchor-label">Who Uses This</span>
+  <span className="section-anchor-label">How it works</span>
   <div className="section-anchor-line h-px w-20"></div>
   </div>
   <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl mb-4">
@@ -123,8 +122,9 @@ export default function CsvLeadCleanerPage() {
   );
   })}
   </div>
-  </div>
   </section>
+  </div>
+  </main>
   </PageFrame>
  );
 }

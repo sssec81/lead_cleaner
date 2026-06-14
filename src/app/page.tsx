@@ -74,41 +74,36 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 lg:px-8 lg:pt-28">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
           <div>
-            <p className="section-eyebrow">Workflow Tool</p>
             <h1 className="section-title mt-4 max-w-none font-display text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-[var(--lc-ink)]">
-              Clean messy lead CSVs
-              <br />
-              before they break
-              <br />
-              your CRM import.
+              Clean messy lead CSVs before CRM import
             </h1>
             <p className="mt-4 max-w-sm text-base leading-7 text-[var(--lc-muted)]">
-              Paste a messy list or upload a CSV. LeadCleanr extracts emails,
-              phones, and domains in your browser. Nothing gets uploaded.
+              Remove duplicates, invalid emails, blank rows, and personal email addresses — 100% in your browser.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href="/tools/csv-lead-cleaner?sample=1"
+                href="/tools/csv-lead-cleaner"
                 className="btn-primary min-h-11 rounded-lg px-5 py-2.5 text-[15px] font-medium"
               >
-                Start CSV Workflow
-                <ArrowRight className="h-4 w-4" />
+                Clean CSV Free
               </Link>
               <Link
-                href="/tools"
+                href="/tools/csv-lead-cleaner?sample=1"
                 className="btn-secondary min-h-11 rounded-lg px-5 py-2.5 text-[15px] font-medium"
               >
-                Browse all tools
+                Try Sample CSV
               </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--lc-muted)]">
-              <span>✓ No account needed</span>
+            <div className="mt-6 flex flex-wrap items-center gap-3 font-mono text-xs text-[var(--lc-muted)]">
+              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> No signup</span>
               <span className="text-[var(--lc-hint)]">·</span>
-              <span>✓ 5MB free</span>
+              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> No upload</span>
               <span className="text-[var(--lc-hint)]">·</span>
-              <span>✓ Processed locally in your browser</span>
+              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> Browser-only</span>
+              <span className="text-[var(--lc-hint)]">·</span>
+              <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-[var(--lc-accent)]" /> 5MB free</span>
             </div>
           </div>
 
