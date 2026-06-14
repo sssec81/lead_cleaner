@@ -29,9 +29,14 @@ export type CsvColumnDetection = {
 
 type ParseCsvFileOptions = {
  file: File;
+ preserveBlankRows?: boolean;
  onProgress?: (progress: CsvParseProgress) => void;
  onComplete: (result: CsvParseResult) => void;
  onError: (message: string) => void;
+};
+
+type ParseCsvTextOptions = {
+ preserveBlankRows?: boolean;
 };
 
 type CsvHeaderMapping = {
@@ -101,6 +106,7 @@ export function isLikelyCsvFile(file: File) {
 
 export function parseCsvFile({
  file,
+ preserveBlankRows = false,
  onProgress,
  onComplete,
  onError,
@@ -138,10 +144,9 @@ export function parseCsvFile({
  const normalizedRows = headerMappings.length
  ? allRows.map((row) => normalizeRow(row, headerMappings))
  : [];
- const { rows, errorsToKeep } = removePhantomTrailingRows(
- normalizedRows,
- allErrors,
- );
+ const { rows, errorsToKeep } = preserveBlankRows
+ ? removeParserPhantomTrailingRows(allRows, normalizedRows, metaFields, allErrors)
+ : removePhantomTrailingRows(normalizedRows, allErrors);
  const warnings = new Set<string>();
 
  collectWarnings(errorsToKeep, warnings);
@@ -162,7 +167,10 @@ export function parseCsvFile({
  });
 }
 
-export function parseCsvText(content: string): CsvParseResult {
+export function parseCsvText(
+ content: string,
+ { preserveBlankRows = false }: ParseCsvTextOptions = {},
+): CsvParseResult {
  if (!content.trim()) {
  return { headers: [], rows: [], warnings: [] };
  }
@@ -177,10 +185,14 @@ export function parseCsvText(content: string): CsvParseResult {
  const normalizedRows = headerMappings.length
  ? result.data.map((row) => normalizeRow(row, headerMappings))
  : [];
- const { rows, errorsToKeep } = removePhantomTrailingRows(
+ const { rows, errorsToKeep } = preserveBlankRows
+ ? removeParserPhantomTrailingRows(
+ result.data,
  normalizedRows,
+ result.meta.fields ?? [],
  result.errors,
- );
+ )
+ : removePhantomTrailingRows(normalizedRows, result.errors);
  const warnings = new Set<string>();
 
  collectWarnings(errorsToKeep, warnings);
@@ -337,12 +349,64 @@ function removePhantomTrailingRows(rows: CsvRow[], errors: ParseError[]) {
  };
 }
 
+function removeParserPhantomTrailingRows(
+ rawRows: Record<string, unknown>[],
+ normalizedRows: CsvRow[],
+ rawHeaders: string[],
+ errors: ParseError[],
+) {
+ const phantomRowIndexes = new Set<number>();
+
+ for (let index = normalizedRows.length - 1; index >= 0; index -= 1) {
+ if (!isBlankRow(normalizedRows[index])) {
+ break;
+ }
+
+ if (!isParserPhantomRow(rawRows[index], rawHeaders)) {
+ break;
+ }
+
+ phantomRowIndexes.add(index);
+ }
+
+ const rowsToKeep = normalizedRows.filter(
+ (_row, index) => !phantomRowIndexes.has(index),
+ );
+ const errorsToKeep = errors.filter((error) => {
+ return !(typeof error.row === "number" && phantomRowIndexes.has(error.row));
+ });
+
+ return {
+ rows: rowsToKeep,
+ errorsToKeep,
+ };
+}
+
 function isBlankRow(row: CsvRow | undefined) {
  if (!row) {
  return false;
  }
 
  return Object.values(row).every((value) => value.trim() === "");
+}
+
+function isParserPhantomRow(
+ row: Record<string, unknown> | undefined,
+ rawHeaders: string[],
+) {
+ if (!row || !rawHeaders.length) {
+ return false;
+ }
+
+ const presentHeaderCount = rawHeaders.filter((header) =>
+ Object.prototype.hasOwnProperty.call(row, header),
+ ).length;
+ const presentValues = Object.entries(row)
+ .filter(([key]) => key !== "__parsed_extra")
+ .map(([, value]) => String(value ?? "").trim())
+ .filter(Boolean);
+
+ return presentHeaderCount <= 1 && presentValues.length === 0;
 }
 
 function buildWarningMessage(error: ParseError) {

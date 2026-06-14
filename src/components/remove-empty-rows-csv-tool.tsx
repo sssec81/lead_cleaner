@@ -98,6 +98,7 @@ export function RemoveEmptyRowsCsvTool() {
 
  parseCsvFile({
  file,
+ preserveBlankRows: true,
  onProgress: (nextProgress) => {
  setProgress(nextProgress);
  },
@@ -125,8 +126,8 @@ export function RemoveEmptyRowsCsvTool() {
  });
  }
 
- function loadDemoCsv() {
- const result = parseCsvText(DEMO_CSV);
+function loadDemoCsv() {
+ const result = parseCsvText(DEMO_CSV, { preserveBlankRows: true });
  resetState("leadcleanr-demo.csv");
  setError("");
  setHeaders(result.headers);

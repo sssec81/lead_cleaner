@@ -312,6 +312,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
 
  parseCsvFile({
  file,
+ preserveBlankRows: true,
  onProgress: setProgress,
  onComplete: (result) => {
  if (!result.headers.length) {
@@ -370,8 +371,8 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
  });
  }
 
- function loadDemoCsv() {
- const result = parseCsvText(DEMO_CSV);
+function loadDemoCsv() {
+ const result = parseCsvText(DEMO_CSV, { preserveBlankRows: true });
  const nextDetections = detectCsvColumns(result.headers, result.rows);
 
  resetState("leadcleanr-demo.csv");

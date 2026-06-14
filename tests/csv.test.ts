@@ -57,6 +57,34 @@ test("parseCsvText preserves interior blank rows and drops phantom trailing blan
   });
 });
 
+test("parseCsvText can preserve real trailing blank rows when a tool needs blank-row counts", () => {
+  const result = parseCsvText("name,email\nJane,jane@acme.com\n,\n", {
+    preserveBlankRows: true,
+  });
+
+  assert.equal(result.rows.length, 2);
+  assert.deepEqual(result.rows[0], {
+    name: "Jane",
+    email: "jane@acme.com",
+  });
+  assert.deepEqual(result.rows[1], {
+    name: "",
+    email: "",
+  });
+});
+
+test("parseCsvText preserveBlankRows still drops the parser phantom row from a plain trailing newline", () => {
+  const result = parseCsvText("name,email\nJane,jane@acme.com\n", {
+    preserveBlankRows: true,
+  });
+
+  assert.equal(result.rows.length, 1);
+  assert.deepEqual(result.rows[0], {
+    name: "Jane",
+    email: "jane@acme.com",
+  });
+});
+
 test("parseCsvText keeps duplicate headers by using renamed field keys", () => {
   const result = parseCsvText("name,name,email\nJane,Alias,jane@acme.com");
 
