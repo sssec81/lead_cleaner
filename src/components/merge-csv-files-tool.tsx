@@ -484,5 +484,21 @@ function normalizeEmailValue(value: string) {
 }
 
 function normalizeDomainValue(value: string) {
- return value.trim().toLowerCase().replace(/^www\./, "");
+ const trimmed = value.trim().toLowerCase();
+ const fromUrl = normalizeUrlValue(trimmed);
+
+ if (fromUrl) {
+  try {
+   const parsed = new URL(fromUrl);
+   return parsed.hostname.replace(/^www\./, "");
+  } catch {
+   // Fall through to looser normalization.
+  }
+ }
+
+ return trimmed
+  .replace(/^https?:\/\//, "")
+  .replace(/^www\./, "")
+  .split(/[/?#]/)[0]
+  ?.replace(/:\d+$/, "") ?? "";
 }

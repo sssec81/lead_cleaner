@@ -9,6 +9,8 @@ function isRateLimited(ip: string): boolean {
  const limit = 20; // 20 signups per minute per IP
  const windowMs = 60 * 1000;
 
+ pruneExpiredRateLimits(ipRates, now);
+
  const record = ipRates.get(ip);
  if (!record || now > record.resetTime) {
  ipRates.set(ip, { count: 1, resetTime: now + windowMs });
@@ -17,6 +19,17 @@ function isRateLimited(ip: string): boolean {
 
  record.count += 1;
  return record.count > limit;
+}
+
+function pruneExpiredRateLimits(
+ map: Map<string, { count: number; resetTime: number }>,
+ now: number,
+) {
+ for (const [key, record] of map) {
+  if (now > record.resetTime) {
+   map.delete(key);
+  }
+ }
 }
 
 function sanitizeWaitlistField(value: unknown) {
