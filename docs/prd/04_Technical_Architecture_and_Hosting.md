@@ -47,14 +47,23 @@ Growth relies on ranking for tool-specific, long-tail keywords. Each tool page i
 | :--- | :--- | :--- | :--- |
 | `/` | LeadCleanr | Clean Messy Lead Lists Instantly | [sitemap.ts](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/app/sitemap.ts) |
 | `/tools` | Lead cleaning tools | Standalone Lead Cleaning & Formatting Tools | [tools/page.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/app/tools/page.tsx) |
+| `/tools/csv-lead-cleaner` | CSV lead cleaner | CSV Lead Cleaner & Deduplicator | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/extract-emails-from-csv` | extract emails from CSV | Extract Emails from CSV Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/extract-phone-numbers-from-csv` | extract phone numbers from CSV | Extract Phone Numbers from CSV Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/remove-empty-rows-from-csv` | remove empty rows from CSV | Remove Empty Rows from CSV Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/merge-csv-files` | merge CSV files | Merge CSV Files Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/split-csv-files` | split CSV files | Split CSV into Multiple Files | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/convert-csv-to-json` | convert CSV to JSON | Convert CSV to JSON Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
 | `/tools/extract-emails-from-text` | extract emails from text | Extract Emails from Text Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
 | `/tools/extract-phone-numbers-from-text` | extract phone numbers from text | Extract Phone Numbers from Text Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
 | `/tools/extract-urls-from-text` | extract URLs from text | Extract URLs from Text Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
 | `/tools/extract-domains-from-emails` | extract domains from email list | Extract Domains from Email List | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
-| `/tools/remove-duplicate-emails` | remove duplicate emails | Remove Duplicate Emails Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
 | `/tools/clean-email-list` | clean email list online | Clean Email List Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
-| `/tools/csv-lead-cleaner` | CSV lead cleaner | CSV Lead Cleaner & Deduplicator | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
-| `/tools/extract-emails-from-csv` | extract emails from CSV | Extract Emails from CSV Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/remove-duplicate-emails` | remove duplicate emails | Remove Duplicate Emails Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/remove-duplicate-phone-numbers` | remove duplicate phone numbers | Remove Duplicate Phone Numbers Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/remove-duplicate-urls` | remove duplicate URLs | Remove Duplicate URLs Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/validate-email-list` | validate email list | Validate Email List Syntax Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
+| `/tools/count-words-characters-text` | count words characters | Count Words and Characters Online | [seo.tsx](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/seo.tsx) |
 
 ---
 

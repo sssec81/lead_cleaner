@@ -36,6 +36,7 @@ Basic cleaning runs entirely in your browser. **We do not store your pasted text
 - **Extract Phone Numbers from CSV**: Detect the likely phone column, pull embedded phone numbers out of messy cell text, normalize them, and export a clean list.
 - **Remove Empty Rows from CSV**: Instantly strip blank lines from large files.
 - **Merge CSV Files**: Combine up to 5 CSV files with header mapping previews and normalized column-based deduplication for emails, phones, URLs, and domains.
+- **Split CSV Files**: Break large CSV files into smaller chunks (500 to 10,000 rows) and download them as a ZIP package.
 - **Convert CSV to JSON**: Transform flat spreadsheet rows into structured JSON arrays.
 
 ### Export & UI
@@ -120,6 +121,7 @@ leadcleanr/
 - Phone values keep their leading `+` in both single-column exports and record-based CSV downloads.
 - Text tools now use a simpler V1 replace-workspace flow without the old append action.
 - Free browser-side CSV processing is capped at 5 MB per file in the current release.
+- Added a local CSV splitter to segment large files to bypass CRM import limits.
 
 ## ⚠️ Acceptable Use Policy
 **LeadCleanr is for cleaning data you own or have permission to process.** Do not use it for spam, scraping abuse, or sending unsolicited messages. Ensure you comply with email marketing and privacy laws in your region.

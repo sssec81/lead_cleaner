@@ -31,6 +31,7 @@ The CSV clean-up path is the primary workspace utility. All data is processed us
   - **Deduplication:** Remove entire rows containing duplicate values in the selected column.
   - **Whitespace & Format Normalization:** Trim whitespace, lowercase emails, and normalize phone numbers.
   - **Blank Row Purging:** Remove rows with blank or invalid values in the targeted column.
+- **CSV Splitting:** Segment large CSV files into smaller chunks of 500, 1000, 5000, or 10000 rows (optionally retaining headers on each file) and export them compressed in a single ZIP archive.
 - **Blob Export:** Output files generated client-side using the browser `Blob` API in [export.ts](file:///Users/shamanjungshah/Desktop/money/lead_cleaner/src/lib/export.ts) for immediate download, with spreadsheet-safe cell sanitization that preserves leading `+` on phone fields.
 
 ---

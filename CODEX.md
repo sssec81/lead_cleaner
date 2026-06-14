@@ -106,13 +106,14 @@ Main pages:
 - `/terms`
 - `/contact`
 
-Initial SEO tool pages (16 tools deployed):
+Initial SEO tool pages (17 tools deployed):
 
 - `/tools/csv-lead-cleaner`
 - `/tools/extract-emails-from-csv`
 - `/tools/extract-phone-numbers-from-csv`
 - `/tools/remove-empty-rows-from-csv`
 - `/tools/merge-csv-files`
+- `/tools/split-csv-files`
 - `/tools/convert-csv-to-json`
 - `/tools/extract-emails-from-text`
 - `/tools/extract-phone-numbers-from-text`

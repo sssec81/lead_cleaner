@@ -91,6 +91,7 @@ LeadCleanr addresses these pain points by offering:
     *   **Email-Type Review:** Classify business vs. personal email rows, flag role-based inboxes, and optionally filter those rows before export.
     *   **Review Views:** Preview clean rows, removed rows, and invalid rows before downloading.
 *   **CSV Merge Utility:** Combine up to 5 CSV files, preserve unique headers, and deduplicate by exact row or normalized column values.
+*   **CSV Split Utility:** Break large CSV files into smaller chunks of 500, 1,000, 5,000, or 10,000 rows (optionally retaining headers on every chunk), and export them compressed into a ZIP package.
 *   **Blob Export:** Generates the cleaned CSV file on the client side using a browser Blob API for immediate download, while preserving leading `+` in phone columns.
 
 ### 4.3 Real-Time Value Metrics
@@ -163,14 +164,23 @@ The growth model relies on a programmatic SEO strategy. Each utility tool is dep
 | :--- | :--- | :--- |
 | `/` | LeadCleanr | Clean Messy Lead Lists Instantly |
 | `/tools` | Lead cleaning tools | Standalone Lead Cleaning & Formatting Tools |
+| `/tools/csv-lead-cleaner` | CSV lead cleaner | CSV Lead Cleaner & Deduplicator |
+| `/tools/extract-emails-from-csv` | extract emails from CSV | Extract Emails from CSV Online |
+| `/tools/extract-phone-numbers-from-csv` | extract phone numbers from CSV | Extract Phone Numbers from CSV Online |
+| `/tools/remove-empty-rows-from-csv` | remove empty rows from CSV | Remove Empty Rows from CSV Online |
+| `/tools/merge-csv-files` | merge CSV files | Merge CSV Files Online |
+| `/tools/split-csv-files` | split CSV files | Split CSV into Multiple Files |
+| `/tools/convert-csv-to-json` | convert CSV to JSON | Convert CSV to JSON Online |
 | `/tools/extract-emails-from-text` | extract emails from text | Extract Emails from Text Online |
 | `/tools/extract-phone-numbers-from-text` | extract phone numbers from text | Extract Phone Numbers from Text Online |
 | `/tools/extract-urls-from-text` | extract URLs from text | Extract URLs from Text Online |
 | `/tools/extract-domains-from-emails` | extract domains from email list | Extract Domains from Email List |
-| `/tools/remove-duplicate-emails` | remove duplicate emails | Remove Duplicate Emails Online |
 | `/tools/clean-email-list` | clean email list online | Clean Email List Online |
-| `/tools/csv-lead-cleaner` | CSV lead cleaner | CSV Lead Cleaner & Deduplicator |
-| `/tools/extract-emails-from-csv` | extract emails from CSV | Extract Emails from CSV Online |
+| `/tools/remove-duplicate-emails` | remove duplicate emails | Remove Duplicate Emails Online |
+| `/tools/remove-duplicate-phone-numbers` | remove duplicate phone numbers | Remove Duplicate Phone Numbers Online |
+| `/tools/remove-duplicate-urls` | remove duplicate URLs | Remove Duplicate URLs Online |
+| `/tools/validate-email-list` | validate email list | Validate Email List Syntax Online |
+| `/tools/count-words-characters-text` | count words characters | Count Words and Characters Online |
 | `/pricing` | LeadCleanr Pricing | Clean Leads Free — Simple Pricing |
 | `/privacy` | Privacy Policy | Privacy Policy & Browser Processing Details |
 | `/terms` | Terms of Service | Terms of Service & Acceptable Use |
