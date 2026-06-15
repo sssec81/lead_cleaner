@@ -1,6 +1,6 @@
 import Link from "next/link";
-
 import type { FaqItem } from "@/lib/seo";
+import { FaqAccordion } from "@/components/faq-accordion";
 
 type ContentItem = {
   title: string;
@@ -123,26 +123,12 @@ export function ToolSeoSections({
           <h2 className="font-sans text-2xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-3xl">
             FAQ
           </h2>
-          <p className="mt-2 text-[14px] text-[var(--lc-muted)]">
+          <p className="mt-2 text-[14px] text-[var(--lc-muted)] mb-8">
             Short answers to the questions people usually ask before they clean or export the file.
           </p>
         </div>
-        <div className="mt-8 border-t border-[var(--lc-border)]">
-          {faqs.map((faq, index) => (
-            <details
-              key={faq.question}
-              className="group border-b border-[var(--lc-border)] py-4"
-              open={index === 0}
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[14px] text-[var(--lc-ink)] hover:text-[var(--lc-accent)] transition-colors [&::-webkit-details-marker]:hidden">
-                {faq.question}
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45 shrink-0 ml-4 font-mono text-[16px]">+</span>
-              </summary>
-              <p className="mt-2 text-[13px] leading-relaxed text-[var(--lc-muted)]">
-                {faq.answer}
-              </p>
-            </details>
-          ))}
+        <div>
+          <FaqAccordion items={faqs} defaultOpenIndex={0} />
         </div>
       </section>
     </div>

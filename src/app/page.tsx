@@ -17,6 +17,7 @@ import {
 
 import { PageFrame } from "@/components/page-frame";
 import { FaqJsonLd, type FaqItem, getSiteUrl } from "@/lib/seo";
+import { FaqAccordion } from "@/components/faq-accordion";
 
 const processSteps = [
   {
@@ -386,73 +387,8 @@ export default function HomePage() {
               Answers about privacy, file limits, exports, and how browser-only CSV cleaning works.
             </p>
           </div>
-          <div className="flex flex-col gap-4">
-            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4" open>
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
-                Is my CSV uploaded to a server?
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
-                  <Plus className="h-4 w-4" />
-                </span>
-              </summary>
-              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
-                No. LeadCleanr processes CSV files locally in your browser. Your pasted text and uploaded files are not sent to our server for cleaning.
-              </div>
-            </details>
-            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
-                Do I need an account?
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
-                  <Plus className="h-4 w-4" />
-                </span>
-              </summary>
-              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
-                No. The free tools can be used without signup, login, or a credit card.
-              </div>
-            </details>
-            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
-                What CSV size is supported?
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
-                  <Plus className="h-4 w-4" />
-                </span>
-              </summary>
-              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
-                The free browser workflow supports CSV files up to 5MB.
-              </div>
-            </details>
-            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
-                Can LeadCleanr remove Gmail and Yahoo addresses?
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
-                  <Plus className="h-4 w-4" />
-                </span>
-              </summary>
-              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
-                Yes. The CSV Lead Cleaner can filter personal email domains so you can focus on business emails.
-              </div>
-            </details>
-            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
-                Can I review removed rows before export?
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
-                  <Plus className="h-4 w-4" />
-                </span>
-              </summary>
-              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
-                Yes. The CSV workflow lets you review clean rows, removed duplicates, invalid rows, and filtered rows before downloading.
-              </div>
-            </details>
-            <details className="group rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-[15px] text-[var(--lc-ink)] [&::-webkit-details-marker]:hidden">
-                What can I export?
-                <span className="text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-45">
-                  <Plus className="h-4 w-4" />
-                </span>
-              </summary>
-              <div className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">
-                Depending on the tool, you can export cleaned results as CSV, TXT, or copied text.
-              </div>
-            </details>
+          <div>
+            <FaqAccordion items={homepageFaqs} defaultOpenIndex={0} />
           </div>
         </div>
       </section>
