@@ -9,6 +9,11 @@ type ErrorBody = {
 
 const ipRates = new Map<string, { count: number; resetTime: number }>();
 
+function getClientIp(request: Request) {
+ const forwardedFor = request.headers.get("x-forwarded-for");
+ return forwardedFor?.split(",")[0]?.trim() || "unknown";
+}
+
 function isRateLimited(ip: string): boolean {
  const now = Date.now();
  const limit = 20; // 20 errors per minute per IP
@@ -49,7 +54,8 @@ export async function POST(request: Request) {
  );
  }
 
- const ip = request.headers.get("x-forwarded-for") || "unknown";
+ // This limiter is process-local, which is acceptable for the current single-process deployment.
+ const ip = getClientIp(request);
  
  if (isRateLimited(ip)) {
  return NextResponse.json({ ok: false, error: "Too many requests" }, { status: 429 });

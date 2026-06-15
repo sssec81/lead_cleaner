@@ -30,6 +30,10 @@ type ParsedPhoneResult = {
  display: string;
 };
 
+function countBlankLines(input: string) {
+ return input.split(/\r?\n/).filter((line) => !line.trim()).length;
+}
+
 function formatPhoneDisplay(
  originalValue: string,
  canonicalValue: string,
@@ -172,7 +176,7 @@ export function extractEmailsFromText(input: string) {
 
 export function cleanEmailList(input: string) {
  const items = input.split(/[\n\r,\t; ]+/).map((entry) => entry.trim());
- const blankRemoved = items.filter((entry) => entry === "").length;
+ const blankRemoved = countBlankLines(input);
  const candidates = items.filter((entry) => entry !== "");
 
  const validEmails = candidates.filter((entry) => SINGLE_EMAIL_REGEX.test(entry));
@@ -202,7 +206,7 @@ export function removeDuplicateEmails(input: string) {
 
 export function validateEmailListSyntax(input: string) {
  const items = input.split(/[\n\r,\t; ]+/).map((entry) => entry.trim());
- const blankRemoved = items.filter((entry) => entry === "").length;
+ const blankRemoved = countBlankLines(input);
  const candidates = items.filter((entry) => entry !== "");
 
  const validEmails: string[] = [];

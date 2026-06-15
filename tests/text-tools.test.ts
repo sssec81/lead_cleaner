@@ -49,6 +49,13 @@ test("cleanEmailList filters invalid entries", () => {
   assert.equal(result.stats.invalidRemoved, 1);
 });
 
+test("cleanEmailList counts blank lines before delimiter collapsing", () => {
+  const result = cleanEmailList("first@example.com\n\n\nsecond@example.com");
+
+  assert.equal(result.stats.blankRemoved, 2);
+  assert.equal(result.stats.finalCount, 2);
+});
+
 test("extractPhoneNumbersFromText normalizes international and local numbers with libphonenumber-js", () => {
   const result = extractPhoneNumbersFromText(
     "Call +44 20 7946 0958 or (415) 555-0101 today.",
