@@ -1,127 +1,169 @@
-# LeadCleanr (v1.1.2)
+# LeadCleanr
 
-**Clean messy lead lists instantly.**
+LeadCleanr is a browser-first Next.js app for cleaning messy lead lists before CRM import. It helps users extract emails, phone numbers, URLs, and domains from raw text or CSV files, then review and export clean results without sending the source data to a backend for processing.
 
-LeadCleanr is an online utility SaaS tool that helps sales teams, recruiters, marketers, agencies, and virtual assistants clean messy lead lists by extracting emails, phone numbers, URLs, and domains from text or CSV files.
+## What This Project Does
 
-## 🛡️ Privacy-First Processing
-Basic cleaning runs entirely in your browser. **We do not store your pasted text or uploaded CSV files.** Data cleanup happens locally on your device; separate product behavior like anonymous telemetry, sanitized error reporting, or waitlist submissions does not include raw pasted text or uploaded CSV contents.
+- Cleans lead data locally in the browser
+- Extracts emails, phones, URLs, and domains from pasted text
+- Cleans and filters CSV lead lists before import
+- Removes duplicates, blank rows, and invalid records
+- Exports cleaned output as `.txt`, `.csv`, or `.json` depending on the tool
 
-## 🎯 Target Audience
-- Sales Teams & Cold Outreach
-- Recruiters & HR Teams
-- Marketers & Newsletter Operators
-- Agencies & Freelancers
-- Virtual Assistants & Data Entry Workers
+## Core Tool Set
 
-## ✨ Core Features (v1.1.2)
+### CSV tools
 
-### Text Input Tools
-- **Extract Emails**: Detect and return email addresses from pasted text.
-- **Extract Phone Numbers**: Detect phone numbers with smart international fallback logic.
-- **Extract URLs**: Detect website links and cleanly strip trailing punctuation.
-- **Extract Domains**: Extract domains from emails or URLs.
-- **Clean Email List**: Standardize and validate syntax for messy email lists.
-- **Remove Duplicate Emails**: Fast deduplication for email lists.
-- **Remove Duplicate Phone Numbers**: Fast deduplication for phone lists.
-- **Remove Duplicate URLs**: Fast deduplication for link lists.
-- **Validate Email List**: Check syntax validity of bulk emails.
-- **Count Words / Characters**: Real-time writing statistics and estimates.
-- **Defensive Parsing**: Hard character limits to prevent ReDoS (Regular Expression Denial of Service) browser hangs.
+- `CSV Lead Cleaner` for full spreadsheet cleanup
+- `Extract Emails from CSV`
+- `Extract Phone Numbers from CSV`
+- `Remove Empty Rows from CSV`
+- `Merge CSV Files`
+- `Split CSV Files`
+- `Convert CSV to JSON`
 
-### CSV Upload Tools
-- **Client-Side Chunking**: Upload `.csv` files and parse them using `PapaParse` via 64KB chunk streaming to keep the browser thread unblocked.
-- **CSV Lead Cleaner**: Smart column detection, row deduplication, invalid/blank row removal, and email-type filtering for messy lead sheets.
-- **Extract Emails from CSV**: Detect the likely email column, pull embedded email addresses out of messy cell text, deduplicate them, and export a clean list.
-- **Extract Phone Numbers from CSV**: Detect the likely phone column, pull embedded phone numbers out of messy cell text, normalize them, and export a clean list.
-- **Remove Empty Rows from CSV**: Instantly strip blank lines from large files.
-- **Merge CSV Files**: Combine up to 5 CSV files with header mapping previews and normalized column-based deduplication for emails, phones, URLs, and domains.
-- **Split CSV Files**: Break large CSV files into smaller chunks (500 to 10,000 rows) and download them as a ZIP package.
-- **Convert CSV to JSON**: Transform flat spreadsheet rows into structured JSON arrays.
+### Text tools
 
-### Export & UI
-- **SaaS Aesthetic**: Premium, modern interface with floating glassmorphic navbars, surface cards, and refined micro-interactions.
-- **Instant Download**: Download cleaned results as `.txt` or `.csv`.
-- **Copy**: One-click copy clean data to clipboard.
-- **Spreadsheet-Safe Export**: CSV exports guard formula-like cells while preserving leading `+` for phone fields.
-- **Review States**: Preview cleaned rows, removed rows, and invalid rows before exporting.
-- **Metrics**: Instantly view stats on duplicates removed, invalid rows, blank rows, email-filter removals, and clean leads ready.
-- **Simplified V1 Workflow**: Text tools focus on a straightforward replace-and-export flow instead of incremental append actions.
+- `Extract Emails from Text`
+- `Extract Phone Numbers from Text`
+- `Extract URLs from Text`
+- `Extract Domains from Emails`
+- `Clean Email List`
+- `Validate Email List`
+- `Remove Duplicate Emails`
+- `Remove Duplicate Phone Numbers`
+- `Remove Duplicate URLs`
+- `Count Words / Characters`
 
-## 💻 Tech Stack
-- **Framework**: Next.js 16 (App Router, Webpack on this platform)
-- **UI Library**: React 19
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **CSV Parsing**: PapaParse
-- **Icons**: `lucide-react`
-- **Phone Parsing**: `libphonenumber-js`
-- **Hosting**: Designed for Vercel or DigitalOcean Droplet + Nginx + PM2
+## Privacy Model
 
-## 🚀 Getting Started
+Lead cleaning runs locally in the browser. Pasted text and uploaded CSV files are not sent to the server for processing.
 
-First, clone the repo and install the dependencies:
+This repo does include optional server-side features for:
+
+- anonymous analytics
+- sanitized client error reporting
+- waitlist submissions
+
+Those flows are separate from the core cleaning pipeline.
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- PapaParse
+- `libphonenumber-js`
+- `fflate`
+
+## Project Structure
+
+```text
+src/
+├── app/              # App Router pages, metadata, API routes
+├── components/       # UI and tool components
+├── lib/              # CSV, text cleanup, export, SEO, telemetry helpers
+tests/                # Node test suite for core logic
+test-fixtures/        # Sample inputs for realistic/manual testing
+docs/                 # PRD and supporting product docs
+```
+
+## Local Development
+
+Install dependencies:
+
 ```bash
 npm install
 ```
 
-Run the development server:
+Start the dev server:
+
 ```bash
 npm run dev
 ```
-Open http://localhost:3000 with your browser.
-On Apple Silicon machines without native Turbopack bindings, this project uses Webpack for local development too.
 
-Create a production build:
+Open `http://localhost:3000`.
+
+Build for production:
+
 ```bash
 npm run build
 ```
-On Apple Silicon machines without native Turbopack bindings, this project uses Webpack for production builds.
 
-## 📂 Project Structure
+Start the production server locally:
 
-```text
-leadcleanr/
-├── src/
-│   ├── app/
-│   │   ├── page.tsx               # Home Page
-│   │   ├── tools/                 # SEO Tool Pages
-│   │   │   ├── extract-emails-from-text/
-│   │   │   ├── clean-email-list/
-│   │   │   ├── csv-lead-cleaner/
-│   │   │   └── ...
-│   │   ├── pricing/               # Pricing Page
-│   │   ├── privacy/               # Privacy Policy
-│   │   ├── terms/                 # Terms of Service
-│   │   └── contact/               # Contact Form
-│   ├── components/                # Reusable UI Components
-│   │   ├── page-frame.tsx         # Main Shell layout
-│   │   ├── site-header.tsx        # Navigation
-│   │   ├── csv-lead-cleaner-tool.tsx
-│   │   └── text-processing-tool.tsx
-│   └── lib/                       # Core Logic (Browser-side)
-│       ├── text-tools.ts          # Regex extraction & string cleaning
-│       ├── csv.ts                 # PapaParse wrappers & chunking
-│       └── export.ts              # Blob/download logic
+```bash
+npm run start
 ```
 
-## 🗺️ Roadmap
+## Scripts
 
-- **V1 (Current)**: Browser-first text extraction, CSV cleaning, merge/export tooling, and SEO pages.
-- **V2 (Monetization Layer)**: User accounts, Stripe integration, larger file limits, saved workflows.
-- **V3 (Business/API Layer)**: API access, team workspaces, CRM exports, email verification credits.
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run test
+```
 
-## 📝 Release Notes
+## Environment Variables
 
-### v1.1.2
-- Waitlist signups now fail honestly if persistence fails instead of returning a false success response.
-- CSV lead cleaner now reports rows removed by email-type filters and fully resets cleanup settings.
-- Merge CSV column deduplication now normalizes emails, phones, URLs, and domains before comparing values.
-- CSV extractors now pull embedded emails and phone numbers out of messy cell text instead of requiring the entire cell to be a single clean value.
-- Phone values keep their leading `+` in both single-column exports and record-based CSV downloads.
-- Text tools now use a simpler V1 replace-workspace flow without the old append action.
-- Free browser-side CSV processing is capped at 5 MB per file in the current release.
-- Added a local CSV splitter to segment large files to bypass CRM import limits.
+Copy `.env.example` to `.env.local` and set values as needed.
 
-## ⚠️ Acceptable Use Policy
-**LeadCleanr is for cleaning data you own or have permission to process.** Do not use it for spam, scraping abuse, or sending unsolicited messages. Ensure you comply with email marketing and privacy laws in your region.
+```env
+NEXT_PUBLIC_GA_ID=
+ERROR_TRACKING_WEBHOOK_URL=
+WAITLIST_WEBHOOK_URL=
+WAITLIST_FILE_PATH=
+```
+
+Notes:
+
+- `NEXT_PUBLIC_GA_ID` enables Google Analytics 4
+- `ERROR_TRACKING_WEBHOOK_URL` is an optional webhook for client error reports
+- `WAITLIST_WEBHOOK_URL` is the recommended production waitlist sink
+- `WAITLIST_FILE_PATH` is an optional single-server fallback for waitlist storage
+
+## Testing
+
+This project includes logic tests for CSV parsing, CSV cleaning, export behavior, and text-processing helpers.
+
+Run them with:
+
+```bash
+npm run test
+```
+
+Useful sample inputs live under:
+
+- `test-fixtures/realistic`
+- `test-fixtures/upload-limits`
+
+## Deployment
+
+This app is designed for either:
+
+- Vercel
+- DigitalOcean Droplet with Nginx and PM2
+
+Deployment notes are documented here:
+
+- [DEPLOYMENT.md](/Users/shamanjungshah/Desktop/money/lead_cleaner/DEPLOYMENT.md)
+- [DEPLOYMENT_DO_DROPLET.md](/Users/shamanjungshah/Desktop/money/lead_cleaner/DEPLOYMENT_DO_DROPLET.md)
+
+## Related Docs
+
+- [docs/PRD.md](/Users/shamanjungshah/Desktop/money/lead_cleaner/docs/PRD.md)
+- [BUSINESS_PLAN.md](/Users/shamanjungshah/Desktop/money/lead_cleaner/BUSINESS_PLAN.md)
+- [CODEX.md](/Users/shamanjungshah/Desktop/money/lead_cleaner/CODEX.md)
+
+## Current Notes
+
+- The free browser workflow currently supports CSV files up to `5 MB` per file
+- Local development and production builds use `--webpack` in this repo's scripts
+- The repository homepage is `https://leadcleanr.com`
+
+## Acceptable Use
+
+Use LeadCleanr only for data you own or are authorized to process. Do not use it for scraping abuse, spam, or unsolicited outreach that violates privacy or marketing laws.
