@@ -4,6 +4,11 @@ type CsvSanitizeOptions = {
  allowLeadingPlus?: boolean;
 };
 
+type CsvRecordExportOptions = {
+ headers?: string[];
+ includeHeader?: boolean;
+};
+
 export function downloadTextFile(filename: string, content: string) {
  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
  triggerDownload(blob, filename);
@@ -57,15 +62,30 @@ export function buildCsvTextFromLines(
 }
 
 export function buildCsvTextFromRecords(rows: Array<Record<string, unknown>>) {
+ return buildCsvTextFromRecordsWithOptions(rows);
+}
+
+export function buildCsvTextFromRecordsWithOptions(
+ rows: Array<Record<string, unknown>>,
+ { headers, includeHeader = true }: CsvRecordExportOptions = {},
+) {
+ const exportHeaders =
+ headers ?? Array.from(new Set(rows.flatMap((row) => Object.keys(row))));
+
+ const sanitizedRows = rows.map((row) =>
+ exportHeaders.map((header) =>
+ sanitizeCsvCell(row[header], getCsvSanitizeOptions(header)),
+ ),
+ );
+
  return Papa.unparse(
- rows.map((row) =>
- Object.fromEntries(
- Object.entries(row).map(([key, value]) => [
- key,
- sanitizeCsvCell(value, getCsvSanitizeOptions(key)),
- ]),
+ {
+ fields: exportHeaders.map((header) =>
+ sanitizeCsvCell(header, getCsvSanitizeOptions(header)),
  ),
- ),
+ data: sanitizedRows,
+ },
+ { header: includeHeader },
  );
 }
 

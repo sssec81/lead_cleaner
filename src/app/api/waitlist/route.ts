@@ -40,8 +40,20 @@ function sanitizeWaitlistField(value: unknown) {
 }
 
 function getClientIp(request: Request) {
- const forwardedFor = request.headers.get("x-forwarded-for");
- return forwardedFor?.split(",")[0]?.trim() || "unknown";
+ const candidates = [
+  request.headers.get("x-real-ip"),
+  request.headers.get("cf-connecting-ip"),
+  request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(),
+ ];
+
+ for (const candidate of candidates) {
+  const normalized = candidate?.trim();
+  if (normalized && /^[a-f0-9:.]+$/i.test(normalized)) {
+   return normalized;
+  }
+ }
+
+ return null;
 }
 
 async function deliverWaitlistSignup(payload: {
@@ -88,7 +100,7 @@ export async function POST(request: Request) {
  try {
  const ip = getClientIp(request);
 
- if (isRateLimited(ip)) {
+ if (ip && isRateLimited(ip)) {
  return NextResponse.json({ ok: false, error: "Too many requests" }, { status: 429 });
  }
 

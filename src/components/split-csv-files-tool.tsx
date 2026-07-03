@@ -10,7 +10,6 @@ import {
  Settings2,
 } from "lucide-react";
 import { zipSync, strToU8 } from "fflate";
-import Papa from "papaparse";
 
 import {
  type CsvRow,
@@ -19,6 +18,7 @@ import {
  MAX_CSV_FILE_SIZE,
  parseCsvFile,
 } from "@/lib/csv";
+import { buildCsvTextFromRecordsWithOptions } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
@@ -117,11 +117,9 @@ export function SplitCsvFilesTool() {
  const baseName = fileName.replace(/\.[^/.]+$/, "");
 
  chunks.forEach((chunkRows, index) => {
- const csvString = Papa.unparse({
- fields: headers,
- data: chunkRows.map(row => headers.map(h => row[h] ?? ""))
- }, {
- header: keepHeaderRow
+ const csvString = buildCsvTextFromRecordsWithOptions(chunkRows, {
+ headers,
+ includeHeader: keepHeaderRow,
  });
  
  archive[`${baseName}_part_${index + 1}.csv`] = strToU8(csvString);

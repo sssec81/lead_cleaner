@@ -113,6 +113,7 @@ Copy `.env.example` to `.env.local` and set values as needed.
 
 ```env
 NEXT_PUBLIC_GA_ID=
+NEXT_PUBLIC_SITE_URL=
 ERROR_TRACKING_WEBHOOK_URL=
 WAITLIST_WEBHOOK_URL=
 WAITLIST_FILE_PATH=
@@ -121,6 +122,7 @@ WAITLIST_FILE_PATH=
 Notes:
 
 - `NEXT_PUBLIC_GA_ID` enables Google Analytics 4
+- `NEXT_PUBLIC_SITE_URL` optionally overrides the canonical site URL used in metadata
 - `ERROR_TRACKING_WEBHOOK_URL` is an optional webhook for client error reports
 - `WAITLIST_WEBHOOK_URL` is the recommended production waitlist sink
 - `WAITLIST_FILE_PATH` is an optional single-server fallback for waitlist storage

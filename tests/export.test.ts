@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   buildCsvTextFromLines,
   buildCsvTextFromRecords,
+  buildCsvTextFromRecordsWithOptions,
   sanitizeCsvCell,
 } from "../src/lib/export.ts";
 
@@ -67,4 +68,40 @@ test("buildCsvTextFromRecords quotes comma-containing cells while keeping formul
 
   assert.ok(csv.includes('"\'=SUM(A1:A2), with comma"'));
   assert.ok(csv.includes("Jane Doe"));
+});
+
+test("buildCsvTextFromRecordsWithOptions sanitizes chunked CSV exports with preserved header order", () => {
+  const csv = buildCsvTextFromRecordsWithOptions(
+    [
+      {
+        phone: "+14155550101",
+        note: "=HYPERLINK(\"http://bad\")",
+      },
+    ],
+    {
+      headers: ["phone", "note"],
+      includeHeader: true,
+    },
+  );
+
+  assert.match(csv, /phone,note/);
+  assert.match(csv, /\+14155550101/);
+  assert.ok(!csv.includes("'+14155550101"));
+  assert.ok(csv.includes("'=HYPERLINK"));
+});
+
+test("buildCsvTextFromRecordsWithOptions can omit the header row safely", () => {
+  const csv = buildCsvTextFromRecordsWithOptions(
+    [
+      {
+        email: "=SUM(A1:A2)",
+      },
+    ],
+    {
+      headers: ["email"],
+      includeHeader: false,
+    },
+  );
+
+  assert.equal(csv.trim(), "'=SUM(A1:A2)");
 });
