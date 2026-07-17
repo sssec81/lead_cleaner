@@ -11,6 +11,9 @@ LeadCleanr is a browser-first Next.js app for cleaning messy lead lists before C
 - Saves reusable cleanup presets in browser storage
 - Saves opt-in cleanup snapshots locally for 30 days
 - Maps clean rows into HubSpot, Salesforce, Apollo, and Pipedrive CSV formats
+- Lets users review and override CRM field mappings before export
+- Generates a data-free cleanup audit report with before/after metrics
+- Includes a dismissible first-run guide and keyboard undo/redo
 - Exports cleaned output as `.txt`, `.csv`, or `.json` depending on the tool
 
 ## Core Tool Set

@@ -60,6 +60,7 @@ import { trackToolEvent } from "@/lib/telemetry";
 import { CleanupPresetControls } from "@/components/cleanup-preset-controls";
 import { CrmExportControls } from "@/components/crm-export-controls";
 import { LocalWorkspaceHistory } from "@/components/local-workspace-history";
+import { CsvCleanerQuickGuide } from "@/components/csv-cleaner-quick-guide";
 import type { LocalWorkspaceSnapshot } from "@/lib/local-workspace-history";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
@@ -379,7 +380,7 @@ export function CsvLeadCleanerTool() {
  setTimeout(() => setToastVisible(false), 1500);
  }
 
- function undoConfigChange() {
+ const undoConfigChange = useCallback(() => {
  setPastConfigs((current) => {
  const previous = current.at(-1);
  if (!previous) {
@@ -396,9 +397,9 @@ export function CsvLeadCleanerTool() {
 
  return current.slice(0, -1);
  });
- }
+ }, [duplicateMode, emailFilter, selectedColumn]);
 
- function redoConfigChange() {
+ const redoConfigChange = useCallback(() => {
  setFutureConfigs((current) => {
  const next = current[0];
  if (!next) {
@@ -415,7 +416,7 @@ export function CsvLeadCleanerTool() {
 
  return current.slice(1);
  });
- }
+ }, [duplicateMode, emailFilter, selectedColumn]);
 
  function resetCleanupConfig() {
  if (!headers.length) {
@@ -460,6 +461,21 @@ export function CsvLeadCleanerTool() {
  );
  const hasLoadedFile = headers.length > 0 && status === "ready";
  const exportReady = hasLoadedFile && cleaned.rows.length > 0;
+
+ useEffect(() => {
+ const handleShortcut = (event: globalThis.KeyboardEvent) => {
+ const target = event.target as HTMLElement | null;
+ const isEditing = target?.matches("input, textarea, select, [contenteditable='true']");
+ if (!hasLoadedFile || isEditing || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "z") return;
+
+ event.preventDefault();
+ if (event.shiftKey) redoConfigChange();
+ else undoConfigChange();
+ };
+
+ window.addEventListener("keydown", handleShortcut);
+ return () => window.removeEventListener("keydown", handleShortcut);
+ }, [hasLoadedFile, redoConfigChange, undoConfigChange]);
  const reportRows =
  previewMode === "removed"
  ? cleaned.removedRows
@@ -545,6 +561,7 @@ export function CsvLeadCleanerTool() {
 
       return (
     <div className={`w-full transition-opacity duration-200 ${mounted ? "opacity-100" : "opacity-0"}`}>
+      <CsvCleanerQuickGuide onLoadSample={loadDemoCsv} />
       <LocalWorkspaceHistory
         currentWorkspace={hasLoadedFile ? {
           fileName,
@@ -729,10 +746,10 @@ export function CsvLeadCleanerTool() {
                     </div>
                   )}
                   <div className="flex gap-1">
-                    <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" aria-label="Undo cleanup setting change" title="Undo">
+                    <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} aria-keyshortcuts="Control+Z Meta+Z" className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" aria-label="Undo cleanup setting change" title="Undo">
                       <Undo2 className="h-4 w-4" />
                     </button>
-                    <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" aria-label="Redo cleanup setting change" title="Redo">
+                    <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z" className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" aria-label="Redo cleanup setting change" title="Redo">
                       <Redo2 className="h-4 w-4" />
                     </button>
                   </div>
@@ -849,6 +866,9 @@ export function CsvLeadCleanerTool() {
               sourceHeaders={previewHeaders}
               fileName={fileName}
               duplicateMode={duplicateMode}
+              selectedColumn={selectedColumn}
+              emailFilter={emailFilter}
+              summary={summary}
             />
           </div>
         </div>

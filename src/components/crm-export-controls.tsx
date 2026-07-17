@@ -1,16 +1,21 @@
 "use client";
 
-import { AlertTriangle, CheckCircle2, ChevronDown, Download, Workflow } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronDown, Download, FileText, Workflow } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import {
   buildCrmExport,
   buildCrmExportFileName,
   type CrmExportFormat,
+  type CrmFieldOverrides,
   CRM_EXPORT_FORMAT_OPTIONS,
 } from "@/lib/crm-export";
-import type { DuplicateMode } from "@/lib/csv-cleaner";
-import { downloadCsvRecords } from "@/lib/export";
+import {
+  buildCleanupAuditFileName,
+  buildCleanupAuditReport,
+} from "@/lib/cleanup-audit-report";
+import type { CleaningSummary, DuplicateMode, EmailFilterMode } from "@/lib/csv-cleaner";
+import { downloadCsvRecords, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 
 type CrmExportControlsProps = {
@@ -18,6 +23,9 @@ type CrmExportControlsProps = {
   sourceHeaders: string[];
   fileName: string;
   duplicateMode: DuplicateMode;
+  selectedColumn: string;
+  emailFilter: EmailFilterMode;
+  summary: CleaningSummary;
 };
 
 export function CrmExportControls({
@@ -25,21 +33,38 @@ export function CrmExportControls({
   sourceHeaders,
   fileName,
   duplicateMode,
+  selectedColumn,
+  emailFilter,
+  summary,
 }: CrmExportControlsProps) {
   const [format, setFormat] = useState<CrmExportFormat>("clean_csv");
+  const [overridesByFormat, setOverridesByFormat] = useState<
+    Partial<Record<Exclude<CrmExportFormat, "clean_csv">, CrmFieldOverrides>>
+  >({});
   const exportReady = rows.length > 0;
   const crmExport = useMemo(
     () =>
       format === "clean_csv"
         ? null
-        : buildCrmExport(format, sourceHeaders, rows),
-    [format, rows, sourceHeaders],
+        : buildCrmExport(format, sourceHeaders, rows, overridesByFormat[format] ?? {}),
+    [format, overridesByFormat, rows, sourceHeaders],
   );
   const selectedOption = CRM_EXPORT_FORMAT_OPTIONS.find(
     (option) => option.value === format,
   );
   const canDownload =
     exportReady && (format === "clean_csv" || Boolean(crmExport?.mappedFieldCount));
+  const activeOverrides = format === "clean_csv" ? {} : overridesByFormat[format] ?? {};
+
+  function updateFieldOverride(targetHeader: string, value: string) {
+    if (format === "clean_csv") return;
+    setOverridesByFormat((current) => {
+      const nextFormatOverrides = { ...(current[format] ?? {}) };
+      if (value === "__auto__") delete nextFormatOverrides[targetHeader];
+      else nextFormatOverrides[targetHeader] = value === "__skip__" ? "" : value;
+      return { ...current, [format]: nextFormatOverrides };
+    });
+  }
 
   function downloadExport() {
     if (!canDownload) return;
@@ -94,15 +119,32 @@ export function CrmExportControls({
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={downloadExport}
-          disabled={!canDownload}
-          className="lc-button-primary min-h-11 w-full gap-2 px-6 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 lg:w-auto"
-        >
-          <Download className="h-4 w-4" aria-hidden="true" />
-          {format === "clean_csv" ? "Export clean CSV" : `Export for ${selectedOption?.label}`}
-        </button>
+        <div className="flex w-full flex-col gap-2 sm:flex-row lg:w-auto">
+          <button
+            type="button"
+            onClick={() => {
+              downloadTextFile(
+                buildCleanupAuditFileName(fileName),
+                buildCleanupAuditReport({ fileName, selectedColumn, duplicateMode, emailFilter, summary }),
+              );
+              trackToolEvent("csv-lead-cleaner", "export_cleanup_audit");
+            }}
+            disabled={!exportReady}
+            className="lc-button-secondary min-h-11 w-full gap-2 px-4 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          >
+            <FileText className="h-4 w-4" aria-hidden="true" />
+            Audit report
+          </button>
+          <button
+            type="button"
+            onClick={downloadExport}
+            disabled={!canDownload}
+            className="lc-button-primary min-h-11 w-full gap-2 px-6 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            {format === "clean_csv" ? "Export clean CSV" : `Export for ${selectedOption?.label}`}
+          </button>
+        </div>
       </div>
 
       {crmExport ? (
@@ -143,6 +185,21 @@ export function CrmExportControls({
               Review field mapping
               <ChevronDown className="h-4 w-4 text-[var(--lc-muted)] transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
             </summary>
+            <div className="flex items-center justify-between gap-3 border-t border-[var(--lc-border)] bg-[var(--lc-bg)] px-3 py-2">
+              <p className="text-[11px] text-[var(--lc-muted)]">Change any automatic match before downloading.</p>
+              {Object.keys(activeOverrides).length ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (format === "clean_csv") return;
+                    setOverridesByFormat((current) => ({ ...current, [format]: {} }));
+                  }}
+                  className="lc-button-quiet min-h-11 shrink-0 px-3 text-xs font-semibold"
+                >
+                  Reset mapping
+                </button>
+              ) : null}
+            </div>
             <div className="grid gap-px border-t border-[var(--lc-border)] bg-[var(--lc-border)] sm:grid-cols-2 xl:grid-cols-3">
               {crmExport.mappings.map((mapping) => (
                 <div key={mapping.targetHeader} className="min-w-0 bg-white p-3">
@@ -162,9 +219,21 @@ export function CrmExportControls({
                       {mapping.status === "missing" ? "Missing" : mapping.status === "derived" ? "Derived" : "Mapped"}
                     </span>
                   </div>
-                  <p className="mt-1 truncate font-mono text-[11px] text-[var(--lc-muted)]" title={mapping.sourceLabel}>
-                    ← {mapping.sourceLabel}
-                  </p>
+                  <label htmlFor={`crm-map-${format}-${slugify(mapping.targetHeader)}`} className="sr-only">
+                    Source column for {mapping.targetHeader}
+                  </label>
+                  <select
+                    id={`crm-map-${format}-${slugify(mapping.targetHeader)}`}
+                    value={Object.hasOwn(activeOverrides, mapping.targetHeader)
+                      ? activeOverrides[mapping.targetHeader] || "__skip__"
+                      : "__auto__"}
+                    onChange={(event) => updateFieldOverride(mapping.targetHeader, event.target.value)}
+                    className="lc-select mt-2 min-h-11 w-full text-xs"
+                  >
+                    <option value="__auto__">Auto: {mapping.sourceLabel}</option>
+                    <option value="__skip__">Do not export</option>
+                    {sourceHeaders.map((header) => <option key={header} value={header}>{header}</option>)}
+                  </select>
                 </div>
               ))}
             </div>
@@ -196,4 +265,8 @@ function formatList(items: string[]): string {
   if (items.length < 2) return items[0] ?? "the required fields";
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
   return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
+}
+
+function slugify(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }

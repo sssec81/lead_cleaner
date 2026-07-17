@@ -21,6 +21,8 @@ export type CrmExportResult = {
   missingRequiredFields: string[];
 };
 
+export type CrmFieldOverrides = Record<string, string>;
+
 type FieldKey =
   | "first_name"
   | "last_name"
@@ -192,6 +194,7 @@ export function buildCrmExport(
   format: Exclude<CrmExportFormat, "clean_csv">,
   sourceHeaders: string[],
   rows: Array<Record<string, unknown>>,
+  overrides: CrmFieldOverrides = {},
 ): CrmExportResult {
   const normalizedHeaders = new Map<string, string>();
   sourceHeaders.forEach((header) => {
@@ -199,9 +202,20 @@ export function buildCrmExport(
     if (!normalizedHeaders.has(normalized)) normalizedHeaders.set(normalized, header);
   });
 
-  const mappings = TARGET_FIELDS[format].map((field) =>
-    resolveMapping(field, normalizedHeaders),
-  );
+  const mappings = TARGET_FIELDS[format].map((field) => {
+    if (Object.hasOwn(overrides, field.header)) {
+      const sourceHeader = overrides[field.header] ?? "";
+      return {
+        targetHeader: field.header,
+        sourceHeader: sourceHeader || null,
+        sourceLabel: sourceHeader || "Not exported",
+        status: sourceHeader ? "mapped" as const : "missing" as const,
+        required: Boolean(field.required),
+      };
+    }
+
+    return resolveMapping(field, normalizedHeaders);
+  });
   const activeMappings = mappings.filter((mapping) => mapping.status !== "missing");
   const exportRows = rows.map((row) => {
     const output: Record<string, unknown> = {};

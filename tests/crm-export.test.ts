@@ -133,3 +133,24 @@ test("buildCrmExportFileName appends the selected CRM format", () => {
     "client-leads-hubspot.csv",
   );
 });
+
+test("buildCrmExport applies custom source mappings and skipped fields", () => {
+  const result = buildCrmExport(
+    "hubspot",
+    ["primary_email", "company_phone"],
+    [{ primary_email: "jane@acme.com", company_phone: "+14155550101" }],
+    {
+      Email: "primary_email",
+      "Phone number": "company_phone",
+      "First name": "",
+    },
+  );
+
+  assert.deepEqual(result.headers, ["Email", "Phone number"]);
+  assert.equal(result.rows[0]?.Email, "jane@acme.com");
+  assert.equal(result.rows[0]?.["Phone number"], "+14155550101");
+  assert.equal(
+    result.mappings.find((mapping) => mapping.targetHeader === "First name")?.sourceLabel,
+    "Not exported",
+  );
+});
