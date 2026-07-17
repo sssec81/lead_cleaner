@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Phone } from "lucide-react";
 
 import { TextProcessingTool } from "@/components/text-processing-tool";
@@ -17,6 +17,14 @@ export function PhoneExtractorTool() {
  const [defaultCountry, setDefaultCountry] =
  useState<PhoneExtractionOptions["defaultCountry"]>("US");
  const [outputFormat, setOutputFormat] = useState<PhoneOutputFormat>("international");
+ const processPhoneInput = useCallback(
+ (input: string) =>
+ extractPhoneNumbersFromText(input, {
+ defaultCountry,
+ outputFormat,
+ }),
+ [defaultCountry, outputFormat],
+ );
 
  return (
  <TextProcessingTool
@@ -27,12 +35,7 @@ export function PhoneExtractorTool() {
  sampleInput={SAMPLE_TEXT}
  placeholder="Paste copied profiles, CRM notes, website text, or any messy block with phone numbers."
  trackName="extract-phone-numbers-from-text"
- processInput={(input) =>
- extractPhoneNumbersFromText(input, {
- defaultCountry,
- outputFormat,
- })
- }
+ processInput={processPhoneInput}
  statLabels={{
  scanned: "Items scanned",
  found: "Found",
@@ -53,8 +56,8 @@ export function PhoneExtractorTool() {
  inputControls={
  <div className="space-y-3">
  <div className="grid gap-3 sm:grid-cols-2">
- <label className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
- <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+ <label className="rounded-xl border border-[var(--lc-border)] bg-white px-4 py-3 text-sm">
+ <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-[var(--lc-muted)]">
  Default country
  </span>
  <select
@@ -62,7 +65,7 @@ export function PhoneExtractorTool() {
  onChange={(event) =>
  setDefaultCountry(event.target.value as PhoneExtractionOptions["defaultCountry"])
  }
- className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:bg-white"
+ className="lc-select mt-2 w-full"
  >
  <option value="US">United States (+1)</option>
  <option value="GB">United Kingdom (+44)</option>
@@ -71,14 +74,14 @@ export function PhoneExtractorTool() {
  </select>
  </label>
 
- <label className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
- <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+ <label className="rounded-xl border border-[var(--lc-border)] bg-white px-4 py-3 text-sm">
+ <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-[var(--lc-muted)]">
  Output format
  </span>
  <select
  value={outputFormat}
  onChange={(event) => setOutputFormat(event.target.value as PhoneOutputFormat)}
- className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:bg-white"
+ className="lc-select mt-2 w-full"
  >
  <option value="international">International format</option>
  <option value="digits-only">Digits only</option>

@@ -80,7 +80,7 @@ export default function ConvertCsvToJsonPage() {
   );
 
   const supportingContent = (
-    <section className="mt-16 lg:mt-20 border-t border-slate-200 pt-16">
+    <section className="mt-12 border-t border-slate-200 pt-12 lg:mt-14">
       <div className="mx-auto max-w-3xl text-center mb-12">
         <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl mb-5">
           Convert CSV to JSON for any workflow
@@ -122,7 +122,7 @@ export default function ConvertCsvToJsonPage() {
         path="/tools/convert-csv-to-json"
         category="BusinessApplication"
       />
-      <main className="relative min-h-screen pt-4 pb-24 lg:pb-32 bg-[var(--lc-bg)]">
+      <main className="relative bg-[var(--lc-bg)] pb-16 pt-4 lg:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {pageHeader}
           <Suspense fallback={<div className="h-96 flex items-center justify-center text-[var(--lc-muted)]">Loading tool...</div>}>

@@ -100,7 +100,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <PageFrame>
-      <section className="pt-20 pb-12 lg:pt-28 lg:pb-16">
+      <section className="pb-10 pt-14 lg:pb-12 lg:pt-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
             <div className="relative overflow-hidden surface-card rounded-[1.5rem] p-7 sm:p-10">
@@ -202,7 +202,7 @@ export default function TermsPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <div className="section-eyebrow">
@@ -264,7 +264,7 @@ export default function TermsPage() {
         </div>
       </section>
 
-      <section className="pb-16 lg:pb-20">
+      <section className="pb-12 lg:pb-16">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
           <div className="lg:sticky lg:top-24 lg:self-start">
             <div className="surface-card rounded-[1.5rem] p-6 sm:p-7">

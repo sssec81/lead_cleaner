@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react";
+import { Check, ShieldCheck } from "lucide-react";
 import React from "react";
 
 export interface TextWorkspaceShellProps {
@@ -69,7 +69,7 @@ export function TextWorkspaceShell({
           </div>
           <button
             type="button"
-            className="group relative flex h-8 w-8 items-center justify-center self-start rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors"
+            className="group relative flex h-11 w-11 items-center justify-center self-start rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors"
             aria-label="Keyboard shortcuts"
             aria-expanded={showShortcuts}
             aria-haspopup="dialog"
@@ -95,7 +95,7 @@ export function TextWorkspaceShell({
           </button>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-1.5 border-b border-[var(--lc-border)] pb-2.5 text-[10px] font-medium tracking-tight text-[var(--lc-muted)]">
+        <div aria-label={`Step ${currentStep + 1} of ${steps.length}`} className="mt-4 flex flex-wrap items-center gap-1.5 border-b border-[var(--lc-border)] pb-2.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
           {steps.map((label, index) => {
             const isDone = index < currentStep;
             const isCurrent = index === currentStep;
@@ -112,7 +112,7 @@ export function TextWorkspaceShell({
                   }`}
                 >
                   <span className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[9px]">
-                    {isDone ? "✓" : index + 1}
+                    {isDone ? <Check aria-hidden="true" className="h-2.5 w-2.5" /> : index + 1}
                   </span>
                   <span>{label}</span>
                 </span>

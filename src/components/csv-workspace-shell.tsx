@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, AlertTriangle, FileSpreadsheet, LoaderCircle, ShieldCheck, Upload, ArrowRight } from "lucide-react";
+import { AlertCircle, AlertTriangle, Check, FileSpreadsheet, LoaderCircle, ShieldCheck, Upload } from "lucide-react";
 import React from "react";
 import type { CsvParseProgress } from "@/lib/csv";
 
@@ -68,7 +68,7 @@ export function CsvWorkspaceShell({
   );
 
   const stepper = (
-    <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-medium tracking-tight text-[var(--lc-muted)]">
+    <div aria-label={`Step ${normalizedCurrentStep} of ${steps.length}`} className="flex flex-wrap items-center gap-1.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
       {steps.map((step, index) => {
         const stepNumber = index + 1;
         const isDone = stepNumber < normalizedCurrentStep;
@@ -85,8 +85,8 @@ export function CsvWorkspaceShell({
                     : "text-[var(--lc-muted)]"
               }`}
             >
-              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[9px]">
-                {isDone ? "✓" : stepNumber}
+              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[10px]">
+                {isDone ? <Check aria-hidden="true" className="h-2.5 w-2.5" /> : stepNumber}
               </span>
               <span>{step}</span>
             </span>
@@ -103,23 +103,23 @@ export function CsvWorkspaceShell({
     <div className="w-full lc-workspace-shell flex flex-col">
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
-        <div className="flex flex-col items-center justify-center p-8 lg:p-16 bg-white">
+        <div className="flex flex-col items-center justify-center bg-[linear-gradient(180deg,#ffffff_0%,#fbfcfd_100%)] p-6 sm:p-10 lg:p-14">
           <label
             htmlFor={uploadId}
-            className={`group relative flex w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-black/10 px-6 py-10 text-center transition-all bg-[#F9F9FB] hover:bg-black/[0.01] ${
+            className={`group relative flex w-full max-w-2xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--lc-border-mid)] bg-white px-6 py-10 text-center shadow-sm transition-all hover:border-[var(--lc-accent)] hover:bg-[var(--lc-surface-subtle)] hover:shadow-[var(--shadow-strong)] sm:py-12 ${
               isParsing ? "opacity-60 cursor-not-allowed" : ""
             }`}
           >
             <input id={uploadId} type="file" accept=".csv,text/csv" className="sr-only" onChange={onFileUpload} disabled={isParsing} />
             
-            <div className="mb-3 text-[var(--lc-accent)]">
+            <div className="lc-icon-tile mb-4 h-14 w-14 transition-transform duration-200 group-hover:scale-105">
               {emptyStateIcon}
             </div>
             
-            <p className="text-[15px] font-semibold text-[var(--lc-ink)] mb-1">
+            <p className="mb-1 text-[17px] font-semibold tracking-[-0.015em] text-[var(--lc-ink)]">
               {emptyStateTitle}
             </p>
-            <p className="text-[13px] text-[var(--lc-muted)] mb-5">
+            <p className="mb-6 max-w-lg text-[13px] leading-6 text-[var(--lc-muted)]">
               {emptyStateSubtitle}
             </p>
             
@@ -159,7 +159,7 @@ export function CsvWorkspaceShell({
           </div>
 
           {error && (
-            <div className="mt-5 w-full max-w-xl rounded-xl border border-red-100 bg-red-50/50 p-4 text-left">
+            <div role="alert" className="mt-5 w-full max-w-xl rounded-xl border border-red-100 bg-red-50/50 p-4 text-left">
               <div className="flex items-start gap-2.5">
                 <AlertCircle className="h-4.5 w-4.5 text-[var(--lc-danger)] shrink-0 mt-0.5" />
                 <div>
@@ -180,9 +180,9 @@ export function CsvWorkspaceShell({
         <div className="flex flex-col flex-1 bg-white">
           
           {/* ── Workspace Header ── */}
-          <div className="flex items-center justify-between border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD]">
+          <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-4">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+              <div className="lc-icon-tile h-8 w-8 rounded-lg">
                 <FileSpreadsheet className="h-4 w-4" />
               </div>
               <span className="font-semibold text-[13px] text-[var(--lc-ink)] truncate max-w-[200px] sm:max-w-[300px]" title={fileName}>
@@ -199,7 +199,7 @@ export function CsvWorkspaceShell({
           </div>
 
           {/* Cleanup Controls Toolbar */}
-          <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-3.5 z-10">
+          <div className="z-10 flex flex-col gap-3.5 border-b border-[var(--lc-border)] bg-white p-4">
             <div className="flex items-center justify-between">
               {stepper}
             </div>
@@ -211,13 +211,13 @@ export function CsvWorkspaceShell({
           </div>
 
           {/* Results Summary Row */}
-          <div className="lc-status-strip">
+          <div className="lc-status-strip" role="status" aria-label="CSV processing summary">
             {summary}
           </div>
 
           {/* Warning Banner */}
           {warning && (
-            <div className="flex items-center gap-2 bg-amber-50/50 px-4 py-2 border-b border-[var(--lc-border)] text-amber-900">
+            <div role="status" aria-live="polite" className="flex items-center gap-2 bg-amber-50/50 px-4 py-2 border-b border-[var(--lc-border)] text-amber-900">
               <AlertTriangle className="h-4 w-4 text-[var(--lc-warning)] shrink-0" />
               <p className="text-xs font-medium">{warning}</p>
             </div>
@@ -226,11 +226,11 @@ export function CsvWorkspaceShell({
           {/* Workspace Body */}
           <div className="flex flex-1 flex-col overflow-hidden bg-white">
             <div className="flex-1 overflow-auto p-4 flex flex-col">
-              <div className="bg-white border border-[var(--lc-border)] rounded-2xl overflow-hidden flex flex-col max-h-[800px]">
+              <div className="flex max-h-[800px] flex-col overflow-hidden rounded-2xl border border-[var(--lc-border-mid)] bg-white shadow-sm">
                 
                 {/* Table Header */}
-                <div className="border-b border-[var(--lc-border)] p-3 bg-[#FDFDFD] flex items-center justify-between">
-                  <h3 className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)]">{reviewTitle}</h3>
+                <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-3">
+                  <h3 className="text-xs font-bold uppercase tracking-tight text-[var(--lc-muted)]">{reviewTitle}</h3>
                 </div>
 
                 {/* The Table */}
@@ -243,7 +243,7 @@ export function CsvWorkspaceShell({
 
           {/* Export Footer */}
           {exportControls && (
-            <div className="border-t border-[var(--lc-border)] p-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#FDFDFD]">
+            <div className="flex flex-col items-center justify-between gap-3 border-t border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-4 sm:flex-row">
               <div className="flex items-center gap-2">
                 <h3 className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)] hidden sm:block">{exportTitle}</h3>
               </div>

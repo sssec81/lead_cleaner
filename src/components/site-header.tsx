@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Menu, ShieldCheck, Sparkles, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const navItems = [
   { href: "/tools", label: "Tools" },
@@ -32,28 +32,41 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerCta = getHeaderCta(pathname);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setMobileOpen(false);
+    }
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [mobileOpen]);
+
   function isActive(href: string) {
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border)] bg-white/72 backdrop-blur-md transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border)] bg-white/88 shadow-[0_1px_12px_rgba(15,23,42,0.035)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/78">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <Sparkles className="h-4.5 w-4.5 text-[var(--lc-accent)]" />
-          <span className="text-[15px] font-semibold tracking-tight text-[var(--lc-ink)]">LeadCleanr</span>
+        <Link href="/" className="group flex min-h-11 items-center gap-2.5" aria-label="LeadCleanr home">
+          <span className="lc-brand-mark transition-transform duration-200 group-hover:scale-[1.04]">
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <span className="text-[15px] font-bold tracking-[-0.02em] text-[var(--lc-ink)]">LeadCleanr</span>
         </Link>
  
-        <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-1 rounded-full border border-[var(--lc-border)] bg-black/[0.018] p-1 lg:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`px-1 py-1 text-[14px] font-medium transition-colors ${
+              className={`flex min-h-11 items-center rounded-full px-3.5 py-1 text-[13px] font-medium transition-colors ${
                 isActive(item.href)
-                  ? "text-[var(--lc-accent)]"
-                  : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"
+                  ? "bg-white text-[var(--lc-ink)] shadow-sm ring-1 ring-black/[0.04]"
+                  : "text-[var(--lc-muted)] hover:bg-white/70 hover:text-[var(--lc-ink)]"
               }`}
             >
               {item.label}
@@ -62,7 +75,7 @@ export function SiteHeader() {
         </nav>
  
         <div className="hidden items-center gap-4 lg:flex">
-          <div className="inline-flex items-center gap-1 rounded-full bg-black/[0.03] border border-black/5 px-2.5 py-0.5 font-sans text-[11px] text-[var(--lc-muted)]">
+          <div className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-emerald-700/10 bg-emerald-50/70 px-3 font-sans text-[11px] font-medium text-emerald-800">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
             Processed locally
           </div>
@@ -71,22 +84,24 @@ export function SiteHeader() {
             className="lc-button-primary"
           >
             {headerCta.label}
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </div>
  
         <button
           type="button"
           onClick={() => setMobileOpen((current) => !current)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-ink)] lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--lc-border-mid)] bg-white text-[var(--lc-ink)] shadow-sm hover:bg-[var(--lc-bg)] lg:hidden"
           aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
           aria-expanded={mobileOpen}
+          aria-controls="mobile-primary-navigation"
         >
           {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
       </div>
  
       {mobileOpen ? (
-        <div className="border-t border-[var(--lc-border)] bg-white/95 backdrop-blur-md lg:hidden">
+        <div id="mobile-primary-navigation" className="border-t border-[var(--lc-border)] bg-white/96 shadow-xl backdrop-blur-xl lg:hidden">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
             <nav aria-label="Mobile primary" className="flex flex-col gap-2">
               {navItems.map((item) => (
@@ -94,7 +109,8 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium ${
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium ${
                     isActive(item.href)
                       ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]"
                       : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
@@ -106,7 +122,7 @@ export function SiteHeader() {
             </nav>
  
             <div className="mt-4 flex flex-col gap-3">
-              <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-black/[0.03] border border-black/5 px-2.5 py-0.5 font-sans text-[11px] text-[var(--lc-muted)]">
+              <div className="inline-flex min-h-8 w-fit items-center gap-1.5 rounded-full border border-emerald-700/10 bg-emerald-50 px-3 font-sans text-[11px] font-medium text-emerald-800">
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
                 Processed locally
               </div>
@@ -116,6 +132,7 @@ export function SiteHeader() {
                 className="lc-button-primary w-full text-center"
               >
                 {headerCta.label}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </div>

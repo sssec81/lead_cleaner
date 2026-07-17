@@ -164,7 +164,7 @@ const workflowSteps = [
 export default function ToolsPage() {
   return (
     <PageFrame>
-      <div className="bg-[var(--lc-bg)] min-h-screen pb-16">
+      <div className="bg-[var(--lc-bg)] pb-12">
         <BreadcrumbJsonLd
           items={[
             { name: "Home", url: "/" },
@@ -173,7 +173,7 @@ export default function ToolsPage() {
         />
 
         {/* Zone 1: Page header */}
-        <section className="pt-16 pb-10">
+        <section className="pb-8 pt-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
               <div className="section-anchor-row mb-4">
@@ -194,29 +194,30 @@ export default function ToolsPage() {
         </section>
 
         {/* Zone 2: Featured tool + workflow logic */}
-        <section className="pb-16">
+        <section className="pb-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 lg:grid-cols-12">
 
               {/* Left Card 7/12 */}
               <div className="lg:col-span-7">
-                <div className="h-full rounded-xl bg-[var(--lc-ink)] p-6 text-white sm:p-7 flex flex-col items-start relative overflow-hidden">
-                  <div className="mb-4 inline-flex items-center rounded-full border border-blue-400/30 bg-blue-500/18 px-3 py-1 text-[11px] font-mono font-medium uppercase tracking-[0.14em] text-blue-200">
-                    ↗ Start Here
+                <div className="relative flex h-full flex-col items-start overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,#111827_0%,#1d1d1f_55%,#10233b_100%)] p-6 text-white shadow-[var(--shadow-strong)] sm:p-8">
+                  <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-blue-500/15 blur-3xl" />
+                  <div className="relative mb-4 inline-flex items-center gap-1.5 rounded-full border border-blue-300/20 bg-blue-400/10 px-3 py-1.5 text-[11px] font-mono font-medium uppercase tracking-[0.14em] text-blue-100">
+                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> Start here
                   </div>
-                  <h2 className="mb-2 font-display text-[1.75rem] font-bold text-white">
+                  <h2 className="relative mb-2 font-display text-[1.875rem] font-bold tracking-[-0.025em] text-white">
                     CSV Lead Cleaner
                   </h2>
-                  <p className="max-w-md font-sans text-[15px] leading-relaxed text-white/72">
+                  <p className="relative max-w-md font-sans text-[15px] leading-7 text-white/75">
                     The default path for CRM imports, recruiter sheets, agency handoffs, and outreach lists that need a full cleanup pass.
                   </p>
-                  <p className="mt-3 text-sm text-white/55">
+                  <p className="relative mt-3 text-sm text-white/60">
                     Deduplicate · Review · Export - all in-browser
                   </p>
 
                   <Link
                     href="/tools/csv-lead-cleaner"
-                    className="lc-button-primary mt-6 min-h-11 px-5 py-2.5 text-sm font-medium"
+                    className="lc-button-primary relative mt-6 min-h-11 px-5 py-2.5 text-sm font-semibold"
                   >
                     Open CSV workflow
                     <ArrowRight className="h-4 w-4" />
@@ -226,7 +227,7 @@ export default function ToolsPage() {
 
               {/* Right Panel 5/12 */}
               <div className="lg:col-span-5">
-                <div className="h-full bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 sm:p-6">
+                <div className="lc-card h-full p-5 sm:p-6">
                   <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-6">
                     Workflow Logic
                   </p>
@@ -247,7 +248,7 @@ export default function ToolsPage() {
                             </p>
                             <Link
                               href={step.href}
-                              className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-[var(--lc-accent)] hover:underline"
+                              className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-[var(--lc-accent)] hover:text-[var(--brand-strong)]"
                             >
                               {step.label}
                               <ArrowRight className="h-3.5 w-3.5" />
@@ -265,7 +266,7 @@ export default function ToolsPage() {
         </section>
 
         {/* Zone 3: Tool Directory */}
-        <section className="border-t border-[var(--lc-border)] pt-16 pb-16">
+        <section className="border-t border-[var(--lc-border)] py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -297,10 +298,10 @@ export default function ToolsPage() {
                     key={tool.href}
                     href={tool.href}
                     aria-label={`Open ${tool.title}`}
-                    className="group bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-5 flex flex-col gap-3 transition-all duration-150 hover:border-[var(--lc-border-mid)] hover:shadow-sm"
+                    className="lc-card-interactive group flex flex-col gap-3 p-5"
                   >
                     <div className="flex items-start justify-between">
-                      <div className="bg-[var(--lc-accent-bg)] rounded-lg p-1.5">
+                      <div className="lc-icon-tile h-10 w-10 transition-transform duration-200 group-hover:scale-105">
                         <Icon className="h-5 w-5 text-[var(--lc-accent)]" />
                       </div>
                       <span className="rounded border border-[var(--lc-border)] bg-[var(--lc-bg)] px-2 py-0.5 font-mono text-[11px] uppercase text-[var(--lc-muted)]">
@@ -315,7 +316,7 @@ export default function ToolsPage() {
                     </p>
                     <span
                       aria-hidden="true"
-                      className="mt-auto pt-3 text-[var(--lc-accent)] text-sm font-medium group-hover:underline"
+                      className="mt-auto inline-flex min-h-11 items-center pt-3 text-sm font-semibold text-[var(--lc-accent)]"
                     >
                       Open tool →
                     </span>
@@ -326,11 +327,11 @@ export default function ToolsPage() {
           </div>
         </section>
 
-        <section id="text-extraction" className="pt-16 pb-16 border-t border-[var(--lc-border)]">
+        <section id="text-extraction" className="border-t border-[var(--lc-border)] py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-2">
 
-              <div className="panel-accent-left p-5 sm:p-6">
+              <div className="lc-card border-l-2 border-l-[var(--lc-accent)] p-5 sm:p-6">
                 <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
                   Text Extraction
                 </p>
@@ -345,7 +346,7 @@ export default function ToolsPage() {
                   {textExtractionTools.map((tool) => {
                     const Icon = tool.icon;
                     return (
-                      <Link key={tool.href} href={tool.href} className="group flex items-start gap-3 py-3 border-b border-[var(--lc-border)] last:border-0 cursor-pointer transition-colors hover:bg-[var(--lc-bg)] -mx-4 px-4 hover:rounded-lg">
+                      <Link key={tool.href} href={tool.href} className="group -mx-4 flex min-h-14 cursor-pointer items-start gap-3 border-b border-[var(--lc-border)] px-4 py-3 transition-colors last:border-0 hover:rounded-lg hover:bg-[var(--lc-bg)]">
                         <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>
@@ -358,7 +359,7 @@ export default function ToolsPage() {
                 </div>
               </div>
 
-              <div className="panel-accent-left p-5 sm:p-6">
+              <div className="lc-card border-l-2 border-l-[var(--lc-accent)] p-5 sm:p-6">
                 <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)] mb-2">
                   Quick Cleanup
                 </p>
@@ -373,7 +374,7 @@ export default function ToolsPage() {
                   {cleanupTools.map((tool) => {
                     const Icon = tool.icon;
                     return (
-                      <Link key={tool.href} href={tool.href} className="group flex items-start gap-3 py-3 border-b border-[var(--lc-border)] last:border-0 cursor-pointer transition-colors hover:bg-[var(--lc-bg)] -mx-4 px-4 hover:rounded-lg">
+                      <Link key={tool.href} href={tool.href} className="group -mx-4 flex min-h-14 cursor-pointer items-start gap-3 border-b border-[var(--lc-border)] px-4 py-3 transition-colors last:border-0 hover:rounded-lg hover:bg-[var(--lc-bg)]">
                         <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>

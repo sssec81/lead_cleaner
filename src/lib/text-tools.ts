@@ -2,7 +2,9 @@ import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js"
 
 const EMAIL_REGEX = /\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b/gi;
 const SINGLE_EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
-const PHONE_REGEX = /(?:\+?\d[\d().\-\s]{6,}\d)/g;
+// Deliberately exclude newlines: otherwise two local numbers on adjacent lines
+// are consumed as one candidate.
+const PHONE_REGEX = /(?:\+?\d[\d().\- \t]{6,}\d)/g;
 const URL_REGEX =
  /\b(?:https?:\/\/|www\.)[^\s<>"'()]+(?:\([^\s<>"']*\)|[^\s<>"'.,;:!?])/gi;
 const DOMAIN_FROM_URL_REGEX =
@@ -106,6 +108,23 @@ function parsePhoneDetails(
  return null;
 }
 
+export function isValidEmailSyntax(value: string) {
+ const normalized = value.trim().toLowerCase();
+
+ if (!SINGLE_EMAIL_REGEX.test(normalized)) {
+ return false;
+ }
+
+ const [localPart, domain] = normalized.split("@");
+ if (!localPart || !domain || localPart.startsWith(".") || localPart.endsWith(".") || localPart.includes("..")) {
+ return false;
+ }
+
+ return domain.split(".").every((label) =>
+ /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label),
+ );
+}
+
 export function parseAndFormatPhone(
  value: string,
  options: PhoneExtractionOptions = {},
@@ -120,7 +139,7 @@ export function extractEmailMatches(input: string) {
  matches.forEach((entry) => {
  const normalized = entry.trim().toLowerCase();
 
- if (!SINGLE_EMAIL_REGEX.test(normalized)) {
+ if (!isValidEmailSyntax(normalized)) {
  return;
  }
 
@@ -179,7 +198,7 @@ export function cleanEmailList(input: string) {
  const blankRemoved = countBlankLines(input);
  const candidates = items.filter((entry) => entry !== "");
 
- const validEmails = candidates.filter((entry) => SINGLE_EMAIL_REGEX.test(entry));
+ const validEmails = candidates.filter((entry) => isValidEmailSyntax(entry));
  const invalidRemoved = candidates.length - validEmails.length;
 
  const cleaned = validEmails.map((entry) => entry.toLowerCase());
@@ -213,7 +232,7 @@ export function validateEmailListSyntax(input: string) {
  const invalidEmails: string[] = [];
 
  candidates.forEach((entry) => {
- if (SINGLE_EMAIL_REGEX.test(entry)) {
+ if (isValidEmailSyntax(entry)) {
  validEmails.push(entry.toLowerCase());
  } else {
  invalidEmails.push(entry);
@@ -245,17 +264,27 @@ export function extractPhoneNumbersFromText(
  const blankRemoved = lines.filter((line) => !line.trim()).length;
 
  const matches = input.match(PHONE_REGEX) ?? [];
- const cleaned = extractPhoneMatches(input, options);
- const invalidRemoved = matches.length - cleaned.length;
- const deduped = Array.from(new Set(cleaned)).sort((a, b) =>
+ const parsedPhones = matches
+ .map((entry) => parsePhoneDetails(entry, options))
+ .filter((phone): phone is ParsedPhoneResult => phone !== null);
+ const invalidRemoved = matches.length - parsedPhones.length;
+ const uniquePhones = new Map<string, string>();
+
+ parsedPhones.forEach(({ canonical, display }) => {
+ if (!uniquePhones.has(canonical)) {
+ uniquePhones.set(canonical, display);
+ }
+ });
+
+ const deduped = Array.from(uniquePhones.values()).sort((a, b) =>
  a.localeCompare(b),
  );
- const duplicatesRemoved = cleaned.length - deduped.length;
+ const duplicatesRemoved = parsedPhones.length - deduped.length;
 
  const stats: CleaningStats = {
  scanned: lines.length,
  found: matches.length,
- valid: cleaned.length,
+ valid: parsedPhones.length,
  duplicatesRemoved,
  invalidRemoved,
  blankRemoved,

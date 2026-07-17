@@ -1,5 +1,9 @@
 import type { CsvRow } from "./csv.ts";
-import { normalizeUrlValue, parseAndFormatPhone } from "./text-tools.ts";
+import {
+  isValidEmailSyntax,
+  normalizeUrlValue,
+  parseAndFormatPhone,
+} from "./text-tools.ts";
 
 export type DuplicateMode =
   | "selected"
@@ -431,7 +435,7 @@ function getFirstNormalizedValue(
 
 function normalizeEmailValue(value: string) {
   const nextValue = value.trim().toLowerCase();
-  return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(nextValue)
+  return isValidEmailSyntax(nextValue)
     ? nextValue
     : null;
 }

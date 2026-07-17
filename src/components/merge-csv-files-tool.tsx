@@ -40,6 +40,7 @@ interface FileEntry {
 export function MergeCsvFilesTool() {
  const [status, setStatus] = useState<UploadStatus>("idle");
  const [error, setError] = useState<string | null>(null);
+ const [warning, setWarning] = useState<string | null>(null);
  
  const [fileEntries, setFileEntries] = useState<FileEntry[]>([]);
  const [mergedRows, setMergedRows] = useState<CsvRow[]>([]);
@@ -83,6 +84,7 @@ export function MergeCsvFilesTool() {
  function resetState() {
  setStatus("idle");
  setError(null);
+ setWarning(null);
  setFileEntries([]);
  setMergedRows([]);
  setMergedHeaders([]);
@@ -102,6 +104,7 @@ export function MergeCsvFilesTool() {
 
  let currentMergedRows = [...mergedRows];
  const newFileEntries: FileEntry[] = [];
+ const parseWarnings: string[] = [];
  
  // Create a Set of existing headers
  const currentHeaderSet = new Set(mergedHeaders);
@@ -137,6 +140,8 @@ export function MergeCsvFilesTool() {
  if (result.headers.length === 0) {
  throw new Error("No headers found.");
  }
+
+ parseWarnings.push(...result.warnings);
 
  const canonicalized = canonicalizeCsvRows(result.headers, result.rows);
 
@@ -175,6 +180,7 @@ export function MergeCsvFilesTool() {
  setMergedHeaders(updatedHeaders);
  setMergedRows(normalizedRows);
  setFileEntries(prev => [...prev, ...newFileEntries]);
+ setWarning(formatCsvWarnings(parseWarnings));
  setStatus("ready");
  
  if (!selectedColumn) {
@@ -221,7 +227,7 @@ export function MergeCsvFilesTool() {
  <div className="mx-auto w-full max-w-[1200px]">
  <div className="flex flex-col gap-8 xl:flex-row">
  {/* Left column: Upload & Config */}
- <div className="flex flex-col min-w-[360px] xl:w-[360px] xl:shrink-0 rounded-xl border border-[color:var(--line)] bg-white p-6 sm:p-8 shadow-sm">
+ <div className="flex w-full min-w-0 flex-col rounded-xl border border-[color:var(--line)] bg-white p-6 shadow-sm sm:p-8 xl:w-[360px] xl:shrink-0">
  <div className="flex items-center gap-4 border-b border-[color:var(--line)] pb-5">
  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[color:var(--brand)]/10 text-[color:var(--brand-strong)] ring-1 ring-[color:var(--brand)]/20 shadow-sm">
  <Combine className="h-6 w-6" />
@@ -339,7 +345,8 @@ export function MergeCsvFilesTool() {
  </div>
  )}
 
- {error ? <div className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
+ {error ? <div role="alert" className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
+ {warning ? <div role="status" aria-live="polite" className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">{warning}</div> : null}
  </div>
 
  {/* Right column: Results */}
@@ -448,6 +455,12 @@ export function MergeCsvFilesTool() {
  </div>
  </div>
  );
+}
+
+function formatCsvWarnings(warnings: string[]) {
+ if (!warnings.length) return null;
+ const preview = warnings.slice(0, 2).join(" ");
+ return `Imported with ${warnings.length} parsing warning${warnings.length === 1 ? "" : "s"}. ${preview}`;
 }
 
 function normalizeMergeDedupValue(value: string, columnName: string) {

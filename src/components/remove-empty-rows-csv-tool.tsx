@@ -41,6 +41,7 @@ export function RemoveEmptyRowsCsvTool() {
  const [headers, setHeaders] = useState<string[]>([]);
  const [rows, setRows] = useState<CsvRow[]>([]);
  const [error, setError] = useState("");
+ const [warning, setWarning] = useState("");
  const [status, setStatus] = useState<UploadStatus>("idle");
  const [progress, setProgress] = useState<CsvParseProgress>({
  percentage: 0,
@@ -59,6 +60,7 @@ export function RemoveEmptyRowsCsvTool() {
  setFileName(nextFileName);
  setHeaders([]);
  setRows([]);
+ setWarning("");
  setProgress({
  percentage: 0,
  rowsProcessed: 0,
@@ -112,6 +114,7 @@ export function RemoveEmptyRowsCsvTool() {
 
  setHeaders(result.headers);
  setRows(result.rows);
+ setWarning(formatCsvWarnings(result.warnings));
  setStatus("ready");
 
  trackToolEvent("remove-empty-rows", "upload_completed", {
@@ -162,7 +165,7 @@ function loadDemoCsv() {
       reviewTitle="Review Rows"
       exportTitle="Export Clean CSV"
       error={error}
-      warning=""
+      warning={warning}
       emptyStateTitle="Remove Empty Rows"
       emptyStateSubtitle="Upload your CSV to instantly drop blank rows. Processed locally in your browser."
       emptyStateIcon={<Eraser className="h-8 w-8" />}
@@ -255,6 +258,12 @@ function loadDemoCsv() {
       }
     />
   );
+}
+
+function formatCsvWarnings(warnings: string[]) {
+ if (!warnings.length) return "";
+ const preview = warnings.slice(0, 2).join(" ");
+ return `Imported with ${warnings.length} parsing warning${warnings.length === 1 ? "" : "s"}. ${preview}`;
 }
 
 function buildExportName(fileName: string) {

@@ -65,7 +65,7 @@ export default function PrivacyPage() {
  return (
  <PageFrame>
   {/* Hero Section */}
-  <section className="pt-24 pb-32 lg:pt-36 lg:pb-40">
+  <section className="pb-20 pt-16 lg:pb-24 lg:pt-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
   <div className="mx-auto max-w-3xl text-center">
   <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
   </div>
 
   {/* Floating Glassmorphic Cards */}
-  <div className="mx-auto mt-20 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+  <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
   {snapshot.map((item) => {
   const Icon = item.icon;
   return (
@@ -104,7 +104,7 @@ export default function PrivacyPage() {
   </section>
 
   {/* Dark Mode "The Boundary" Section */}
-  <section className="relative overflow-hidden bg-[var(--lc-dark-bg)] py-24 sm:py-32">
+  <section className="relative overflow-hidden bg-[var(--lc-dark-bg)] py-16 sm:py-20">
   <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
   <div>
@@ -138,9 +138,9 @@ export default function PrivacyPage() {
   </section>
 
   {/* Modern Accordion/List Section */}
-  <section className="py-24 sm:py-32">
+  <section className="py-16 sm:py-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-  <div className="mx-auto mb-16 max-w-3xl text-center">
+  <div className="mx-auto mb-10 max-w-3xl text-center">
   <h2 className="mb-4 font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
   Privacy details, without the jargon.
   </h2>

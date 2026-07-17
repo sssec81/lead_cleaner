@@ -26,7 +26,13 @@ import {
  Upload,
  X,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+ type KeyboardEvent as ReactKeyboardEvent,
+ useCallback,
+ useEffect,
+ useMemo,
+ useState,
+} from "react";
 import { useSearchParams } from "next/navigation";
 
 import {
@@ -53,6 +59,7 @@ import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
+type PreviewMode = "clean" | "removed" | "invalid";
 
 const PREVIEW_LIMIT = 100;
 const MAX_CSV_CONFIG_HISTORY = 30;
@@ -142,7 +149,7 @@ export function CsvLeadCleanerTool() {
  const [futureConfigs, setFutureConfigs] = useState<
  Array<{ selectedColumn: string; duplicateMode: DuplicateMode; emailFilter: EmailFilterMode }>
  >([]);
- const [previewMode, setPreviewMode] = useState<"clean" | "removed" | "invalid">(
+ const [previewMode, setPreviewMode] = useState<PreviewMode>(
  "clean",
  );
  const [hasAppliedQuerySample, setHasAppliedQuerySample] = useState(false);
@@ -472,6 +479,39 @@ export function CsvLeadCleanerTool() {
  ? "Rows removed because the selected cleanup field was blank or could not be normalized."
  : `Showing up to ${PREVIEW_LIMIT} rows after cleanup.`;
  const visiblePreviewRows = reportRows.slice(0, PREVIEW_LIMIT);
+ const availablePreviewModes: Array<{ mode: PreviewMode; label: string }> = [
+ { mode: "clean", label: "Clean rows" },
+ ...(cleaned.removedRows.length
+ ? [{ mode: "removed" as const, label: "Removed rows" }]
+ : []),
+ ...(cleaned.invalidRows.length
+ ? [{ mode: "invalid" as const, label: "Invalid rows" }]
+ : []),
+ ];
+
+ function handlePreviewTabKeyDown(
+ event: ReactKeyboardEvent<HTMLButtonElement>,
+ mode: PreviewMode,
+ ) {
+ if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+ event.preventDefault();
+
+ const currentIndex = availablePreviewModes.findIndex((item) => item.mode === mode);
+ const nextIndex =
+ event.key === "Home"
+ ? 0
+ : event.key === "End"
+ ? availablePreviewModes.length - 1
+ : event.key === "ArrowRight"
+ ? (currentIndex + 1) % availablePreviewModes.length
+ : (currentIndex - 1 + availablePreviewModes.length) % availablePreviewModes.length;
+ const nextMode = availablePreviewModes[nextIndex]?.mode;
+
+ if (nextMode) {
+ setPreviewMode(nextMode);
+ document.getElementById(`preview-tab-${nextMode}`)?.focus();
+ }
+ }
 
       return (
     <div className={`w-full transition-opacity duration-200 ${mounted ? "opacity-100" : "opacity-0"}`}>
@@ -527,7 +567,7 @@ export function CsvLeadCleanerTool() {
           </div>
 
           {error && (
-            <div className="mt-5 w-full max-w-xl rounded-xl border border-red-100 bg-red-50/50 p-4 text-left">
+            <div role="alert" className="mt-5 w-full max-w-xl rounded-xl border border-red-100 bg-red-50/50 p-4 text-left">
               <div className="flex items-start gap-2.5">
                 <AlertCircle className="h-4.5 w-4.5 text-[var(--lc-danger)] shrink-0 mt-0.5" />
                 <div>
@@ -568,8 +608,8 @@ export function CsvLeadCleanerTool() {
 
           {/* Cleanup Controls Toolbar */}
           <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-3.5 z-10">
-            <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-medium tracking-tight text-[var(--lc-muted)]">
-              <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">✓ Upload CSV</span>
+            <div className="flex flex-wrap items-center gap-1.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700"><Check className="h-3 w-3" aria-hidden="true" /> Upload CSV</span>
               <span className="text-black/10">·</span>
               <span className="bg-[var(--lc-accent-bg)] text-[var(--lc-accent)] font-semibold px-2 py-0.5 rounded-full">2 Choose cleanup rules</span>
               <span className="text-black/10">·</span>
@@ -636,15 +676,16 @@ export function CsvLeadCleanerTool() {
 
                 <div className="flex items-center gap-2">
                   {toastVisible && (
-                    <div className="flex items-center gap-1.5 px-2 py-1 text-[13px] font-medium text-[var(--lc-green)] animate-in fade-in zoom-in duration-200">
+                    <div role="status" aria-live="polite" className="flex items-center gap-1.5 px-2 py-1 text-[13px] font-medium text-[var(--lc-green)] animate-in fade-in zoom-in duration-200">
                       <Check className="h-4 w-4" />
+                      <span className="sr-only">Cleanup settings updated.</span>
                     </div>
                   )}
                   <div className="flex gap-1">
-                    <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" title="Undo">
+                    <button type="button" onClick={undoConfigChange} disabled={!pastConfigs.length} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" aria-label="Undo cleanup setting change" title="Undo">
                       <Undo2 className="h-4 w-4" />
                     </button>
-                    <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" title="Redo">
+                    <button type="button" onClick={redoConfigChange} disabled={!futureConfigs.length} className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50" aria-label="Redo cleanup setting change" title="Redo">
                       <Redo2 className="h-4 w-4" />
                     </button>
                   </div>
@@ -666,7 +707,7 @@ export function CsvLeadCleanerTool() {
 
           {/* Warning Banner */}
           {workspaceWarning && (
-            <div className="flex items-center gap-2 bg-amber-50/50 px-4 py-2 border-b border-[var(--lc-border)] text-amber-900">
+            <div role="status" aria-live="polite" className="flex items-center gap-2 bg-amber-50/50 px-4 py-2 border-b border-[var(--lc-border)] text-amber-900">
               <AlertTriangle className="h-4 w-4 text-[var(--lc-warning)] shrink-0" />
               <p className="text-xs font-medium">{workspaceWarning}</p>
             </div>
@@ -677,27 +718,47 @@ export function CsvLeadCleanerTool() {
             <div className="flex flex-col border border-[var(--lc-border)] rounded-2xl overflow-hidden flex-1 bg-white">
               {/* Tab Row */}
               <div className="flex flex-col items-start gap-2 border-b border-[var(--lc-border)] bg-[#FDFDFD] px-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex flex-wrap items-center gap-1">
-                  <button type="button" onClick={() => setPreviewMode("clean")} className={`px-4 py-2 text-[12px] rounded-t-md transition-colors ${previewMode === "clean" ? "bg-white border border-[var(--lc-border)] border-b-white text-[var(--lc-ink)] font-semibold translate-y-px" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"}`}>Clean rows</button>
-                  {cleaned.removedRows.length > 0 && <button type="button" onClick={() => setPreviewMode("removed")} className={`px-4 py-2 text-[12px] rounded-t-md transition-colors ${previewMode === "removed" ? "bg-white border border-[var(--lc-border)] border-b-white text-[var(--lc-ink)] font-semibold translate-y-px" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"}`}>Removed rows</button>}
-                  {cleaned.invalidRows.length > 0 && <button type="button" onClick={() => setPreviewMode("invalid")} className={`px-4 py-2 text-[12px] rounded-t-md transition-colors ${previewMode === "invalid" ? "bg-white border border-[var(--lc-border)] border-b-white text-[var(--lc-ink)] font-semibold translate-y-px" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"}`}>Invalid rows</button>}
+                <div role="tablist" aria-label="CSV row previews" className="flex flex-wrap items-center gap-1">
+                  {availablePreviewModes.map(({ mode, label }) => (
+                    <button
+                      key={mode}
+                      id={`preview-tab-${mode}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={previewMode === mode}
+                      aria-controls="preview-tab-panel"
+                      tabIndex={previewMode === mode ? 0 : -1}
+                      onClick={() => setPreviewMode(mode)}
+                      onKeyDown={(event) => handlePreviewTabKeyDown(event, mode)}
+                      className={`min-h-11 rounded-t-md px-4 py-2 text-xs transition-colors ${previewMode === mode ? "translate-y-px border border-[var(--lc-border)] border-b-white bg-white font-semibold text-[var(--lc-ink)]" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
               
               {/* The Table */}
-              <div className="flex-1 overflow-auto bg-white min-h-[300px]">
+              <div
+                id="preview-tab-panel"
+                role="tabpanel"
+                aria-labelledby={`preview-tab-${previewMode}`}
+                tabIndex={0}
+                className="min-h-[300px] flex-1 overflow-auto bg-white"
+              >
                 {reportHeaders.length && visiblePreviewRows.length ? (
                   <div className="overflow-x-auto rounded-lg">
-                    <table className="min-w-full text-left text-xs whitespace-nowrap border-collapse">
+                    <table aria-label={previewLabel} className="min-w-full text-left text-xs whitespace-nowrap border-collapse">
+                      <caption className="sr-only">{previewDescription}</caption>
                       <thead className="sticky top-0 z-10 bg-[#FDFDFD] border-b border-[var(--lc-border)]">
                         <tr>
-                          <th className="px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-[var(--lc-hint)] w-8">#</th>
-                          {previewMode !== "clean" && <th className="px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-[var(--lc-hint)]">REASON</th>}
+                          <th scope="col" className="px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8">#</th>
+                          {previewMode !== "clean" && <th scope="col" className="px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">REASON</th>}
                           {reportHeaders.map((header) => {
                             const isComputed = header.startsWith("leadcleanr_");
                             return (
-                              <th key={header} title={isComputed ? "Added by LeadCleanr" : undefined} className={`px-3 py-2 font-mono text-[10px] uppercase tracking-wider ${isComputed ? "text-[var(--lc-accent)]" : "text-[var(--lc-hint)]"}`}>
-                                {isComputed && <span className="mr-1">✦</span>}
+                              <th scope="col" key={header} title={isComputed ? "Added by LeadCleanr" : undefined} className={`px-3 py-2 font-mono text-[11px] uppercase tracking-wider ${isComputed ? "text-[var(--lc-accent)]" : "text-[var(--lc-hint)]"}`}>
+                                {isComputed && <Sparkles aria-hidden="true" className="mr-1 inline h-3 w-3" />}
                                 {prettyHeader(header)}
                               </th>
                             );
@@ -710,7 +771,7 @@ export function CsvLeadCleanerTool() {
                             <td className="px-3 py-2 font-mono text-[11px] text-[var(--lc-hint)] w-8">{index + 1}</td>
                             {previewMode !== "clean" && "leadcleanr_reason" in row && (
                               <td className="px-3 py-2">
-                                <span className="inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-[10px] font-medium text-red-700">
+                                <span className="inline-flex items-center rounded bg-red-50 px-1.5 py-0.5 text-[11px] font-medium text-red-700">
                                   {(row as any).leadcleanr_reason}
                                 </span>
                               </td>

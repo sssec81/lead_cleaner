@@ -76,7 +76,7 @@ export default function PricingPage() {
  return (
  <PageFrame>
   {/* Hero Section */}
-  <section className="pt-24 pb-20 lg:pt-36 lg:pb-32">
+  <section className="pb-14 pt-16 lg:pb-20 lg:pt-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
   <div className="mx-auto max-w-3xl text-center">
   <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
@@ -97,7 +97,7 @@ export default function PricingPage() {
   </section>
 
  {/* Pricing Cards Section */}
- <section className="relative pb-24 lg:pb-32 z-10">
+ <section className="relative z-10 pb-16 lg:pb-20">
  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
  <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:items-start">
   {/* Free Tier Card */}
@@ -217,9 +217,9 @@ export default function PricingPage() {
  </section>
 
   {/* Decision Rules / How to Choose Section */}
-  <section className="py-24 lg:py-32">
+  <section className="py-16 lg:py-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-  <div className="mx-auto max-w-3xl text-center mb-16">
+  <div className="mx-auto mb-10 max-w-3xl text-center">
   <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl mb-4">
   How to choose your plan
   </h2>
@@ -250,7 +250,7 @@ export default function PricingPage() {
   </section>
 
   {/* Comparison Cards Section */}
-  <section className="py-24 lg:py-32">
+  <section className="py-16 lg:py-20">
   <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
   <div className="mx-auto max-w-3xl text-center">
   <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">

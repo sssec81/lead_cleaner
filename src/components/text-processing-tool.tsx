@@ -17,7 +17,7 @@ import {
  Undo2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
@@ -77,7 +77,7 @@ const WORKSPACE_PREVIEW_LIMIT = 8;
 const TEXT_INPUT_BOX_CLASS_NAME =
   "rounded-2xl border border-[var(--lc-border)] bg-white overflow-hidden flex flex-col relative group";
 const TEXT_INPUT_ACTION_CLASS_NAME =
-  "inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors";
+  "inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors";
 
 export function TextProcessingTool({
  title,
@@ -119,6 +119,11 @@ export function TextProcessingTool({
  const [restoredSession, setRestoredSession] = useState(false);
  const [isHydrated, setIsHydrated] = useState(false);
  const [hasAppliedQuerySample, setHasAppliedQuerySample] = useState(false);
+ const processInputRef = useRef(processInput);
+
+ useEffect(() => {
+ processInputRef.current = processInput;
+ }, [processInput]);
 
  const processed = useMemo(() => processInput(input), [input, processInput]);
  const workspaceValues = workspace.map((item) => item.value);
@@ -144,7 +149,7 @@ export function TextProcessingTool({
  if (shouldLoadSampleFromQuery) {
  setInput(sampleInput);
  setWorkspace(
- createWorkspaceFromValues(processInput(sampleInput).results, "Sample"),
+ createWorkspaceFromValues(processInputRef.current(sampleInput).results, "Sample"),
  );
  } else if (rawState) {
  try {
@@ -154,7 +159,7 @@ export function TextProcessingTool({
  const nextWorkspace = Array.isArray(parsed.workspace)
  ? createWorkspaceFromPersistedItems(parsed.workspace)
  : createWorkspaceFromValues(
- processInput(nextInput).results,
+ processInputRef.current(nextInput).results,
  "Restored",
  );
 
@@ -165,13 +170,13 @@ export function TextProcessingTool({
  } catch {
  setInput(sampleInput);
  setWorkspace(
- createWorkspaceFromValues(processInput(sampleInput).results, "Sample"),
+ createWorkspaceFromValues(processInputRef.current(sampleInput).results, "Sample"),
  );
  }
  } else {
  setInput(sampleInput);
  setWorkspace(
- createWorkspaceFromValues(processInput(sampleInput).results, "Sample"),
+ createWorkspaceFromValues(processInputRef.current(sampleInput).results, "Sample"),
  );
  }
 
@@ -179,7 +184,7 @@ export function TextProcessingTool({
  }, 0);
 
  return () => window.clearTimeout(restoreTimer);
- }, [processInput, sampleInput, shouldLoadSampleFromQuery, storageKey]);
+ }, [sampleInput, shouldLoadSampleFromQuery, storageKey]);
 
 
 
@@ -234,7 +239,7 @@ export function TextProcessingTool({
   const loadSampleInput = useCallback(() => {
     setFreshInput(sampleInput);
     const sampleWorkspace = createWorkspaceFromValues(
-      processInput(sampleInput).results,
+      processInputRef.current(sampleInput).results,
       "Sample",
     );
     setWorkspace(sampleWorkspace);
@@ -243,7 +248,7 @@ export function TextProcessingTool({
     setShowBulkEditor(false);
     setRestoredSession(false);
     trackToolEvent(trackName, "load_sample_input");
-  }, [sampleInput, processInput, trackName]);
+  }, [sampleInput, trackName]);
 
   useEffect(() => {
     if (!isHydrated || !shouldLoadSampleFromQuery || hasAppliedQuerySample) {
@@ -536,7 +541,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                   <MousePointerClick className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">Selected</span>
                 </button>
-                <button type="button" onClick={toggleBatchMode} className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold transition-colors ${batchMode ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]" : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"}`} title={batchMode ? "Disable batch mode" : "Enable batch mode"}>
+                <button type="button" onClick={toggleBatchMode} className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold transition-colors ${batchMode ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]" : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"}`} title={batchMode ? "Disable batch mode" : "Enable batch mode"}>
                   <span className="font-mono text-[10px] leading-none px-1 rounded bg-black/5 text-[var(--lc-muted)]">#</span>
                   <span>Batch</span>
                 </button>
@@ -578,7 +583,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
               aria-label={inputLabel}
               value={input}
               onChange={(event) => setFreshInput(event.target.value)}
-              className={`w-full flex-1 resize-y bg-transparent p-4 sm:p-5 font-mono text-sm leading-relaxed text-[var(--lc-ink)] placeholder-[var(--lc-muted)] outline-none border-none focus:ring-0 min-h-[200px] ${inputMinHeightClassName}`}
+              className={`w-full flex-1 resize-y bg-transparent p-4 sm:p-5 font-mono text-base sm:text-sm leading-relaxed text-[var(--lc-ink)] placeholder-[var(--lc-muted)] outline-none border-none focus:ring-0 min-h-[200px] ${inputMinHeightClassName}`}
               placeholder={placeholder}
             />
             
@@ -632,7 +637,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 type="button"
                 onClick={() => setShowBulkEditor((current) => !current)}
                 disabled={!workspaceValues.length}
-                className={`inline-flex min-h-8 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold transition-colors ${showBulkEditor ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]" : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"} disabled:opacity-50`}
+                className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold transition-colors ${showBulkEditor ? "bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]" : "text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"} disabled:opacity-50`}
               >
                 <PencilLine className="h-3.5 w-3.5" />
                 {showBulkEditor ? "Close editor" : "Edit all"}
@@ -642,7 +647,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 type="button"
                 onClick={toggleSelectAllPreviewed}
                 disabled={!workspaceValues.length}
-                className="inline-flex min-h-8 items-center justify-center rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
               >
                 Select all
               </button>
@@ -650,7 +655,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 type="button"
                 onClick={deleteSelectedRows}
                 disabled={!selectedCount}
-                className="inline-flex min-h-8 items-center justify-center rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-danger)] hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-50"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg px-2.5 text-xs font-semibold text-[var(--lc-danger)] hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-50"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 Delete
@@ -661,7 +666,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                   type="button"
                   onClick={undoWorkspace}
                   disabled={!pastWorkspace.length}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
                   aria-label="Undo"
                   title="Undo"
                 >
@@ -671,7 +676,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                   type="button"
                   onClick={redoWorkspace}
                   disabled={!futureWorkspace.length}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors disabled:opacity-50"
                   aria-label="Redo"
                   title="Redo"
                 >
@@ -680,7 +685,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 <button
                   type="button"
                   onClick={() => setShowShortcuts(true)}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)] transition-colors"
                   aria-label="Show keyboard shortcuts"
                   title="Keyboard shortcuts (?)"
                 >
@@ -692,14 +697,14 @@ return () => window.removeEventListener("keydown", handleKeyDown);
               <button
                 type="button"
                 onClick={() => setResultDensity("comfortable")}
-                className={`${resultDensity === "comfortable" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} rounded-md px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide transition-colors`}
+                className={`${resultDensity === "comfortable" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} min-h-11 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide transition-colors`}
               >
                 Comfortable
               </button>
               <button
                 type="button"
                 onClick={() => setResultDensity("compact")}
-                className={`${resultDensity === "compact" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} rounded-md px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide transition-colors`}
+                className={`${resultDensity === "compact" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} min-h-11 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide transition-colors`}
               >
                 Compact
               </button>
@@ -724,15 +729,18 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                     <button
                       type="button"
                       onClick={toggleSelectAllPreviewed}
-                      className="flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded border border-[var(--lc-border-mid)] bg-white hover:border-[var(--lc-accent)] transition-colors"
+                      className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-black/[0.03]"
+                      aria-label="Select all previewed rows"
                     >
-                      {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-2.5 w-2.5 text-[var(--lc-accent)]" />}
+                      <span className="flex h-4 w-4 items-center justify-center rounded border border-[var(--lc-border-mid)] bg-white">
+                        {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-2.5 w-2.5 text-[var(--lc-accent)]" />}
+                      </span>
                     </button>
-                    <div className="flex-1 flex items-center gap-4 font-mono text-[9px] uppercase tracking-wider text-[var(--lc-hint)]">
+                    <div className="flex-1 flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">
                       <span className="w-16">STATUS</span>
                       <span>{csvHeader.toUpperCase()}</span>
                     </div>
-                    <span className="font-mono text-[9px] uppercase tracking-wider text-[var(--lc-hint)]">ACTIONS</span>
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">ACTIONS</span>
                   </div>
                   <div className="divide-y divide-[var(--lc-border)] bg-white">
                     {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
@@ -743,14 +751,16 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                         <button
                           type="button"
                           onClick={() => toggleWorkspaceSelection(item.id)}
-                          className={`flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded border transition-all ${item.selected ? "border-[var(--lc-accent)] bg-[var(--lc-accent)] text-white" : "border-[var(--lc-border-mid)] bg-white group-hover:border-[var(--lc-accent)]"}`}
+                          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-black/[0.03]"
                           aria-label={`Select row ${index + 1}`}
                         >
-                          {item.selected && <Check className="h-2.5 w-2.5" />}
+                          <span className={`flex h-4 w-4 items-center justify-center rounded border transition-all ${item.selected ? "border-[var(--lc-accent)] bg-[var(--lc-accent)] text-white" : "border-[var(--lc-border-mid)] bg-white group-hover:border-[var(--lc-accent)]"}`}>
+                            {item.selected && <Check className="h-2.5 w-2.5" />}
+                          </span>
                         </button>
                         
                         <div className="flex w-16 shrink-0 items-center">
-                          <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-100">
+                          <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-100">
                             Valid
                           </span>
                         </div>
@@ -760,7 +770,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                             aria-label="Edit item value"
                             value={item.value}
                             onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
-                            className={`w-full bg-transparent font-mono text-[13px] text-[var(--lc-ink)] outline-none focus:bg-black/[0.02] focus:ring-1 focus:ring-[var(--lc-accent)]/20 rounded px-1.5 transition-all ${resultDensity === "compact" ? "py-0.5" : "py-1"}`}
+                            className={`w-full bg-transparent font-mono text-base sm:text-[13px] text-[var(--lc-ink)] outline-none focus:bg-black/[0.02] focus:ring-1 focus:ring-[var(--lc-accent)]/20 rounded px-1.5 transition-all ${resultDensity === "compact" ? "py-0.5" : "py-1"}`}
                           />
                         </div>
  
@@ -768,7 +778,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                           <button
                             type="button"
                             onClick={() => toggleWorkspaceLock(item.id)}
-                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
+                            className="flex h-11 w-11 cursor-pointer items-center justify-center rounded text-[var(--lc-muted)] hover:bg-black/[0.03] hover:text-[var(--lc-ink)]"
                             aria-label={item.locked ? "Unlock row" : "Lock row"}
                           >
                             {item.locked ? <Lock className="h-3.5 w-3.5 text-amber-500" /> : <LockOpen className="h-3.5 w-3.5" />}
@@ -776,7 +786,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                           <button
                             type="button"
                             onClick={() => removeWorkspaceItem(item.id)}
-                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded text-[var(--lc-muted)] hover:bg-red-50 hover:text-red-600"
+                            className="flex h-11 w-11 cursor-pointer items-center justify-center rounded text-[var(--lc-muted)] hover:bg-red-50 hover:text-red-600"
                             aria-label={`Remove row ${index + 1}`}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -786,7 +796,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                     ))}
                   </div>
                   <div className="border-t border-[var(--lc-border)] bg-[#FDFDFD] px-6 py-2">
-                    <p className="font-mono text-[9px] uppercase tracking-wider text-[var(--lc-hint)] text-center">
+                    <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] text-center">
                       {workspace.length > WORKSPACE_PREVIEW_LIMIT
                         ? `SHOWING ${WORKSPACE_PREVIEW_LIMIT} OUT OF ${workspace.length} ROWS`
                         : `ALL ${workspace.length} RESULTS SHOWN`}

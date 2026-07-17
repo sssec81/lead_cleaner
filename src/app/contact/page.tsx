@@ -62,7 +62,7 @@ export default function ContactPage() {
  return (
  <PageFrame>
   {/* Hero Section */}
-  <section className="pt-24 pb-20 lg:pt-36 lg:pb-32">
+  <section className="pb-14 pt-16 lg:pb-20 lg:pt-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
   <div className="mx-auto max-w-3xl text-center">
   <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
@@ -80,7 +80,7 @@ export default function ContactPage() {
   </section>
 
   {/* Best Practices Section */}
-  <section className="relative z-10 pb-24 lg:pb-32">
+  <section className="relative z-10 pb-16 lg:pb-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
   
@@ -117,9 +117,9 @@ export default function ContactPage() {
   </section>
 
   {/* Dark Mode Inboxes Section */}
-  <section className="relative overflow-hidden bg-[var(--lc-dark-bg)] py-24 sm:py-32">
+  <section className="relative overflow-hidden bg-[var(--lc-dark-bg)] py-16 sm:py-20">
   <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-  <div className="mx-auto max-w-3xl text-center mb-16">
+  <div className="mx-auto mb-10 max-w-3xl text-center">
   <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-[var(--lc-surface)] sm:text-5xl">
   Direct inboxes
   </h2>

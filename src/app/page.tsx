@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import {
   ArrowRight,
   Check,
+  ChevronDown,
   Download,
   FileSpreadsheet,
   Globe,
   Mail,
   Phone,
   Shield,
+  ShieldCheck,
   Upload,
   Users,
   Wand2,
@@ -134,14 +136,19 @@ export default function HomePage() {
   return (
     <PageFrame>
       <FaqJsonLd faqEntries={homepageFaqs} />
-      <section className="mx-auto max-w-7xl px-4 pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-20">
+      <section className="mx-auto max-w-7xl overflow-hidden px-4 pb-12 pt-12 sm:px-6 lg:px-8 lg:pb-16 lg:pt-16">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-16">
           <div>
-            <h1 className="font-sans text-[34px] font-bold tracking-tight text-[var(--lc-ink)] sm:text-[48px] lg:text-[56px] leading-[1.1]">
-              Clean messy lead lists instantly.
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5 text-xs font-semibold text-[var(--lc-muted)] shadow-sm backdrop-blur">
+              <ShieldCheck className="h-4 w-4 text-[var(--lc-green)]" aria-hidden="true" />
+              Private lead operations, in your browser
+            </div>
+            <h1 className="font-display text-[38px] font-bold leading-[1.06] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-[50px] lg:text-[60px]">
+              Clean messy lead lists.
+              <span className="mt-1 block text-[var(--lc-accent)]">Export with confidence.</span>
             </h1>
-            <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-[var(--lc-muted)] sm:text-[18px]">
-              Private CSV and contact-list cleaning that runs in your browser.
+            <p className="mt-5 max-w-xl text-[16px] leading-7 text-[var(--lc-muted)] sm:text-[18px]">
+              Turn raw CSVs and contact lists into CRM-ready data without uploading sensitive lead information.
             </p>
  
             <div className="mt-8 flex flex-wrap gap-3">
@@ -150,6 +157,7 @@ export default function HomePage() {
                 className="lc-button-primary py-2.5 px-6"
               >
                 Try CSV Cleaner
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 href="/tools"
@@ -159,14 +167,14 @@ export default function HomePage() {
               </Link>
             </div>
  
-            <div className="mt-6 flex flex-wrap items-center gap-2 font-sans text-xs text-[var(--lc-muted)]">
-              <span className="lc-chip">Runs locally</span>
-              <span className="lc-chip">No signup</span>
-              <span className="lc-chip">CSV + text tools</span>
+            <div className="mt-6 flex flex-wrap items-center gap-2 font-sans text-xs text-[var(--lc-muted)]" aria-label="Product benefits">
+              <span className="lc-chip lc-chip-success"><Check className="h-3 w-3" aria-hidden="true" /> Runs locally</span>
+              <span className="lc-chip"><Check className="h-3 w-3" aria-hidden="true" /> No signup</span>
+              <span className="lc-chip"><Check className="h-3 w-3" aria-hidden="true" /> CSV + text tools</span>
             </div>
           </div>
  
-          <div className="relative">
+          <div className="lc-hero-panel relative">
             <div className="lc-workspace-shell">
               {/* App Window Top Bar */}
               <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[#F1F1F4] px-4 py-2">
@@ -192,14 +200,14 @@ export default function HomePage() {
                       <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)]">Target Column</span>
                       <div className="mt-1 w-full rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-[var(--lc-ink)] flex items-center justify-between">
                         <span>Email</span>
-                        <span className="text-black/30">▼</span>
+                        <ChevronDown className="h-3.5 w-3.5 text-black/30" aria-hidden="true" />
                       </div>
                     </div>
                     <div>
                       <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)]">Deduplicate</span>
                       <div className="mt-1 w-full rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-[var(--lc-ink)] flex items-center justify-between">
                         <span>Remove duplicates</span>
-                        <span className="text-black/30">▼</span>
+                        <ChevronDown className="h-3.5 w-3.5 text-black/30" aria-hidden="true" />
                       </div>
                     </div>
                   </div>
@@ -234,7 +242,9 @@ export default function HomePage() {
                   
                   <div className="mt-4 border-t border-black/5 pt-3 flex items-center justify-between">
                     <span className="text-[11px] font-bold text-emerald-700">1,145 ready leads</span>
-                    <button className="lc-button-primary py-1 px-3.5 text-xs font-semibold">Download CSV</button>
+                    <Link href="/tools/csv-lead-cleaner" className="lc-button-primary px-3.5 text-xs font-semibold">
+                      Open cleaner
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -258,8 +268,8 @@ export default function HomePage() {
             {processSteps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <div key={step.title} className="flex items-start gap-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+                <div key={step.title} className="flex items-start gap-4 rounded-2xl p-2 transition-colors hover:bg-[var(--lc-bg)]">
+                  <div className="lc-icon-tile h-11 w-11 shrink-0">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
@@ -278,7 +288,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-4xl">
             Built for messy lead workflows
@@ -288,25 +298,25 @@ export default function HomePage() {
           </p>
         </div>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+          <div className="lc-card p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Sales teams</p>
             <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
               Clean scraped prospect CSVs before importing into Apollo, Outreach, HubSpot, or another sales tool.
             </p>
           </div>
-          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+          <div className="lc-card p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Recruiters</p>
             <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
               Extract candidate emails and phone numbers from sourcing lists, ATS exports, and copied profile notes.
             </p>
           </div>
-          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+          <div className="lc-card p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Marketers</p>
             <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
               Turn messy email lists into cleaner company-domain lists for ABM, enrichment, and campaign prep.
             </p>
           </div>
-          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
+          <div className="lc-card p-6">
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Agencies & VAs</p>
             <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
               Clean client lead sheets before delivery without uploading private contact data to a third-party server.
@@ -315,7 +325,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] py-16">
+      <section className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-4xl">
@@ -336,7 +346,7 @@ export default function HomePage() {
               "CSV exports ready for CRM import",
               "Browser-only processing with no upload"
             ].map(item => (
-              <div key={item} className="flex items-start gap-3 rounded-lg border border-[var(--lc-border)] bg-[var(--lc-surface)] p-4 shadow-sm">
+              <div key={item} className="lc-card flex items-start gap-3 p-4">
                 <Check className="h-5 w-5 shrink-0 text-[var(--lc-green)]" />
                 <span className="text-[14px] font-medium text-[var(--lc-ink)]">{item}</span>
               </div>
@@ -345,7 +355,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <p className="section-eyebrow">Quick Start Paths</p>
         <div className="mt-3 flex items-end justify-between gap-6">
           <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">
@@ -360,14 +370,14 @@ export default function HomePage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-5 transition-colors hover:border-[var(--lc-accent)] hover:shadow-sm"
+                className="lc-card-interactive group p-5"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+                <div className="lc-icon-tile h-12 w-12 transition-transform duration-200 group-hover:scale-105">
                   <Icon className="h-7 w-7" />
                 </div>
                 <h3 className="mt-5 text-lg font-semibold text-[var(--lc-ink)]">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">{item.text}</p>
-                <div className="mt-5 inline-flex items-center gap-2 rounded-md border border-[var(--lc-border-mid)] px-3 py-1 text-sm font-medium text-[var(--lc-ink)] transition-colors hover:border-[var(--lc-accent)]">
+                <div className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--lc-border-mid)] px-4 py-1 text-sm font-semibold text-[var(--lc-ink)] transition-colors group-hover:border-[var(--lc-accent)] group-hover:text-[var(--lc-accent)]">
                   {item.cta}
                   <ArrowRight className="h-4 w-4" />
                 </div>
@@ -377,8 +387,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 border-t border-[var(--lc-border)]">
-        <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
+      <section className="mx-auto max-w-7xl border-t border-[var(--lc-border)] px-4 py-12 sm:px-6 lg:px-8 lg:py-14">
+        <div className="grid gap-8 lg:grid-cols-[1fr_2fr] lg:gap-12">
           <div>
             <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)]">
               Frequently asked questions
@@ -393,10 +403,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 lg:px-8 border-t border-[var(--lc-border)]">
+      <section className="mx-auto max-w-7xl border-t border-[var(--lc-border)] px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+          <div className="lc-card p-6">
+            <div className="lc-icon-tile h-12 w-12">
               <Shield className="h-6 w-6" />
             </div>
             <h2 className="mt-5 font-display text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--lc-ink)]">
@@ -404,15 +414,15 @@ export default function HomePage() {
               <br />
               your browser.
             </h2>
-            <div className="mt-5 space-y-2 text-sm leading-6 text-[var(--lc-muted)]">
-              <p>✓ CSV parsing and text cleanup happen locally on this device.</p>
-              <p>✓ You can test the free workflow without creating an account first.</p>
+            <div className="mt-5 space-y-3 text-sm leading-6 text-[var(--lc-muted)]">
+              <p className="flex items-start gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[var(--lc-green)]" aria-hidden="true" /> CSV parsing and text cleanup happen locally on this device.</p>
+              <p className="flex items-start gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[var(--lc-green)]" aria-hidden="true" /> You can test the free workflow without creating an account first.</p>
             </div>
           </div>
 
           <div className="grid gap-4">
-            <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+            <div className="lc-card p-6">
+              <div className="lc-icon-tile h-10 w-10">
                 <Check className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-lg font-semibold text-[var(--lc-ink)]">No signup</h3>
@@ -420,8 +430,8 @@ export default function HomePage() {
                 Open a tool, load a sample, and see the output before committing to anything.
               </p>
             </div>
-            <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+            <div className="lc-card p-6">
+              <div className="lc-icon-tile h-10 w-10">
                 <Users className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-lg font-semibold text-[var(--lc-ink)]">Built for lead ops</h3>

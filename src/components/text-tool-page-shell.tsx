@@ -31,16 +31,16 @@ export function TextToolPageShell({
 
   return (
     <PageFrame>
-      <div className="bg-[var(--lc-bg)] min-h-screen pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+      <div className="bg-[var(--lc-bg)] pb-12">
+        <div className="mx-auto max-w-7xl px-4 pb-10 pt-12 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
             
             {/* Left Column 7/12 */}
             <div className="lg:col-span-7 pt-2">
-              <p className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)]">
+              <p className="mb-4 inline-flex rounded-full border border-[var(--lc-border)] bg-white/75 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--lc-accent)] shadow-sm">
                 {eyebrow}
               </p>
-              <h1 className="font-display font-bold text-[clamp(1.75rem,3vw,2.5rem)] text-[var(--lc-ink)] tracking-[-0.025em] leading-tight mb-3">
+              <h1 className="mb-3 font-display text-[clamp(2rem,4vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.04em] text-[var(--lc-ink)]">
                 {title}
               </h1>
               <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-lg mb-6">
@@ -58,7 +58,8 @@ export function TextToolPageShell({
               {asideContent ? (
                 asideContent
               ) : (
-                <div className="bg-[var(--lc-surface)] border border-[var(--lc-border)] rounded-xl p-6 shadow-[var(--shadow)]">
+                <div className="lc-card relative overflow-hidden p-6">
+                  <div aria-hidden="true" className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--lc-accent-bg)] blur-2xl" />
                   <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)]">
                     Use This When
                   </p>
@@ -76,14 +77,14 @@ export function TextToolPageShell({
                     What happens here
                   </h4>
                   <div className="flex flex-col relative">
-                    <div className="absolute left-[3px] top-3 bottom-3 w-px bg-[var(--lc-border)]"></div>
+                    <div className="absolute bottom-3 left-[4px] top-3 w-px bg-[var(--lc-border)]"></div>
                     {[
                       "Paste the source content or list",
                       "Run the focused extraction",
                       "Copy or export the cleaned result",
                     ].map((item, index) => (
                       <div key={item} className="flex items-start gap-3 py-2 relative z-10">
-                        <div className="w-[7px] h-[7px] rounded-full bg-[var(--lc-border-mid)] mt-1.5 shrink-0 outline outline-[4px] outline-[var(--lc-surface)]"></div>
+                        <div className="mt-1.5 h-[9px] w-[9px] shrink-0 rounded-full bg-[var(--lc-accent)] outline outline-[4px] outline-[var(--lc-surface)]"></div>
                         <span className="font-sans text-[14px] text-[var(--lc-muted)]">{item}</span>
                       </div>
                     ))}

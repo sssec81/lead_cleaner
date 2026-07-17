@@ -33,7 +33,7 @@ export function ToolSeoSections({
   faqs,
 }: ToolSeoSectionsProps) {
   return (
-    <div className="mt-14 space-y-14 border-t border-[var(--lc-border)] pt-14">
+    <div className="mt-12 space-y-12 border-t border-[var(--lc-border)] pt-12">
       <section>
         <div className="section-anchor-row mb-4">
           <span className="section-anchor-label">How it works</span>
@@ -51,7 +51,7 @@ export function ToolSeoSections({
           {howItWorksSteps.map((step) => (
             <div
               key={step.title}
-              className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-5"
+              className="lc-card p-5"
             >
               <h3 className="text-base font-semibold text-[var(--lc-ink)]">
                 {step.title}
@@ -78,7 +78,7 @@ export function ToolSeoSections({
           {useCases.map((item) => (
             <div
               key={item.title}
-              className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-5"
+              className="lc-card p-5"
             >
               <h3 className="text-base font-semibold text-[var(--lc-ink)]">
                 {item.title}
@@ -105,7 +105,7 @@ export function ToolSeoSections({
             <Link
               key={tool.href}
               href={tool.href}
-              className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-5 transition-colors hover:border-[var(--lc-accent)] hover:shadow-sm"
+              className="lc-card-interactive p-5"
             >
               <h3 className="text-base font-semibold text-[var(--lc-ink)]">
                 {tool.title}

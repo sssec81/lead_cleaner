@@ -37,7 +37,7 @@ export default function RemoveEmptyRowsFromCsvPage() {
         path="/tools/remove-empty-rows-from-csv"
         category="UtilitiesApplication"
       />
-      <main className="relative min-h-screen bg-[var(--lc-bg)] pb-24 pt-4 lg:pb-32">
+      <main className="relative bg-[var(--lc-bg)] pb-16 pt-4 lg:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl pb-6 pt-12 text-center sm:mx-0 sm:text-left">
             <div className="section-eyebrow mb-4">CSV TOOL</div>
@@ -65,7 +65,7 @@ export default function RemoveEmptyRowsFromCsvPage() {
             </div>
           </div>
 
-          <div className="mb-16">
+          <div className="mb-10">
             <Suspense
               fallback={
                 <div className="flex h-96 items-center justify-center text-[var(--lc-muted)]">

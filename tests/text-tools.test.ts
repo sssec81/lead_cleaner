@@ -49,6 +49,15 @@ test("cleanEmailList filters invalid entries", () => {
   assert.equal(result.stats.invalidRemoved, 1);
 });
 
+test("cleanEmailList rejects invalid local parts and domain labels", () => {
+  const result = cleanEmailList(
+    "valid@example.com a..b@example.com user@example..com user@-example.com",
+  );
+
+  assert.deepEqual(result.results, ["valid@example.com"]);
+  assert.equal(result.stats.invalidRemoved, 3);
+});
+
 test("cleanEmailList counts blank lines before delimiter collapsing", () => {
   const result = cleanEmailList("first@example.com\n\n\nsecond@example.com");
 
@@ -174,6 +183,13 @@ test("phone verification - duplicated number in different formatting deduplicate
   assert.equal(result.stats.duplicatesRemoved, 1);
 });
 
+test("phone extraction does not join adjacent local numbers across lines", () => {
+  const result = extractPhoneNumbersFromText("415-555-0101\n415-555-0101");
+
+  assert.deepEqual(result.results, ["+14155550101"]);
+  assert.equal(result.stats.duplicatesRemoved, 1);
+});
+
 test("removeDuplicatePhoneNumbers acts as alias to extractPhoneNumbersFromText", () => {
   const result = removeDuplicatePhoneNumbers("Call +1 415 555 0101 or (415) 555-0101");
   assert.equal(result.results.length, 1);
@@ -194,6 +210,16 @@ test("extractPhoneNumbersFromText supports original formatting output", () => {
   });
 
   assert.deepEqual(result.results, ["+1 415 555 0101"]);
+});
+
+test("phone extraction deduplicates canonical values when preserving original formatting", () => {
+  const result = extractPhoneNumbersFromText(
+    "+1 (415) 555-0101\n+14155550101",
+    { outputFormat: "original" },
+  );
+
+  assert.deepEqual(result.results, ["+1 (415) 555-0101"]);
+  assert.equal(result.stats.duplicatesRemoved, 1);
 });
 
 test("extractPhoneNumbersFromText respects the selected default country", () => {

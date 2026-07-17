@@ -26,6 +26,7 @@ type UploadStatus = "idle" | "parsing" | "ready" | "error";
 export function SplitCsvFilesTool() {
  const [status, setStatus] = useState<UploadStatus>("idle");
  const [error, setError] = useState<string | null>(null);
+ const [warning, setWarning] = useState<string | null>(null);
  
  const [fileName, setFileName] = useState("");
  const [rows, setRows] = useState<CsvRow[]>([]);
@@ -39,6 +40,7 @@ export function SplitCsvFilesTool() {
  function resetState() {
  setStatus("idle");
  setError(null);
+ setWarning(null);
  setFileName("");
  setRows([]);
  setHeaders([]);
@@ -74,6 +76,7 @@ export function SplitCsvFilesTool() {
  setFileName(file.name);
  setHeaders(result.headers);
  setRows(result.rows);
+ setWarning(formatCsvWarnings(result.warnings));
  setStatus("ready");
  
  trackToolEvent("split-csv-files", "file_uploaded", {
@@ -156,7 +159,7 @@ export function SplitCsvFilesTool() {
  <div className="mx-auto w-full max-w-[1200px]">
  <div className="flex flex-col gap-8 xl:flex-row">
  {/* Left column: Upload & Config */}
- <div className="flex flex-col min-w-[360px] xl:w-[360px] xl:shrink-0 rounded-xl border border-[color:var(--line)] bg-white p-6 sm:p-8 shadow-sm">
+ <div className="flex w-full min-w-0 flex-col rounded-xl border border-[color:var(--line)] bg-white p-6 shadow-sm sm:p-8 xl:w-[360px] xl:shrink-0">
  <div className="flex items-center gap-4 border-b border-[color:var(--line)] pb-5">
  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[color:var(--brand)]/10 text-[color:var(--brand-strong)] ring-1 ring-[color:var(--brand)]/20 shadow-sm">
  <Scissors className="h-6 w-6" />
@@ -257,7 +260,8 @@ export function SplitCsvFilesTool() {
  </div>
  )}
 
- {error ? <div className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
+ {error ? <div role="alert" className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
+ {warning ? <div role="status" aria-live="polite" className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">{warning}</div> : null}
  </div>
 
  {/* Right column: Results */}
@@ -345,4 +349,10 @@ export function SplitCsvFilesTool() {
  </div>
  </div>
  );
+}
+
+function formatCsvWarnings(warnings: string[]) {
+ if (!warnings.length) return null;
+ const preview = warnings.slice(0, 2).join(" ");
+ return `Imported with ${warnings.length} parsing warning${warnings.length === 1 ? "" : "s"}. ${preview}`;
 }

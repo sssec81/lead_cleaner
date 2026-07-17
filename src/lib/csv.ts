@@ -212,12 +212,24 @@ export function detectCsvColumns(
 }
 
 function normalizeHeaderMappings(headers: string[]): CsvHeaderMapping[] {
+ const usedHeaders = new Set<string>();
+
  return headers.flatMap((header) => {
  const normalizedHeader = header.trim();
 
- return normalizedHeader
- ? [{ originalHeader: header, normalizedHeader }]
- : [];
+ if (!normalizedHeader) {
+ return [];
+ }
+
+ let uniqueHeader = normalizedHeader;
+ let suffix = 1;
+ while (usedHeaders.has(uniqueHeader)) {
+ uniqueHeader = `${normalizedHeader}_${suffix}`;
+ suffix += 1;
+ }
+ usedHeaders.add(uniqueHeader);
+
+ return [{ originalHeader: header, normalizedHeader: uniqueHeader }];
  });
 }
 

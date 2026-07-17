@@ -23,6 +23,17 @@ test("parseCsvText preserves values when headers contain surrounding spaces", ()
   });
 });
 
+test("parseCsvText preserves columns whose headers collide after trimming", () => {
+  const result = parseCsvText(" email ,email,email_1\nfirst@example.com,second@example.com,third@example.com");
+
+  assert.deepEqual(result.headers, ["email", "email_1", "email_1_1"]);
+  assert.deepEqual(result.rows[0], {
+    email: "first@example.com",
+    email_1: "second@example.com",
+    email_1_1: "third@example.com",
+  });
+});
+
 test("detectCsvColumns identifies email and url columns", () => {
   const parsed = parseCsvText(
     "company,email,website\nAcme,hello@acme.com,https://acme.com",

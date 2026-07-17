@@ -28,36 +28,38 @@ export function CountWordsCharactersTool() {
  trackToolEvent("count-words", "clear");
  }
 
- function handleCopy() {
+ async function handleCopy() {
  if (!text) return;
- copyTextToClipboard(text);
+ const didCopy = await copyTextToClipboard(text);
+ if (!didCopy) return;
  trackToolEvent("count-words", "copy");
  }
 
  return (
  <div className="flex flex-col lg:flex-row gap-8 items-start">
  {/* Left Panel: Input */}
- <section className="flex flex-col flex-1 w-full max-w-3xl min-w-0 rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm backdrop-blur-xl">
+ <section className="flex flex-col flex-1 w-full max-w-3xl min-w-0 rounded-xl border border-[var(--lc-border)] bg-white p-6 sm:p-8 shadow-sm">
  <div className="flex items-center gap-4 mb-6">
- <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 shadow-sm">
+ <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lc-accent-bg)] text-[var(--lc-accent)] ring-1 ring-[var(--lc-border)] shadow-sm">
  <Type className="h-6 w-6" />
  </div>
  <div>
- <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+ <label htmlFor="text-counter-input" className="block text-xl font-bold text-[var(--lc-ink)] tracking-tight">
  Paste your text
- </h2>
- <p className="text-sm text-slate-500">
+ </label>
+ <p className="text-sm text-[var(--lc-muted)]">
  Metrics update automatically as you type.
  </p>
  </div>
  </div>
 
  <textarea
+ id="text-counter-input"
  value={text}
  onChange={(e) => setText(e.target.value)}
  aria-label="Text to analyze"
  placeholder="Paste or type your text here to instantly see word, character, and line counts..."
- className="w-full flex-1 min-h-[24rem] rounded-xl border border-slate-200 bg-white p-4 text-sm leading-relaxed text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 resize-y"
+ className="w-full flex-1 min-h-[24rem] rounded-xl border border-[var(--lc-border-mid)] bg-white p-4 text-base leading-relaxed text-[var(--lc-ink)] placeholder:text-[var(--lc-hint)] outline-none transition focus:border-[var(--lc-accent)] focus:ring-4 focus:ring-[var(--lc-accent-bg)] resize-y"
  />
 
  <div className="flex flex-wrap items-center gap-3 mt-4">
@@ -65,7 +67,7 @@ export function CountWordsCharactersTool() {
  type="button"
  onClick={handleCopy}
  disabled={!text}
- className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-50"
+ className="lc-button-primary px-5 text-sm font-semibold disabled:opacity-50"
  >
  Copy Text
  </button>
@@ -73,7 +75,7 @@ export function CountWordsCharactersTool() {
  type="button"
  onClick={handleClear}
  disabled={!text}
- className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 active:bg-slate-100 disabled:opacity-50"
+ className="lc-button-secondary px-5 text-sm font-semibold disabled:opacity-50"
  >
  Clear
  </button>
@@ -82,8 +84,8 @@ export function CountWordsCharactersTool() {
 
  {/* Right Panel: Stats */}
  <section className="w-full lg:w-[360px] shrink-0 space-y-6">
- <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
- <p className="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 mb-6">
+ <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-6 sm:p-8">
+ <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--lc-accent)] mb-6">
  Text Metrics
  </p>
 
@@ -103,14 +105,14 @@ export function CountWordsCharactersTool() {
 
 function StatTile({ label, value, icon: Icon }: { label: string; value: number; icon: React.ElementType }) {
  return (
- <div className="flex items-center justify-between rounded-xl bg-white p-4 border border-slate-100 shadow-sm">
+ <div className="flex items-center justify-between rounded-xl bg-white p-4 border border-[var(--lc-border)] shadow-sm">
  <div className="flex items-center gap-3">
- <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+ <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
  <Icon className="h-4 w-4" />
  </div>
- <span className="text-sm font-semibold text-slate-700">{label}</span>
+ <span className="text-sm font-semibold text-[var(--lc-muted)]">{label}</span>
  </div>
- <span className="text-xl font-display font-bold text-slate-900 tabular-nums">
+ <span className="text-xl font-display font-bold text-[var(--lc-ink)] tabular-nums">
  {value.toLocaleString()}
  </span>
  </div>

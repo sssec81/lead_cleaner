@@ -42,6 +42,7 @@ Support Team,support@acme.com,Acme`;
 export function ConvertCsvToJsonTool() {
  const [status, setStatus] = useState<UploadStatus>("idle");
  const [error, setError] = useState<string | null>(null);
+ const [warning, setWarning] = useState<string | null>(null);
  const [fileName, setFileName] = useState<string>("");
  const [progress, setProgress] = useState<CsvParseProgress>({
  percentage: 0,
@@ -59,6 +60,7 @@ export function ConvertCsvToJsonTool() {
  function resetState() {
  setStatus("idle");
  setError(null);
+ setWarning(null);
  setFileName("");
  setHeaders([]);
  setRows([]);
@@ -108,6 +110,7 @@ export function ConvertCsvToJsonTool() {
 
  setHeaders(result.headers);
  setRows(result.rows);
+ setWarning(formatCsvWarnings(result.warnings));
  setStatus("ready");
  trackToolEvent("convert-csv-to-json", "upload_success", {
  row_count: result.rows.length,
@@ -198,8 +201,9 @@ export function ConvertCsvToJsonTool() {
  });
  }
 
- function handleCopy() {
- copyTextToClipboard(jsonOutput);
+ async function handleCopy() {
+ const didCopy = await copyTextToClipboard(jsonOutput);
+ if (!didCopy) return;
  setCopied(true);
  setTimeout(() => setCopied(false), 2000);
  trackToolEvent("convert-csv-to-json", "copy_json", {
@@ -216,7 +220,7 @@ export function ConvertCsvToJsonTool() {
  <div className="mx-auto w-full max-w-[1200px]">
  <div className="flex flex-col gap-6 xl:flex-row">
  {/* Left column: Upload & Config */}
- <div className="flex flex-col min-w-[360px] xl:w-[400px] xl:shrink-0 rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm backdrop-blur-md">
+ <div className="flex w-full min-w-0 flex-col rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-6 shadow-sm xl:w-[400px] xl:shrink-0">
  <div className="flex items-center gap-3">
  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
  <FileJson className="h-5 w-5" />
@@ -293,7 +297,7 @@ export function ConvertCsvToJsonTool() {
  <button
  type="button"
  onClick={loadDemoCsv}
- className="lc-button-secondary w-full min-h-10 px-4 text-xs font-semibold"
+              className="lc-button-secondary min-h-11 w-full px-4 text-xs font-semibold"
  >
  <FlaskConical className="h-3.5 w-3.5" />
  Try sample CSV
@@ -317,14 +321,14 @@ export function ConvertCsvToJsonTool() {
  <button
  type="button"
  onClick={() => setJsonFormat("pretty")}
- className={`${jsonFormat === "pretty" ? "btn-segment-active" : "btn-segment"} flex-1 min-h-9 rounded-lg text-xs font-semibold transition`}
+                  className={`${jsonFormat === "pretty" ? "btn-segment-active" : "btn-segment"} min-h-11 flex-1 rounded-lg text-xs font-semibold transition`}
  >
  Pretty
  </button>
  <button
  type="button"
  onClick={() => setJsonFormat("minified")}
- className={`${jsonFormat === "minified" ? "btn-segment-active" : "btn-segment"} flex-1 min-h-9 rounded-lg text-xs font-semibold transition`}
+                  className={`${jsonFormat === "minified" ? "btn-segment-active" : "btn-segment"} min-h-11 flex-1 rounded-lg text-xs font-semibold transition`}
  >
  Minified
  </button>
@@ -337,14 +341,14 @@ export function ConvertCsvToJsonTool() {
  <button
  type="button"
  onClick={() => setJsonStructure("array")}
- className={`${jsonStructure === "array" ? "btn-segment-active" : "btn-segment"} flex-1 min-h-9 rounded-lg text-xs font-semibold transition`}
+                  className={`${jsonStructure === "array" ? "btn-segment-active" : "btn-segment"} min-h-11 flex-1 rounded-lg text-xs font-semibold transition`}
  >
  JSON Array
  </button>
  <button
  type="button"
  onClick={() => setJsonStructure("ndjson")}
- className={`${jsonStructure === "ndjson" ? "btn-segment-active" : "btn-segment"} flex-1 min-h-9 rounded-lg text-xs font-semibold transition`}
+                  className={`${jsonStructure === "ndjson" ? "btn-segment-active" : "btn-segment"} min-h-11 flex-1 rounded-lg text-xs font-semibold transition`}
  >
  NDJSON
  </button>
@@ -409,7 +413,8 @@ export function ConvertCsvToJsonTool() {
  </div>
  ) : null}
 
- {error ? <div className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
+ {error ? <div role="alert" className="mt-4 rounded-xl border px-4 py-3 text-sm border-[color:rgba(185,28,28,0.18)] bg-[color:rgba(254,242,242,0.9)] text-red-700">{error}</div> : null}
+ {warning ? <div role="status" aria-live="polite" className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">{warning}</div> : null}
  </div>
 
  {/* Right column: JSON output */}
@@ -508,4 +513,10 @@ export function ConvertCsvToJsonTool() {
  </div>
  </div>
  );
+}
+
+function formatCsvWarnings(warnings: string[]) {
+ if (!warnings.length) return null;
+ const preview = warnings.slice(0, 2).join(" ");
+ return `Imported with ${warnings.length} parsing warning${warnings.length === 1 ? "" : "s"}. ${preview}`;
 }
