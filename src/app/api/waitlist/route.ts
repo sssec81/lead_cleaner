@@ -1,8 +1,24 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import fs from "fs";
 import path from "path";
 
 const ipRates = new Map<string, { count: number; resetTime: number }>();
+
+const WAITLIST_ROLES = new Set(["agency", "sales", "recruiting", "marketing", "founder", "other"]);
+const WAITLIST_FILE_SIZES = new Set(["under_5mb", "5_25mb", "25_100mb", "over_100mb", "not_sure"]);
+const WAITLIST_CRMS = new Set(["hubspot", "apollo", "salesforce", "pipedrive", "other", "none"]);
+const WAITLIST_FREQUENCIES = new Set(["daily", "weekly", "monthly", "occasional"]);
+
+type WaitlistSignup = {
+ email: string;
+ role: string;
+ fileSize: string;
+ crm: string;
+ frequency: string;
+ intendedUse: string;
+ source: string;
+ receivedAt: string;
+};
 
 function isRateLimited(ip: string): boolean {
  const now = Date.now();
@@ -32,11 +48,20 @@ function pruneExpiredRateLimits(
  }
 }
 
-function sanitizeWaitlistField(value: unknown) {
+function sanitizeWaitlistField(value: unknown, maxLength = 500) {
  return String(value ?? "")
  .replace(/[\r\n]+/g, " ")
- .replace(/,/g, " ")
- .trim();
+ .trim()
+ .slice(0, maxLength);
+}
+
+function formatWaitlistCsvCell(value: string) {
+ const spreadsheetSafeValue = /^[=+\-@]/.test(value) ? `'${value}` : value;
+ return `"${spreadsheetSafeValue.replace(/"/g, '""')}"`;
+}
+
+function isAllowedChoice(value: string, allowedValues: Set<string>) {
+ return Boolean(value) && allowedValues.has(value);
 }
 
 function getClientIp(request: Request) {
@@ -56,11 +81,7 @@ function getClientIp(request: Request) {
  return null;
 }
 
-async function deliverWaitlistSignup(payload: {
- email: string;
- source: string;
- receivedAt: string;
-}) {
+async function deliverWaitlistSignup(payload: WaitlistSignup) {
  const webhookUrl = process.env.WAITLIST_WEBHOOK_URL?.trim();
  if (webhookUrl) {
  const response = await fetch(webhookUrl, {
@@ -90,9 +111,21 @@ async function deliverWaitlistSignup(payload: {
  const filePath = storagePath
  ? path.resolve(storagePath)
  : path.join(process.cwd(), "waitlist.txt");
+ const needsHeader = !fs.existsSync(filePath) || fs.statSync(filePath).size === 0;
+ const header = "receivedAt,email,role,fileSize,crm,frequency,intendedUse,source\n";
+ const row = [
+ payload.receivedAt,
+ payload.email,
+ payload.role,
+ payload.fileSize,
+ payload.crm,
+ payload.frequency,
+ payload.intendedUse,
+ payload.source,
+ ].map(formatWaitlistCsvCell).join(",");
  fs.appendFileSync(
  filePath,
- `${payload.receivedAt},${payload.email},${payload.source}\n`,
+ `${needsHeader ? header : ""}${row}\n`,
  );
 }
 
@@ -104,26 +137,63 @@ export async function POST(request: Request) {
  return NextResponse.json({ ok: false, error: "Too many requests" }, { status: 429 });
  }
 
- const { email, source } = await request.json();
+ const {
+ email,
+ role,
+ fileSize,
+ crm,
+ frequency,
+ intendedUse,
+ companyWebsite,
+ source,
+ } = await request.json();
+
+ if (sanitizeWaitlistField(companyWebsite, 200)) {
+ return NextResponse.json({ ok: true });
+ }
 
  if (!email || typeof email !== "string") {
  return NextResponse.json({ ok: false, error: "Email is required" }, { status: 400 });
  }
 
  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
- if (!emailRegex.test(email)) {
+ if (email.length > 254 || !emailRegex.test(email.trim())) {
  return NextResponse.json({ ok: false, error: "Invalid email format" }, { status: 400 });
  }
 
+ const safeRole = sanitizeWaitlistField(role, 40);
+ const safeFileSize = sanitizeWaitlistField(fileSize, 40);
+ const safeCrm = sanitizeWaitlistField(crm, 40);
+ const safeFrequency = sanitizeWaitlistField(frequency, 40);
+
+ if (!isAllowedChoice(safeRole, WAITLIST_ROLES)) {
+ return NextResponse.json({ ok: false, error: "Please select your role" }, { status: 400 });
+ }
+ if (!isAllowedChoice(safeFileSize, WAITLIST_FILE_SIZES)) {
+ return NextResponse.json({ ok: false, error: "Please select a typical CSV size" }, { status: 400 });
+ }
+ if (!isAllowedChoice(safeCrm, WAITLIST_CRMS)) {
+ return NextResponse.json({ ok: false, error: "Please select your main CRM" }, { status: 400 });
+ }
+ if (!isAllowedChoice(safeFrequency, WAITLIST_FREQUENCIES)) {
+ return NextResponse.json({ ok: false, error: "Please select cleanup frequency" }, { status: 400 });
+ }
+
  const normalizedEmail = email.trim().toLowerCase();
- const safeSource = sanitizeWaitlistField(source) || "unknown";
+ const safeSource = sanitizeWaitlistField(source, 80) || "unknown";
+ const safeIntendedUse = sanitizeWaitlistField(intendedUse, 500);
  const receivedAt = new Date().toISOString();
  const maskedEmail = normalizedEmail.replace(/(^..)(.*)(@.*)$/, "$1***$3");
- console.log(`[WAITLIST] New signup: ${maskedEmail} from ${safeSource}`);
+ console.log(`[WAITLIST] New signup: ${maskedEmail} from ${safeSource} (${safeRole}, ${safeCrm})`);
 
  try {
  await deliverWaitlistSignup({
  email: normalizedEmail,
+ role: safeRole,
+ fileSize: safeFileSize,
+ crm: safeCrm,
+ frequency: safeFrequency,
+ intendedUse: safeIntendedUse,
  source: safeSource,
  receivedAt,
  });

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Zap, Info, Check, ShieldCheck } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
+import { ProWaitlistForm } from "@/components/pro-waitlist-form";
 import { getSiteUrl } from "@/lib/seo";
 
 const freePoints = [
@@ -169,7 +170,7 @@ export default function PricingPage() {
   </div>
   </div>
   <div className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--lc-surface)]">
-  Heavy Use
+  Early access
   </div>
   </div>
 
@@ -203,10 +204,10 @@ export default function PricingPage() {
 
   <div className="relative mt-auto pt-4">
   <Link
-  href="#"
+  href="#pro-waitlist"
   className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--lc-surface)] px-6 text-sm font-semibold text-[var(--lc-ink)] transition-all hover:bg-[#e4e4e1]"
   >
-  <span>Get Pro Access</span>
+  <span>Join Pro waitlist</span>
   <ArrowRight className="h-4 w-4" />
   </Link>
   </div>
@@ -215,6 +216,8 @@ export default function PricingPage() {
  </div>
  </div>
  </section>
+
+  <ProWaitlistForm />
 
   {/* Decision Rules / How to Choose Section */}
   <section className="py-16 lg:py-20">

@@ -8,6 +8,9 @@ LeadCleanr is a browser-first Next.js app for cleaning messy lead lists before C
 - Extracts emails, phones, URLs, and domains from pasted text
 - Cleans and filters CSV lead lists before import
 - Removes duplicates, blank rows, and invalid records
+- Saves reusable cleanup presets in browser storage
+- Saves opt-in cleanup snapshots locally for 30 days
+- Maps clean rows into HubSpot, Salesforce, Apollo, and Pipedrive CSV formats
 - Exports cleaned output as `.txt`, `.csv`, or `.json` depending on the tool
 
 ## Core Tool Set
@@ -124,7 +127,7 @@ Notes:
 - `NEXT_PUBLIC_GA_ID` enables Google Analytics 4
 - `NEXT_PUBLIC_SITE_URL` optionally overrides the canonical site URL used in metadata
 - `ERROR_TRACKING_WEBHOOK_URL` is an optional webhook for client error reports
-- `WAITLIST_WEBHOOK_URL` is the recommended production waitlist sink
+- `WAITLIST_WEBHOOK_URL` is the recommended production waitlist sink; LeadCleanr sends email, role, typical file size, CRM, cleanup frequency, intended use, source, and timestamp
 - `WAITLIST_FILE_PATH` is an optional single-server fallback for waitlist storage
 
 ## Testing

@@ -57,6 +57,10 @@ import {
 } from "@/lib/csv-cleaner";
 import { downloadCsvRecords } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+import { CleanupPresetControls } from "@/components/cleanup-preset-controls";
+import { CrmExportControls } from "@/components/crm-export-controls";
+import { LocalWorkspaceHistory } from "@/components/local-workspace-history";
+import type { LocalWorkspaceSnapshot } from "@/lib/local-workspace-history";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 type PreviewMode = "clean" | "removed" | "invalid";
@@ -513,8 +517,45 @@ export function CsvLeadCleanerTool() {
  }
  }
 
+ function restoreLocalWorkspace(snapshot: LocalWorkspaceSnapshot) {
+ const nextDetections = detectCsvColumns(snapshot.headers, snapshot.rows);
+ const estimatedBytes = new Blob([JSON.stringify(snapshot.rows)]).size;
+
+ resetState(snapshot.fileName);
+ setPendingFile({
+ name: snapshot.fileName,
+ sizeMb: estimatedBytes / (1024 * 1024),
+ exceedsFreeLimit: false,
+ estimatedRows: snapshot.rows.length,
+ estimatedRowsWithinFreeLimit: snapshot.rows.length,
+ });
+ setError("");
+ setHeaders(snapshot.headers);
+ setRows(snapshot.rows);
+ setDetections(nextDetections);
+ setSelectedColumn(
+ snapshot.headers.includes(snapshot.selectedColumn)
+ ? snapshot.selectedColumn
+ : pickDefaultColumn(snapshot.headers, nextDetections),
+ );
+ setDuplicateMode(snapshot.duplicateMode);
+ setEmailFilter(snapshot.emailFilter);
+ setStatus("ready");
+ }
+
       return (
     <div className={`w-full transition-opacity duration-200 ${mounted ? "opacity-100" : "opacity-0"}`}>
+      <LocalWorkspaceHistory
+        currentWorkspace={hasLoadedFile ? {
+          fileName,
+          headers,
+          rows,
+          selectedColumn,
+          duplicateMode,
+          emailFilter,
+        } : null}
+        onRestore={restoreLocalWorkspace}
+      />
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
         <div className="flex flex-col items-center justify-center p-8 lg:p-16 bg-white border border-[var(--lc-border)] rounded-[28px] shadow-[var(--shadow-elevated)]">
@@ -617,6 +658,12 @@ export function CsvLeadCleanerTool() {
               <span className="text-black/10">·</span>
               <span>4 Export</span>
             </div>
+
+            <CleanupPresetControls
+              currentRules={{ selectedColumn, duplicateMode, emailFilter }}
+              availableColumns={headers}
+              onApply={(rules) => applyConfigChange(rules)}
+            />
             
             <div>
               <h3 className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)] mb-1.5">Cleaning Rules</h3>
@@ -796,25 +843,13 @@ export function CsvLeadCleanerTool() {
           </div>
 
           {/* Export Footer */}
-          <div className="border-t border-[var(--lc-border)] p-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#FDFDFD]">
-            <div className="flex items-center gap-3">
-              <h3 className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)] hidden sm:block">Export</h3>
-            </div>
-            
-            <button
-              type="button"
-              onClick={() => {
-                trackToolEvent("csv-lead-cleaner", "export_csv", {
-                  row_count_bucket: getRowCountBucket(cleaned.rows.length),
-                  duplicate_mode: duplicateMode,
-                });
-                downloadCsvRecords(buildCleanFileName(fileName), cleaned.rows);
-              }}
-              disabled={!exportReady}
-              className="lc-button-primary py-2 px-6 disabled:opacity-50 disabled:cursor-not-allowed gap-2 w-full sm:w-auto"
-            >
-              Export CSV <Download className="h-4 w-4" />
-            </button>
+          <div className="border-t border-[var(--lc-border)] bg-[#FDFDFD] p-4">
+            <CrmExportControls
+              rows={cleaned.rows}
+              sourceHeaders={previewHeaders}
+              fileName={fileName}
+              duplicateMode={duplicateMode}
+            />
           </div>
         </div>
       )}
