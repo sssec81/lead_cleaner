@@ -1,7 +1,7 @@
 "use client";
 
-import { AlertTriangle, CheckCircle2, ChevronDown, Download, FileText, Workflow } from "lucide-react";
-import { useMemo, useState } from "react";
+import { AlertTriangle, CheckCircle2, ChevronDown, Download, FileText, ShieldCheck, Workflow } from "lucide-react";
+import { useMemo } from "react";
 
 import {
   buildCrmExport,
@@ -10,6 +10,7 @@ import {
   type CrmFieldOverrides,
   CRM_EXPORT_FORMAT_OPTIONS,
 } from "@/lib/crm-export";
+import { buildCrmReadinessReport, filterCrmRowsByStatus } from "@/lib/crm-readiness";
 import {
   buildCleanupAuditFileName,
   buildCleanupAuditReport,
@@ -17,6 +18,7 @@ import {
 import type { CleaningSummary, DuplicateMode, EmailFilterMode } from "@/lib/csv-cleaner";
 import { downloadCsvRecords, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
+import { CrmImportRepairPanel } from "@/components/crm-import-repair-panel";
 
 type CrmExportControlsProps = {
   rows: Array<Record<string, unknown>>;
@@ -26,6 +28,10 @@ type CrmExportControlsProps = {
   selectedColumn: string;
   emailFilter: EmailFilterMode;
   summary: CleaningSummary;
+  format: CrmExportFormat;
+  overrides: CrmFieldOverrides;
+  onFormatChange: (format: CrmExportFormat) => void;
+  onOverridesChange: (overrides: CrmFieldOverrides) => void;
 };
 
 export function CrmExportControls({
@@ -36,41 +42,55 @@ export function CrmExportControls({
   selectedColumn,
   emailFilter,
   summary,
+  format,
+  overrides,
+  onFormatChange,
+  onOverridesChange,
 }: CrmExportControlsProps) {
-  const [format, setFormat] = useState<CrmExportFormat>("clean_csv");
-  const [overridesByFormat, setOverridesByFormat] = useState<
-    Partial<Record<Exclude<CrmExportFormat, "clean_csv">, CrmFieldOverrides>>
-  >({});
   const exportReady = rows.length > 0;
   const crmExport = useMemo(
     () =>
       format === "clean_csv"
         ? null
-        : buildCrmExport(format, sourceHeaders, rows, overridesByFormat[format] ?? {}),
-    [format, overridesByFormat, rows, sourceHeaders],
+        : buildCrmExport(format, sourceHeaders, rows, overrides),
+    [format, overrides, rows, sourceHeaders],
+  );
+  const readiness = useMemo(
+    () => format === "clean_csv" || !crmExport
+      ? null
+      : buildCrmReadinessReport(format, crmExport.rows),
+    [crmExport, format],
   );
   const selectedOption = CRM_EXPORT_FORMAT_OPTIONS.find(
     (option) => option.value === format,
   );
+  const importableRowCount = readiness
+    ? readiness.readyRows + readiness.reviewRows
+    : rows.length;
   const canDownload =
-    exportReady && (format === "clean_csv" || Boolean(crmExport?.mappedFieldCount));
-  const activeOverrides = format === "clean_csv" ? {} : overridesByFormat[format] ?? {};
+    exportReady && (
+      format === "clean_csv" ||
+      (Boolean(crmExport?.mappedFieldCount) && importableRowCount > 0)
+    );
+  const activeOverrides = format === "clean_csv" ? {} : overrides;
 
   function updateFieldOverride(targetHeader: string, value: string) {
     if (format === "clean_csv") return;
-    setOverridesByFormat((current) => {
-      const nextFormatOverrides = { ...(current[format] ?? {}) };
-      if (value === "__auto__") delete nextFormatOverrides[targetHeader];
-      else nextFormatOverrides[targetHeader] = value === "__skip__" ? "" : value;
-      return { ...current, [format]: nextFormatOverrides };
-    });
+    const nextOverrides = { ...overrides };
+    if (value === "__auto__") delete nextOverrides[targetHeader];
+    else nextOverrides[targetHeader] = value === "__skip__" ? "" : value;
+    onOverridesChange(nextOverrides);
   }
 
   function downloadExport() {
     if (!canDownload) return;
 
     const isCleanCsv = format === "clean_csv";
-    const exportRows = isCleanCsv ? rows : crmExport?.rows ?? [];
+    const exportRows = isCleanCsv
+      ? rows
+      : readiness && crmExport
+        ? filterCrmRowsByStatus(crmExport.rows, readiness, ["ready", "review"])
+        : crmExport?.rows ?? [];
     const exportFileName = isCleanCsv
       ? buildCleanFileName(fileName)
       : buildCrmExportFileName(fileName, format);
@@ -101,7 +121,7 @@ export function CrmExportControls({
             value={format}
             onChange={(event) => {
               const nextFormat = event.target.value as CrmExportFormat;
-              setFormat(nextFormat);
+              onFormatChange(nextFormat);
               trackToolEvent("csv-lead-cleaner", "change_export_format", {
                 export_format: nextFormat,
               });
@@ -125,7 +145,15 @@ export function CrmExportControls({
             onClick={() => {
               downloadTextFile(
                 buildCleanupAuditFileName(fileName),
-                buildCleanupAuditReport({ fileName, selectedColumn, duplicateMode, emailFilter, summary }),
+                buildCleanupAuditReport({
+                  fileName,
+                  selectedColumn,
+                  duplicateMode,
+                  emailFilter,
+                  summary,
+                  crmFormat: format,
+                  readiness,
+                }),
               );
               trackToolEvent("csv-lead-cleaner", "export_cleanup_audit");
             }}
@@ -142,13 +170,77 @@ export function CrmExportControls({
             className="lc-button-primary min-h-11 w-full gap-2 px-6 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
-            {format === "clean_csv" ? "Export clean CSV" : `Export for ${selectedOption?.label}`}
+            {format === "clean_csv"
+              ? "Export clean CSV"
+              : `Export ${importableRowCount.toLocaleString()} importable rows`}
           </button>
         </div>
       </div>
 
       {crmExport ? (
         <div className="mt-4 rounded-xl border border-[var(--lc-border)] bg-white">
+          {readiness ? (
+            <div className="border-b border-[var(--lc-border)] p-3 sm:p-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold tabular-nums ${
+                    readiness.blockedRows
+                      ? "bg-amber-50 text-amber-800"
+                      : "bg-[var(--lc-green-bg)] text-[var(--lc-green)]"
+                  }`}>
+                    {readiness.readinessScore}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--lc-ink)]">{selectedOption?.label} readiness score</p>
+                    <p className="mt-0.5 text-[11px] leading-5 text-[var(--lc-muted)]">
+                      Row-level checks run locally after CRM mapping.
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <ReadinessMetric label="Ready" value={readiness.readyRows} tone="success" />
+                  <ReadinessMetric label="Review" value={readiness.reviewRows} tone="warning" />
+                  <ReadinessMetric label="Blocked" value={readiness.blockedRows} tone="danger" />
+                </div>
+              </div>
+
+              {readiness.issues.length ? (
+                <div className="mt-3">
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {summarizeReadinessIssues(readiness.issues).slice(0, 4).map((issue) => (
+                      <div key={`${issue.code}-${issue.field}`} className="flex items-start gap-2 rounded-lg bg-[var(--lc-bg)] px-3 py-2 text-[11px] leading-5 text-[var(--lc-muted)]">
+                        <AlertTriangle className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${issue.severity === "blocked" ? "text-[var(--lc-danger)]" : "text-[var(--lc-warning)]"}`} aria-hidden="true" />
+                        <span><strong className="text-[var(--lc-ink)]">{issue.count} rows:</strong> {issue.message}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {readiness.blockedRows ? (
+                    <div className="mt-3 flex flex-col gap-2 rounded-lg border border-red-100 bg-red-50/60 p-3 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-[11px] leading-5 text-red-900">
+                        Blocked rows are excluded from the primary CRM export so they cannot fail the import silently.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => downloadCsvRecords(
+                          buildPreflightReviewFileName(fileName, format),
+                          buildPreflightReviewRows(crmExport.rows, readiness),
+                        )}
+                        className="lc-button-secondary min-h-11 shrink-0 px-4 text-xs font-semibold"
+                      >
+                        <Download className="h-4 w-4" aria-hidden="true" />
+                        Download blocked rows
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-[var(--lc-green-bg)] px-3 py-2 text-xs font-medium text-[var(--lc-green)]">
+                  <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                  Every mapped row passed the current CRM preflight checks.
+                </div>
+              )}
+            </div>
+          ) : null}
           <div className="flex flex-col gap-2 p-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-2.5">
               <Workflow className="mt-0.5 h-4 w-4 shrink-0 text-[var(--lc-accent)]" aria-hidden="true" />
@@ -192,7 +284,7 @@ export function CrmExportControls({
                   type="button"
                   onClick={() => {
                     if (format === "clean_csv") return;
-                    setOverridesByFormat((current) => ({ ...current, [format]: {} }));
+                    onOverridesChange({});
                   }}
                   className="lc-button-quiet min-h-11 shrink-0 px-3 text-xs font-semibold"
                 >
@@ -238,10 +330,49 @@ export function CrmExportControls({
               ))}
             </div>
           </details>
+          {format !== "clean_csv" ? (
+            <CrmImportRepairPanel format={format} sourceRows={crmExport.rows} fileName={fileName} />
+          ) : null}
         </div>
       ) : null}
     </section>
   );
+}
+
+function ReadinessMetric({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number;
+  tone: "success" | "warning" | "danger";
+}) {
+  const toneClass = tone === "success"
+    ? "text-[var(--lc-green)]"
+    : tone === "warning"
+      ? "text-amber-800"
+      : "text-[var(--lc-danger)]";
+  return (
+    <div className="min-w-16 rounded-lg border border-[var(--lc-border)] bg-[var(--lc-bg)] px-2 py-1.5">
+      <p className={`text-sm font-bold tabular-nums ${toneClass}`}>{value.toLocaleString()}</p>
+      <p className="text-[10px] text-[var(--lc-muted)]">{label}</p>
+    </div>
+  );
+}
+
+function summarizeReadinessIssues(issues: Array<{ code: string; field: string; message: string; severity: "blocked" | "review" }>) {
+  const summaries = new Map<string, { code: string; field: string; message: string; severity: "blocked" | "review"; count: number }>();
+  issues.forEach((issue) => {
+    const key = `${issue.code}:${issue.field}`;
+    const current = summaries.get(key);
+    if (current) current.count += 1;
+    else summaries.set(key, { ...issue, count: 1 });
+  });
+  return Array.from(summaries.values()).sort((left, right) => {
+    if (left.severity !== right.severity) return left.severity === "blocked" ? -1 : 1;
+    return right.count - left.count;
+  });
 }
 
 function buildCleanFileName(fileName: string): string {
@@ -269,4 +400,25 @@ function formatList(items: string[]): string {
 
 function slugify(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function buildPreflightReviewRows(
+  rows: Array<Record<string, unknown>>,
+  report: NonNullable<ReturnType<typeof buildCrmReadinessReport>>,
+) {
+  return report.rows.flatMap((readinessRow) => {
+    if (readinessRow.status !== "blocked") return [];
+    const row = rows[readinessRow.rowIndex];
+    if (!row) return [];
+    return [{
+      ...row,
+      leadcleanr_preflight_status: readinessRow.status,
+      leadcleanr_preflight_issues: readinessRow.issues.map((issue) => issue.message).join(" | "),
+    }];
+  });
+}
+
+function buildPreflightReviewFileName(fileName: string, format: CrmExportFormat) {
+  const base = (fileName || "leadcleanr").replace(/\.csv$/i, "");
+  return `${base}-${format}-blocked-review.csv`;
 }

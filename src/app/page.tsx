@@ -8,7 +8,6 @@ import {
   FileSpreadsheet,
   Globe,
   Mail,
-  Phone,
   Shield,
   ShieldCheck,
   Upload,
@@ -23,50 +22,50 @@ import { FaqAccordion } from "@/components/faq-accordion";
 
 const processSteps = [
   {
-    title: "Upload or paste the raw list",
-    text: "Start with a CSV when the spreadsheet already exists.",
-    icon: Upload,
+    title: "Choose the CRM destination",
+    text: "Start with HubSpot, Salesforce, Apollo, Pipedrive, or a clean CSV.",
+    icon: Users,
   },
   {
-    title: "Clean only what matters",
-    text: "Extract emails, phones, domains, or remove the duplicates.",
+    title: "Clean, map, and preflight",
+    text: "Apply cleanup rules, map fields, and check every row before import.",
     icon: Wand2,
   },
   {
-    title: "Review, then export",
-    text: "Download the cleaned output only when it looks right.",
+    title: "Export or repair failures",
+    text: "Download importable rows, then repair any CRM error file locally.",
     icon: Download,
   },
 ];
 
 const quickStarts = [
   {
-    href: "/tools/csv-lead-cleaner",
-    title: "Full CSV cleanup",
-    text: "Best for CRM imports, recruiter sheets, and agency delivery.",
+    href: "/tools/csv-lead-cleaner?crm=hubspot",
+    title: "HubSpot import preflight",
+    text: "Map contact properties and catch blocked rows before HubSpot import.",
     icon: FileSpreadsheet,
-    cta: "Clean CSV"
+    cta: "Prepare for HubSpot"
   },
   {
-    href: "/tools/extract-emails-from-text?sample=1",
-    title: "Emails from pasted text",
-    text: "Use when the contacts still live in copied notes or rough blocks.",
+    href: "/tools/csv-lead-cleaner?crm=salesforce",
+    title: "Salesforce lead preflight",
+    text: "Validate required lead values and export Salesforce-ready columns.",
+    icon: Users,
+    cta: "Prepare for Salesforce"
+  },
+  {
+    href: "/tools/csv-lead-cleaner?crm=apollo",
+    title: "Apollo contact preflight",
+    text: "Map contact identity and company fields before uploading to Apollo.",
     icon: Mail,
-    cta: "Extract emails"
+    cta: "Prepare for Apollo"
   },
   {
-    href: "/tools/extract-phone-numbers-from-text?sample=1",
-    title: "Phones from pasted text",
-    text: "Pull phone numbers out of raw sourcing notes or messy directories.",
-    icon: Phone,
-    cta: "Extract phones"
-  },
-  {
-    href: "/tools/extract-domains-from-emails?sample=1",
-    title: "Domains for enrichment",
-    text: "Turn messy emails and URLs into a clean company-domain list.",
+    href: "/tools/csv-lead-cleaner?crm=pipedrive",
+    title: "Pipedrive people preflight",
+    text: "Build person and organization fields with row-level readiness checks.",
     icon: Globe,
-    cta: "Extract domains"
+    cta: "Prepare for Pipedrive"
   },
 ];
 
@@ -144,19 +143,19 @@ export default function HomePage() {
               Private lead operations, in your browser
             </div>
             <h1 className="font-display text-[38px] font-bold leading-[1.06] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-[50px] lg:text-[60px]">
-              Clean messy lead lists.
-              <span className="mt-1 block text-[var(--lc-accent)]">Export with confidence.</span>
+              Prepare lead CSVs.
+              <span className="mt-1 block text-[var(--lc-accent)]">Import with confidence.</span>
             </h1>
             <p className="mt-5 max-w-xl text-[16px] leading-7 text-[var(--lc-muted)] sm:text-[18px]">
-              Turn raw CSVs and contact lists into CRM-ready data without uploading sensitive lead information.
+              Clean, map, preflight, and repair HubSpot, Salesforce, Apollo, and Pipedrive imports without uploading sensitive lead information.
             </p>
  
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href="/tools/csv-lead-cleaner"
+                href="/tools/csv-lead-cleaner?crm=hubspot"
                 className="lc-button-primary py-2.5 px-6"
               >
-                Try CSV Cleaner
+                Start CRM preflight
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
@@ -356,10 +355,10 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <p className="section-eyebrow">Quick Start Paths</p>
+        <p className="section-eyebrow">CRM Import Workflows</p>
         <div className="mt-3 flex items-end justify-between gap-6">
           <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">
-            Pick the workflow that matches the mess.
+            Start with the system receiving the data.
           </h2>
         </div>
 

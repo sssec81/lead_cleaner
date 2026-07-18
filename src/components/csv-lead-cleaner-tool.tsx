@@ -62,6 +62,12 @@ import { CrmExportControls } from "@/components/crm-export-controls";
 import { LocalWorkspaceHistory } from "@/components/local-workspace-history";
 import { CsvCleanerQuickGuide } from "@/components/csv-cleaner-quick-guide";
 import type { LocalWorkspaceSnapshot } from "@/lib/local-workspace-history";
+import {
+  CRM_EXPORT_FORMAT_OPTIONS,
+  type CrmExportFormat,
+  type CrmFieldOverrides,
+} from "@/lib/crm-export";
+import type { CleanupPresetRules } from "@/lib/cleanup-presets";
 
 type UploadStatus = "idle" | "parsing" | "ready" | "error";
 type PreviewMode = "clean" | "removed" | "invalid";
@@ -126,14 +132,19 @@ function getRowCountBucket(count: number): string {
 
 export function CsvLeadCleanerTool() {
  const searchParams = useSearchParams();
- const shouldLoadSampleFromQuery = searchParams.get("sample") === "1";
+	 const shouldLoadSampleFromQuery = searchParams.get("sample") === "1";
+	 const requestedCrm = parseCrmFormat(searchParams.get("crm"));
  const [fileName, setFileName] = useState("");
  const [headers, setHeaders] = useState<string[]>([]);
  const [rows, setRows] = useState<CsvRow[]>([]);
  const [detections, setDetections] = useState<CsvColumnDetection[]>([]);
  const [selectedColumn, setSelectedColumn] = useState("");
  const [duplicateMode, setDuplicateMode] = useState<DuplicateMode>("selected");
- const [emailFilter, setEmailFilter] = useState<EmailFilterMode>("all");
+	 const [emailFilter, setEmailFilter] = useState<EmailFilterMode>("all");
+	 const [crmFormat, setCrmFormat] = useState<CrmExportFormat>(requestedCrm);
+	 const [crmOverridesByFormat, setCrmOverridesByFormat] = useState<
+	 Partial<Record<Exclude<CrmExportFormat, "clean_csv">, CrmFieldOverrides>>
+	 >({});
  const [error, setError] = useState("");
  const [warning, setWarning] = useState("");
  const [status, setStatus] = useState<UploadStatus>("idle");
@@ -159,7 +170,10 @@ export function CsvLeadCleanerTool() {
  );
  const [hasAppliedQuerySample, setHasAppliedQuerySample] = useState(false);
  const [toastVisible, setToastVisible] = useState(false);
- const [mounted, setMounted] = useState(false);
+	 const [mounted, setMounted] = useState(false);
+	 const activeCrmOverrides = crmFormat === "clean_csv"
+	 ? {}
+	 : crmOverridesByFormat[crmFormat] ?? {};
 
   const resetState = useCallback((nextFileName = "") => {
     setFileName(nextFileName);
@@ -533,7 +547,7 @@ export function CsvLeadCleanerTool() {
  }
  }
 
- function restoreLocalWorkspace(snapshot: LocalWorkspaceSnapshot) {
+	 function restoreLocalWorkspace(snapshot: LocalWorkspaceSnapshot) {
  const nextDetections = detectCsvColumns(snapshot.headers, snapshot.rows);
  const estimatedBytes = new Blob([JSON.stringify(snapshot.rows)]).size;
 
@@ -556,8 +570,20 @@ export function CsvLeadCleanerTool() {
  );
  setDuplicateMode(snapshot.duplicateMode);
  setEmailFilter(snapshot.emailFilter);
- setStatus("ready");
- }
+	 setStatus("ready");
+	 }
+
+	 function applySavedWorkflow(rules: CleanupPresetRules) {
+	 applyConfigChange(rules);
+	 const nextFormat = rules.crmFormat ?? "clean_csv";
+	 setCrmFormat(nextFormat);
+	 if (nextFormat !== "clean_csv") {
+	 setCrmOverridesByFormat((current) => ({
+	 ...current,
+	 [nextFormat]: { ...(rules.crmFieldOverrides ?? {}) },
+	 }));
+	 }
+	 }
 
       return (
     <div className={`w-full transition-opacity duration-200 ${mounted ? "opacity-100" : "opacity-0"}`}>
@@ -575,8 +601,11 @@ export function CsvLeadCleanerTool() {
       />
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
-        <div className="flex flex-col items-center justify-center p-8 lg:p-16 bg-white border border-[var(--lc-border)] rounded-[28px] shadow-[var(--shadow-elevated)]">
-          <label
+	        <div className="flex flex-col items-center justify-center p-6 sm:p-8 lg:p-12 bg-white border border-[var(--lc-border)] rounded-[28px] shadow-[var(--shadow-elevated)]">
+	          <div className="mb-6 w-full max-w-3xl">
+	            <CrmDestinationPicker value={crmFormat} onChange={setCrmFormat} />
+	          </div>
+	          <label
             htmlFor="csv-upload"
             className={`group relative flex w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-black/10 px-6 py-10 text-center transition-all bg-[#F9F9FB] hover:bg-black/[0.01] ${
               isParsing ? "opacity-60 cursor-not-allowed" : ""
@@ -587,10 +616,12 @@ export function CsvLeadCleanerTool() {
             <Upload className="h-6 w-6 text-[var(--lc-accent)] mb-2" />
             
             <p className="text-[15px] font-semibold text-[var(--lc-ink)] mb-1">
-              Drop your messy lead CSV
+	              {crmFormat === "clean_csv" ? "Drop your messy lead CSV" : `Drop the CSV you want to import into ${crmFormatLabel(crmFormat)}`}
             </p>
             <p className="text-[13px] text-[var(--lc-muted)] mb-5">
-              We&apos;ll detect email, phone, URL, and domain columns automatically.
+	              {crmFormat === "clean_csv"
+	                ? "We'll detect email, phone, URL, and domain columns automatically."
+	                : `We'll clean, map, and run row-level ${crmFormatLabel(crmFormat)} preflight checks locally.`}
             </p>
             
             <div className="flex items-center justify-center gap-3">
@@ -676,11 +707,17 @@ export function CsvLeadCleanerTool() {
               <span>4 Export</span>
             </div>
 
-            <CleanupPresetControls
-              currentRules={{ selectedColumn, duplicateMode, emailFilter }}
-              availableColumns={headers}
-              onApply={(rules) => applyConfigChange(rules)}
-            />
+	            <CleanupPresetControls
+	              currentRules={{
+	                selectedColumn,
+	                duplicateMode,
+	                emailFilter,
+	                crmFormat,
+	                crmFieldOverrides: activeCrmOverrides,
+	              }}
+	              availableColumns={headers}
+	              onApply={applySavedWorkflow}
+	            />
             
             <div>
               <h3 className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)] mb-1.5">Cleaning Rules</h3>
@@ -868,13 +905,79 @@ export function CsvLeadCleanerTool() {
               duplicateMode={duplicateMode}
               selectedColumn={selectedColumn}
               emailFilter={emailFilter}
-              summary={summary}
-            />
+	              summary={summary}
+	              format={crmFormat}
+	              overrides={activeCrmOverrides}
+	              onFormatChange={setCrmFormat}
+	              onOverridesChange={(overrides) => {
+	                if (crmFormat === "clean_csv") return;
+	                setCrmOverridesByFormat((current) => ({
+	                  ...current,
+	                  [crmFormat]: overrides,
+	                }));
+	              }}
+	            />
           </div>
         </div>
       )}
     </div>
   );
+}
+
+function CrmDestinationPicker({
+ value,
+ onChange,
+}: {
+ value: CrmExportFormat;
+ onChange: (format: CrmExportFormat) => void;
+}) {
+ return (
+ <fieldset>
+ <legend className="text-center font-display text-xl font-bold tracking-[-0.025em] text-[var(--lc-ink)] sm:text-2xl">
+ Where is this CSV going?
+ </legend>
+ <p className="mx-auto mt-2 max-w-xl text-center text-sm leading-6 text-[var(--lc-muted)]">
+ Choose a destination first so cleanup, mapping, and readiness checks work toward the actual import.
+ </p>
+ <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
+ {CRM_EXPORT_FORMAT_OPTIONS.map((option) => {
+ const selected = value === option.value;
+ return (
+ <button
+ key={option.value}
+ type="button"
+ aria-pressed={selected}
+ onClick={() => {
+ onChange(option.value);
+ trackToolEvent("csv-lead-cleaner", "choose_crm_destination", { export_format: option.value });
+ }}
+ className={`min-h-12 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--lc-accent)] ${
+ selected
+ ? "border-[var(--lc-accent)] bg-[var(--lc-accent-bg)] text-[var(--lc-accent)] shadow-sm"
+ : "border-[var(--lc-border)] bg-white text-[var(--lc-muted)] hover:border-[var(--lc-border-mid)] hover:text-[var(--lc-ink)]"
+ }`}
+ >
+ {option.value === "clean_csv" ? "Just clean it" : crmFormatLabel(option.value)}
+ </button>
+ );
+ })}
+ </div>
+ </fieldset>
+ );
+}
+
+function parseCrmFormat(value: string | null): CrmExportFormat {
+ return CRM_EXPORT_FORMAT_OPTIONS.some((option) => option.value === value)
+ ? value as CrmExportFormat
+ : "hubspot";
+}
+
+function crmFormatLabel(format: CrmExportFormat) {
+ if (format === "hubspot") return "HubSpot";
+ if (format === "salesforce") return "Salesforce";
+ if (format === "apollo") return "Apollo";
+ if (format === "pipedrive") return "Pipedrive";
+ return "a clean CSV";
 }
 
 function pickDefaultColumn(

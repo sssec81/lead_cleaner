@@ -1,4 +1,6 @@
 import type { CleaningSummary, DuplicateMode, EmailFilterMode } from "./csv-cleaner.ts";
+import type { CrmExportFormat } from "./crm-export.ts";
+import type { CrmReadinessReport } from "./crm-readiness.ts";
 
 export type CleanupAuditInput = {
   fileName: string;
@@ -7,6 +9,8 @@ export type CleanupAuditInput = {
   duplicateMode: DuplicateMode;
   emailFilter: EmailFilterMode;
   summary: CleaningSummary;
+  crmFormat?: CrmExportFormat;
+  readiness?: CrmReadinessReport | null;
 };
 
 export function buildCleanupAuditReport({
@@ -16,6 +20,8 @@ export function buildCleanupAuditReport({
   duplicateMode,
   emailFilter,
   summary,
+  crmFormat = "clean_csv",
+  readiness = null,
 }: CleanupAuditInput): string {
   const removedRows =
     summary.emptyRowsRemoved +
@@ -26,7 +32,7 @@ export function buildCleanupAuditReport({
     ? Math.round((summary.cleanRowsReady / summary.totalRows) * 1000) / 10
     : 0;
 
-  return [
+  const report = [
     "LeadCleanr Cleanup Audit Report",
     "================================",
     `File: ${fileName || "Untitled CSV"}`,
@@ -59,9 +65,24 @@ export function buildCleanupAuditReport({
     `Personal emails: ${summary.personalEmails}`,
     `Role-based emails: ${summary.roleBasedEmails}`,
     `Company domains generated: ${summary.generatedDomains}`,
-    "",
-    "Review the cleaned CSV before importing it into another system.",
-  ].join("\n");
+  ];
+
+  if (crmFormat !== "clean_csv" && readiness) {
+    report.push(
+      "",
+      "CRM import preflight",
+      "--------------------",
+      `Destination: ${prettyValue(crmFormat)}`,
+      `Readiness score: ${readiness.readinessScore}/100`,
+      `Rows ready: ${readiness.readyRows}`,
+      `Rows needing review: ${readiness.reviewRows}`,
+      `Rows blocked: ${readiness.blockedRows}`,
+      `Preflight issues: ${readiness.issues.length}`,
+    );
+  }
+
+  report.push("", "Review the cleaned CSV before importing it into another system.");
+  return report.join("\n");
 }
 
 export function buildCleanupAuditFileName(fileName: string): string {

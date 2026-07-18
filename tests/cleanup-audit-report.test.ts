@@ -5,6 +5,7 @@ import {
   buildCleanupAuditFileName,
   buildCleanupAuditReport,
 } from "../src/lib/cleanup-audit-report.ts";
+import { buildCrmReadinessReport } from "../src/lib/crm-readiness.ts";
 
 test("buildCleanupAuditReport describes rules and before/after metrics", () => {
   const report = buildCleanupAuditReport({
@@ -42,4 +43,33 @@ test("buildCleanupAuditFileName creates a readable text filename", () => {
     buildCleanupAuditFileName("client-leads.csv"),
     "client-leads-cleanup-audit.txt",
   );
+});
+
+test("buildCleanupAuditReport includes CRM preflight results", () => {
+  const readiness = buildCrmReadinessReport("salesforce", [
+    { "Last Name": "", Company: "Acme", Email: "jane@acme.com" },
+  ]);
+  const report = buildCleanupAuditReport({
+    fileName: "salesforce.csv",
+    selectedColumn: "Email",
+    duplicateMode: "email",
+    emailFilter: "all",
+    summary: {
+      totalRows: 1,
+      emptyRowsRemoved: 0,
+      invalidRowsRemoved: 0,
+      duplicatesRemoved: 0,
+      filteredRowsRemoved: 0,
+      cleanRowsReady: 1,
+      businessEmails: 1,
+      personalEmails: 0,
+      roleBasedEmails: 0,
+      generatedDomains: 1,
+    },
+    crmFormat: "salesforce",
+    readiness,
+  });
+
+  assert.match(report, /CRM import preflight/);
+  assert.match(report, /Rows blocked: 1/);
 });

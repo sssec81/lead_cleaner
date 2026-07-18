@@ -41,14 +41,14 @@ export default function CsvLeadCleanerPage() {
       <main className="relative bg-[var(--lc-bg)] pb-16 pt-4 lg:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl pb-6 pt-12 text-center sm:mx-0 sm:text-left">
-            <div className="section-eyebrow mb-4">CSV TOOL</div>
+            <div className="section-eyebrow mb-4">CRM IMPORT PREFLIGHT</div>
             <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
-              CSV lead cleaner
+              Prepare a CRM import that passes the first time
             </h1>
             <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
-              Upload your spreadsheet to remove duplicates, clean emails, review
-              filtered rows, and export a CRM-ready file without uploading lead
-              data to a server.
+              Choose HubSpot, Salesforce, Apollo, or Pipedrive. LeadCleanr cleans
+              the CSV, maps fields, validates every row, and helps repair failed
+              imports without uploading lead data to a server.
             </p>
 
             <div className="trust-chip-row mt-6 justify-center sm:justify-start">

@@ -175,7 +175,7 @@ export function CleanupPresetControls({
               htmlFor="cleanup-preset-select"
               className="text-[12px] font-medium text-[var(--lc-muted)]"
             >
-              Saved cleanup presets
+              Saved import workflows
             </label>
             <span className="text-[11px] text-[var(--lc-hint)]">
               Stored only in this browser
@@ -194,7 +194,7 @@ export function CleanupPresetControls({
             className="lc-select min-h-11 w-full disabled:cursor-not-allowed disabled:opacity-60"
           >
             {!presets.length ? (
-              <option value="">No saved presets yet</option>
+              <option value="">No saved workflows yet</option>
             ) : null}
             {presets.map((preset) => (
               <option key={preset.id} value={preset.id}>
@@ -220,7 +220,7 @@ export function CleanupPresetControls({
             className="lc-button-primary min-h-11 px-4 text-xs font-semibold"
           >
             <BookmarkPlus className="h-4 w-4" aria-hidden="true" />
-            Save current
+            Save workflow
           </button>
           <button
             type="button"
@@ -253,7 +253,7 @@ export function CleanupPresetControls({
         <form onSubmit={submitEditor} className="mt-3 flex flex-col gap-2 sm:flex-row">
           <div className="min-w-0 flex-1">
             <label htmlFor="cleanup-preset-name" className="sr-only">
-              Preset name
+              Workflow name
             </label>
             <input
               id="cleanup-preset-name"
@@ -263,7 +263,7 @@ export function CleanupPresetControls({
               autoFocus
               required
               onChange={(event) => setName(event.target.value)}
-              placeholder="Example: Business email cleanup"
+              placeholder="Example: Weekly HubSpot import"
               className="lc-input min-h-11 w-full"
             />
           </div>
@@ -272,7 +272,7 @@ export function CleanupPresetControls({
             className="lc-button-primary min-h-11 px-4 text-xs font-semibold"
           >
             <Save className="h-4 w-4" aria-hidden="true" />
-            {editorMode === "save" ? "Save preset" : "Save name"}
+            {editorMode === "save" ? "Save workflow" : "Save name"}
           </button>
           <button
             type="button"
@@ -304,7 +304,7 @@ export function CleanupPresetControls({
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--lc-danger)] px-4 text-xs font-semibold text-white transition-opacity hover:opacity-90"
             >
               <Trash2 className="h-4 w-4" aria-hidden="true" />
-              Delete preset
+              Delete workflow
             </button>
           </div>
         </div>
@@ -317,7 +317,7 @@ export function CleanupPresetControls({
           <span className="text-[var(--lc-green)]">{message}</span>
         ) : (
           <span className="text-[var(--lc-hint)]">
-            Save these rules once, then reuse them on another CSV.
+            Saves cleanup rules, CRM destination, and field mappings in this browser.
           </span>
         )}
       </div>

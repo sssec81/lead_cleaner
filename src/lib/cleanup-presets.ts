@@ -1,4 +1,5 @@
 import type { DuplicateMode, EmailFilterMode } from "./csv-cleaner.ts";
+import type { CrmExportFormat, CrmFieldOverrides } from "./crm-export.ts";
 
 export const CLEANUP_PRESETS_STORAGE_KEY = "leadcleanr:csv-cleaner:presets:v1";
 export const MAX_CLEANUP_PRESETS = 20;
@@ -16,11 +17,20 @@ const EMAIL_FILTER_MODES = new Set<EmailFilterMode>([
   "business_only",
   "personal_only",
 ]);
+const CRM_EXPORT_FORMATS = new Set<CrmExportFormat>([
+  "clean_csv",
+  "hubspot",
+  "salesforce",
+  "apollo",
+  "pipedrive",
+]);
 
 export type CleanupPresetRules = {
   selectedColumn: string;
   duplicateMode: DuplicateMode;
   emailFilter: EmailFilterMode;
+  crmFormat?: CrmExportFormat;
+  crmFieldOverrides?: CrmFieldOverrides;
 };
 
 export type CleanupPreset = {
@@ -54,7 +64,12 @@ export function createCleanupPreset(
   return {
     id: options.id ?? createPresetId(),
     name: normalizedName,
-    rules: { ...rules },
+    rules: {
+      ...rules,
+      crmFieldOverrides: rules.crmFieldOverrides
+        ? { ...rules.crmFieldOverrides }
+        : undefined,
+    },
     createdAt: now,
     updatedAt: now,
   };
@@ -73,7 +88,13 @@ export function parseCleanupPresets(rawValue: string | null): CleanupPreset[] {
       .map((preset) => ({
         ...preset,
         name: normalizePresetName(preset.name),
-        rules: { ...preset.rules },
+        rules: {
+          ...preset.rules,
+          crmFormat: preset.rules.crmFormat ?? "clean_csv",
+          crmFieldOverrides: preset.rules.crmFieldOverrides
+            ? { ...preset.rules.crmFieldOverrides }
+            : {},
+        },
       }));
   } catch {
     return [];
@@ -130,7 +151,21 @@ function isCleanupPreset(value: unknown): value is CleanupPreset {
       rules &&
       typeof rules.selectedColumn === "string" &&
       DUPLICATE_MODES.has(rules.duplicateMode as DuplicateMode) &&
-      EMAIL_FILTER_MODES.has(rules.emailFilter as EmailFilterMode),
+      EMAIL_FILTER_MODES.has(rules.emailFilter as EmailFilterMode) &&
+      (rules.crmFormat === undefined ||
+        CRM_EXPORT_FORMATS.has(rules.crmFormat as CrmExportFormat)) &&
+      (rules.crmFieldOverrides === undefined ||
+        isCrmFieldOverrides(rules.crmFieldOverrides)),
+  );
+}
+
+function isCrmFieldOverrides(value: unknown): value is CrmFieldOverrides {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      Object.entries(value).every(
+        ([key, source]) => typeof key === "string" && typeof source === "string",
+      ),
   );
 }
 

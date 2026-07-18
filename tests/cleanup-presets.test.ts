@@ -15,6 +15,8 @@ const rules = {
   selectedColumn: "email",
   duplicateMode: "email" as const,
   emailFilter: "business_only" as const,
+  crmFormat: "hubspot" as const,
+  crmFieldOverrides: { Email: "work_email" },
 };
 
 test("createCleanupPreset normalizes its name and preserves cleanup rules", () => {
@@ -62,6 +64,24 @@ test("parseCleanupPresets keeps valid presets and removes invalid entries", () =
   );
 
   assert.deepEqual(parsed, [preset]);
+});
+
+test("parseCleanupPresets upgrades legacy presets with CRM defaults", () => {
+  const legacy = {
+    id: "legacy",
+    name: "Legacy cleanup",
+    rules: {
+      selectedColumn: "email",
+      duplicateMode: "email",
+      emailFilter: "all",
+    },
+    createdAt: "2026-07-18T00:00:00.000Z",
+    updatedAt: "2026-07-18T00:00:00.000Z",
+  };
+
+  const [parsed] = parseCleanupPresets(JSON.stringify([legacy]));
+  assert.equal(parsed?.rules.crmFormat, "clean_csv");
+  assert.deepEqual(parsed?.rules.crmFieldOverrides, {});
 });
 
 test("addCleanupPreset puts the newest preset first and enforces the limit", () => {
