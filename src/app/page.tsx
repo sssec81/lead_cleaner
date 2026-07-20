@@ -69,6 +69,52 @@ const quickStarts = [
   },
 ];
 
+const audiences = [
+  {
+    title: "Sales teams",
+    text: "Clean prospect CSVs before they reach Apollo, Outreach, HubSpot, or your sales workflow.",
+    icon: FileSpreadsheet,
+  },
+  {
+    title: "Recruiters",
+    text: "Extract candidate emails and phone numbers from ATS exports, sourcing lists, and copied notes.",
+    icon: Users,
+  },
+  {
+    title: "Marketers",
+    text: "Turn mixed email lists into cleaner company-domain data for enrichment and campaign prep.",
+    icon: Globe,
+  },
+  {
+    title: "Agencies & VAs",
+    text: "Prepare client lead sheets for handoff without sending private contact data to another server.",
+    icon: Wand2,
+  },
+];
+
+const cleanupGroups = [
+  {
+    title: "Duplicates and gaps",
+    text: "Remove repeated contacts, empty rows, and incomplete records before they block an import.",
+    icon: FileSpreadsheet,
+  },
+  {
+    title: "Email readiness",
+    text: "Catch invalid formats and separate personal addresses such as Gmail or Yahoo.",
+    icon: Mail,
+  },
+  {
+    title: "CRM-ready structure",
+    text: "Map and export cleaner columns for HubSpot, Salesforce, Apollo, and Pipedrive.",
+    icon: Users,
+  },
+  {
+    title: "Private by default",
+    text: "Parse and clean on your device, with no lead-list upload required for the free workflow.",
+    icon: Shield,
+  },
+];
+
 export const metadata: Metadata = {
   title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
   description:
@@ -135,7 +181,7 @@ export default function HomePage() {
   return (
     <PageFrame>
       <FaqJsonLd faqEntries={homepageFaqs} />
-      <section className="mx-auto max-w-7xl overflow-hidden px-4 pb-12 pt-12 sm:px-6 lg:px-8 lg:pb-16 lg:pt-16">
+      <section className="home-hero mx-auto max-w-7xl overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-16">
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5 text-xs font-semibold text-[var(--lc-muted)] shadow-sm backdrop-blur">
@@ -170,6 +216,21 @@ export default function HomePage() {
               <span className="lc-chip lc-chip-success"><Check className="h-3 w-3" aria-hidden="true" /> Runs locally</span>
               <span className="lc-chip"><Check className="h-3 w-3" aria-hidden="true" /> No signup</span>
               <span className="lc-chip"><Check className="h-3 w-3" aria-hidden="true" /> CSV + text tools</span>
+            </div>
+
+            <div className="mt-8 grid max-w-lg grid-cols-3 gap-3 border-t border-[var(--lc-border)] pt-6" aria-label="Product facts">
+              <div className="lc-metric">
+                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">17</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">focused tools</p>
+              </div>
+              <div className="lc-metric">
+                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">5 MB</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">free CSV limit</p>
+              </div>
+              <div className="lc-metric">
+                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">0</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">uploads needed</p>
+              </div>
             </div>
           </div>
  
@@ -261,7 +322,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-[var(--lc-border)] bg-[var(--lc-surface)] py-12">
+      <section className="border-b border-[var(--lc-border)] bg-[var(--lc-surface)] py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-3 md:items-start">
             {processSteps.map((step, index) => {
@@ -296,31 +357,19 @@ export default function HomePage() {
             LeadCleanr is designed for the small cleanup jobs that happen before CRM imports, outreach campaigns, recruiting handoffs, and agency delivery.
           </p>
         </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="lc-card p-6">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Sales teams</p>
-            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
-              Clean scraped prospect CSVs before importing into Apollo, Outreach, HubSpot, or another sales tool.
-            </p>
-          </div>
-          <div className="lc-card p-6">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Recruiters</p>
-            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
-              Extract candidate emails and phone numbers from sourcing lists, ATS exports, and copied profile notes.
-            </p>
-          </div>
-          <div className="lc-card p-6">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Marketers</p>
-            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
-              Turn messy email lists into cleaner company-domain lists for ABM, enrichment, and campaign prep.
-            </p>
-          </div>
-          <div className="lc-card p-6">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-3">Agencies & VAs</p>
-            <p className="text-[14px] leading-relaxed text-[var(--lc-muted)]">
-              Clean client lead sheets before delivery without uploading private contact data to a third-party server.
-            </p>
-          </div>
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {audiences.map((audience) => {
+            const Icon = audience.icon;
+            return (
+              <article key={audience.title} className="lc-card lc-audience-card p-6">
+                <div className="lc-icon-tile h-10 w-10">
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <h3 className="mt-5 text-[15px] font-semibold text-[var(--lc-ink)]">{audience.title}</h3>
+                <p className="relative z-10 mt-2 text-[14px] leading-6 text-[var(--lc-muted)]">{audience.text}</p>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -334,22 +383,21 @@ export default function HomePage() {
               Common CSV problems that slow down CRM imports and outreach workflows.
             </p>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              "Duplicate emails and repeated rows",
-              "Blank rows and missing lead fields",
-              "Invalid email formats",
-              "Personal email domains like Gmail/Yahoo",
-              "Messy phone numbers",
-              "Domains extracted from emails",
-              "CSV exports ready for CRM import",
-              "Browser-only processing with no upload"
-            ].map(item => (
-              <div key={item} className="lc-card flex items-start gap-3 p-4">
-                <Check className="h-5 w-5 shrink-0 text-[var(--lc-green)]" />
-                <span className="text-[14px] font-medium text-[var(--lc-ink)]">{item}</span>
-              </div>
-            ))}
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {cleanupGroups.map((group) => {
+              const Icon = group.icon;
+              return (
+                <article key={group.title} className="lc-card flex items-start gap-4 p-5 sm:p-6">
+                  <div className="lc-icon-tile h-11 w-11 shrink-0">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-[15px] font-semibold text-[var(--lc-ink)]">{group.title}</h3>
+                    <p className="mt-1.5 text-[14px] leading-6 text-[var(--lc-muted)]">{group.text}</p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

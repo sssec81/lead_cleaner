@@ -168,8 +168,8 @@ export function ProWaitlistForm() {
                     <label htmlFor="pro-waitlist-email" className="mb-1.5 block text-sm font-semibold text-[var(--lc-ink)]">
                       Work email <span aria-hidden="true" className="text-[var(--lc-danger)]">*</span>
                     </label>
-                    <div className="relative">
-                      <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--lc-muted)]" aria-hidden="true" />
+                    <div className="lc-input-icon-wrap relative">
+                      <Mail className="lc-input-leading-icon pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--lc-muted)]" aria-hidden="true" />
                       <input
                         id="pro-waitlist-email"
                         name="email"
@@ -178,7 +178,7 @@ export function ProWaitlistForm() {
                         required
                         maxLength={254}
                         placeholder="you@company.com"
-                        className="lc-input min-h-12 pl-10"
+                        className="lc-input lc-input-with-icon min-h-12"
                       />
                     </div>
                   </div>
