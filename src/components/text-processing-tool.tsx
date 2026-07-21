@@ -74,6 +74,7 @@ type PersistedState = {
 };
 
 const WORKSPACE_PREVIEW_LIMIT = 8;
+const RESULT_DENSITY_STORAGE_KEY = "leadcleanr:result-density";
 const TEXT_INPUT_BOX_CLASS_NAME =
   "rounded-2xl border border-[var(--lc-border)] bg-white overflow-hidden flex flex-col relative group";
 const TEXT_INPUT_ACTION_CLASS_NAME =
@@ -145,6 +146,11 @@ export function TextProcessingTool({
 
  const restoreTimer = window.setTimeout(() => {
  const rawState = window.localStorage.getItem(storageKey);
+ const savedDensity = window.localStorage.getItem(RESULT_DENSITY_STORAGE_KEY);
+
+ if (savedDensity === "comfortable" || savedDensity === "compact") {
+ setResultDensity(savedDensity);
+ }
 
  if (shouldLoadSampleFromQuery) {
  setInput(sampleInput);
@@ -205,6 +211,14 @@ export function TextProcessingTool({
 
  window.localStorage.setItem(storageKey, JSON.stringify(payload));
  }, [batchMode, input, isHydrated, storageKey, workspace]);
+
+ useEffect(() => {
+ if (!isHydrated || typeof window === "undefined") {
+ return;
+ }
+
+ window.localStorage.setItem(RESULT_DENSITY_STORAGE_KEY, resultDensity);
+ }, [isHydrated, resultDensity]);
 
  function pushWorkspaceUpdate(nextWorkspace: WorkspaceItem[]) {
  const previous = cloneWorkspace(workspace);
@@ -292,6 +306,13 @@ export function TextProcessingTool({
  setBatchMode((current) => !current);
  trackToolEvent(trackName, "toggle_batch_mode", {
  enabled: !batchMode,
+ });
+ }
+
+ function changeResultDensity(nextDensity: "comfortable" | "compact") {
+ setResultDensity(nextDensity);
+ trackToolEvent(trackName, "change_result_density", {
+ density: nextDensity,
  });
  }
 
@@ -693,17 +714,23 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 </button>
               </div>
             </div>
-            <div className="flex items-center gap-1 rounded-lg bg-[var(--lc-bg)] p-0.5 border border-[var(--lc-border)]">
+            <div
+              className="flex items-center gap-1 rounded-lg border border-[var(--lc-border)] bg-[var(--lc-bg)] p-0.5"
+              role="group"
+              aria-label="Result row density"
+            >
               <button
                 type="button"
-                onClick={() => setResultDensity("comfortable")}
+                onClick={() => changeResultDensity("comfortable")}
+                aria-pressed={resultDensity === "comfortable"}
                 className={`${resultDensity === "comfortable" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} min-h-11 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide transition-colors`}
               >
                 Comfortable
               </button>
               <button
                 type="button"
-                onClick={() => setResultDensity("compact")}
+                onClick={() => changeResultDensity("compact")}
+                aria-pressed={resultDensity === "compact"}
                 className={`${resultDensity === "compact" ? "bg-white text-[var(--lc-ink)] shadow-sm" : "text-[var(--lc-muted)] hover:text-[var(--lc-ink)] hover:bg-white/50"} min-h-11 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide transition-colors`}
               >
                 Compact
@@ -725,7 +752,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 </div>
               ) : (
                 <div className="flex flex-col">
-                  <div className="flex items-center gap-4 border-b border-[var(--lc-border)] bg-[#FDFDFD] px-6 py-2">
+                  <div className={`flex items-center border-b border-[var(--lc-border)] bg-[#FDFDFD] transition-[padding,gap] ${resultDensity === "compact" ? "gap-2 px-4 py-0" : "gap-4 px-6 py-2"}`}>
                     <button
                       type="button"
                       onClick={toggleSelectAllPreviewed}
@@ -746,7 +773,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                     {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
                       <div
                         key={item.id}
-                        className={`group relative flex items-center gap-4 px-6 py-2 transition-colors hover:bg-black/[0.005] ${item.selected ? "bg-[var(--lc-accent-bg)]" : ""}`}
+                        className={`group relative flex items-center transition-[padding,gap,background-color] hover:bg-black/[0.005] ${resultDensity === "compact" ? "gap-2 px-4 py-0" : "gap-4 px-6 py-2"} ${item.selected ? "bg-[var(--lc-accent-bg)]" : ""}`}
                       >
                         <button
                           type="button"
@@ -770,7 +797,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                             aria-label="Edit item value"
                             value={item.value}
                             onChange={(event) => updateWorkspaceItem(item.id, event.target.value)}
-                            className={`w-full bg-transparent font-mono text-base sm:text-[13px] text-[var(--lc-ink)] outline-none focus:bg-black/[0.02] focus:ring-1 focus:ring-[var(--lc-accent)]/20 rounded px-1.5 transition-all ${resultDensity === "compact" ? "py-0.5" : "py-1"}`}
+                            className={`w-full rounded bg-transparent px-1.5 font-mono text-base text-[var(--lc-ink)] outline-none transition-all focus:bg-black/[0.02] focus:ring-1 focus:ring-[var(--lc-accent)]/20 ${resultDensity === "compact" ? "py-0 sm:text-xs sm:leading-5" : "py-1 sm:text-sm sm:leading-6"}`}
                           />
                         </div>
  
