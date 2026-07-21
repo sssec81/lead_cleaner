@@ -31,7 +31,7 @@ export function PhoneExtractorTool() {
  title="Phone number extractor"
  description="Paste messy notes, copied pages, logs, or research scraps to extract phone numbers, remove duplicates, and export a clean list."
  icon={Phone}
- iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+ iconToneClassName="bg-[var(--lc-accent-bg)] text-[var(--lc-accent-strong)] ring-1 ring-[var(--lc-accent-border)]"
  sampleInput={SAMPLE_TEXT}
  placeholder="Paste copied profiles, CRM notes, website text, or any messy block with phone numbers."
  trackName="extract-phone-numbers-from-text"

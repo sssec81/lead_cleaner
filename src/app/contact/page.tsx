@@ -123,7 +123,7 @@ export default function ContactPage() {
   <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-[var(--lc-surface)] sm:text-5xl">
   Direct inboxes
   </h2>
-  <p className="text-lg leading-8 text-[#e4e4e1]">
+  <p className="text-lg leading-8 text-white/80">
   A small product deserves a direct human contact path. Choose the best inbox for your request below.
   </p>
   </div>
@@ -142,11 +142,11 @@ export default function ContactPage() {
   </div>
   
   <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)] mb-3">{item.label}</h3>
-  <p className="text-sm leading-relaxed text-[#e4e4e1] mb-6 h-20">
+  <p className="text-sm leading-relaxed text-white/80 mb-6 h-20">
   {item.description}
   </p>
   
-  <div className="mb-6 rounded-xl bg-black/40 px-4 py-3 font-mono text-sm text-[#e4e4e1] border border-white/10">
+  <div className="mb-6 rounded-xl bg-black/40 px-4 py-3 font-mono text-sm text-white/80 border border-white/10">
   <span className="block truncate">{item.value}</span>
   </div>
 

@@ -222,7 +222,7 @@ export function ConvertCsvToJsonTool() {
  {/* Left column: Upload & Config */}
  <div className="flex w-full min-w-0 flex-col rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-6 shadow-sm xl:w-[400px] xl:shrink-0">
  <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color:rgba(37,99,235,0.08)] text-[color:#2563eb]">
+ <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--lc-accent-bg)] text-[color:var(--lc-accent)]">
  <FileJson className="h-5 w-5" />
  </div>
  <div>
@@ -240,11 +240,11 @@ export function ConvertCsvToJsonTool() {
  className={`group mt-6 flex min-h-[14rem] flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-6 text-center transition-all duration-200 ${
  isParsing
  ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-60"
- : "cursor-pointer border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50/50"
+ : "cursor-pointer border-slate-300 bg-white hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)]"
  }`}
  >
  <div className="flex flex-col items-center">
- <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[color:rgba(37,99,235,0.1)] bg-[color:rgba(37,99,235,0.04)] text-[color:#2563eb] shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
+ <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--lc-accent-border)] bg-[var(--lc-accent-bg)] text-[color:var(--lc-accent)] shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
  {isParsing ? (
  <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
  ) : (
@@ -290,7 +290,7 @@ export function ConvertCsvToJsonTool() {
  </div>
 
  <div className="mt-4 rounded-xl border border-[color:var(--line)] bg-slate-50 p-3">
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+ <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--lc-muted)]">
  Quick start
  </p>
  <div className="mt-2">
@@ -308,7 +308,7 @@ export function ConvertCsvToJsonTool() {
  {/* Conversion Options */}
  <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
  <div className="flex items-center gap-2 mb-3">
- <Settings2 className="h-4 w-4 text-blue-600" />
+ <Settings2 className="h-4 w-4 text-[var(--lc-accent)]" />
  <p className="text-xs font-bold uppercase tracking-wider text-[color:var(--brand-strong)]">
  Output Options
  </p>
@@ -387,7 +387,7 @@ export function ConvertCsvToJsonTool() {
  {progress.percentage}%
  </span>
  </div>
- <div className="mt-3 h-2 overflow-hidden rounded-full bg-[color:rgba(17,36,51,0.08)]">
+ <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--lc-accent-bg)]">
  <div
  className="h-full rounded-full bg-[color:var(--brand)] transition-[width]"
  style={{ width: `${progress.percentage}%` }}
@@ -420,13 +420,13 @@ export function ConvertCsvToJsonTool() {
  {/* Right column: JSON output */}
  <div className="flex-1 min-w-0 space-y-5">
  <div className="rounded-xl bg-white p-5 sm:p-8 shadow-sm border border-slate-200 min-h-[30rem] flex flex-col relative overflow-hidden">
- <div className="absolute top-0 inset-x-0 h-32 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.05),transparent_70%)] pointer-events-none"></div>
+ <div className="absolute top-0 inset-x-0 h-32 bg-[radial-gradient(ellipse_at_top,var(--lc-accent-bg),transparent_70%)] pointer-events-none"></div>
  
  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[color:var(--line)] pb-5 mb-5">
  <div>
- <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 mb-2">
- <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-sm"></span>
- <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600">JSON Output</p>
+ <div className="inline-flex items-center gap-2 rounded-full border border-[var(--lc-accent-border)] bg-[var(--lc-accent-bg)] px-3 py-1 mb-2">
+ <span className="flex h-2 w-2 rounded-full bg-[var(--lc-accent)] shadow-sm"></span>
+ <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-accent-strong)]">JSON Output</p>
  </div>
  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
  {hasData ? "Conversion Complete" : "JSON Preview"}

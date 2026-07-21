@@ -5,6 +5,8 @@ import { ArrowRight, Menu, ShieldCheck, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { BrandMark, BrandWordmark } from "@/components/brand-mark";
+
 const navItems = [
   { href: "/tools", label: "Tools" },
   { href: "/pricing", label: "Pricing" },
@@ -48,11 +50,11 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border-mid)] bg-[rgba(245,244,239,0.94)] backdrop-blur-lg">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border-mid)] bg-[var(--lc-header-bg)] backdrop-blur-lg">
       <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex min-h-11 items-center gap-2.5" aria-label="LeadCleanr home">
-          <span className="lc-brand-mark">LC</span>
-          <span className="text-[15px] font-bold tracking-[-0.035em] text-[var(--lc-ink)]">LeadCleanr</span>
+          <BrandMark />
+          <BrandWordmark />
         </Link>
  
         <nav aria-label="Primary" className="hidden h-full items-center gap-7 lg:flex">

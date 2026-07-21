@@ -195,7 +195,7 @@ export default function TermsPage() {
                 LeadCleanr can make messy data more workable. It cannot replace review, consent, or judgment.
               </h2>
             </div>
-            <blockquote className="rounded-xl border border-white/10 bg-white/5 p-6 text-lg leading-8 text-[#e4e4e1] sm:text-xl">
+            <blockquote className="rounded-xl border border-white/10 bg-white/5 p-6 text-lg leading-8 text-white/80 sm:text-xl">
               “Use the output like a cleaner draft. If the decision matters, verify it before you act.”
             </blockquote>
           </div>

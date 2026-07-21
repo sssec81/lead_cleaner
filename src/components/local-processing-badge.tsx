@@ -17,7 +17,7 @@ export function LocalProcessingBadge({
  title="Your pasted text and CSV files are processed in your browser."
  className={`trust-chip trust-chip-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-sm ${className}`.trim()}
  >
- <ShieldCheck className="h-3.5 w-3.5 text-blue-500" />
+ <ShieldCheck className="h-3.5 w-3.5 text-[var(--lc-accent)]" />
  <span className="hidden sm:inline">Runs locally</span>
  <span className="sm:hidden">Local</span>
  </div>
@@ -33,10 +33,10 @@ export function LocalProcessingBadge({
  <HardDriveDownload className="h-4 w-4" />
  </div>
  <div>
- <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+ <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--lc-muted)]">
  Local Processing
  </p>
- <p className="mt-1 text-sm font-semibold text-[color:#102534]">
+ <p className="mt-1 text-sm font-semibold text-[color:var(--lc-ink)]">
  Core processing happens in your browser on this device.
  </p>
  <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">

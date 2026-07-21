@@ -545,7 +545,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
         onToggleShortcuts={() => setShowShortcuts((current) => !current)}
         inputArea={
           <div className={TEXT_INPUT_BOX_CLASS_NAME}>
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-[#FDFDFD] px-4 py-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-[var(--lc-surface-raised)] px-4 py-2.5">
               <div>
                 <h3 className="text-[13px] font-semibold text-[var(--lc-ink)]">{inputLabel}</h3>
               </div>
@@ -584,9 +584,9 @@ return () => window.removeEventListener("keydown", handleKeyDown);
             
             {batchMode && (
               <div className="px-4 pt-3 sm:px-5">
-                <div className="rounded-lg border border-teal-100 bg-teal-50/40 px-3.5 py-2.5 text-xs">
-                  <p className="font-semibold text-teal-950">One snippet per line mode enabled</p>
-                  <p className="mt-0.5 leading-relaxed text-teal-700">
+                <div className="rounded-lg border border-[var(--lc-mint-border)] bg-[var(--lc-mint-bg)] px-3.5 py-2.5 text-xs">
+                  <p className="font-semibold text-[var(--lc-ink)]">One snippet per line mode enabled</p>
+                  <p className="mt-0.5 leading-relaxed text-[var(--lc-green)]">
                     {batchLineCount} line{batchLineCount === 1 ? "" : "s"} detected.
                   </p>
                 </div>
@@ -747,12 +747,12 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                     aria-label="Bulk editor"
                     value={resultText}
                     onChange={(event) => applyBulkEditor(event.target.value)}
-                    className="min-h-[200px] w-full rounded-xl border border-[var(--lc-border)] bg-[#FDFDFD] px-4 py-3 font-mono text-sm leading-relaxed text-[var(--lc-ink)] outline-none focus:bg-white focus:border-[var(--lc-accent)] focus:ring-1 focus:ring-[var(--lc-accent)] transition-colors"
+                    className="min-h-[200px] w-full rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-4 py-3 font-mono text-sm leading-relaxed text-[var(--lc-ink)] outline-none focus:bg-white focus:border-[var(--lc-accent)] focus:ring-1 focus:ring-[var(--lc-accent)] transition-colors"
                   />
                 </div>
               ) : (
                 <div className="flex flex-col">
-                  <div className={`flex items-center border-b border-[var(--lc-border)] bg-[#FDFDFD] transition-[padding,gap] ${resultDensity === "compact" ? "gap-2 px-4 py-0" : "gap-4 px-6 py-2"}`}>
+                  <div className={`flex items-center border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] transition-[padding,gap] ${resultDensity === "compact" ? "gap-2 px-4 py-0" : "gap-4 px-6 py-2"}`}>
                     <button
                       type="button"
                       onClick={toggleSelectAllPreviewed}
@@ -822,7 +822,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                       </div>
                     ))}
                   </div>
-                  <div className="border-t border-[var(--lc-border)] bg-[#FDFDFD] px-6 py-2">
+                  <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-6 py-2">
                     <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] text-center">
                       {workspace.length > WORKSPACE_PREVIEW_LIMIT
                         ? `SHOWING ${WORKSPACE_PREVIEW_LIMIT} OUT OF ${workspace.length} ROWS`

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowRight, Lock, Mail, Shield } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+import { BrandMark, BrandWordmark } from "@/components/brand-mark";
+
 const links = [
   { href: "/tools", label: "All Tools" },
   { href: "/pricing", label: "Pricing & Limits" },
@@ -95,8 +97,8 @@ export function SiteFooter() {
     <footer className="border-t border-black bg-[var(--lc-ink)] text-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-14">
         <div className="flex items-center gap-2.5">
-          <span className="lc-brand-mark lc-brand-mark-inverse">LC</span>
-          <p className="text-[15px] font-bold tracking-[-0.02em]">LeadCleanr</p>
+          <BrandMark className="lc-brand-mark-inverse" />
+          <BrandWordmark inverse />
         </div>
  
         <div className="mt-8 max-w-3xl">
@@ -117,7 +119,7 @@ export function SiteFooter() {
         <div className="mt-12 border-t border-white/10 pt-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-blue-300">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-[var(--lc-accent-on-dark)]">
                 <Shield className="h-4.5 w-4.5" />
               </div>
               <div>
@@ -128,7 +130,7 @@ export function SiteFooter() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-emerald-300">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-[var(--lc-mint-on-dark)]">
                 <Lock className="h-4.5 w-4.5" />
               </div>
               <div>
@@ -139,7 +141,7 @@ export function SiteFooter() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-blue-300">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-[var(--lc-accent-on-dark)]">
                 <ArrowRight className="h-4.5 w-4.5" />
               </div>
               <div>

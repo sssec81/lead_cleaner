@@ -607,7 +607,7 @@ export function CsvLeadCleanerTool() {
 	          </div>
 	          <label
             htmlFor="csv-upload"
-            className={`group relative flex w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-black/10 px-6 py-10 text-center transition-all bg-[#F9F9FB] hover:bg-black/[0.01] ${
+            className={`group relative flex w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-black/10 px-6 py-10 text-center transition-all bg-[var(--lc-surface-muted)] hover:bg-black/[0.01] ${
               isParsing ? "opacity-60 cursor-not-allowed" : ""
             }`}
           >
@@ -677,7 +677,7 @@ export function CsvLeadCleanerTool() {
         <div className="flex flex-col flex-1 bg-white border border-[var(--lc-border)] rounded-[28px] shadow-[var(--shadow-elevated)] overflow-hidden">
           
           {/* ── Workspace Header ── */}
-          <div className="flex items-center justify-between border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD]">
+          <div className="flex items-center justify-between border-b border-[var(--lc-border)] p-4 bg-[var(--lc-surface-raised)]">
             <div className="flex items-center gap-2.5">
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
                 <FileSpreadsheet className="h-4 w-4" />
@@ -696,7 +696,7 @@ export function CsvLeadCleanerTool() {
           </div>
 
           {/* Cleanup Controls Toolbar */}
-          <div className="border-b border-[var(--lc-border)] p-4 bg-[#FDFDFD] flex flex-col gap-3.5 z-10">
+          <div className="border-b border-[var(--lc-border)] p-4 bg-[var(--lc-surface-raised)] flex flex-col gap-3.5 z-10">
             <div className="flex flex-wrap items-center gap-1.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700"><Check className="h-3 w-3" aria-hidden="true" /> Upload CSV</span>
               <span className="text-black/10">·</span>
@@ -818,7 +818,7 @@ export function CsvLeadCleanerTool() {
           <div className="flex-1 flex flex-col p-4">
             <div className="flex flex-col border border-[var(--lc-border)] rounded-2xl overflow-hidden flex-1 bg-white">
               {/* Tab Row */}
-              <div className="flex flex-col items-start gap-2 border-b border-[var(--lc-border)] bg-[#FDFDFD] px-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col items-start gap-2 border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 <div role="tablist" aria-label="CSV row previews" className="flex flex-wrap items-center gap-1">
                   {availablePreviewModes.map(({ mode, label }) => (
                     <button
@@ -851,7 +851,7 @@ export function CsvLeadCleanerTool() {
                   <div className="overflow-x-auto rounded-lg">
                     <table aria-label={previewLabel} className="min-w-full text-left text-xs whitespace-nowrap border-collapse">
                       <caption className="sr-only">{previewDescription}</caption>
-                      <thead className="sticky top-0 z-10 bg-[#FDFDFD] border-b border-[var(--lc-border)]">
+                      <thead className="sticky top-0 z-10 bg-[var(--lc-surface-raised)] border-b border-[var(--lc-border)]">
                         <tr>
                           <th scope="col" className="px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8">#</th>
                           {previewMode !== "clean" && <th scope="col" className="px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">REASON</th>}
@@ -897,7 +897,7 @@ export function CsvLeadCleanerTool() {
           </div>
 
           {/* Export Footer */}
-          <div className="border-t border-[var(--lc-border)] bg-[#FDFDFD] p-4">
+          <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface-raised)] p-4">
             <CrmExportControls
               rows={cleaned.rows}
               sourceHeaders={previewHeaders}

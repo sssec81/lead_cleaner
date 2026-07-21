@@ -166,18 +166,18 @@ export default function PricingPage() {
   {proPoints.map((point) => (
   <div key={point} className="flex items-start gap-3">
   <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--lc-surface)]" />
-  <span className="text-sm text-[#e4e4e1]">{point}</span>
+  <span className="text-sm text-white/80">{point}</span>
   </div>
   ))}
   </div>
 
   <div className="mb-8 border-t border-white/20 pt-5">
-  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#e4e4e1]">
+  <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/80">
   Good for
   </p>
   <div className="mt-3 grid gap-2">
   {proUseCases.map((item) => (
-  <div key={item} className="flex items-center gap-2 text-sm text-[#e4e4e1]">
+  <div key={item} className="flex items-center gap-2 text-sm text-white/80">
   <Check className="h-4 w-4 text-[var(--lc-surface)]" />
   <span>{item}</span>
   </div>
@@ -189,7 +189,7 @@ export default function PricingPage() {
   <div className="relative mt-auto pt-4">
   <Link
   href="#pro-waitlist"
-  className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--lc-surface)] px-6 text-sm font-semibold text-[var(--lc-ink)] transition-colors hover:bg-[#e4e4e1]"
+  className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--lc-surface)] px-6 text-sm font-semibold text-[var(--lc-ink)] transition-colors hover:bg-[var(--lc-surface-muted)]"
   >
   <span>Join Pro waitlist</span>
   <ArrowRight className="h-4 w-4" />

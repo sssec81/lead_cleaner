@@ -238,7 +238,7 @@ export default function HomePage() {
           <div className="lc-hero-panel relative">
             <div className="lc-workspace-shell">
               {/* App Window Top Bar */}
-              <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[#F1F1F4] px-4 py-2">
+              <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--background-strong)] px-4 py-2">
                 <div className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-black/10"></span>
                   <span className="h-2 w-2 rounded-full bg-black/10"></span>
@@ -249,7 +249,7 @@ export default function HomePage() {
               </div>
               <div className="grid lg:grid-cols-2">
                 {/* Left Panel: Upload/Paste/Options */}
-                <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col bg-[#F9F9FB] p-5">
+                <div className="border-b border-[var(--lc-border)] lg:border-r lg:border-b-0 flex flex-col bg-[var(--lc-surface-muted)] p-5">
                   <div className="border border-dashed border-black/10 rounded-xl p-6 text-center bg-white flex flex-col items-center justify-center">
                     <Upload className="h-6 w-6 text-[var(--lc-accent)] mb-2" />
                     <p className="text-[13px] font-semibold text-[var(--lc-ink)]">Drop CSV here</p>
@@ -311,7 +311,7 @@ export default function HomePage() {
               </div>
  
               {/* Bottom: Slim Stats Strip */}
-              <div className="border-t border-[var(--lc-border)] bg-[#F9F9FB] px-4 py-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[var(--lc-muted)] font-medium">
+              <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface-muted)] px-4 py-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[var(--lc-muted)] font-medium">
                 <span>1,361 total rows</span>
                 <span className="text-black/10">·</span>
                 <span>184 duplicates removed</span>

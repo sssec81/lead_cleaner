@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 import { ImageResponse } from "next/og";
 
 export const alt = "LeadCleanr";
@@ -7,7 +10,12 @@ export const size = {
  height: 630,
 };
 
-export default function OpenGraphImage() {
+export const runtime = "nodejs";
+
+export default async function OpenGraphImage() {
+ const mark = await readFile(path.join(process.cwd(), "public", "leadcleanr-mark.png"));
+ const markUrl = `data:image/png;base64,${mark.toString("base64")}`;
+
  return new ImageResponse(
  (
  <div
@@ -16,8 +24,8 @@ export default function OpenGraphImage() {
  height: "100%",
  width: "100%",
  background:
- "linear-gradient(135deg, #fff8ee 0%, #f9f3eb 48%, #d7f0eb 100%)",
- color: "#112433",
+ "linear-gradient(135deg, #fffaf2 0%, #f6f4ee 48%, #e4f7f0 100%)",
+ color: "#102a43",
  padding: "56px",
  }}
  >
@@ -27,9 +35,9 @@ export default function OpenGraphImage() {
  flexDirection: "column",
  justifyContent: "space-between",
  width: "100%",
- border: "1px solid rgba(17,36,51,0.12)",
+ border: "1px solid rgba(16,42,67,0.12)",
  borderRadius: "36px",
- background: "rgba(255,255,255,0.82)",
+ background: "rgba(255,255,255,0.86)",
  padding: "48px",
  }}
  >
@@ -40,22 +48,11 @@ export default function OpenGraphImage() {
  gap: "20px",
  }}
  >
- <div
- style={{
- display: "flex",
- alignItems: "center",
- justifyContent: "center",
- width: "72px",
- height: "72px",
- borderRadius: "24px",
- background: "#112433",
- color: "#ffffff",
- fontSize: "28px",
- fontWeight: 700,
- }}
- >
- LC
- </div>
+ <img
+ src={markUrl}
+ alt=""
+ style={{ width: "92px", height: "72px", objectFit: "contain" }}
+ />
  <div
  style={{
  display: "flex",
@@ -63,10 +60,10 @@ export default function OpenGraphImage() {
  gap: "6px",
  }}
  >
- <div style={{ fontSize: "28px", fontWeight: 700 }}>
- LeadCleanr
+ <div style={{ display: "flex", fontSize: "28px", fontWeight: 700 }}>
+ <span>Lead</span><span style={{ color: "#2454ff" }}>Cleanr</span>
  </div>
- <div style={{ fontSize: "18px", color: "#48606f" }}>
+ <div style={{ fontSize: "18px", color: "#596675" }}>
  Browser-first lead cleaning
  </div>
  </div>
@@ -94,7 +91,7 @@ export default function OpenGraphImage() {
  style={{
  fontSize: "26px",
  lineHeight: 1.35,
- color: "#48606f",
+ color: "#596675",
  }}
  >
  Deduplicate rows, flag personal and role-based inboxes, generate
@@ -117,8 +114,8 @@ export default function OpenGraphImage() {
  display: "flex",
  alignItems: "center",
  borderRadius: "999px",
- background: "rgba(15,118,110,0.1)",
- color: "#0f766e",
+ background: "rgba(120,230,192,0.18)",
+ color: "#087a55",
  padding: "12px 18px",
  fontSize: "18px",
  fontWeight: 600,

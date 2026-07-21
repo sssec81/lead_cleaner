@@ -18,7 +18,7 @@ export function RemoveDuplicatePhonesTool() {
  title="Remove duplicate phones"
  description="Paste a repeated phone number list to keep one clean, formatted copy of each valid number and drop the rest."
  icon={CopyMinus}
- iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+ iconToneClassName="bg-[var(--lc-accent-bg)] text-[var(--lc-accent-strong)] ring-1 ring-[var(--lc-accent-border)]"
  sampleInput={SAMPLE_PHONE_LIST}
  placeholder="Paste phone numbers (one per line or mixed in text) separated by commas, spaces, or tabs."
  trackName="remove-duplicate-phones"

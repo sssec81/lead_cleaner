@@ -94,8 +94,8 @@ export default function ConvertCsvToJsonPage() {
         {seoUseCases.map((useCase) => {
           const Icon = useCase.icon;
           return (
-            <div key={useCase.title} className="group rounded-xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-transform duration-300 group-hover:scale-105">
+            <div key={useCase.title} className="group rounded-xl border border-[var(--lc-border)] bg-white p-6 transition-all duration-300 hover:shadow-md hover:border-[var(--lc-accent-border)] hover:-translate-y-0.5">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--lc-accent-bg)] text-[var(--lc-accent)] transition-transform duration-300 group-hover:scale-105">
                 <Icon className="h-5 w-5" />
               </div>
               <h3 className="mb-2 font-display text-lg font-bold text-slate-900">{useCase.title}</h3>

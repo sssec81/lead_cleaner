@@ -126,7 +126,7 @@ export function TextWorkspaceShell({
       </div>
 
       {/* ── Text Input Area ── */}
-      <div className="border-b border-[var(--lc-border)] bg-[#FDFDFD] p-4 sm:p-5">
+      <div className="border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] p-4 sm:p-5">
         {inputArea}
       </div>
 
@@ -138,7 +138,7 @@ export function TextWorkspaceShell({
       </div>
 
       {/* ── Workspace Controls Toolbar ── */}
-      <div className="border-b border-[var(--lc-border)] bg-[#FDFDFD] px-4 py-3 flex flex-wrap items-center gap-4 sm:px-6">
+      <div className="border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-4 py-3 flex flex-wrap items-center gap-4 sm:px-6">
         {toolbar}
       </div>
 
@@ -148,7 +148,7 @@ export function TextWorkspaceShell({
         
         {/* Export Section */}
         {exportControls && (
-          <div className="mt-auto border-t border-[var(--lc-border)] bg-[#FDFDFD] p-4 sm:p-5">
+          <div className="mt-auto border-t border-[var(--lc-border)] bg-[var(--lc-surface-raised)] p-4 sm:p-5">
             {exportControls}
           </div>
         )}

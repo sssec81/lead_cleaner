@@ -18,7 +18,7 @@ export function CleanEmailListTool() {
  title="Clean email list online"
  description="Paste a raw email list to lowercase addresses, remove blanks, filter invalid entries, and deduplicate the final output."
  icon={Sparkles}
- iconToneClassName="bg-teal-50 text-teal-700 ring-1 ring-teal-100"
+ iconToneClassName="bg-[var(--lc-mint-bg)] text-[var(--lc-green)] ring-1 ring-[var(--lc-mint-border)]"
  sampleInput={SAMPLE_EMAIL_LIST}
  placeholder="Paste one email per line or a mixed list separated by commas, spaces, or tabs."
  trackName="clean-email-list"

@@ -15,7 +15,7 @@ export function DomainExtractorTool() {
  title="Extract domains from emails and URLs"
  description="Paste emails or website links, pull out the root domains, remove duplicates, and export the clean list."
  icon={Globe}
- iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+ iconToneClassName="bg-[var(--lc-accent-bg)] text-[var(--lc-accent-strong)] ring-1 ring-[var(--lc-accent-border)]"
  sampleInput={SAMPLE_TEXT}
  placeholder="Paste email addresses, website URLs, or any messy lead text with domains."
  trackName="extract-domains-from-emails"

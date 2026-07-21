@@ -206,7 +206,7 @@ function loadDemoCsv() {
           {cleanRowsCount > 0 ? (
             <div className="overflow-x-auto rounded-lg">
               <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
-                <thead className="sticky top-0 z-10 bg-[#FDFDFD]">
+                <thead className="sticky top-0 z-10 bg-[var(--lc-surface-raised)]">
                   <tr>
                     <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
                     {headers.slice(0, 5).map(header => (

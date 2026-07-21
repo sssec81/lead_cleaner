@@ -76,7 +76,7 @@ export function TextExtractorSupportingContent({
 
  {relatedTools.length ? (
  <div className="mt-8 rounded-xl border border-[var(--lc-accent)]/15 bg-[var(--lc-accent-bg)] p-5">
- <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">
+ <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--lc-accent-strong)]">
  Related tools
  </p>
  <div className="mt-4 flex flex-wrap gap-3">
@@ -84,7 +84,7 @@ export function TextExtractorSupportingContent({
  <Link
  key={tool.href}
  href={tool.href}
- className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-blue-200 bg-white px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+ className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--lc-accent-border)] bg-white px-4 text-sm font-semibold text-[var(--lc-accent-strong)] transition hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)]"
  >
  {tool.label}
  <ArrowRight className="h-4 w-4" />

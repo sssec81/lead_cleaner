@@ -249,12 +249,12 @@ export function MergeCsvFilesTool() {
  onDrop={handleDrop}
  className={`group mt-5 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 text-center transition-all duration-200 ${
  isDragging
- ? "border-blue-500 bg-blue-50/50"
- : "border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50/50"
+ ? "border-[var(--lc-accent)] bg-[var(--lc-accent-bg)]"
+ : "border-slate-300 bg-white hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)]"
  }`}
  >
  <div className="flex flex-col items-center pointer-events-none">
- <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[color:rgba(37,99,235,0.1)] bg-[color:rgba(37,99,235,0.04)] text-[color:#2563eb] shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
+ <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--lc-accent-border)] bg-[var(--lc-accent-bg)] text-[color:var(--lc-accent)] shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-white">
  {isParsing ? (
  <LoaderCircle className="h-6 w-6 animate-spin text-[color:var(--brand-strong)]" />
  ) : (
@@ -287,7 +287,7 @@ export function MergeCsvFilesTool() {
  {fileEntries.length > 0 && (
  <div className="mt-6 flex flex-col gap-3">
  <div className="flex items-center justify-between">
- <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:#38586b]">
+ <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--lc-muted)]">
  Loaded Files ({fileEntries.length})
  </p>
  <button onClick={resetState} className="text-xs text-red-600 hover:text-red-700 font-medium">Clear all</button>
@@ -317,7 +317,7 @@ export function MergeCsvFilesTool() {
  id="duplicate-mode"
  value={duplicateMode}
  onChange={(e) => setDuplicateMode(e.target.value as "none" | "exact_row" | "column")}
- className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10"
+ className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[var(--lc-accent-bg)]"
  >
  <option value="none">Do not deduplicate</option>
  <option value="exact_row">Exact row match</option>
@@ -333,7 +333,7 @@ export function MergeCsvFilesTool() {
  id="selected-column"
  value={selectedColumn}
  onChange={(e) => setSelectedColumn(e.target.value)}
- className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-blue-500/10"
+ className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[var(--lc-accent-bg)]"
  >
  <option value="" disabled>Select a column...</option>
  {mergedHeaders.map(h => (
@@ -352,13 +352,13 @@ export function MergeCsvFilesTool() {
  {/* Right column: Results */}
  <div className="flex-1 min-w-0 space-y-6">
  <div className="rounded-xl bg-white p-6 sm:p-10 shadow-sm border border-[color:var(--line)] min-h-[30rem] flex flex-col relative overflow-hidden">
- <div className="absolute top-0 inset-x-0 h-32 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.05),transparent_70%)] pointer-events-none"></div>
+ <div className="absolute top-0 inset-x-0 h-32 bg-[radial-gradient(ellipse_at_top,var(--lc-accent-bg),transparent_70%)] pointer-events-none"></div>
  
  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[color:var(--line)] pb-6 mb-6">
  <div>
- <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 mb-3">
- <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-sm"></span>
- <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600">CSV Merger</p>
+ <div className="inline-flex items-center gap-2 rounded-full border border-[var(--lc-accent-border)] bg-[var(--lc-accent-bg)] px-3 py-1 mb-3">
+ <span className="flex h-2 w-2 rounded-full bg-[var(--lc-accent)] shadow-sm"></span>
+ <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-accent-strong)]">CSV Merger</p>
  </div>
  <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
  Master Dataset

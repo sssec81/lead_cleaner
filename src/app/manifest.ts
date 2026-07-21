@@ -8,14 +8,9 @@ export default function manifest(): MetadataRoute.Manifest {
  "Browser-first tools for cleaning lead CSV files and extracting contact data.",
  start_url: "/",
  display: "standalone",
- background_color: "#f9f3eb",
- theme_color: "#112433",
+ background_color: "#f6f4ee",
+ theme_color: "#102a43",
  icons: [
- {
- src: "/icon.svg",
- sizes: "any",
- type: "image/svg+xml",
- },
  {
  src: "/icon-192.png",
  sizes: "192x192",

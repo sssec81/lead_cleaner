@@ -14,7 +14,7 @@ export function EmailExtractorTool() {
  title="Extract emails from text"
  description="Paste messy text, pull out email addresses, remove duplicates, then copy or export the clean list."
  icon={Mail}
- iconToneClassName="bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+ iconToneClassName="bg-[var(--lc-accent-bg)] text-[var(--lc-accent-strong)] ring-1 ring-[var(--lc-accent-border)]"
  sampleInput={SAMPLE_TEXT}
  placeholder="Paste website text, copied profiles, CRM notes, or any messy lead block here."
  trackName="extract-emails-from-text"

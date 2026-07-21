@@ -112,7 +112,7 @@ export default function PrivacyPage() {
   <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-[var(--lc-surface)] sm:text-5xl">
   Local cleanup has a clear, physical edge.
   </h2>
-  <p className="text-lg leading-8 text-[#e4e4e1]">
+  <p className="text-lg leading-8 text-white/80">
   The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don&apos;t hide behind legal fog.
   </p>
   </div>
