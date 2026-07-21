@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Lock, Mail, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Lock, Mail, Shield } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -92,12 +92,10 @@ export function SiteFooter() {
   const cta = getFooterCta(pathname);
  
   return (
-    <footer className="border-t border-white/5 bg-[linear-gradient(145deg,#171719_0%,#1d1d1f_58%,#10233b_100%)] text-white">
+    <footer className="border-t border-black bg-[var(--lc-ink)] text-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-14">
         <div className="flex items-center gap-2.5">
-          <span className="lc-brand-mark border-white/10 bg-white/10 text-blue-300 shadow-none">
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
-          </span>
+          <span className="lc-brand-mark lc-brand-mark-inverse">LC</span>
           <p className="text-[15px] font-bold tracking-[-0.02em]">LeadCleanr</p>
         </div>
  

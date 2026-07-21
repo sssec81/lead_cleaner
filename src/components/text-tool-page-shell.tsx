@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, type ReactNode } from "react";
-import { BarChart3, CheckCircle2, Quote, ShieldCheck, Zap } from "lucide-react";
 import { PageFrame } from "@/components/page-frame";
 
 type TextToolPageShellProps = {
@@ -37,7 +36,7 @@ export function TextToolPageShell({
             
             {/* Left Column 7/12 */}
             <div className="lg:col-span-7 pt-2">
-              <p className="mb-4 inline-flex rounded-full border border-[var(--lc-border)] bg-white/75 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--lc-accent)] shadow-sm">
+              <p className="mb-5 inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--lc-muted)] before:h-px before:w-8 before:bg-[var(--lc-border-mid)]">
                 {eyebrow}
               </p>
               <h1 className="mb-3 font-display text-[clamp(2rem,4vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.04em] text-[var(--lc-ink)]">
@@ -58,8 +57,7 @@ export function TextToolPageShell({
               {asideContent ? (
                 asideContent
               ) : (
-                <div className="lc-card relative overflow-hidden p-6">
-                  <div aria-hidden="true" className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--lc-accent-bg)] blur-2xl" />
+                <div className="lc-card relative overflow-hidden border-t-2 border-t-[var(--lc-ink)] p-6">
                   <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[var(--lc-muted)]">
                     Use This When
                   </p>

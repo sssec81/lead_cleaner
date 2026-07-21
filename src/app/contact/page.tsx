@@ -62,17 +62,17 @@ export default function ContactPage() {
  return (
  <PageFrame>
   {/* Hero Section */}
-  <section className="pb-14 pt-16 lg:pb-20 lg:pt-20">
+  <section className="pb-10 pt-16 lg:pb-12 lg:pt-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-  <div className="mx-auto max-w-3xl text-center">
-  <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
+  <div className="mx-auto max-w-4xl text-center">
+  <div className="mb-7 section-eyebrow inline-flex items-center gap-2">
   <MessageSquare className="h-4 w-4" />
   <span>Direct Access</span>
   </div>
-  <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-7xl">
+  <h1 className="mx-auto mb-7 max-w-3xl font-display text-4xl font-bold leading-[1.03] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-6xl">
   Talk to a human, not a maze.
   </h1>
-  <p className="text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
+  <p className="mx-auto max-w-3xl text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
   Reach out when the workflow gets weird, not only when it breaks. The most useful note is the one that shows the exact moment the result stopped feeling correct.
   </p>
   </div>
@@ -85,7 +85,7 @@ export default function ContactPage() {
   <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
   
   {/* Context Card */}
-  <div className="group relative overflow-hidden surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1 sm:p-10 flex flex-col justify-center">
+  <div className="relative flex flex-col justify-center overflow-hidden rounded-xl surface-card p-8 sm:p-10">
   <div className="relative">
   <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] mb-4">
   A short, concrete message beats a long one.
@@ -97,13 +97,13 @@ export default function ContactPage() {
   </div>
 
   {/* Checklist Grid */}
-  <div className="group relative overflow-hidden surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1 sm:p-10">
+  <div className="relative overflow-hidden rounded-xl surface-card p-8 sm:p-10">
   <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-ink)] mb-8">What to include</h3>
   <div className="grid gap-4 sm:grid-cols-2">
   {messageTips.map((tip) => {
   const Icon = tip.icon;
   return (
-  <div key={tip.text} className="flex flex-col gap-3 rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-5 transition-colors group-hover:border-[var(--lc-border-mid)]">
+  <div key={tip.text} className="flex flex-col gap-3 rounded-lg border border-[var(--lc-border)] bg-[var(--lc-bg)] p-5">
   <Icon className="h-5 w-5 text-[var(--lc-accent)]" />
   <p className="text-sm leading-relaxed text-[var(--lc-ink)] font-medium">{tip.text}</p>
   </div>
@@ -134,14 +134,10 @@ export default function ContactPage() {
   return (
   <div 
   key={item.label}
-  className="group relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/5 p-8 transition-all duration-300 hover:-translate-y-2 hover:bg-white/10 hover:shadow-[var(--shadow-strong)]"
+  className="relative overflow-hidden border border-white/15 bg-white/[0.04] p-8"
   >
-  <div className="absolute top-0 right-0 p-8 opacity-10 transition-transform duration-500 group-hover:scale-125 group-hover:opacity-20">
-  <Icon className="h-24 w-24 text-[var(--lc-surface)]" />
-  </div>
-  
   <div className="relative">
-  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 text-[var(--lc-surface)] backdrop-blur-md border border-white/10">
+  <div className="mb-6 flex h-12 w-12 items-center justify-center border border-white/20 text-[var(--lc-surface)]">
   <Icon className="h-6 w-6" />
   </div>
   

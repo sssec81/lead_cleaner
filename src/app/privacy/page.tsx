@@ -67,15 +67,15 @@ export default function PrivacyPage() {
   {/* Hero Section */}
   <section className="pb-20 pt-16 lg:pb-24 lg:pt-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-  <div className="mx-auto max-w-3xl text-center">
-  <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
+  <div className="mx-auto max-w-4xl text-center">
+  <div className="mb-7 section-eyebrow inline-flex items-center gap-2">
   <Shield className="h-4 w-4" />
   <span>Trust Boundary</span>
   </div>
-  <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-7xl">
+  <h1 className="mx-auto mb-7 max-w-3xl font-display text-4xl font-bold leading-[1.03] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-6xl">
   Your data never leaves your screen.
   </h1>
-  <p className="text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
+  <p className="mx-auto max-w-3xl text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
   This page answers one question quickly: what happens to your raw data while you use LeadCleanr? The short version: <strong>The cleanup flow runs locally in your browser.</strong>
   </p>
   </div>
@@ -87,10 +87,10 @@ export default function PrivacyPage() {
   return (
   <div 
   key={item.label}
-  className="group relative overflow-hidden surface-card rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--lc-border-mid)]"
+  className="relative overflow-hidden surface-card rounded-xl p-6"
   >
   <div className="relative">
-  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)] transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 group-hover:bg-[var(--lc-accent-bg)]">
+  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-lg border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)]">
   <Icon className="h-6 w-6" />
   </div>
   <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--lc-ink)]">{item.label}</h3>
@@ -155,7 +155,7 @@ export default function PrivacyPage() {
   return (
   <div 
   key={section.title}
-  className="group flex flex-col gap-6 rounded-[1.25rem] surface-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--lc-border-mid)] sm:flex-row"
+  className="flex flex-col gap-6 rounded-xl surface-card p-8 sm:flex-row"
   >
   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)] transition-colors duration-300 group-hover:bg-[var(--lc-accent-bg)]">
   <Icon className="h-6 w-6" />
@@ -180,14 +180,10 @@ export default function PrivacyPage() {
 
 function BoundaryCard({ number, title, text }: { number: string; title: string; text: string }) {
  return (
- <div className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-8 transition-all hover:bg-white/10">
- <div className="absolute -right-10 -top-10 text-9xl font-black text-white/5 transition-transform duration-500 group-hover:scale-110 group-hover:text-white/10">
- {number}
- </div>
- <div className="relative">
+ <div className="relative overflow-hidden border-t border-white/20 py-7">
+ <p className="mb-5 font-mono text-[11px] font-medium tracking-[0.16em] text-white/45">{number}</p>
  <h3 className="mb-3 text-xl font-semibold text-white">{title}</h3>
- <p className="text-base leading-relaxed text-slate-500">{text}</p>
- </div>
+ <p className="text-base leading-7 text-white/65">{text}</p>
  </div>
  );
 }

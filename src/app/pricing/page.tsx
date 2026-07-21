@@ -53,20 +53,6 @@ const decisionRules = [
  },
 ];
 
-const freeComparison = [
- "Up to 5 MB CSV uploads",
- "Unlimited browser exports",
- "No signup for core tools",
- "Local processing by default",
-];
-
-const proComparison = [
- "10 MB+ CSV uploads",
- "Saved cleanup workflows",
- "CRM export presets",
- "Priority support channel",
-];
-
 export const metadata: Metadata = {
  title: "Pricing — LeadCleanr",
  description: "LeadCleanr pricing for browser-first CSV lead cleanup workflows, from free discovery to heavier operational use.",
@@ -77,17 +63,16 @@ export default function PricingPage() {
  return (
  <PageFrame>
   {/* Hero Section */}
-  <section className="pb-14 pt-16 lg:pb-20 lg:pt-20">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-  <div className="mx-auto max-w-3xl text-center">
-  <div className="mb-8 section-eyebrow inline-flex items-center gap-2">
-  <Zap className="h-4 w-4" />
-  <span>Fair Pricing Model</span>
+  <section className="border-b border-[var(--lc-border-mid)] pb-14 pt-14 lg:pb-20 lg:pt-20">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto mb-7 max-w-3xl text-center font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--lc-muted)]">
+  01 / Pricing
   </div>
-  <h1 className="mb-8 font-display text-5xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-7xl">
+  <div className="mx-auto max-w-4xl text-center">
+  <h1 className="mx-auto mb-7 max-w-3xl font-display text-4xl font-bold leading-[1.02] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-6xl">
   Free should feel useful on purpose.
   </h1>
-  <p className="text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
+  <p className="mx-auto max-w-3xl text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
   LeadCleanr is not priced like a trap. The free tier lets you test the product honestly. Pro starts only when spreadsheet work gets heavier and larger files create friction.
   </p>
   <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[var(--lc-hint)]">
@@ -98,11 +83,11 @@ export default function PricingPage() {
   </section>
 
  {/* Pricing Cards Section */}
- <section className="relative z-10 pb-16 lg:pb-20">
+ <section className="relative z-10 pb-16 pt-12 lg:pb-20 lg:pt-16">
  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
- <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:items-start">
+ <div className="mx-auto grid max-w-5xl overflow-hidden rounded-xl border border-[var(--lc-border-mid)] bg-[var(--lc-border-mid)] gap-px lg:grid-cols-2 lg:items-stretch">
   {/* Free Tier Card */}
-  <div className="group relative flex flex-col overflow-hidden surface-card rounded-[1.5rem] p-8 sm:p-12 transition-all duration-300 hover:-translate-y-1">
+  <div className="relative flex flex-col bg-[var(--lc-surface)] p-8 sm:p-12">
   <div className="relative flex-1">
   <div className="flex items-center justify-between mb-8">
   <div>
@@ -112,8 +97,8 @@ export default function PricingPage() {
   <span className="text-lg text-[var(--lc-muted)]">/mo</span>
   </div>
   </div>
-  <div className="inline-flex items-center justify-center rounded-full border border-[var(--lc-border)] bg-[var(--lc-surface)] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--lc-accent)] shadow-sm">
-  Featured
+  <div className="border border-[var(--lc-border-mid)] px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--lc-muted)]">
+  Available now
   </div>
   </div>
 
@@ -130,7 +115,7 @@ export default function PricingPage() {
   ))}
   </div>
 
-  <div className="mb-8 rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-4">
+  <div className="mb-8 border-t border-[var(--lc-border-mid)] pt-5">
   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--lc-accent)]">
   Good for
   </p>
@@ -157,8 +142,7 @@ export default function PricingPage() {
   </div>
 
   {/* Pro Tier Card */}
-  <div className="group relative flex flex-col overflow-hidden rounded-[1.5rem] bg-[var(--lc-dark-bg)] p-8 shadow-[var(--shadow-strong)] transition-all duration-300 hover:-translate-y-1 sm:p-12">
-  <div className="absolute inset-0 border border-white/10 rounded-[1.5rem]"></div>
+  <div className="relative flex flex-col overflow-hidden bg-[var(--lc-dark-bg)] p-8 sm:p-12">
   
   <div className="relative flex-1">
   <div className="flex items-center justify-between mb-8">
@@ -166,15 +150,15 @@ export default function PricingPage() {
   <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">Pro</h3>
   <div className="mt-4 flex items-baseline gap-2">
   <span className="text-6xl font-display font-bold tracking-tight text-[var(--lc-surface)]">$12</span>
-  <span className="text-lg text-[var(--lc-hint)]">/mo</span>
+  <span className="text-lg text-white/50">/mo</span>
   </div>
   </div>
-  <div className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--lc-surface)]">
+  <div className="border border-white/25 px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-white/70">
   Early access
   </div>
   </div>
 
-  <p className="mb-8 text-base leading-relaxed text-[var(--lc-hint)]">
+  <p className="mb-8 text-base leading-relaxed text-white/65">
   Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
   </p>
 
@@ -187,7 +171,7 @@ export default function PricingPage() {
   ))}
   </div>
 
-  <div className="mb-8 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+  <div className="mb-8 border-t border-white/20 pt-5">
   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#e4e4e1]">
   Good for
   </p>
@@ -205,7 +189,7 @@ export default function PricingPage() {
   <div className="relative mt-auto pt-4">
   <Link
   href="#pro-waitlist"
-  className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--lc-surface)] px-6 text-sm font-semibold text-[var(--lc-ink)] transition-all hover:bg-[#e4e4e1]"
+  className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--lc-surface)] px-6 text-sm font-semibold text-[var(--lc-ink)] transition-colors hover:bg-[#e4e4e1]"
   >
   <span>Join Pro waitlist</span>
   <ArrowRight className="h-4 w-4" />
@@ -220,9 +204,10 @@ export default function PricingPage() {
   <ProWaitlistForm />
 
   {/* Decision Rules / How to Choose Section */}
-  <section className="py-16 lg:py-20">
+  <section className="border-t border-[var(--lc-border-mid)] py-16 lg:py-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div className="mx-auto mb-10 max-w-3xl text-center">
+  <p className="mb-4 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--lc-muted)]">02 / Decision guide</p>
   <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl mb-4">
   How to choose your plan
   </h2>
@@ -231,20 +216,20 @@ export default function PricingPage() {
   </p>
   </div>
 
-  <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+  <div className="mx-auto max-w-6xl divide-y divide-[var(--lc-border-mid)] border-y border-[var(--lc-border-mid)]">
   {decisionRules.map((rule) => {
   const Icon = rule.icon;
 
   return (
   <div 
   key={rule.label}
-  className="group relative overflow-hidden surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--lc-border-mid)]"
+  className="grid gap-5 py-7 md:grid-cols-[4rem_11rem_1fr] md:items-start md:gap-8"
   >
-  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)] transition-colors duration-300 group-hover:bg-[var(--lc-accent-bg)]">
-  <Icon className="h-6 w-6" />
+  <div className="flex h-11 w-11 items-center justify-center border border-[var(--lc-border-mid)] text-[var(--lc-accent)]">
+  <Icon className="h-5 w-5" />
   </div>
-  <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-ink)] mb-3">{rule.label}</h3>
-  <p className="text-sm leading-relaxed text-[var(--lc-muted)]">{rule.text}</p>
+  <h3 className="pt-2 text-sm font-bold uppercase tracking-widest text-[var(--lc-ink)]">{rule.label}</h3>
+  <p className="max-w-2xl pt-1 text-sm leading-7 text-[var(--lc-muted)]">{rule.text}</p>
   </div>
   );
   })}
@@ -252,77 +237,6 @@ export default function PricingPage() {
   </div>
   </section>
 
-  {/* Comparison Cards Section */}
-  <section className="py-16 lg:py-20">
-  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-  <div className="mx-auto max-w-3xl text-center">
-  <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
-  Compare by how much work you need to do
-  </h2>
-  <p className="mt-4 text-base leading-7 text-[var(--lc-muted)]">
-  The free plan is a real workflow. Pro is for scale, presets, and repeat cleanup jobs.
-  </p>
-  </div>
-
-  <div className="mt-12 grid gap-6 md:grid-cols-2">
-  <div className="surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1">
-  <div className="flex items-center justify-between gap-4">
-  <div>
-  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--lc-accent)]">
-  Free
-  </p>
-  <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--lc-ink)]">
-  Useful without pressure
-  </h3>
-  </div>
-  <span className="rounded-full border border-[var(--lc-border)] bg-[var(--lc-bg)] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--lc-ink)]">
-  $0
-  </span>
-  </div>
-
-  <div className="mt-6 grid gap-3">
-  {freeComparison.map((item) => (
-  <div key={item} className="flex items-start gap-3 rounded-xl bg-[var(--lc-bg)] px-4 py-3">
-  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--lc-accent)]" />
-  <span className="text-sm font-medium text-[var(--lc-ink)]">{item}</span>
-  </div>
-  ))}
-  </div>
-  </div>
-
-  <div className="surface-card rounded-[1.25rem] p-8 transition-all duration-300 hover:-translate-y-1">
-  <div className="flex items-center justify-between gap-4">
-  <div>
-  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--lc-ink)]">
-  Pro
-  </p>
-  <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--lc-ink)]">
-  Scale when it becomes repeat work
-  </h3>
-  </div>
-  <span className="rounded-full border border-[var(--lc-border)] bg-[var(--lc-surface)] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--lc-ink)]">
-  $12/mo
-  </span>
-  </div>
-
-  <div className="mt-6 grid gap-3">
-  {proComparison.map((item) => (
-  <div key={item} className="flex items-start gap-3 rounded-xl bg-[var(--lc-surface)] border border-[var(--lc-border)] px-4 py-3">
-  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--lc-ink)]" />
-  <span className="text-sm font-medium text-[var(--lc-ink)]">{item}</span>
-  </div>
-  ))}
-  </div>
-  </div>
-  </div>
-
-  <div className="mt-8 surface-card rounded-xl p-6 text-center">
-  <p className="text-sm leading-relaxed text-[var(--lc-muted)]">
-  <strong>Note:</strong> Business and API features should appear only after repeat demand proves they belong here. Until then, pricing stays easy to explain.
-  </p>
-  </div>
-  </div>
-  </section>
  </PageFrame>
  );
 }

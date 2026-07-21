@@ -103,16 +103,16 @@ export function CsvWorkspaceShell({
     <div className="w-full lc-workspace-shell flex flex-col">
       {!hasLoadedFile ? (
         /* ── Main Upload Panel (Empty State) ── */
-        <div className="flex flex-col items-center justify-center bg-[linear-gradient(180deg,#ffffff_0%,#fbfcfd_100%)] p-6 sm:p-10 lg:p-14">
+        <div className="flex flex-col items-center justify-center bg-[var(--lc-surface-subtle)] p-6 sm:p-10 lg:p-14">
           <label
             htmlFor={uploadId}
-            className={`group relative flex w-full max-w-2xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--lc-border-mid)] bg-white px-6 py-10 text-center shadow-sm transition-all hover:border-[var(--lc-accent)] hover:bg-[var(--lc-surface-subtle)] hover:shadow-[var(--shadow-strong)] sm:py-12 ${
+            className={`group relative flex w-full max-w-2xl cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[var(--lc-border-mid)] bg-white px-6 py-10 text-center transition-colors hover:border-[var(--lc-accent)] sm:py-12 ${
               isParsing ? "opacity-60 cursor-not-allowed" : ""
             }`}
           >
             <input id={uploadId} type="file" accept=".csv,text/csv" className="sr-only" onChange={onFileUpload} disabled={isParsing} />
             
-            <div className="lc-icon-tile mb-4 h-14 w-14 transition-transform duration-200 group-hover:scale-105">
+            <div className="lc-icon-tile mb-4 h-14 w-14">
               {emptyStateIcon}
             </div>
             

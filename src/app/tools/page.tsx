@@ -200,10 +200,9 @@ export default function ToolsPage() {
 
               {/* Left Card 7/12 */}
               <div className="lg:col-span-7">
-                <div className="relative flex h-full flex-col items-start overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,#111827_0%,#1d1d1f_55%,#10233b_100%)] p-6 text-white shadow-[var(--shadow-strong)] sm:p-8">
-                  <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-blue-500/15 blur-3xl" />
-                  <div className="relative mb-4 inline-flex items-center gap-1.5 rounded-full border border-blue-300/20 bg-blue-400/10 px-3 py-1.5 text-[11px] font-mono font-medium uppercase tracking-[0.14em] text-blue-100">
-                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> Start here
+                <div className="relative flex h-full flex-col items-start overflow-hidden rounded-xl border border-black bg-[var(--lc-ink)] p-6 text-white sm:p-8">
+                  <div className="relative mb-6 inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-white/55">
+                    <span className="h-px w-8 bg-white/40" aria-hidden="true" /> Start here
                   </div>
                   <h2 className="relative mb-2 font-display text-[1.875rem] font-bold tracking-[-0.025em] text-white">
                     CSV Lead Cleaner
@@ -280,11 +279,12 @@ export default function ToolsPage() {
                   One focused action on your spreadsheet.
                 </h2>
               </div>
-              <div className="flex gap-2">
-                <span className="rounded-full border border-[var(--lc-ink)] bg-[var(--lc-ink)] px-3 py-1 text-xs font-medium text-white">
+              <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.1em]">
+                <span className="font-semibold text-[var(--lc-ink)]">
                   Showing all
                 </span>
-                <span className="rounded-full border border-[var(--lc-border)] bg-transparent px-3 py-1 text-xs font-medium text-[var(--lc-muted)]">
+                <span className="h-3 w-px bg-[var(--lc-border-mid)]" aria-hidden="true" />
+                <span className="text-[var(--lc-muted)]">
                   CSV-first order
                 </span>
               </div>

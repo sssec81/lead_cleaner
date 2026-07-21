@@ -17,22 +17,18 @@ export function FaqAccordion({ items, defaultOpenIndex = 0 }: FaqAccordionProps)
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="border-y border-[var(--lc-border-mid)]">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         return (
           <div
             key={index}
-            className={`group overflow-hidden rounded-2xl border transition-all duration-300 ${
-              isOpen
-                ? "border-[var(--lc-accent)] bg-white shadow-[var(--shadow-strong)] ring-1 ring-[var(--lc-accent-bg)]"
-                : "border-[var(--lc-border)] bg-[var(--lc-surface)] shadow-[var(--shadow)] hover:border-[var(--lc-border-mid)] hover:shadow-[var(--shadow-strong)]"
-            }`}
+            className="group overflow-hidden border-b border-[var(--lc-border)] bg-transparent last:border-b-0"
           >
             <button
               type="button"
               onClick={() => toggle(index)}
-              className="flex min-h-11 w-full cursor-pointer items-center justify-between gap-4 px-5 py-3.5 text-left font-semibold text-[15px] text-[var(--lc-ink)] select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--lc-accent)]"
+              className="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 px-1 py-4 text-left font-semibold text-[15px] text-[var(--lc-ink)] select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--lc-accent)]"
               aria-expanded={isOpen}
             >
               <span className={`transition-colors duration-200 ${isOpen ? "text-[var(--lc-accent)] font-bold" : "group-hover:text-[var(--lc-accent)]"}`}>
@@ -52,8 +48,8 @@ export function FaqAccordion({ items, defaultOpenIndex = 0 }: FaqAccordionProps)
               }`}
             >
               <div className="overflow-hidden">
-                <div className="border-t border-[var(--lc-border)]/5 px-5 pb-4 pt-1 text-sm leading-relaxed text-[var(--lc-muted)]">
-                  <div className="mt-1 rounded-xl bg-[var(--lc-bg)] p-3.5">
+                <div className="max-w-3xl px-1 pb-5 text-sm leading-7 text-[var(--lc-muted)]">
+                  <div>
                     {item.answer}
                   </div>
                 </div>

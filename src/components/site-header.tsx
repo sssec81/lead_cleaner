@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Menu, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ArrowRight, Menu, ShieldCheck, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -48,25 +48,23 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border)] bg-white/88 shadow-[0_1px_12px_rgba(15,23,42,0.035)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/78">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--lc-border-mid)] bg-[rgba(245,244,239,0.94)] backdrop-blur-lg">
+      <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex min-h-11 items-center gap-2.5" aria-label="LeadCleanr home">
-          <span className="lc-brand-mark transition-transform duration-200 group-hover:scale-[1.04]">
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
-          </span>
-          <span className="text-[15px] font-bold tracking-[-0.02em] text-[var(--lc-ink)]">LeadCleanr</span>
+          <span className="lc-brand-mark">LC</span>
+          <span className="text-[15px] font-bold tracking-[-0.035em] text-[var(--lc-ink)]">LeadCleanr</span>
         </Link>
  
-        <nav aria-label="Primary" className="hidden items-center gap-1 rounded-full border border-[var(--lc-border)] bg-black/[0.018] p-1 lg:flex">
+        <nav aria-label="Primary" className="hidden h-full items-center gap-7 lg:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`flex min-h-11 items-center rounded-full px-3.5 py-1 text-[13px] font-medium transition-colors ${
+              className={`relative flex h-full items-center border-b-2 px-0.5 pt-0.5 text-[13px] font-medium transition-colors ${
                 isActive(item.href)
-                  ? "bg-white text-[var(--lc-ink)] shadow-sm ring-1 ring-black/[0.04]"
-                  : "text-[var(--lc-muted)] hover:bg-white/70 hover:text-[var(--lc-ink)]"
+                  ? "border-[var(--lc-ink)] text-[var(--lc-ink)]"
+                  : "border-transparent text-[var(--lc-muted)] hover:text-[var(--lc-ink)]"
               }`}
             >
               {item.label}
@@ -75,7 +73,7 @@ export function SiteHeader() {
         </nav>
  
         <div className="hidden items-center gap-4 lg:flex">
-          <div className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-emerald-700/10 bg-emerald-50/70 px-3 font-sans text-[11px] font-medium text-emerald-800">
+          <div className="inline-flex min-h-8 items-center gap-1.5 border-l border-[var(--lc-border-mid)] pl-4 font-sans text-[11px] font-medium text-[var(--lc-green)]">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
             Processed locally
           </div>
@@ -122,7 +120,7 @@ export function SiteHeader() {
             </nav>
  
             <div className="mt-4 flex flex-col gap-3">
-              <div className="inline-flex min-h-8 w-fit items-center gap-1.5 rounded-full border border-emerald-700/10 bg-emerald-50 px-3 font-sans text-[11px] font-medium text-emerald-800">
+              <div className="inline-flex min-h-8 w-fit items-center gap-1.5 border-l border-[var(--lc-border-mid)] pl-3 font-sans text-[11px] font-medium text-[var(--lc-green)]">
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
                 Processed locally
               </div>

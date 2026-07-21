@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, LoaderCircle, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, LoaderCircle, Mail, ShieldCheck } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 import { trackEvent } from "@/lib/telemetry";
@@ -101,13 +101,12 @@ export function ProWaitlistForm() {
   return (
     <section id="pro-waitlist" aria-labelledby="pro-waitlist-title" className="scroll-mt-24 py-16 lg:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[1.75rem] border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] shadow-[var(--shadow-strong)]">
+        <div className="overflow-hidden rounded-xl border border-[var(--lc-border-mid)] bg-[var(--lc-surface)]">
           <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
-            <div className="relative overflow-hidden bg-[linear-gradient(145deg,#171719_0%,#10233b_100%)] p-7 text-white sm:p-10 lg:p-12">
-              <div aria-hidden="true" className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl" />
-              <div className="relative">
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-blue-100">
-                  <Sparkles className="h-4 w-4" aria-hidden="true" />
+            <div className="relative overflow-hidden border-b border-white/15 bg-[var(--lc-ink)] p-7 text-white sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
+              <div className="relative flex h-full flex-col">
+                <div className="mb-8 flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-white/55">
+                  <span className="h-px w-8 bg-white/40" aria-hidden="true" />
                   Pro early access
                 </div>
                 <h2 id="pro-waitlist-title" className="font-display text-3xl font-bold leading-tight tracking-[-0.04em] sm:text-4xl">
@@ -117,14 +116,14 @@ export function ProWaitlistForm() {
                   Join the list for larger files, saved cleanup presets, and CRM-ready exports. No payment is required today.
                 </p>
 
-                <div className="mt-8 space-y-4">
+                <div className="mt-10 space-y-4 border-t border-white/15 pt-8">
                   {[
                     "Early access before the public Pro launch",
                     "A chance to influence CRM presets and limits",
                     "No card and no automatic subscription",
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3 text-sm text-white/80">
-                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" aria-hidden="true" />
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-white" aria-hidden="true" />
                       <span>{item}</span>
                     </div>
                   ))}
@@ -228,7 +227,7 @@ export function ProWaitlistForm() {
                     ) : (
                       <>
                         Join Pro waitlist
-                        <Sparkles className="h-4 w-4" aria-hidden="true" />
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
                       </>
                     )}
                   </button>

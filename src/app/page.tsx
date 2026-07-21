@@ -13,7 +13,6 @@ import {
   Upload,
   Users,
   Wand2,
-  Plus,
 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
@@ -184,7 +183,8 @@ export default function HomePage() {
       <section className="home-hero mx-auto max-w-7xl overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-16">
           <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--lc-border)] bg-white/80 px-3 py-1.5 text-xs font-semibold text-[var(--lc-muted)] shadow-sm backdrop-blur">
+            <div className="mb-6 inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--lc-muted)]">
+              <span className="h-px w-8 bg-[var(--lc-border-mid)]" aria-hidden="true" />
               <ShieldCheck className="h-4 w-4 text-[var(--lc-green)]" aria-hidden="true" />
               Private lead operations, in your browser
             </div>
@@ -424,7 +424,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="mt-5 text-lg font-semibold text-[var(--lc-ink)]">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[var(--lc-muted)]">{item.text}</p>
-                <div className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--lc-border-mid)] px-4 py-1 text-sm font-semibold text-[var(--lc-ink)] transition-colors group-hover:border-[var(--lc-accent)] group-hover:text-[var(--lc-accent)]">
+                <div className="mt-5 inline-flex min-h-11 items-center gap-2 border-b border-[var(--lc-border-mid)] py-1 text-sm font-semibold text-[var(--lc-ink)] transition-colors group-hover:border-[var(--lc-accent)] group-hover:text-[var(--lc-accent)]">
                   {item.cta}
                   <ArrowRight className="h-4 w-4" />
                 </div>
