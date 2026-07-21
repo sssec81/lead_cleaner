@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 import { PageFrame } from "@/components/page-frame";
-import { FaqJsonLd, type FaqItem, getSiteUrl } from "@/lib/seo";
+import { FaqJsonLd, SiteJsonLd, type FaqItem, getSiteUrl } from "@/lib/seo";
 import { FaqAccordion } from "@/components/faq-accordion";
 
 const processSteps = [
@@ -39,28 +39,28 @@ const processSteps = [
 
 const quickStarts = [
   {
-    href: "/tools/csv-lead-cleaner?crm=hubspot",
+    href: "/tools/hubspot-csv-import-cleaner",
     title: "HubSpot import preflight",
     text: "Map contact properties and catch blocked rows before HubSpot import.",
     icon: FileSpreadsheet,
     cta: "Prepare for HubSpot"
   },
   {
-    href: "/tools/csv-lead-cleaner?crm=salesforce",
+    href: "/tools/salesforce-csv-import-cleaner",
     title: "Salesforce lead preflight",
     text: "Validate required lead values and export Salesforce-ready columns.",
     icon: Users,
     cta: "Prepare for Salesforce"
   },
   {
-    href: "/tools/csv-lead-cleaner?crm=apollo",
+    href: "/tools/apollo-csv-import-cleaner",
     title: "Apollo contact preflight",
     text: "Map contact identity and company fields before uploading to Apollo.",
     icon: Mail,
     cta: "Prepare for Apollo"
   },
   {
-    href: "/tools/csv-lead-cleaner?crm=pipedrive",
+    href: "/tools/pipedrive-csv-import-cleaner",
     title: "Pipedrive people preflight",
     text: "Build person and organization fields with row-level readiness checks.",
     icon: Globe,
@@ -115,14 +115,14 @@ const cleanupGroups = [
 ];
 
 export const metadata: Metadata = {
-  title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+  title: { absolute: "LeadCleanr — Clean Lead CSVs Before CRM Import" },
   description:
-    "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser — no signup or upload.",
+    "Clean lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal addresses locally in your browser. No signup required.",
   alternates: { canonical: `${getSiteUrl()}/` },
   openGraph: {
-    title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+    title: "LeadCleanr — Clean Lead CSVs Before CRM Import",
     description:
-      "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser — no signup or upload.",
+      "Clean lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal addresses locally in your browser.",
     url: `${getSiteUrl()}/`,
     siteName: "LeadCleanr",
     type: "website",
@@ -137,9 +137,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+    title: "LeadCleanr — Clean Lead CSVs Before CRM Import",
     description:
-      "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser — no signup or upload.",
+      "Clean lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal addresses locally in your browser.",
     images: [`${getSiteUrl()}/twitter-image`],
   },
 };
@@ -180,6 +180,7 @@ export default function HomePage() {
   return (
     <PageFrame>
       <FaqJsonLd faqEntries={homepageFaqs} />
+      <SiteJsonLd />
       <section className="home-hero mx-auto max-w-7xl overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-16">
           <div>
@@ -189,7 +190,7 @@ export default function HomePage() {
               Private lead operations, in your browser
             </div>
             <h1 className="font-display text-[38px] font-bold leading-[1.06] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-[50px] lg:text-[60px]">
-              Prepare lead CSVs.
+              Clean lead CSVs.
               <span className="mt-1 block text-[var(--lc-accent)]">Import with confidence.</span>
             </h1>
             <p className="mt-5 max-w-xl text-[16px] leading-7 text-[var(--lc-muted)] sm:text-[18px]">

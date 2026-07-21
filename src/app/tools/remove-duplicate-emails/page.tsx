@@ -6,9 +6,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
- title: "Remove Duplicate Emails Online — Private Email Deduper",
+ title: "Remove Duplicate Emails Online",
  description:
- "Remove duplicate emails online. Keep one clean copy of each valid address and export the result. Core cleanup runs locally in your browser, with no signup required.",
+ "Remove duplicate emails online, keep one clean copy of each address, and export the result locally in your browser. No signup required.",
  path: "/tools/remove-duplicate-emails",
  keywords: [
  "remove duplicate emails",
@@ -30,14 +30,14 @@ export default function RemoveDuplicateEmailsPage() {
  />
  <ToolJsonLd
  name="Remove Duplicate Emails"
- title="Remove Duplicate Emails Online — Private Email Deduper"
+ title="Remove Duplicate Emails Online"
  description="Remove duplicate emails online. Keep one clean copy of each valid address and export the result. Core cleanup runs locally in your browser, with no signup required."
  path="/tools/remove-duplicate-emails"
  category="BusinessApplication"
  />
  <TextToolPageShell
  eyebrow="Remove Duplicate Emails"
- title="Keep one clean copy of each address and drop the repetition."
+ title="Remove duplicate emails from your list."
  intro="Paste repeated lead lists, newsletter exports, or CRM contact blocks. This tool is for the narrower case where the addresses themselves are mostly fine but the list keeps echoing the same rows."
  quote="Sometimes the list is not broken. It is just louder than it needs to be."
  tool={<RemoveDuplicateEmailsTool />}

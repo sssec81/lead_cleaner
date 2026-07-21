@@ -56,7 +56,7 @@ const sections = [
 ];
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — LeadCleanr",
+  title: "Privacy Policy",
   description: "LeadCleanr privacy policy. Your raw CSV and pasted text stay in your browser during normal cleanup operations.",
   alternates: { canonical: `${getSiteUrl()}/privacy` },
 };

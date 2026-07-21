@@ -8,9 +8,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Extract Emails from CSV Online — Private Browser Tool",
+  title: "Extract Emails from CSV Online",
   description:
-    "Extract and clean emails from CSV files. Detect the email column, pull addresses out of messy cell text, remove duplicates and invalid rows, and download a clean list locally in your browser.",
+    "Extract emails from CSV files, detect the email column, remove duplicates and invalid rows, then download a clean list from your browser.",
   path: "/tools/extract-emails-from-csv",
   keywords: [
     "extract emails from csv",
@@ -32,7 +32,7 @@ export default function ExtractEmailsFromCsvPage() {
       />
       <ToolJsonLd
         name="Extract Emails from CSV"
-        title="Extract Emails from CSV Online — Private Browser Tool"
+        title="Extract Emails from CSV Online"
         description="Extract and clean emails from CSV files. Detect the email column, pull addresses out of messy cell text, remove duplicates and invalid rows, and download a clean list locally in your browser."
         path="/tools/extract-emails-from-csv"
         category="BusinessApplication"

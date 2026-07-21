@@ -5,9 +5,9 @@ import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
- title: "Remove Duplicate URLs Online — Free List Cleaner",
+ title: "Remove Duplicate URLs Online",
  description:
- "Paste a messy list of URLs and instantly remove all duplicates. Browser-first processing keeps your data secure without uploading.",
+ "Remove duplicate URLs, normalize inconsistent links, filter invalid entries, and export a clean list locally in your browser.",
  path: "/tools/remove-duplicate-urls",
  keywords: [
  "remove duplicate urls",
@@ -28,7 +28,7 @@ export default function RemoveDuplicateUrlsPage() {
  ]}
  />
  <ToolJsonLd
- title="Remove Duplicate URLs Online — Free List Cleaner"
+ title="Remove Duplicate URLs Online"
  description="Paste a messy list of URLs and instantly remove all duplicates. Browser-first processing keeps your data secure without uploading."
  path="/tools/remove-duplicate-urls"
  category="BusinessApplication"

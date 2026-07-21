@@ -44,6 +44,12 @@ export const metadata: Metadata = {
  "lead list cleanup",
  "browser-based csv cleaner",
  ],
+ verification: {
+ google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+ other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+ ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+ : undefined,
+ },
  openGraph: {
  title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
  description:

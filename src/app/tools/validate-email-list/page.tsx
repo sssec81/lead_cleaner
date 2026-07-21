@@ -6,9 +6,9 @@ import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
- title: "Free Email List Validator for Syntax Checks",
+ title: "Email List Syntax Validator",
  description:
- "Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM.",
+ "Check an email list for invalid syntax, missing @ symbols, duplicates, and formatting errors before CRM import. This does not verify mailboxes.",
  path: "/tools/validate-email-list",
  keywords: [
  "validate email list",
@@ -31,14 +31,14 @@ export default function ValidateEmailListPage() {
  />
  <ToolJsonLd
  name="Validate Email List"
- title="Free Email List Validator for Syntax Checks"
+ title="Email List Syntax Validator"
  description="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM."
  path="/tools/validate-email-list"
  category="BusinessApplication"
  />
  <TextToolPageShell
  eyebrow="Email List Validator"
- title="Free Email List Validator for Syntax Checks"
+ title="Validate email list syntax before CRM import."
  intro="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM."
  quote="Catch invalid email formats before outreach."
  asideDescription="Checks formatting only. Domain, MX, and mailbox verification are coming to Pro — so you can fix syntax now without worrying about deliverability."

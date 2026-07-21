@@ -89,7 +89,7 @@ const operatingRules = [
 ];
 
 export const metadata: Metadata = {
-  title: "Terms of Service — LeadCleanr",
+  title: "Terms of Service",
   description:
     "LeadCleanr terms of service, acceptable use, data handling answers, accuracy expectations, and product rules.",
   alternates: {

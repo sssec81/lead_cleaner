@@ -6,9 +6,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
- title: "Clean Email List Online — Remove Duplicates & Invalid Emails",
+ title: "Clean Email List Online",
  description:
- "Clean email lists online. Lowercase addresses, filter duplicates, remove invalid syntax, and download a clean list. Core cleanup runs locally in your browser, with no signup required.",
+ "Clean an email list online. Normalize addresses, remove duplicates and invalid syntax, then export locally in your browser without signing up.",
  path: "/tools/clean-email-list",
  keywords: [
  "clean email list",
@@ -29,7 +29,7 @@ export default function CleanEmailListPage() {
  ]}
  />
  <ToolJsonLd
- title="Clean Email List Online — Remove Duplicates & Invalid Emails"
+ title="Clean Email List Online"
  name="Clean Email List"
  description="Clean email lists online. Lowercase addresses, filter duplicates, remove invalid syntax, and download a clean list. Core cleanup runs locally in your browser, with no signup required."
  path="/tools/clean-email-list"
@@ -37,7 +37,7 @@ export default function CleanEmailListPage() {
  />
  <TextToolPageShell
  eyebrow="Clean Email List"
- title="Normalize the addresses and make the list usable again."
+ title="Clean and normalize an email list online."
  intro="Paste a messy email list from outreach notes, spreadsheet exports, or copied lead sources. This tool trims noise, lowercases the addresses, removes invalid entries, and prepares a cleaner output."
  quote="The difference between a messy list and a usable one is usually ten small fixes repeated hundreds of times."
  tool={<CleanEmailListTool />}

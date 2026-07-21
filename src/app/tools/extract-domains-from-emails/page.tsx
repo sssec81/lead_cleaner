@@ -9,7 +9,7 @@ import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/li
 export const metadata: Metadata = buildToolMetadata({
  title: "Extract Domains from Emails Online",
  description:
- "Extract domains from emails and URLs. Parse unique domains from contact records to isolate corporate websites and accounts. Core cleanup runs locally in your browser, with no signup required.",
+ "Extract unique domains from emails and URLs for account mapping, enrichment, and CRM cleanup. Processing runs locally in your browser.",
  path: "/tools/extract-domains-from-emails",
  keywords: [
  "extract domains from emails",
@@ -51,7 +51,7 @@ export default function ExtractDomainsFromEmailsPage() {
  <FaqJsonLd faqEntries={faqEntries} />
  <TextToolPageShell
  eyebrow="Extract Domains from Emails"
- title="Isolate company domains from lead emails and URLs."
+ title="Extract domains from emails and URLs."
  heroVariant="streamlined"
  intro="Paste a raw list of prospect emails or web links. This tool strips out the personal prefixes and outputs a clean, deduplicated list of unique domains, perfect for CRM account mapping and target enrichment."
  quote="Outreach targets companies, not just addresses. Clean the domains first."

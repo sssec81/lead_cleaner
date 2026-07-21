@@ -8,9 +8,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Extract Phone Numbers from CSV Online — Free Tool",
+  title: "Extract Phone Numbers from CSV",
   description:
-    "Upload a CSV file to automatically detect the phone column, pull phone numbers out of messy cell text, normalize valid matches, and export a clean list locally in your browser.",
+    "Extract phone numbers from CSV files, detect the correct column, normalize valid matches, and export a clean list locally in your browser.",
   path: "/tools/extract-phone-numbers-from-csv",
   keywords: [
     "extract phone numbers from csv",
@@ -32,7 +32,7 @@ export default function ExtractPhoneNumbersFromCsvPage() {
       />
       <ToolJsonLd
         name="Extract Phone Numbers from CSV"
-        title="Extract Phone Numbers from CSV Online — Free Tool"
+        title="Extract Phone Numbers from CSV"
         description="Upload a CSV file to automatically detect the phone column, pull phone numbers out of messy cell text, normalize valid matches, and export a clean list locally in your browser."
         path="/tools/extract-phone-numbers-from-csv"
         category="BusinessApplication"
@@ -42,7 +42,7 @@ export default function ExtractPhoneNumbersFromCsvPage() {
           <div className="mx-auto max-w-2xl pb-6 pt-12 text-center sm:mx-0 sm:text-left">
             <div className="section-eyebrow mb-4">CSV TOOL</div>
             <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
-              Extract Phones from CSV
+              Extract Phone Numbers from CSV
             </h1>
             <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
               Upload your CSV, find the phone column, normalize clean matches,

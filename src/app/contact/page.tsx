@@ -53,7 +53,7 @@ const messageTips = [
 ];
 
 export const metadata: Metadata = {
- title: "Contact Us — LeadCleanr",
+ title: "Contact",
  description: "Get in touch with LeadCleanr support, report bugs, or request custom API access and business limits.",
  alternates: { canonical: `${getSiteUrl()}/contact` },
 };

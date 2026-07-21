@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { FaqItem } from "@/lib/seo";
+import { FaqJsonLd, type FaqItem } from "@/lib/seo";
 import { FaqAccordion } from "@/components/faq-accordion";
 
 type ContentItem = {
@@ -34,6 +34,7 @@ export function ToolSeoSections({
 }: ToolSeoSectionsProps) {
   return (
     <div className="mt-12 space-y-12 border-t border-[var(--lc-border)] pt-12">
+      <FaqJsonLd faqEntries={faqs} />
       <section>
         <div className="section-anchor-row mb-4">
           <span className="section-anchor-label">How it works</span>

@@ -10,6 +10,10 @@ const staticRoutes: Array<{
  { route: "", changeFrequency: "weekly", priority: 1.0 },
  { route: "/tools", changeFrequency: "weekly", priority: 0.9 },
  { route: "/tools/csv-lead-cleaner", changeFrequency: "weekly", priority: 0.95 },
+ { route: "/tools/hubspot-csv-import-cleaner", changeFrequency: "monthly", priority: 0.88 },
+ { route: "/tools/salesforce-csv-import-cleaner", changeFrequency: "monthly", priority: 0.86 },
+ { route: "/tools/apollo-csv-import-cleaner", changeFrequency: "monthly", priority: 0.84 },
+ { route: "/tools/pipedrive-csv-import-cleaner", changeFrequency: "monthly", priority: 0.82 },
  { route: "/tools/extract-emails-from-csv", changeFrequency: "weekly", priority: 0.9 },
  { route: "/tools/extract-phone-numbers-from-csv", changeFrequency: "weekly", priority: 0.88 },
  { route: "/tools/validate-email-list", changeFrequency: "weekly", priority: 0.88 },
@@ -24,7 +28,6 @@ const staticRoutes: Array<{
  { route: "/tools/extract-domains-from-emails", changeFrequency: "monthly", priority: 0.76 },
  { route: "/tools/remove-duplicate-phone-numbers", changeFrequency: "monthly", priority: 0.72 },
  { route: "/tools/remove-duplicate-urls", changeFrequency: "monthly", priority: 0.7 },
- { route: "/tools/count-words-characters-text", changeFrequency: "monthly", priority: 0.55 },
  { route: "/tools/convert-csv-to-json", changeFrequency: "monthly", priority: 0.72 },
  { route: "/pricing", changeFrequency: "monthly", priority: 0.7 },
  { route: "/privacy", changeFrequency: "monthly", priority: 0.5 },
@@ -34,13 +37,9 @@ const staticRoutes: Array<{
 
 export default function sitemap(): MetadataRoute.Sitemap {
  const siteUrl = getSiteUrl();
- const now = process.env.BUILD_TIME 
- ? new Date(process.env.BUILD_TIME) 
- : new Date();
 
  return staticRoutes.map(({ route, changeFrequency, priority }) => ({
  url: `${siteUrl}${route}`,
- lastModified: now,
  changeFrequency,
  priority,
  }));

@@ -6,9 +6,9 @@ import { PageFrame } from "@/components/page-frame";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Free CSV to JSON Converter — Convert CSV Online",
+  title: "CSV to JSON Converter Online",
   description:
-    "Upload a CSV file and convert it into a structured JSON array instantly. Runs locally in your browser, with no signup and no server upload.",
+    "Convert a CSV file into structured JSON locally in your browser. Preview the output and download JSON without signup or server upload.",
   path: "/tools/convert-csv-to-json",
   keywords: [
     "csv to json converter",
@@ -117,7 +117,7 @@ export default function ConvertCsvToJsonPage() {
         ]}
       />
       <ToolJsonLd
-        title="Free CSV to JSON Converter — Convert CSV Online"
+        title="CSV to JSON Converter Online"
         description="Upload a CSV file and convert it into a structured JSON array instantly. Runs locally in your browser, with no signup and no server upload."
         path="/tools/convert-csv-to-json"
         category="BusinessApplication"

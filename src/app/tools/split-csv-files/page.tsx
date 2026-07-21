@@ -8,9 +8,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Split CSV into Multiple Files | LeadCleanr",
+  title: "Split CSV into Multiple Files",
   description:
-    "Split large lead list CSV files into smaller chunks to bypass CRM import limits. Generate a ZIP file with your separated rows instantly in the browser.",
+    "Split a large CSV into smaller files for CRM import limits. Choose the row count and download the separated files as a ZIP in your browser.",
   path: "/tools/split-csv-files",
   keywords: ["split csv files", "divide csv", "split spreadsheet", "csv splitter"],
 });

@@ -54,7 +54,7 @@ const decisionRules = [
 ];
 
 export const metadata: Metadata = {
- title: "Pricing — LeadCleanr",
+ title: "Pricing",
  description: "LeadCleanr pricing for browser-first CSV lead cleanup workflows, from free discovery to heavier operational use.",
  alternates: { canonical: `${getSiteUrl()}/pricing` },
 };

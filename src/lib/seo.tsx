@@ -132,6 +132,40 @@ export function FaqJsonLd({ faqEntries }: { faqEntries: FaqItem[] }) {
  return <JsonLd data={jsonLd} />;
 }
 
+export function SiteJsonLd() {
+ const siteUrl = getSiteUrl();
+ const organizationId = `${siteUrl}/#organization`;
+ const websiteId = `${siteUrl}/#website`;
+ const jsonLd = {
+ "@context": "https://schema.org",
+ "@graph": [
+ {
+ "@type": "Organization",
+ "@id": organizationId,
+ name: "LeadCleanr",
+ url: siteUrl,
+ logo: {
+ "@type": "ImageObject",
+ url: `${siteUrl}/icon-512.png`,
+ width: 512,
+ height: 512,
+ },
+ },
+ {
+ "@type": "WebSite",
+ "@id": websiteId,
+ url: siteUrl,
+ name: "LeadCleanr",
+ description: "Browser-first tools for cleaning lead CSV files before CRM import.",
+ publisher: { "@id": organizationId },
+ inLanguage: "en",
+ },
+ ],
+ };
+
+ return <JsonLd data={jsonLd} />;
+}
+
 export type BreadcrumbItem = {
  name: string;
  url: string;

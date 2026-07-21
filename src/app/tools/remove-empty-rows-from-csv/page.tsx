@@ -8,9 +8,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Remove Empty Rows from CSV Online — Free Tool",
+  title: "Remove Empty Rows from CSV",
   description:
-    "Upload a CSV to instantly delete all empty and blank rows. Export a perfectly clean spreadsheet without opening Excel.",
+    "Remove empty and blank rows from a CSV, review the cleaned spreadsheet, and export the result locally without opening Excel.",
   path: "/tools/remove-empty-rows-from-csv",
   keywords: [
     "remove empty rows from csv",
@@ -32,7 +32,7 @@ export default function RemoveEmptyRowsFromCsvPage() {
       />
       <ToolJsonLd
         name="Remove Empty Rows from CSV"
-        title="Remove Empty Rows from CSV Online — Free Tool"
+        title="Remove Empty Rows from CSV"
         description="Upload a CSV to instantly delete all empty and blank rows. Export a perfectly clean spreadsheet without opening Excel."
         path="/tools/remove-empty-rows-from-csv"
         category="UtilitiesApplication"

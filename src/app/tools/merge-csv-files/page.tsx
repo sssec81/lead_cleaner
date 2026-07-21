@@ -8,9 +8,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Merge CSV Files Online — Free Data Tool",
+  title: "Merge CSV Files Online",
   description:
-    "Combine multiple CSV files into one master dataset. Headers are automatically aligned and matched. Free, secure, browser-side processing.",
+    "Merge multiple CSV files into one dataset. Align matching headers automatically, preview the result, and export locally in your browser.",
   path: "/tools/merge-csv-files",
   keywords: ["merge csv files", "combine csv", "join csv files", "csv merger"],
 });
@@ -27,7 +27,7 @@ export default function MergeCsvFilesPage() {
       />
       <ToolJsonLd
         name="Merge CSV Files"
-        title="Merge CSV Files Online — Free Data Tool"
+        title="Merge CSV Files Online"
         description="Combine multiple CSV files into one master dataset. Headers are automatically aligned and matched. Free, secure, browser-side processing."
         path="/tools/merge-csv-files"
         category="UtilitiesApplication"

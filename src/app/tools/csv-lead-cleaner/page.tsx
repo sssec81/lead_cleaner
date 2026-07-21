@@ -8,9 +8,9 @@ import { ToolSeoSections } from "@/components/tool-seo-sections";
 import { BreadcrumbJsonLd, buildToolMetadata, ToolJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
-  title: "Free CSV Lead Cleaner for Sales, CRM & Outreach Lists",
+  title: "CSV Lead Cleaner for CRM Imports",
   description:
-    "Clean messy lead CSVs before CRM import. Remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes locally in your browser.",
+    "Clean lead CSVs before CRM import. Remove duplicate rows, invalid emails, blank fields, and personal addresses locally in your browser.",
   path: "/tools/csv-lead-cleaner",
   keywords: [
     "csv lead cleaner",
@@ -33,7 +33,7 @@ export default function CsvLeadCleanerPage() {
       />
       <ToolJsonLd
         name="CSV Lead Cleaner"
-        title="Free CSV Lead Cleaner for Sales, CRM & Outreach Lists"
+        title="CSV Lead Cleaner for CRM Imports"
         description="Clean messy lead CSVs before CRM import. Remove duplicate rows, invalid emails, blank fields, personal emails, and role-based inboxes locally in your browser."
         path="/tools/csv-lead-cleaner"
         category="BusinessApplication"
@@ -43,7 +43,7 @@ export default function CsvLeadCleanerPage() {
           <div className="mx-auto max-w-2xl pb-6 pt-12 text-center sm:mx-0 sm:text-left">
             <div className="section-eyebrow mb-4">CRM IMPORT PREFLIGHT</div>
             <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
-              Prepare a CRM import that passes the first time
+              CSV Lead Cleaner for CRM Imports
             </h1>
             <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
               Choose HubSpot, Salesforce, Apollo, or Pipedrive. LeadCleanr cleans

@@ -7,9 +7,9 @@ import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata({
- title: "Free Phone Number Extractor from Text",
+ title: "Extract Phone Numbers from Text",
  description:
- "Paste messy notes, copied pages, logs, or research scraps to extract phone numbers, remove duplicates, and export a clean list.",
+ "Extract phone numbers from text, notes, and copied pages. Normalize valid matches, remove duplicates, and export a clean list in your browser.",
  path: "/tools/extract-phone-numbers-from-text",
  keywords: [
  "extract phone numbers from text",
@@ -44,7 +44,7 @@ export default function ExtractPhoneNumbersFromTextPage() {
  ]}
  />
  <ToolJsonLd
- title="Free Phone Number Extractor from Text"
+ title="Extract Phone Numbers from Text"
  description="Paste messy notes, copied pages, logs, or research scraps to extract phone numbers, remove duplicates, and export a clean list."
  path="/tools/extract-phone-numbers-from-text"
  category="BusinessApplication"
@@ -52,7 +52,7 @@ export default function ExtractPhoneNumbersFromTextPage() {
  <FaqJsonLd faqEntries={faqEntries} />
  <TextToolPageShell
  eyebrow="Phone Number Extractor"
- title="Free Phone Number Extractor from Text"
+ title="Extract Phone Numbers from Text"
  heroVariant="streamlined"
  intro="Paste messy notes, copied pages, logs, or research scraps to extract phone numbers, remove duplicates, and export a clean list."
  quote="Extract clean phone numbers from messy text in your browser."

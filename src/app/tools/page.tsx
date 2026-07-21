@@ -135,7 +135,7 @@ const cleanupTools = [
 ];
 
 export const metadata: Metadata = {
-  title: "All Lead Cleaning Tools — LeadCleanr",
+  title: "Lead Cleaning Tools",
   description:
     "Choose the right LeadCleanr workflow fast. Start with the CSV cleaner for spreadsheets, then use compact helper tools only when the input is still raw text.",
   alternates: {

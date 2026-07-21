@@ -4,10 +4,11 @@ import { CountWordsCharactersTool } from "@/components/count-words-characters-to
 import { TextToolPageShell } from "@/components/text-tool-page-shell";
 import { buildToolMetadata, ToolJsonLd, BreadcrumbJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = buildToolMetadata({
- title: "Count Words and Characters Online — Free Text Tool",
+export const metadata: Metadata = {
+ ...buildToolMetadata({
+ title: "Word and Character Counter",
  description:
- "Instantly count words, characters, sentences, and paragraphs in your text. A fast, free, browser-side tool for writers and marketers.",
+ "Count words, characters, sentences, and paragraphs instantly. Text remains in your browser and is never uploaded for processing.",
  path: "/tools/count-words-characters-text",
  keywords: [
  "word counter",
@@ -15,7 +16,9 @@ export const metadata: Metadata = buildToolMetadata({
  "count words",
  "text length checker",
  ],
-});
+ }),
+ robots: { index: false, follow: true },
+};
 
 export default function CountWordsCharactersPage() {
  return (
@@ -28,7 +31,7 @@ export default function CountWordsCharactersPage() {
  ]}
  />
  <ToolJsonLd
- title="Count Words and Characters Online — Free Text Tool"
+ title="Word and Character Counter"
  description="Instantly count words, characters, sentences, and paragraphs in your text. A fast, free, browser-side tool for writers and marketers."
  path="/tools/count-words-characters-text"
  category="BusinessApplication"
