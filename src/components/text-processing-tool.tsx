@@ -752,7 +752,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                 </div>
               ) : (
                 <div className="flex flex-col">
-                  <div className={`flex items-center border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] transition-[padding,gap] ${resultDensity === "compact" ? "gap-2 px-4 py-0" : "gap-4 px-6 py-2"}`}>
+                  <div className={`lc-result-grid border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] transition-[padding] ${resultDensity === "compact" ? "px-4 py-0" : "px-6 py-2"}`}>
                     <button
                       type="button"
                       onClick={toggleSelectAllPreviewed}
@@ -763,17 +763,15 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                         {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).some((i) => i.selected) && <Check className="h-2.5 w-2.5 text-[var(--lc-accent)]" />}
                       </span>
                     </button>
-                    <div className="flex-1 flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">
-                      <span className="w-16">STATUS</span>
-                      <span>{csvHeader.toUpperCase()}</span>
-                    </div>
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">ACTIONS</span>
+                    <span className="lc-result-status font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">Status</span>
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">{csvHeader}</span>
+                    <span className="text-right font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">Actions</span>
                   </div>
                   <div className="divide-y divide-[var(--lc-border)] bg-white">
                     {workspace.slice(0, WORKSPACE_PREVIEW_LIMIT).map((item, index) => (
                       <div
                         key={item.id}
-                        className={`group relative flex items-center transition-[padding,gap,background-color] hover:bg-black/[0.005] ${resultDensity === "compact" ? "gap-2 px-4 py-0" : "gap-4 px-6 py-2"} ${item.selected ? "bg-[var(--lc-accent-bg)]" : ""}`}
+                        className={`lc-result-grid group relative transition-[padding,background-color] hover:bg-black/[0.005] ${resultDensity === "compact" ? "px-4 py-0" : "px-6 py-2"} ${item.selected ? "bg-[var(--lc-accent-bg)]" : ""}`}
                       >
                         <button
                           type="button"
@@ -786,13 +784,13 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                           </span>
                         </button>
                         
-                        <div className="flex w-16 shrink-0 items-center">
-                          <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-100">
+                        <div className="lc-result-status flex items-center">
+                          <span className="lc-status-pill lc-status-pill-success">
                             Valid
                           </span>
                         </div>
                         
-                        <div className="flex flex-1 items-center">
+                        <div className="flex min-w-0 items-center">
                           <input
                             aria-label="Edit item value"
                             value={item.value}
@@ -801,7 +799,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
                           />
                         </div>
  
-                        <div className="flex shrink-0 items-center gap-0.5 pl-4 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+                        <div className="flex items-center justify-end gap-0.5 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                           <button
                             type="button"
                             onClick={() => toggleWorkspaceLock(item.id)}

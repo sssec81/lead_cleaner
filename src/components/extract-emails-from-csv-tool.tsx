@@ -369,25 +369,26 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
       preview={
         <div className="flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]">
           {extracted.results.length ? (
-            <div className="overflow-x-auto rounded-lg">
-              <table className="min-w-full text-left text-sm whitespace-nowrap border-collapse">
-                <thead className="sticky top-0 z-10 bg-[var(--lc-surface-raised)]">
+            <div className="lc-table-scroll">
+              <table aria-label="Extracted email preview" className="lc-data-table lc-data-table-compact">
+                <caption className="sr-only">Valid email addresses extracted from the selected CSV column.</caption>
+                <thead>
                   <tr>
-                    <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] w-8 border-b border-[var(--lc-border)]">#</th>
-                    <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">STATUS</th>
-                    <th className="px-3 py-2.5 font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] border-b border-[var(--lc-border)]">EMAIL</th>
+                    <th scope="col" className="lc-data-table-index">#</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Email</th>
                   </tr>
                 </thead>
                 <tbody>
                   {extracted.results.slice(0, PREVIEW_LIMIT).map((email, idx) => (
-                    <tr key={idx} className="hover:bg-[var(--lc-bg)] border-b border-[var(--lc-border)] last:border-0 transition-colors group">
-                      <td className="px-3 py-2.5 font-mono text-[12px] text-[var(--lc-hint)] w-8">{idx + 1}</td>
-                      <td className="px-3 py-2.5">
-                        <span className="inline-flex items-center rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-medium text-emerald-700">
+                    <tr key={email}>
+                      <td className="lc-data-table-index">{idx + 1}</td>
+                      <td>
+                        <span className="lc-status-pill lc-status-pill-success">
                           Valid
                         </span>
                       </td>
-                      <td className="px-3 py-2.5 font-mono text-[13px] text-[var(--lc-ink)] max-w-[280px] truncate" title={email}>{email}</td>
+                      <td className="lc-data-table-value" title={email}>{email}</td>
                     </tr>
                   ))}
                 </tbody>

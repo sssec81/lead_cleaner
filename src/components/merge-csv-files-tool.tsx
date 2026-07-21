@@ -408,17 +408,21 @@ export function MergeCsvFilesTool() {
  </div>
  </div>
 
- <div className="mt-6 w-full rounded-xl border border-slate-200 bg-slate-50 p-6 overflow-x-auto">
- <h3 className="text-sm font-semibold text-slate-800 mb-4">Column Mapping Preview</h3>
- <div className="overflow-x-auto rounded-lg">
- <table className="w-full text-left text-sm whitespace-nowrap">
+ <div className="mt-6 w-full overflow-hidden rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface)]">
+ <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-4 py-3 sm:px-5">
+ <h3 className="text-sm font-semibold text-[var(--lc-ink)]">Column mapping</h3>
+ <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)]">{mergedHeaders.length} columns</span>
+ </div>
+ <div className="lc-table-scroll">
+ <table aria-label="Merged CSV column mapping" className="lc-data-table">
+ <caption className="sr-only">How source CSV columns map into the merged output.</caption>
  <thead>
- <tr className="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
- <th className="pb-3 pr-6 font-medium">Merged Column</th>
- <th className="pb-3 font-medium">Found in Files</th>
+ <tr>
+ <th scope="col">Merged column</th>
+ <th scope="col">Source columns</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-100">
+ <tbody>
  {mergedHeaders.map((h, i) => {
  const foundIn = fileEntries.flatMap((fileEntry) =>
  fileEntry.headerMappings
@@ -429,12 +433,12 @@ export function MergeCsvFilesTool() {
  })),
  );
  return (
- <tr key={i}>
- <td className="py-3 pr-6 font-medium text-slate-800">{h}</td>
- <td className="py-3 text-slate-600">
+ <tr key={h}>
+ <td className="font-medium text-[var(--lc-ink)]">{h}</td>
+ <td>
  <div className="flex flex-wrap gap-1.5">
  {foundIn.map((entry, idx) => (
- <span key={idx} className="inline-flex items-center rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[11px] text-slate-500">
+ <span key={`${entry.fileName}-${entry.originalHeader}-${idx}`} className="inline-flex items-center rounded-md border border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-2 py-1 font-mono text-[11px] text-[var(--lc-muted)]">
  {entry.fileName}: {entry.originalHeader}
  </span>
  ))}
