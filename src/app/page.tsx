@@ -183,7 +183,7 @@ export default function HomePage() {
     <PageFrame>
       <FaqJsonLd faqEntries={homepageFaqs} />
       <SiteJsonLd />
-      <section className="home-hero mx-auto max-w-7xl overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
+      <section className="home-hero mx-auto max-w-7xl px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-16">
           <div>
             <div className="mb-6 inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--lc-muted)]">
@@ -234,6 +234,13 @@ export default function HomePage() {
                 <p className="font-display text-lg font-bold text-[var(--lc-ink)]">0</p>
                 <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">uploads needed</p>
               </div>
+            </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--lc-muted)]" aria-label="Supported CRM destinations">
+              <span className="font-semibold text-[var(--lc-ink)]">Ready for</span>
+              {["HubSpot", "Salesforce", "Apollo", "Pipedrive"].map((crm) => (
+                <span key={crm} className="font-medium">{crm}</span>
+              ))}
             </div>
           </div>
  
@@ -325,13 +332,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-[var(--lc-border)] bg-[var(--lc-surface)] py-12">
+      <section className="border-b border-[var(--lc-border)] bg-[var(--lc-surface)] py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-3 md:items-start">
             {processSteps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <div key={step.title} className="flex items-start gap-4 rounded-2xl p-2 transition-colors hover:bg-[var(--lc-bg)]">
+                <div key={step.title} className="flex items-start gap-4 rounded-[var(--radius-card)] p-3 transition-colors hover:bg-[var(--lc-bg)]">
                   <div className="lc-icon-tile h-11 w-11 shrink-0">
                     <Icon className="h-5 w-5" />
                   </div>
@@ -351,7 +358,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-4xl">
             Built for messy lead workflows
@@ -376,7 +383,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-t border-[var(--lc-border)] bg-[var(--lc-bg)] py-12">
+      <section className="border-y border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-4xl">
@@ -405,7 +412,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <p className="section-eyebrow">CRM Import Workflows</p>
         <div className="mt-3 flex items-end justify-between gap-6">
           <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">

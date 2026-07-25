@@ -97,7 +97,7 @@ export function TextProcessingTool({
  resultTitle,
  resultDescription,
  emptyMessage,
- inputMinHeightClassName = "min-h-[14rem] sm:min-h-[16rem]",
+ inputMinHeightClassName = "min-h-[12rem] sm:min-h-[14rem]",
  inputLabel = "Input text",
  inputHelpText = "Paste messy notes, copied pages, logs, or lead snippets.",
  collapseWorkspaceActions = false,
@@ -482,6 +482,9 @@ export function TextProcessingTool({
  const normalizedKey = event.key.toLowerCase();
 
  switch (normalizedKey) {
+ case "escape":
+ setShowShortcuts(false);
+ return;
  case "?":
  event.preventDefault();
  setShowShortcuts((current) => !current);
@@ -632,7 +635,7 @@ return () => window.removeEventListener("keydown", handleKeyDown);
           </div>
         }
         summary={
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 py-2 text-xs text-[var(--lc-muted)] font-medium">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs font-medium text-[var(--lc-muted)]">
             <span>{statLabels.scanned}: <strong>{processed.stats.scanned.toLocaleString()}</strong></span>
             <span className="text-black/10">·</span>
             <span>{statLabels.found}: <strong>{processed.stats.found.toLocaleString()}</strong></span>

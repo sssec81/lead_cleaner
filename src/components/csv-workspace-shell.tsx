@@ -199,19 +199,19 @@ export function CsvWorkspaceShell({
           </div>
 
           {/* Cleanup Controls Toolbar */}
-          <div className="z-10 flex flex-col gap-3.5 border-b border-[var(--lc-border)] bg-white p-4">
+          <div className="z-10 flex flex-col gap-4 border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-4 sm:p-5">
             <div className="flex items-center justify-between">
               {stepper}
             </div>
             
-            <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)] mb-1.5">{rulesTitle}</h3>
+            <div className="rounded-xl border border-[var(--lc-border)] bg-white p-4">
+              <h3 className="mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--lc-muted)]">{rulesTitle}</h3>
               {toolbar}
             </div>
           </div>
 
           {/* Results Summary Row */}
-          <div className="lc-status-strip" role="status" aria-label="CSV processing summary">
+          <div className="lc-status-strip lc-stat-grid" role="status" aria-label="CSV processing summary">
             {summary}
           </div>
 
@@ -225,8 +225,8 @@ export function CsvWorkspaceShell({
 
           {/* Workspace Body */}
           <div className="flex flex-1 flex-col overflow-hidden bg-white">
-            <div className="flex-1 overflow-auto p-4 flex flex-col">
-              <div className="flex max-h-[800px] flex-col overflow-hidden rounded-2xl border border-[var(--lc-border-mid)] bg-white shadow-sm">
+            <div className="flex flex-col p-4 sm:p-5">
+              <div className="flex max-h-[32rem] flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--lc-border-mid)] bg-white shadow-[var(--shadow)]">
                 
                 {/* Table Header */}
                 <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-3">
@@ -234,7 +234,7 @@ export function CsvWorkspaceShell({
                 </div>
 
                 {/* The Table */}
-                <div className="flex-1 overflow-auto bg-white min-h-[300px]">
+                <div className="overflow-auto bg-white">
                    {preview}
                 </div>
               </div>

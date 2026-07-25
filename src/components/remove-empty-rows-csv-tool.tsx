@@ -184,17 +184,14 @@ function loadDemoCsv() {
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Rows scanned</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{rows.length.toLocaleString()}</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Empty rows removed</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{emptyRowsCount.toLocaleString()}</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Columns preserved</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{headers.length.toLocaleString()}</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-1">Clean rows ready</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-accent)] tabular-nums">{cleanRowsCount.toLocaleString()}</p>
@@ -202,7 +199,7 @@ function loadDemoCsv() {
         </>
       }
       preview={
-        <div className="flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]">
+        <div className="overflow-auto bg-[var(--lc-surface)]">
           {cleanRowsCount > 0 ? (
             <div className="lc-table-scroll">
               <table aria-label="Clean CSV row preview" className="lc-data-table lc-data-table-compact">
@@ -230,7 +227,7 @@ function loadDemoCsv() {
               </table>
             </div>
           ) : status === "ready" && headers.length ? (
-            <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
+            <div className="flex min-h-52 flex-col items-center justify-center p-6 text-center">
               <FileMinus className="h-8 w-8 text-[var(--lc-muted)] mb-3" />
               <h4 className="text-sm font-semibold text-[var(--lc-ink)] mb-1">No clean rows found</h4>
               <p className="max-w-md text-sm leading-relaxed text-[var(--lc-muted)]">
@@ -238,7 +235,7 @@ function loadDemoCsv() {
               </p>
             </div>
           ) : (
-            <div className="flex h-full min-h-[300px] items-center justify-center text-sm font-medium text-[var(--lc-muted)]">
+            <div className="flex min-h-52 items-center justify-center text-sm font-medium text-[var(--lc-muted)]">
               Upload a file to see preview.
             </div>
           )}

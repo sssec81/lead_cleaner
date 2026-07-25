@@ -181,9 +181,9 @@ export default function PrivacyPage() {
 function BoundaryCard({ number, title, text }: { number: string; title: string; text: string }) {
  return (
  <div className="relative overflow-hidden border-t border-white/20 py-7">
- <p className="mb-5 font-mono text-[11px] font-medium tracking-[0.16em] text-white/45">{number}</p>
+ <p className="mb-5 font-mono text-[11px] font-medium tracking-[0.16em] text-white/75">{number}</p>
  <h3 className="mb-3 text-xl font-semibold text-white">{title}</h3>
- <p className="text-base leading-7 text-white/65">{text}</p>
+ <p className="text-base leading-7 text-white/80">{text}</p>
  </div>
  );
 }

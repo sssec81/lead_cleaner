@@ -48,7 +48,7 @@ export function TextWorkspaceShell({
   return (
     <div className="w-full lc-workspace-shell flex flex-col">
       {/* ── Workspace Header ── */}
-      <div className="px-4 pt-4 sm:px-6">
+      <div className="border-b border-[var(--lc-border)] bg-white px-4 py-4 sm:px-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-start gap-3">
             <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${iconToneClassName}`}>
@@ -67,17 +67,21 @@ export function TextWorkspaceShell({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            className="group relative flex h-11 w-11 items-center justify-center self-start rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)] transition-colors"
-            aria-label="Keyboard shortcuts"
-            aria-expanded={showShortcuts}
-            aria-haspopup="dialog"
-            onClick={onToggleShortcuts}
-          >
-            <span className="font-mono text-sm font-semibold">?</span>
-            {(showShortcuts) ? (
+          <div className="relative self-start">
+            <button
+              type="button"
+              className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--lc-border)] text-[var(--lc-muted)] transition-colors hover:bg-[var(--lc-bg)] hover:text-[var(--lc-ink)]"
+              aria-label="Keyboard shortcuts"
+              aria-expanded={showShortcuts}
+              aria-haspopup="dialog"
+              aria-controls="text-workspace-shortcuts"
+              onClick={onToggleShortcuts}
+            >
+              <span className="font-mono text-sm font-semibold">?</span>
+            </button>
+            {showShortcuts ? (
               <div
+                id="text-workspace-shortcuts"
                 role="dialog"
                 aria-label="Keyboard shortcuts"
                 className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-[var(--lc-border)] bg-white p-3 text-left shadow-lg"
@@ -92,10 +96,10 @@ export function TextWorkspaceShell({
                 </div>
               </div>
             ) : null}
-          </button>
+          </div>
         </div>
 
-        <div aria-label={`Step ${currentStep + 1} of ${steps.length}`} className="mt-4 flex flex-wrap items-center gap-1.5 border-b border-[var(--lc-border)] pb-2.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
+        <div aria-label={`Step ${currentStep + 1} of ${steps.length}`} className="mt-4 flex flex-wrap items-center gap-1.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
           {steps.map((label, index) => {
             const isDone = index < currentStep;
             const isCurrent = index === currentStep;
@@ -126,24 +130,26 @@ export function TextWorkspaceShell({
       </div>
 
       {/* ── Text Input Area ── */}
-      <div className="border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] p-4 sm:p-5">
+      <div className="border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-4 sm:p-5">
         {inputArea}
       </div>
 
       {/* ── Results Summary Row ── */}
       <div
+        role="status"
+        aria-label="Processing summary"
         className={`lc-status-strip ${summaryClassName ?? ""}`}
       >
         {summary}
       </div>
 
       {/* ── Workspace Controls Toolbar ── */}
-      <div className="border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] px-4 py-3 flex flex-wrap items-center gap-4 sm:px-6">
+      <div className="flex flex-wrap items-center gap-3 border-b border-[var(--lc-border)] bg-white px-4 py-2.5 sm:px-5">
         {toolbar}
       </div>
 
       {/* ── Data Preview / Editor Area ── */}
-      <div className="flex-1 flex flex-col min-h-[400px] bg-white rounded-b-[28px] overflow-hidden">
+      <div className="flex flex-col overflow-hidden bg-white">
         {preview}
         
         {/* Export Section */}

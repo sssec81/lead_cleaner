@@ -142,7 +142,7 @@ export default function ContactPage() {
   </div>
   
   <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)] mb-3">{item.label}</h3>
-  <p className="text-sm leading-relaxed text-white/80 mb-6 h-20">
+  <p className="mb-6 text-sm leading-relaxed text-white/80 md:min-h-20">
   {item.description}
   </p>
   

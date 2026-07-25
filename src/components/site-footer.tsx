@@ -112,7 +112,7 @@ export function SiteFooter() {
             >
               {cta.label}
             </Link>
-            <p className="text-[13px] text-white/60">{cta.intro}</p>
+            <p className="text-[13px] text-white/75">{cta.intro}</p>
           </div>
         </div>
  
@@ -124,7 +124,7 @@ export function SiteFooter() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">Browser-only processing</p>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/55">
+                <p className="mt-1.5 text-xs leading-relaxed text-white/75">
                   CSV files are parsed and cleaned locally in your browser.
                 </p>
               </div>
@@ -135,7 +135,7 @@ export function SiteFooter() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">No account needed</p>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/55">
+                <p className="mt-1.5 text-xs leading-relaxed text-white/75">
                   Start cleaning immediately. No account, no credit card.
                 </p>
               </div>
@@ -146,7 +146,7 @@ export function SiteFooter() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">Export to any CRM</p>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/55">
+                <p className="mt-1.5 text-xs leading-relaxed text-white/75">
                   Clean CSV works with HubSpot, Apollo, Clay, and more.
                 </p>
               </div>
@@ -160,7 +160,7 @@ export function SiteFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="inline-flex min-h-11 items-center text-[13px] text-white/55 transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center text-[13px] text-white/75 transition-colors hover:text-white"
               >
                 {link.label}
               </Link>
@@ -169,7 +169,7 @@ export function SiteFooter() {
  
           <Link
             href="/contact"
-            className="inline-flex min-h-11 items-center gap-2 text-[13px] text-white/55 transition-colors hover:text-white"
+            className="inline-flex min-h-11 items-center gap-2 text-[13px] text-white/75 transition-colors hover:text-white"
           >
             <Mail className="h-4 w-4" />
             Contact support

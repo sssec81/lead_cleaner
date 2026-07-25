@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BarChart3, Shield, Users } from "lucide-react";
+import { BarChart3, CheckCircle2, Shield, Users } from "lucide-react";
 import { Suspense } from "react";
 
 import { CsvLeadCleanerTool } from "@/components/csv-lead-cleaner-tool";
@@ -40,31 +40,44 @@ export default function CsvLeadCleanerPage() {
       />
       <main className="relative bg-[var(--lc-bg)] pb-16 pt-4 lg:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl pb-6 pt-12 text-center sm:mx-0 sm:text-left">
-            <div className="section-eyebrow mb-4">CRM IMPORT PREFLIGHT</div>
-            <h1 className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
-              CSV Lead Cleaner for CRM Imports
-            </h1>
-            <p className="mt-3 text-lg leading-relaxed text-[var(--lc-muted)]">
-              Choose HubSpot, Salesforce, Apollo, or Pipedrive. LeadCleanr cleans
-              the CSV, maps fields, validates every row, and helps repair failed
-              imports without uploading lead data to a server.
-            </p>
+          <div className="grid gap-8 pb-8 pt-12 lg:grid-cols-[1fr_22rem] lg:items-end">
+            <div className="max-w-3xl text-center sm:text-left">
+              <div className="section-eyebrow mb-4">CRM IMPORT PREFLIGHT</div>
+              <h1 className="font-display text-[clamp(2.25rem,6vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--lc-ink)]">
+                Turn a messy CSV into an import-ready file.
+              </h1>
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--lc-muted)]">
+                Clean, map, and validate rows for HubSpot, Salesforce, Apollo,
+                or Pipedrive—without uploading sensitive lead data.
+              </p>
 
-            <div className="trust-chip-row mt-6 justify-center sm:justify-start">
-              <div className="trust-chip">
-                <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
-                <span>Browser-only</span>
-              </div>
-              <div className="trust-chip">
-                <Users className="h-4 w-4 text-[var(--lc-accent)]" />
-                <span>No account needed</span>
-              </div>
-              <div className="trust-chip">
-                <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
-                <span>Up to 5MB free</span>
+              <div className="trust-chip-row mt-6 justify-center sm:justify-start">
+                <div className="trust-chip">
+                  <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
+                  <span>Browser-only</span>
+                </div>
+                <div className="trust-chip">
+                  <Users className="h-4 w-4 text-[var(--lc-accent)]" />
+                  <span>No account needed</span>
+                </div>
+                <div className="trust-chip">
+                  <BarChart3 className="h-4 w-4 text-[var(--lc-accent)]" />
+                  <span>Up to 5MB free</span>
+                </div>
               </div>
             </div>
+
+            <aside className="lc-card hidden p-5 lg:block" aria-label="CSV cleaning workflow">
+              <p className="section-eyebrow">Four-step workflow</p>
+              <ol className="mt-4 space-y-3">
+                {["Choose CRM destination", "Upload and set rules", "Review removed rows", "Export a clean CSV"].map((step, index) => (
+                  <li key={step} className="flex items-center gap-3 text-sm text-[var(--lc-muted)]">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--lc-green)]" aria-hidden="true" />
+                    <span><span className="font-semibold text-[var(--lc-ink)]">{index + 1}.</span> {step}</span>
+                  </li>
+                ))}
+              </ol>
+            </aside>
           </div>
 
           <div className="mb-10">
@@ -79,7 +92,7 @@ export default function CsvLeadCleanerPage() {
             </Suspense>
           </div>
 
-          <section className="rounded-2xl border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6 sm:p-8">
+          <section className="rounded-[var(--radius-panel)] border border-[var(--lc-border)] bg-[var(--lc-surface)] p-6 shadow-[var(--shadow)] sm:p-8">
             <div className="max-w-3xl">
               <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-[var(--lc-ink)] sm:text-3xl">
                 What the CSV Lead Cleaner catches before import

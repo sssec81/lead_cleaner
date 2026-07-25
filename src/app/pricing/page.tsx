@@ -151,7 +151,7 @@ export default function PricingPage() {
   <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">Pro</h3>
   <div className="mt-4 flex items-baseline gap-2">
   <span className="text-6xl font-display font-bold tracking-tight text-[var(--lc-surface)]">$12</span>
-  <span className="text-lg text-white/50">/mo</span>
+  <span className="text-lg text-white/70">/mo</span>
   </div>
   </div>
   <div className="border border-white/25 px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-white/70">
@@ -159,7 +159,7 @@ export default function PricingPage() {
   </div>
   </div>
 
-  <p className="mb-8 text-base leading-relaxed text-white/65">
+  <p className="mb-8 text-base leading-relaxed text-white/80">
   Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
   </p>
 

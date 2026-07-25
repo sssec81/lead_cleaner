@@ -105,14 +105,14 @@ export function ProWaitlistForm() {
           <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
             <div className="relative overflow-hidden border-b border-white/15 bg-[var(--lc-ink)] p-7 text-white sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
               <div className="relative flex h-full flex-col">
-                <div className="mb-8 flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-white/55">
+                <div className="mb-8 flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-white/75">
                   <span className="h-px w-8 bg-white/40" aria-hidden="true" />
                   Pro early access
                 </div>
                 <h2 id="pro-waitlist-title" className="font-display text-3xl font-bold leading-tight tracking-[-0.04em] sm:text-4xl">
                   Help shape the paid workflow.
                 </h2>
-                <p className="mt-4 max-w-lg text-sm leading-7 text-white/65 sm:text-base">
+                <p className="mt-4 max-w-lg text-sm leading-7 text-white/80 sm:text-base">
                   Join the list for larger files, saved cleanup presets, and CRM-ready exports. No payment is required today.
                 </p>
 

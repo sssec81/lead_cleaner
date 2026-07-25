@@ -80,13 +80,13 @@ export function CsvCleanerUploadPanel({
   onLoadDemo: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[28px] border border-[var(--lc-border)] bg-white p-6 shadow-[var(--shadow-elevated)] sm:p-8 lg:p-12">
-      <div className="mb-6 w-full max-w-3xl">
+    <div className="lc-workspace-shell flex flex-col items-center justify-center p-5 sm:p-8 lg:p-10">
+      <div className="mb-6 w-full max-w-4xl">
         <CrmDestinationPicker value={crmFormat} onChange={onCrmFormatChange} />
       </div>
       <label
         htmlFor="csv-upload"
-        className={`group relative flex w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-black/10 bg-[var(--lc-surface-muted)] px-6 py-10 text-center transition-all hover:bg-black/[0.01] ${
+        className={`group relative flex w-full max-w-2xl cursor-pointer flex-col items-center justify-center rounded-[var(--radius-panel)] border border-dashed border-[var(--lc-border-mid)] bg-[var(--lc-surface-subtle)] px-5 py-10 text-center transition-all hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)] sm:px-8 sm:py-12 ${
           isParsing ? "cursor-not-allowed opacity-60" : ""
         }`}
       >
@@ -99,7 +99,9 @@ export function CsvCleanerUploadPanel({
           disabled={isParsing}
         />
 
-        <Upload className="mb-2 h-6 w-6 text-[var(--lc-accent)]" aria-hidden="true" />
+        <span className="lc-icon-tile mb-4 h-12 w-12 rounded-xl">
+          <Upload className="h-5 w-5 text-[var(--lc-accent)]" aria-hidden="true" />
+        </span>
         <p className="mb-1 text-[15px] font-semibold text-[var(--lc-ink)]">
           {crmFormat === "clean_csv"
             ? "Drop your messy lead CSV"
@@ -111,7 +113,7 @@ export function CsvCleanerUploadPanel({
             : `We'll clean, map, and run row-level ${crmFormatLabel(crmFormat)} preflight checks locally.`}
         </p>
 
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
           {isParsing ? (
             <>
               <LoaderCircle className="h-5 w-5 animate-spin text-[var(--lc-muted)]" aria-hidden="true" />
@@ -255,7 +257,7 @@ export function CsvCleanerWorkspaceView({
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-[28px] border border-[var(--lc-border)] bg-white shadow-[var(--shadow-elevated)]">
+    <div className="lc-workspace-shell flex flex-1 flex-col">
       <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] p-4">
         <div className="flex min-w-0 items-center gap-2.5">
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
@@ -270,15 +272,12 @@ export function CsvCleanerWorkspaceView({
         </button>
       </div>
 
-      <div className="z-10 flex flex-col gap-3.5 border-b border-[var(--lc-border)] bg-[var(--lc-surface-raised)] p-4">
-        <div className="flex flex-wrap items-center gap-1.5 text-xs font-medium tracking-tight text-[var(--lc-muted)]">
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700"><Check className="h-3 w-3" aria-hidden="true" /> Upload CSV</span>
-          <span className="text-black/10" aria-hidden="true">·</span>
-          <span className="rounded-full bg-[var(--lc-accent-bg)] px-2 py-0.5 font-semibold text-[var(--lc-accent)]">2 Choose cleanup rules</span>
-          <span className="text-black/10" aria-hidden="true">·</span>
-          <span>3 Review rows</span>
-          <span className="text-black/10" aria-hidden="true">·</span>
-          <span>4 Export</span>
+      <div className="z-10 flex flex-col gap-4 border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-4 sm:p-5">
+        <div className="grid grid-cols-2 gap-1 rounded-xl border border-[var(--lc-border)] bg-white p-1 text-[11px] font-medium text-[var(--lc-muted)] sm:grid-cols-4">
+          <span className="inline-flex min-h-9 items-center justify-center gap-1 rounded-lg bg-[var(--lc-green-bg)] px-2 text-[var(--lc-green)]"><Check className="h-3 w-3" aria-hidden="true" /> 1. Upload</span>
+          <span className="inline-flex min-h-9 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] px-2 font-semibold text-[var(--lc-accent)]">2. Clean</span>
+          <span className="inline-flex min-h-9 items-center justify-center px-2">3. Review</span>
+          <span className="inline-flex min-h-9 items-center justify-center px-2">4. Export</span>
         </div>
 
         <CleanupPresetControls
@@ -294,7 +293,7 @@ export function CsvCleanerWorkspaceView({
         />
 
         <div>
-          <h3 className="mb-1.5 text-[11px] font-bold uppercase tracking-tight text-[var(--lc-muted)]">Cleaning Rules</h3>
+          <h3 className="mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--lc-muted)]">Cleaning rules</h3>
           <div className="flex flex-wrap items-end gap-4">
             <div className="min-w-[200px] flex-1">
               <label htmlFor="column-select" className="mb-1 block text-[12px] font-medium text-[var(--lc-muted)]">Target column</label>
@@ -369,7 +368,7 @@ export function CsvCleanerWorkspaceView({
         </div>
       </div>
 
-      <div className="lc-status-strip" role="status" aria-label="Cleanup results summary">
+      <div className="lc-status-strip lc-stat-grid" role="status" aria-label="Cleanup results summary">
         <span><strong>{summary.totalRows.toLocaleString()}</strong> total rows</span>
         <span className="text-black/10" aria-hidden="true">·</span>
         <span><strong>{summary.duplicatesRemoved.toLocaleString()}</strong> duplicates removed</span>

@@ -51,7 +51,7 @@ const seoUseCases = [
 
 export default function ConvertCsvToJsonPage() {
   const pageHeader = (
-    <div className="mx-auto max-w-3xl pt-12 pb-8 text-center">
+    <div className="max-w-2xl pb-8 pt-12">
       <div className="section-eyebrow mb-4">
         CSV TOOL
       </div>
@@ -62,7 +62,7 @@ export default function ConvertCsvToJsonPage() {
         Upload a CSV file and convert it into a structured JSON array instantly. Runs locally in your browser, with no signup and no server upload.
       </p>
       
-      <div className="trust-chip-row mt-6 justify-center">
+      <div className="trust-chip-row mt-6">
         <div className="trust-chip">
           <Shield className="h-4 w-4 text-[var(--lc-accent)]" />
           <span>Browser-only</span>
@@ -80,12 +80,12 @@ export default function ConvertCsvToJsonPage() {
   );
 
   const supportingContent = (
-    <section className="mt-12 border-t border-slate-200 pt-12 lg:mt-14">
+    <section className="mt-12 border-t border-[var(--lc-border)] pt-12 lg:mt-14">
       <div className="mx-auto max-w-3xl text-center mb-12">
-        <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl mb-5">
+        <h2 className="mb-5 font-display text-3xl font-semibold tracking-tight text-[var(--lc-ink)] sm:text-4xl">
           Convert CSV to JSON for any workflow
         </h2>
-        <p className="text-base leading-7 text-slate-600 sm:text-lg">
+        <p className="text-base leading-7 text-[var(--lc-muted)] sm:text-lg">
           Whether you&apos;re building integrations, feeding APIs, or preparing data imports, this converter transforms flat CSV rows into clean, structured JSON—entirely in your browser.
         </p>
       </div>
@@ -94,12 +94,12 @@ export default function ConvertCsvToJsonPage() {
         {seoUseCases.map((useCase) => {
           const Icon = useCase.icon;
           return (
-            <div key={useCase.title} className="group rounded-xl border border-[var(--lc-border)] bg-white p-6 transition-all duration-300 hover:shadow-md hover:border-[var(--lc-accent-border)] hover:-translate-y-0.5">
+            <div key={useCase.title} className="lc-card p-6">
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--lc-accent-bg)] text-[var(--lc-accent)] transition-transform duration-300 group-hover:scale-105">
                 <Icon className="h-5 w-5" />
               </div>
-              <h3 className="mb-2 font-display text-lg font-bold text-slate-900">{useCase.title}</h3>
-              <p className="text-sm leading-relaxed text-slate-600">{useCase.text}</p>
+              <h3 className="mb-2 font-display text-lg font-bold text-[var(--lc-ink)]">{useCase.title}</h3>
+              <p className="text-sm leading-relaxed text-[var(--lc-muted)]">{useCase.text}</p>
             </div>
           );
         })}

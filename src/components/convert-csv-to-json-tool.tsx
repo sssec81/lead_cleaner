@@ -217,10 +217,9 @@ export function ConvertCsvToJsonTool() {
  const hasData = rows.length > 0 && status === "ready";
 
  return (
- <div className="mx-auto w-full max-w-[1200px]">
- <div className="flex flex-col gap-6 xl:flex-row">
+ <div className="lc-tool-grid">
  {/* Left column: Upload & Config */}
- <div className="flex w-full min-w-0 flex-col rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-6 shadow-sm xl:w-[400px] xl:shrink-0">
+ <div className="lc-tool-sidebar flex flex-col bg-[var(--lc-surface-subtle)]">
  <div className="flex items-center gap-3">
  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--lc-accent-bg)] text-[color:var(--lc-accent)]">
  <FileJson className="h-5 w-5" />
@@ -237,10 +236,10 @@ export function ConvertCsvToJsonTool() {
 
  <label
  htmlFor="csv-upload"
- className={`group mt-6 flex min-h-[14rem] flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-6 text-center transition-all duration-200 ${
+ className={`lc-dropzone group mt-6 transition-colors ${
  isParsing
- ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-60"
- : "cursor-pointer border-slate-300 bg-white hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)]"
+ ? "cursor-not-allowed opacity-60"
+ : ""
  }`}
  >
  <div className="flex flex-col items-center">
@@ -251,7 +250,7 @@ export function ConvertCsvToJsonTool() {
  <Upload className="h-6 w-6 text-[color:var(--brand-strong)]" />
  )}
  </div>
- <span className="mt-4 text-base font-semibold text-slate-800">
+ <span className="mt-4 text-base font-semibold text-[var(--lc-ink)]">
  {isParsing ? "Parsing your CSV..." : "Drag and drop your CSV file here"}
  </span>
  <span className="mt-2 max-w-sm text-sm leading-relaxed text-[color:var(--muted)]">
@@ -273,23 +272,23 @@ export function ConvertCsvToJsonTool() {
  />
  </label>
 
- <div className="mt-4 flex flex-col gap-2 border-b border-slate-200 pb-5">
- <div className="flex items-start gap-2.5 bg-emerald-50/60 border border-emerald-100/50 rounded-lg px-3 py-2">
+ <div className="mt-4 flex flex-col gap-2 border-b border-[var(--lc-border)] pb-5">
+ <div className="flex items-start gap-2.5 rounded-lg border border-[var(--lc-mint-border)] bg-[var(--lc-mint-bg)] px-3 py-2">
  <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600" />
- <p className="text-sm font-semibold leading-relaxed text-slate-700">
+ <p className="text-sm font-medium leading-relaxed text-[var(--lc-ink)]">
  Your CSV is processed locally in your browser and is never uploaded to our servers.
  </p>
  </div>
- <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+ <div className="flex items-center gap-2 text-xs font-medium text-[var(--lc-muted)]">
  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> No account needed
  </div>
- <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+ <div className="flex items-center gap-2 text-xs font-medium text-[var(--lc-muted)]">
  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> Download .json instantly
  </div>
- <p className="mt-1 text-xs text-slate-500 font-medium ml-5">Supports files up to 5 MB</p>
+ <p className="ml-5 mt-1 text-xs font-medium text-[var(--lc-muted)]">Supports files up to 5 MB</p>
  </div>
 
- <div className="mt-4 rounded-xl border border-[color:var(--line)] bg-slate-50 p-3">
+ <div className="mt-4 rounded-xl border border-[var(--lc-border)] bg-white p-3">
  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--lc-muted)]">
  Quick start
  </p>
@@ -306,7 +305,7 @@ export function ConvertCsvToJsonTool() {
  </div>
 
  {/* Conversion Options */}
- <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+ <div className="mt-5 rounded-xl border border-[var(--lc-border)] bg-white p-4">
  <div className="flex items-center gap-2 mb-3">
  <Settings2 className="h-4 w-4 text-[var(--lc-accent)]" />
  <p className="text-xs font-bold uppercase tracking-wider text-[color:var(--brand-strong)]">
@@ -316,7 +315,7 @@ export function ConvertCsvToJsonTool() {
 
  <div className="space-y-3">
  <div>
- <label className="text-xs font-semibold text-slate-600 mb-1.5 block">Format</label>
+ <span className="mb-1.5 block text-xs font-semibold text-[var(--lc-muted)]">Format</span>
  <div className="flex gap-2">
  <button
  type="button"
@@ -336,7 +335,7 @@ export function ConvertCsvToJsonTool() {
  </div>
 
  <div>
- <label className="text-xs font-semibold text-slate-600 mb-1.5 block">Structure</label>
+ <span className="mb-1.5 block text-xs font-semibold text-[var(--lc-muted)]">Structure</span>
  <div className="flex gap-2">
  <button
  type="button"
@@ -355,7 +354,7 @@ export function ConvertCsvToJsonTool() {
  </div>
  </div>
 
- <p className="text-xs leading-relaxed text-slate-500">
+ <p className="text-xs leading-relaxed text-[var(--lc-muted)]">
  {jsonStructure === "ndjson"
  ? "One JSON object per line. Great for streaming and log-style data."
  : jsonFormat === "pretty"
@@ -366,12 +365,12 @@ export function ConvertCsvToJsonTool() {
  </div>
 
  {/* Auto-detect settings */}
- <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
- <div className="flex items-center gap-2 text-xs text-slate-500">
+ <div className="mt-3 rounded-xl border border-[var(--lc-border)] bg-white p-4">
+ <div className="flex items-center gap-2 text-xs text-[var(--lc-muted)]">
  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
  <span className="font-medium">First row used as headers (auto-detected)</span>
  </div>
- <div className="flex items-center gap-2 text-xs text-slate-500 mt-2">
+ <div className="mt-2 flex items-center gap-2 text-xs text-[var(--lc-muted)]">
  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
  <span className="font-medium">Delimiter auto-detected (comma, tab, semicolon)</span>
  </div>
@@ -400,14 +399,14 @@ export function ConvertCsvToJsonTool() {
  ) : null}
 
  {headers.length ? (
- <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+ <div className="mt-5 rounded-xl border border-[var(--lc-border)] bg-white p-4">
  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--brand-strong)]">
  Active File
  </p>
- <p className="mt-1 text-sm font-semibold truncate text-slate-800">
+ <p className="mt-1 truncate text-sm font-semibold text-[var(--lc-ink)]">
  {fileName || "No CSV uploaded yet"}
  </p>
- <p className="mt-1 text-xs text-slate-500 font-medium">
+ <p className="mt-1 text-xs font-medium text-[var(--lc-muted)]">
  {rows.length.toLocaleString()} rows · {headers.length} columns
  </p>
  </div>
@@ -418,17 +417,14 @@ export function ConvertCsvToJsonTool() {
  </div>
 
  {/* Right column: JSON output */}
- <div className="flex-1 min-w-0 space-y-5">
- <div className="rounded-xl bg-white p-5 sm:p-8 shadow-sm border border-slate-200 min-h-[30rem] flex flex-col relative overflow-hidden">
- <div className="absolute top-0 inset-x-0 h-32 bg-[radial-gradient(ellipse_at_top,var(--lc-accent-bg),transparent_70%)] pointer-events-none"></div>
- 
+ <div className="lc-tool-output flex flex-col">
  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[color:var(--line)] pb-5 mb-5">
  <div>
  <div className="inline-flex items-center gap-2 rounded-full border border-[var(--lc-accent-border)] bg-[var(--lc-accent-bg)] px-3 py-1 mb-2">
  <span className="flex h-2 w-2 rounded-full bg-[var(--lc-accent)] shadow-sm"></span>
  <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-accent-strong)]">JSON Output</p>
  </div>
- <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+ <h2 className="font-display text-2xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-3xl">
  {hasData ? "Conversion Complete" : "JSON Preview"}
  </h2>
  <p className="mt-1 text-sm font-medium text-[color:var(--muted)]">
@@ -452,7 +448,7 @@ export function ConvertCsvToJsonTool() {
  type="button"
  onClick={handleExport}
  disabled={!rows.length}
- className="group inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-slate-300 active:bg-slate-100 disabled:opacity-50"
+ className="lc-button-secondary min-h-11 px-5 text-sm"
  >
  <Download className="h-4 w-4" />
  Download {jsonStructure === "ndjson" ? ".ndjson" : ".json"}
@@ -461,24 +457,24 @@ export function ConvertCsvToJsonTool() {
  )}
  </div>
 
- <div className="flex-1 flex flex-col justify-center items-center text-center">
+ <div className="lc-empty-state flex-col">
  {!hasData ? (
  <div className="max-w-sm">
- <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 shadow-inner">
+ <div className="lc-icon-tile mx-auto mb-5 h-14 w-14 rounded-xl">
  <div className="flex items-center gap-2">
- <FileSpreadsheet className="h-5 w-5 text-slate-500" />
- <ArrowRight className="h-4 w-4 text-slate-300" />
- <FileJson className="h-5 w-5 text-slate-500" />
+ <FileSpreadsheet className="h-5 w-5" />
+ <ArrowRight className="h-4 w-4 text-[var(--lc-hint)]" />
+ <FileJson className="h-5 w-5" />
  </div>
  </div>
- <h3 className="text-lg font-bold text-slate-800 tracking-tight">Upload a CSV to convert</h3>
- <p className="mt-2 text-sm leading-relaxed text-slate-500">
+ <h3 className="text-lg font-semibold text-[var(--lc-ink)]">Upload a CSV to convert</h3>
+ <p className="mt-2 text-sm leading-relaxed text-[var(--lc-muted)]">
  Your CSV will be instantly transformed into structured JSON. Use the options on the left to control format and structure.
  </p>
  </div>
  ) : (
  <div className="w-full flex flex-col h-full items-start text-left max-h-[35rem]">
- <div className="w-full flex-1 min-h-0 relative rounded-xl border border-slate-200 bg-slate-900 overflow-hidden">
+ <div className="relative min-h-0 w-full flex-1 overflow-hidden rounded-xl border border-[var(--lc-dark-surface)] bg-[var(--lc-dark-bg)]">
  <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-4 py-2">
  <div className="flex items-center gap-2">
  <div className="flex gap-1.5">
@@ -486,17 +482,17 @@ export function ConvertCsvToJsonTool() {
  <div className="h-2.5 w-2.5 rounded-full bg-slate-700"></div>
  <div className="h-2.5 w-2.5 rounded-full bg-slate-700"></div>
  </div>
- <span className="text-xs font-mono text-slate-500 ml-2">
+ <span className="ml-2 font-mono text-xs text-white/70">
  {jsonStructure === "ndjson" ? "output.ndjson" : "output.json"}
  </span>
  </div>
- <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+ <span className="text-[11px] font-semibold uppercase tracking-wider text-white/70">
  {jsonFormat === "pretty" ? "Pretty" : "Minified"} · {jsonStructure === "ndjson" ? "NDJSON" : "Array"}
  </span>
  </div>
  <div className="p-4 overflow-y-auto max-h-[22rem]">
  {rows.length > previewRowCount ? (
- <p className="mb-3 text-xs font-medium text-slate-500">
+ <p className="mb-3 text-xs font-medium text-white/70">
  Showing the first {previewRowCount} of {rows.length.toLocaleString()} {jsonStructure === "ndjson" ? "lines" : "JSON objects"}.
  </p>
  ) : null}
@@ -507,8 +503,6 @@ export function ConvertCsvToJsonTool() {
  </div>
  </div>
  )}
- </div>
- </div>
  </div>
  </div>
  </div>

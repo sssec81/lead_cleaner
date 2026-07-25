@@ -36,9 +36,9 @@ export function CountWordsCharactersTool() {
  }
 
  return (
- <div className="flex flex-col lg:flex-row gap-8 items-start">
+ <div className="mx-auto grid w-full max-w-[75rem] gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
  {/* Left Panel: Input */}
- <section className="flex flex-col flex-1 w-full max-w-3xl min-w-0 rounded-xl border border-[var(--lc-border)] bg-white p-6 sm:p-8 shadow-sm">
+ <section className="lc-workspace-shell flex min-w-0 flex-col p-5 sm:p-6">
  <div className="flex items-center gap-4 mb-6">
  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lc-accent-bg)] text-[var(--lc-accent)] ring-1 ring-[var(--lc-border)] shadow-sm">
  <Type className="h-6 w-6" />
@@ -59,7 +59,7 @@ export function CountWordsCharactersTool() {
  onChange={(e) => setText(e.target.value)}
  aria-label="Text to analyze"
  placeholder="Paste or type your text here to instantly see word, character, and line counts..."
- className="w-full flex-1 min-h-[24rem] rounded-xl border border-[var(--lc-border-mid)] bg-white p-4 text-base leading-relaxed text-[var(--lc-ink)] placeholder:text-[var(--lc-hint)] outline-none transition focus:border-[var(--lc-accent)] focus:ring-4 focus:ring-[var(--lc-accent-bg)] resize-y"
+ className="min-h-[14rem] w-full flex-1 resize-y rounded-xl border border-[var(--lc-border-mid)] bg-[var(--lc-surface-subtle)] p-4 text-base leading-relaxed text-[var(--lc-ink)] outline-none transition placeholder:text-[var(--lc-hint)] focus:border-[var(--lc-accent)] focus:bg-white focus:ring-4 focus:ring-[var(--lc-accent-bg)] sm:min-h-[18rem]"
  />
 
  <div className="flex flex-wrap items-center gap-3 mt-4">
@@ -83,13 +83,13 @@ export function CountWordsCharactersTool() {
  </section>
 
  {/* Right Panel: Stats */}
- <section className="w-full lg:w-[360px] shrink-0 space-y-6">
- <div className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] p-6 sm:p-8">
+ <section className="w-full">
+ <div className="rounded-[var(--radius-workspace)] border border-[var(--lc-border-mid)] bg-[var(--lc-surface-subtle)] p-5 shadow-[var(--shadow)]">
  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--lc-accent)] mb-6">
  Text Metrics
  </p>
 
- <div className="grid gap-4">
+ <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
  <StatTile label="Words" value={words} icon={FileText} />
  <StatTile label="Characters" value={characters} icon={Hash} />
  <StatTile label="Characters (no spaces)" value={charactersNoSpaces} icon={Hash} />
@@ -105,12 +105,12 @@ export function CountWordsCharactersTool() {
 
 function StatTile({ label, value, icon: Icon }: { label: string; value: number; icon: React.ElementType }) {
  return (
- <div className="flex items-center justify-between rounded-xl bg-white p-4 border border-[var(--lc-border)] shadow-sm">
- <div className="flex items-center gap-3">
- <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
+ <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-[var(--lc-border)] bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+ <div className="flex min-w-0 items-center gap-2.5">
+ <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--lc-accent-bg)] text-[var(--lc-accent)]">
  <Icon className="h-4 w-4" />
  </div>
- <span className="text-sm font-semibold text-[var(--lc-muted)]">{label}</span>
+ <span className="text-xs font-semibold leading-4 text-[var(--lc-muted)] sm:text-sm">{label}</span>
  </div>
  <span className="text-xl font-display font-bold text-[var(--lc-ink)] tabular-nums">
  {value.toLocaleString()}

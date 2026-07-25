@@ -47,9 +47,9 @@ export function SiteBreadcrumbs() {
   return (
     <div className="border-b border-[var(--lc-border)] bg-[var(--lc-surface-subtle)]">
       <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ol className="flex min-h-10 items-center gap-1.5 overflow-x-auto whitespace-nowrap text-xs text-[var(--lc-muted)]">
+        <ol className="flex min-h-11 items-center gap-1.5 overflow-x-auto whitespace-nowrap text-xs text-[var(--lc-muted)]">
           <li>
-            <Link href="/" className="inline-flex min-h-10 items-center hover:text-[var(--lc-ink)]">
+            <Link href="/" className="inline-flex min-h-11 items-center hover:text-[var(--lc-ink)]">
               Home
             </Link>
           </li>
@@ -61,7 +61,7 @@ export function SiteBreadcrumbs() {
                 {isCurrent ? (
                   <span aria-current="page" className="font-medium text-[var(--lc-ink)]">{item.label}</span>
                 ) : (
-                  <Link href={item.href} className="inline-flex min-h-10 items-center hover:text-[var(--lc-ink)]">
+                  <Link href={item.href} className="inline-flex min-h-11 items-center hover:text-[var(--lc-ink)]">
                     {item.label}
                   </Link>
                 )}

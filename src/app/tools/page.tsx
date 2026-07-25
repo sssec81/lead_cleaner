@@ -142,22 +142,29 @@ export default function ToolsPage() {
         />
 
         {/* Zone 1: Page header */}
-        <section className="pb-8 pt-12">
+        <section className="pb-10 pt-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
+            <div className="max-w-3xl">
               <div className="section-anchor-row mb-4">
                 <span className="section-anchor-label">
                   All Tools
                 </span>
                 <div className="section-anchor-line h-px flex-1 max-w-28" />
               </div>
-              <h1 className="font-display text-[clamp(2.25rem,7vw,2.75rem)] font-bold tracking-[-0.025em] text-[var(--lc-ink)] leading-tight mb-4">
-                Pick the right tool in one pass.
+              <h1 className="mb-4 font-display text-[clamp(2.5rem,7vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--lc-ink)]">
+                Clean the data you have.
+                <span className="block text-[var(--lc-accent)]">Export what you need.</span>
               </h1>
               <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-xl">
                 Upload your spreadsheet or paste raw text. LeadCleanr helps you
                 clean, deduplicate, and prep it for your CRM in seconds.
               </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <span className="trust-chip trust-chip-accent">CSV workflows</span>
+                <span className="trust-chip">Text extraction</span>
+                <span className="trust-chip">Quick cleanup</span>
+                <span className="trust-chip">Runs locally</span>
+              </div>
             </div>
           </div>
         </section>
@@ -169,8 +176,10 @@ export default function ToolsPage() {
 
               {/* Left Card 7/12 */}
               <div className="lg:col-span-7">
-                <div className="relative flex h-full flex-col items-start overflow-hidden rounded-xl border border-black bg-[var(--lc-ink)] p-6 text-white sm:p-8">
-                  <div className="relative mb-6 inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-white/55">
+                <div className="relative flex h-full flex-col items-start overflow-hidden rounded-[var(--radius-panel)] border border-[var(--lc-dark-surface)] bg-[var(--lc-ink)] p-6 text-white shadow-[var(--shadow-strong)] sm:p-8">
+                  <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[var(--lc-accent)]/20 blur-3xl" aria-hidden="true" />
+                  <FileSpreadsheet className="absolute bottom-6 right-6 h-20 w-20 text-white/[0.06]" aria-hidden="true" />
+                  <div className="relative mb-6 inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-white/75">
                     <span className="h-px w-8 bg-white/40" aria-hidden="true" /> Start here
                   </div>
                   <h2 className="relative mb-2 font-display text-[1.875rem] font-bold tracking-[-0.025em] text-white">
@@ -179,9 +188,11 @@ export default function ToolsPage() {
                   <p className="relative max-w-md font-sans text-[15px] leading-7 text-white/75">
                     The default path for CRM imports, recruiter sheets, agency handoffs, and outreach lists that need a full cleanup pass.
                   </p>
-                  <p className="relative mt-3 text-sm text-white/60">
-                    Deduplicate · Review · Export - all in-browser
-                  </p>
+                  <div className="relative mt-5 flex flex-wrap gap-2 text-xs text-white/75">
+                    {["Deduplicate", "Validate", "Map fields", "Export"].map((item) => (
+                      <span key={item} className="rounded-md border border-white/10 bg-white/[0.06] px-2.5 py-1">{item}</span>
+                    ))}
+                  </div>
 
                   <Link
                     href="/tools/csv-lead-cleaner"
@@ -204,7 +215,7 @@ export default function ToolsPage() {
                     {workflowSteps.map((step, index) => (
                       <div
                         key={step.question}
-                        className="rounded-lg border border-[var(--lc-border)] bg-[var(--lc-bg)] px-4 py-3"
+                        className="rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] px-4 py-3"
                       >
                         <div className="flex items-start gap-3">
                           <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--lc-accent-bg)] text-[11px] font-semibold text-[var(--lc-accent)]">
@@ -234,7 +245,7 @@ export default function ToolsPage() {
         </section>
 
         {/* Zone 3: Tool Directory */}
-        <section className="border-t border-[var(--lc-border)] py-12">
+        <section className="border-t border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -296,7 +307,7 @@ export default function ToolsPage() {
           </div>
         </section>
 
-        <section id="text-extraction" className="border-t border-[var(--lc-border)] py-12">
+        <section id="text-extraction" className="border-t border-[var(--lc-border)] py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-2">
 

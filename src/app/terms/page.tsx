@@ -103,7 +103,7 @@ export default function TermsPage() {
       <section className="pb-10 pt-14 lg:pb-12 lg:pt-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-            <div className="relative overflow-hidden surface-card rounded-[1.5rem] p-7 sm:p-10">
+            <div className="surface-card relative overflow-hidden rounded-[var(--radius-workspace)] p-7 sm:p-10">
               <div className="relative">
                 <div className="section-eyebrow mb-6 inline-flex items-center gap-2">
                   <Scale className="h-4 w-4" />
@@ -151,7 +151,7 @@ export default function TermsPage() {
               </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              <div className="surface-card rounded-[1.25rem] p-7">
+              <div className="surface-card rounded-[var(--radius-panel)] p-7">
                 <div className="flex items-start gap-4">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[var(--lc-border)] bg-[var(--lc-bg)] text-[var(--lc-accent)]">
                     <HelpCircle className="h-5 w-5" />
@@ -170,7 +170,7 @@ export default function TermsPage() {
               {quickAnswers.map((item) => (
                 <div
                   key={item.question}
-                  className="surface-card rounded-[1.25rem] p-5 transition-transform duration-200 hover:-translate-y-0.5"
+                  className="surface-card rounded-[var(--radius-panel)] p-5"
                 >
                   <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
                     Quick check
@@ -185,7 +185,7 @@ export default function TermsPage() {
       </section>
 
       <section className="px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[1.5rem] bg-[var(--lc-dark-bg)] p-6 shadow-[var(--shadow-strong)] sm:p-8 lg:p-10">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[var(--radius-workspace)] bg-[var(--lc-dark-bg)] p-6 shadow-[var(--shadow-strong)] sm:p-8 lg:p-10">
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--lc-surface)]">
@@ -220,7 +220,7 @@ export default function TermsPage() {
             {usageGuidelines.map((section) => (
               <div
                 key={section.title}
-                className="surface-card overflow-hidden rounded-[1.25rem]"
+                className="surface-card overflow-hidden rounded-[var(--radius-panel)]"
               >
                 <div className="border-b border-[var(--lc-border)] bg-[var(--lc-bg)] px-6 py-5">
                   <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lc-accent)]">
@@ -267,7 +267,7 @@ export default function TermsPage() {
       <section className="pb-12 lg:pb-16">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="surface-card rounded-[1.5rem] p-6 sm:p-7">
+            <div className="surface-card rounded-[var(--radius-workspace)] p-6 sm:p-7">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--lc-bg)] border border-[var(--lc-border)] text-[var(--lc-accent)]">
                 <FileText className="h-6 w-6" />
               </div>
@@ -293,7 +293,7 @@ export default function TermsPage() {
               <details
                 key={term.title}
                 open={index === 0}
-                className="group overflow-hidden surface-card rounded-[1.25rem] transition-all duration-300 open:border-[var(--lc-border-mid)] hover:border-[var(--lc-border-mid)]"
+                className="group surface-card overflow-hidden rounded-[var(--radius-panel)] open:border-[var(--lc-border-mid)] hover:border-[var(--lc-border-mid)]"
               >
                 <summary className="flex cursor-pointer list-none items-center gap-4 p-5 sm:p-6">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--lc-bg)] border border-[var(--lc-border)] text-sm font-bold text-[var(--lc-muted)] transition-colors duration-300 group-open:bg-[var(--lc-accent-bg)] group-open:text-[var(--lc-accent)]">

@@ -156,10 +156,9 @@ export function SplitCsvFilesTool() {
  const chunkCount = Math.ceil(rows.length / rowsPerFile) || 0;
 
  return (
- <div className="mx-auto w-full max-w-[1200px]">
- <div className="flex flex-col gap-8 xl:flex-row">
+ <div className="lc-tool-grid">
  {/* Left column: Upload & Config */}
- <div className="flex w-full min-w-0 flex-col rounded-xl border border-[color:var(--line)] bg-white p-6 shadow-sm sm:p-8 xl:w-[360px] xl:shrink-0">
+ <div className="lc-tool-sidebar flex flex-col">
  <div className="flex items-center gap-4 border-b border-[color:var(--line)] pb-5">
  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[color:var(--brand)]/10 text-[color:var(--brand-strong)] ring-1 ring-[color:var(--brand)]/20 shadow-sm">
  <Scissors className="h-6 w-6" />
@@ -179,10 +178,10 @@ export function SplitCsvFilesTool() {
  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
  onDragLeave={() => setIsDragging(false)}
  onDrop={handleDrop}
- className={`group mt-5 flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 text-center transition-all duration-200 ${
+ className={`lc-dropzone group mt-5 transition-colors ${
  isDragging
  ? "border-[var(--lc-accent)] bg-[var(--lc-accent-bg)]"
- : "border-slate-300 bg-white hover:border-[var(--lc-accent)] hover:bg-[var(--lc-accent-bg)]"
+ : ""
  }`}
  >
  <div className="flex flex-col items-center pointer-events-none">
@@ -193,7 +192,7 @@ export function SplitCsvFilesTool() {
  <Upload className="h-6 w-6 text-[color:var(--brand-strong)]" />
  )}
  </div>
- <span className="mt-4 text-base font-semibold text-slate-800">
+ <span className="mt-4 text-base font-semibold text-[var(--lc-ink)]">
  {isParsing ? "Parsing file..." : "Drop a CSV file here"}
  </span>
  <span className="mt-2 max-w-sm text-sm leading-relaxed text-[color:var(--muted)]">
@@ -211,22 +210,22 @@ export function SplitCsvFilesTool() {
  </label>
 
  {fileName && (
- <div className="mt-6 flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
+ <div className="mt-6 flex items-center justify-between rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-3">
  <div className="flex items-center gap-3 overflow-hidden">
- <FileSpreadsheet className="h-4 w-4 text-slate-500 shrink-0" />
+ <FileSpreadsheet className="h-4 w-4 shrink-0 text-[var(--lc-muted)]" />
  <div className="min-w-0">
- <p className="text-xs font-semibold text-slate-700 truncate">{fileName}</p>
- <p className="mt-0.5 text-[11px] text-slate-500">{rows.length.toLocaleString()} rows</p>
+ <p className="truncate text-xs font-semibold text-[var(--lc-ink)]">{fileName}</p>
+ <p className="mt-0.5 text-[11px] text-[var(--lc-muted)]">{rows.length.toLocaleString()} rows</p>
  </div>
  </div>
  </div>
  )}
 
  {rows.length > 0 && (
- <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+ <div className="mt-6 space-y-4 rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-4">
  <div className="flex items-center gap-2 mb-2">
- <Settings2 className="h-4 w-4 text-slate-500" />
- <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Split Settings</h3>
+ <Settings2 className="h-4 w-4 text-[var(--lc-accent)]" />
+ <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--lc-ink)]">Split settings</h3>
  </div>
  
  <div>
@@ -237,7 +236,7 @@ export function SplitCsvFilesTool() {
  id="rows-per-file"
  value={rowsPerFile}
  onChange={(e) => setRowsPerFile(Number(e.target.value))}
- className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[var(--lc-accent-bg)]"
+ className="lc-select mt-2 w-full"
  >
  <option value={500}>500 rows</option>
  <option value={1000}>1,000 rows</option>
@@ -246,14 +245,14 @@ export function SplitCsvFilesTool() {
  </select>
  </div>
 
- <label className="flex items-center gap-3 py-2 cursor-pointer group">
+ <label className="group flex min-h-11 cursor-pointer items-center gap-3 py-2">
  <input
  type="checkbox"
  checked={keepHeaderRow}
  onChange={(e) => setKeepHeaderRow(e.target.checked)}
- className="h-4 w-4 rounded border-slate-300 text-[var(--lc-accent)] focus:ring-[var(--lc-accent)]"
+ className="h-5 w-5 rounded border-[var(--lc-border-mid)] text-[var(--lc-accent)] focus:ring-[var(--lc-accent)]"
  />
- <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">
+ <span className="text-sm font-medium text-[var(--lc-ink)]">
  Keep header row in every file
  </span>
  </label>
@@ -265,17 +264,14 @@ export function SplitCsvFilesTool() {
  </div>
 
  {/* Right column: Results */}
- <div className="flex-1 min-w-0 space-y-6">
- <div className="rounded-xl bg-white p-6 sm:p-10 shadow-sm border border-[color:var(--line)] min-h-[30rem] flex flex-col relative overflow-hidden">
- <div className="absolute top-0 inset-x-0 h-32 bg-[radial-gradient(ellipse_at_top,var(--lc-accent-bg),transparent_70%)] pointer-events-none"></div>
- 
+ <div className="lc-tool-output flex flex-col">
  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[color:var(--line)] pb-6 mb-6">
  <div>
  <div className="inline-flex items-center gap-2 rounded-full border border-[var(--lc-accent-border)] bg-[var(--lc-accent-bg)] px-3 py-1 mb-3">
  <span className="flex h-2 w-2 rounded-full bg-[var(--lc-accent)] shadow-sm"></span>
  <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--lc-accent-strong)]">CSV Splitter</p>
  </div>
- <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+ <h2 className="font-display text-2xl font-bold tracking-tight text-[var(--lc-ink)] sm:text-3xl">
  Export Chunks
  </h2>
  <p className="mt-1 text-sm font-medium text-[color:var(--muted)]">
@@ -284,27 +280,27 @@ export function SplitCsvFilesTool() {
  </div>
  </div>
 
- <div className="flex-1 flex flex-col justify-center items-center text-center">
+ <div className="lc-empty-state flex-col">
  {rows.length === 0 ? (
  <div className="max-w-sm">
- <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 shadow-inner">
- <Scissors className="h-8 w-8 text-slate-500" />
+ <div className="lc-icon-tile mx-auto mb-5 h-14 w-14 rounded-xl">
+ <Scissors className="h-6 w-6" />
  </div>
- <h3 className="text-xl font-bold text-slate-800 tracking-tight">Waiting for file</h3>
- <p className="mt-2 text-sm leading-relaxed text-slate-500">
+ <h3 className="text-lg font-semibold text-[var(--lc-ink)]">Waiting for file</h3>
+ <p className="mt-2 text-sm leading-relaxed text-[var(--lc-muted)]">
  Upload a CSV file to split it into smaller chunks. You will receive a ZIP file containing all the pieces.
  </p>
  </div>
  ) : (
  <div className="w-full flex flex-col items-start text-left">
- <div className="w-full rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+ <div className="w-full rounded-xl border border-[var(--lc-border)] bg-[var(--lc-surface-subtle)] p-5">
  <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
  <div>
- <p className="text-4xl font-display font-bold text-slate-900 tracking-tight">
- {chunkCount} <span className="text-slate-500 font-medium text-lg">files ready.</span>
+ <p className="font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)]">
+ {chunkCount} <span className="text-base font-medium text-[var(--lc-muted)]">files ready</span>
  </p>
- <p className="mt-2 text-sm text-slate-500">
- Your <span className="font-medium text-slate-700">{rows.length.toLocaleString()} rows</span> will be split into chunks of <span className="font-medium text-slate-700">{rowsPerFile.toLocaleString()}</span>.
+ <p className="mt-2 text-sm text-[var(--lc-muted)]">
+ Your <span className="font-medium text-[var(--lc-ink)]">{rows.length.toLocaleString()} rows</span> will be split into chunks of <span className="font-medium text-[var(--lc-ink)]">{rowsPerFile.toLocaleString()}</span>.
  </p>
  </div>
  <div className="flex flex-wrap items-center gap-3">
@@ -320,31 +316,29 @@ export function SplitCsvFilesTool() {
  </div>
  </div>
 
- <div className="mt-6 w-full rounded-xl border border-slate-200 bg-slate-50 p-6">
- <h3 className="text-sm font-semibold text-slate-800 mb-4">Export Summary</h3>
- <ul className="space-y-3 text-sm text-slate-600">
- <li className="flex items-center justify-between border-b border-slate-200 pb-3">
+ <div className="mt-5 w-full rounded-xl border border-[var(--lc-border)] bg-white p-5">
+ <h3 className="mb-4 text-sm font-semibold text-[var(--lc-ink)]">Export summary</h3>
+ <ul className="space-y-3 text-sm text-[var(--lc-muted)]">
+ <li className="flex items-center justify-between border-b border-[var(--lc-border)] pb-3">
  <span>Original rows</span>
- <span className="font-semibold text-slate-900">{rows.length.toLocaleString()}</span>
+ <span className="font-semibold text-[var(--lc-ink)]">{rows.length.toLocaleString()}</span>
  </li>
- <li className="flex items-center justify-between border-b border-slate-200 pb-3">
+ <li className="flex items-center justify-between border-b border-[var(--lc-border)] pb-3">
  <span>Rows per file</span>
- <span className="font-semibold text-slate-900">{rowsPerFile.toLocaleString()}</span>
+ <span className="font-semibold text-[var(--lc-ink)]">{rowsPerFile.toLocaleString()}</span>
  </li>
- <li className="flex items-center justify-between border-b border-slate-200 pb-3">
+ <li className="flex items-center justify-between border-b border-[var(--lc-border)] pb-3">
  <span>Files generated</span>
- <span className="font-semibold text-slate-900">{chunkCount} files</span>
+ <span className="font-semibold text-[var(--lc-ink)]">{chunkCount} files</span>
  </li>
  <li className="flex items-center justify-between">
  <span>Header row included</span>
- <span className="font-semibold text-slate-900">{keepHeaderRow ? "Yes" : "No"}</span>
+ <span className="font-semibold text-[var(--lc-ink)]">{keepHeaderRow ? "Yes" : "No"}</span>
  </li>
  </ul>
  </div>
  </div>
  )}
- </div>
- </div>
  </div>
  </div>
  </div>

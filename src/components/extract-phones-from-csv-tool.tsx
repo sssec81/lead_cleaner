@@ -321,7 +321,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               });
             }}
             disabled={!headers.length || isParsing}
-            className="w-full max-w-sm rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] px-3 py-2 text-sm text-[var(--lc-ink)] focus:border-[var(--lc-accent)] focus:ring-1 focus:ring-[var(--lc-accent)] focus:outline-none transition-colors cursor-pointer"
+            className="lc-select w-full max-w-sm"
           >
             {headers.map((header) => (
               <option key={header} value={header}>{header}</option>
@@ -345,17 +345,14 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Rows scanned</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{extracted.summary.totalRows.toLocaleString()}</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Duplicates removed</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{extracted.summary.duplicatesRemoved.toLocaleString()}</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-hint)] mb-1">Invalid / Blank</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-ink)] tabular-nums">{(extracted.summary.blankRowsSkipped + extracted.summary.invalidPhonesRemoved).toLocaleString()}</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-[var(--lc-border-mid)]"></div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--lc-accent)] mb-1">Clean phones</p>
             <p className="font-mono text-xl font-semibold text-[var(--lc-accent)] tabular-nums">{extracted.summary.cleanPhonesReady.toLocaleString()}</p>
@@ -363,7 +360,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
         </>
       }
       preview={
-        <div className="flex-1 overflow-auto bg-[var(--lc-surface)] min-h-[300px]">
+        <div className="overflow-auto bg-[var(--lc-surface)]">
           {extracted.results.length ? (
             <div className="lc-table-scroll">
               <table aria-label="Extracted phone preview" className="lc-data-table lc-data-table-compact">
@@ -391,7 +388,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               </table>
             </div>
           ) : status === "ready" && headers.length ? (
-            <div className="flex flex-col items-center justify-center p-6 text-center h-full min-h-[300px]">
+            <div className="flex min-h-52 flex-col items-center justify-center p-6 text-center">
               <AlertCircle className="h-8 w-8 text-[var(--lc-muted)] mb-3" />
               <h4 className="text-sm font-semibold text-[var(--lc-ink)] mb-1">No clean phones found</h4>
               <p className="max-w-md text-sm leading-relaxed text-[var(--lc-muted)]">
@@ -399,7 +396,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
               </p>
             </div>
           ) : (
-            <div className="flex h-full min-h-[300px] items-center justify-center text-sm font-medium text-[var(--lc-muted)]">
+            <div className="flex min-h-52 items-center justify-center text-sm font-medium text-[var(--lc-muted)]">
               Select a column to preview extracted phones.
             </div>
           )}
@@ -411,7 +408,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
             <button
               type="button"
               onClick={handleCopy}
-              className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] px-4 text-[13px] font-medium text-[var(--lc-ink)] transition-colors hover:bg-[var(--lc-bg)] flex-1 sm:flex-none gap-2"
+              className="lc-button-secondary min-h-11 flex-1 gap-2 px-4 text-[13px] sm:flex-none"
             >
               {copied ? <Check className="h-4 w-4 text-[var(--lc-green)]" /> : <Clipboard className="h-4 w-4" />} {copied ? "Copied" : "Copy"}
             </button>
@@ -421,7 +418,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
                 trackToolEvent("extract-phones-from-csv", "download_txt", { result_count: extracted.results.length });
                 downloadTextFile(buildExportName(fileName, "txt"), extracted.results.join("\n"));
               }}
-              className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--lc-border-mid)] bg-[var(--lc-surface)] px-4 text-[13px] font-medium text-[var(--lc-ink)] transition-colors hover:bg-[var(--lc-bg)] flex-1 sm:flex-none gap-2"
+              className="lc-button-secondary min-h-11 flex-1 gap-2 px-4 text-[13px] sm:flex-none"
             >
               <FileText className="h-4 w-4" /> TXT
             </button>
@@ -612,63 +609,4 @@ function coerceUploadErrorMessage(error: unknown) {
  }
 
  return "We couldn't read that file in the browser. Please try the upload again.";
-}
-
-function prettyColumnType(type: CsvColumnDetection["type"]) {
- if (type === "url") {
- return "URL";
- }
-
- return type.charAt(0).toUpperCase() + type.slice(1);
-}
-
-function EmptyState({
- title,
- description,
-}: {
- title: string;
- description: string;
-}) {
- return (
- <div>
- <p className="text-base font-semibold text-[color:var(--foreground)]">
- {title}
- </p>
- <p className="mt-2 text-sm leading-7 text-[color:var(--muted)]">
- {description}
- </p>
- </div>
- );
-}
-
-function StatCard({
- label,
- value,
- icon,
- accent = false,
-}: {
- label: string;
- value: number;
- icon?: React.ReactNode;
- accent?: boolean;
-}) {
- return (
- <div
- className={`rounded-xl border p-4 transition-all duration-300 hover:shadow-xs ${
- accent
- ? "border-emerald-100 bg-emerald-50/40"
- : "border-slate-200 bg-white hover:border-slate-300"
- }`}
- >
- <div className="flex items-center justify-between gap-2">
- <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
- {label}
- </span>
- {icon && <div className="text-slate-500">{icon}</div>}
- </div>
- <div className="mt-3 text-2xl font-bold tabular-nums text-slate-900">
- {value.toLocaleString()}
- </div>
- </div>
- );
 }

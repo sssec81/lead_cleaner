@@ -24,10 +24,10 @@ export default function GlobalError({
  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl bg-red-50 text-red-500 shadow-sm border border-red-100">
  <AlertCircle className="h-8 w-8" />
  </div>
- <h1 className="mb-4 font-display text-3xl font-bold tracking-tight text-slate-900">
+ <h1 className="mb-4 font-display text-3xl font-bold tracking-tight text-[var(--lc-ink)]">
  Something went wrong
  </h1>
- <p className="mb-8 max-w-md text-lg text-slate-600">
+ <p className="mb-8 max-w-md text-lg text-[var(--lc-muted)]">
  A client-side error occurred while rendering this page or tool. We have been notified of the issue.
  </p>
  <button
