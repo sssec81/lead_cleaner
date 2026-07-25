@@ -21,6 +21,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
+import { readLocalStorage, writeLocalStorage } from "@/lib/browser-storage";
 import {
  detectCsvColumns,
  type CsvColumnDetection,
@@ -117,7 +118,7 @@ export function ExtractEmailsFromCsvTool() {
  return;
  }
 
- window.localStorage.setItem(
+ writeLocalStorage(
  "leadcleanr:extract-email-csv:preferred-column",
  selectedColumn,
  );
@@ -194,7 +195,7 @@ async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
  const nextDetections = detectCsvColumns(nextHeaders, nextRows);
  const storedPreferredColumn =
  typeof window !== "undefined"
- ? window.localStorage.getItem("leadcleanr:extract-email-csv:preferred-column")
+ ? readLocalStorage("leadcleanr:extract-email-csv:preferred-column")
  : null;
  setHeaders(nextHeaders);
  setRows(nextRows);

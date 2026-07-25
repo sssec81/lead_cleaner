@@ -1,5 +1,7 @@
 import Papa, { type ParseError } from "papaparse";
 
+import { FREE_CSV_LIMIT_BYTES } from "./product-config.ts";
+
 export type CsvRow = Record<string, string>;
 
 export type CsvParseProgress = {
@@ -44,7 +46,7 @@ type CsvHeaderMapping = {
  normalizedHeader: string;
 };
 
-export const MAX_CSV_FILE_SIZE = 5 * 1024 * 1024;
+export const MAX_CSV_FILE_SIZE = FREE_CSV_LIMIT_BYTES;
 
 export async function inspectCsvFile(file: File): Promise<CsvFileInspection> {
  if (file.size === 0) {
@@ -122,6 +124,7 @@ export function parseCsvFile({
  let metaFields: string[] = [];
 
  Papa.parse<Record<string, unknown>>(file, {
+ worker: true,
  header: true,
  skipEmptyLines: false,
  chunkSize: 1024 * 64, // 64 KB chunks to stream progress smoothly on small files

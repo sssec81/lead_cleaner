@@ -22,117 +22,86 @@ import {
 
 import { PageFrame } from "@/components/page-frame";
 import { BreadcrumbJsonLd, getSiteUrl } from "@/lib/seo";
+import { getToolByPath } from "@/lib/tool-registry";
 
 const csvTools = [
   {
-    href: "/tools/extract-emails-from-csv",
-    title: "Extract Emails from CSV",
-    description: "Pull, validate, and export the email column only.",
+    ...getToolByPath("/tools/extract-emails-from-csv"),
     icon: FolderDown,
     tag: "Email column",
   },
   {
-    href: "/tools/extract-phone-numbers-from-csv",
-    title: "Extract Phones from CSV",
-    description: "Detect phone columns and standardize formats quickly.",
+    ...getToolByPath("/tools/extract-phone-numbers-from-csv"),
     icon: Phone,
     tag: "Phone column",
   },
   {
-    href: "/tools/remove-empty-rows-from-csv",
-    title: "Remove Empty CSV Rows",
-    description: "Delete blank spreadsheet rows before import or merge.",
+    ...getToolByPath("/tools/remove-empty-rows-from-csv"),
     icon: Rows3,
     tag: "Blank rows",
   },
   {
-    href: "/tools/merge-csv-files",
-    title: "Merge CSV Files",
-    description: "Combine multiple CSVs and align headers automatically.",
+    ...getToolByPath("/tools/merge-csv-files"),
     icon: Combine,
     tag: "Combine files",
   },
   {
-    href: "/tools/split-csv-files",
-    title: "Split CSV Files",
-    description: "Break large CSVs into smaller chunks for upload limits.",
+    ...getToolByPath("/tools/split-csv-files"),
     icon: Scissors,
     tag: "Upload limits",
   },
   {
-    href: "/tools/convert-csv-to-json",
-    title: "Convert CSV to JSON",
-    description: "Turn rows into structured JSON arrays instantly.",
+    ...getToolByPath("/tools/convert-csv-to-json"),
     icon: FileJson,
     tag: "Format export",
   },
-];
+] as const;
 
 const textExtractionTools = [
   {
-    href: "/tools/extract-emails-from-text",
-    title: "Extract Emails",
-    description: "Pull email addresses out of copied blocks of text.",
+    ...getToolByPath("/tools/extract-emails-from-text"),
     icon: Mail,
   },
   {
-    href: "/tools/extract-phone-numbers-from-text",
-    title: "Extract Phone Numbers",
-    description: "Find and normalize phone numbers in raw pasted text.",
+    ...getToolByPath("/tools/extract-phone-numbers-from-text"),
     icon: Phone,
   },
   {
-    href: "/tools/extract-urls-from-text",
-    title: "Extract URLs",
-    description: "Pull links out of noisy copied content.",
+    ...getToolByPath("/tools/extract-urls-from-text"),
     icon: LinkIcon,
   },
   {
-    href: "/tools/extract-domains-from-emails",
-    title: "Extract Domains",
-    description: "Get domains from email lists for enrichment workflows.",
+    ...getToolByPath("/tools/extract-domains-from-emails"),
     icon: Globe,
   },
-];
+] as const;
 
 const cleanupTools = [
   {
-    href: "/tools/validate-email-list",
-    title: "Validate Email List",
-    description: "Check list structure and syntax before sending.",
+    ...getToolByPath("/tools/validate-email-list"),
     icon: CheckCircle2,
   },
   {
-    href: "/tools/clean-email-list",
-    title: "Clean Email List",
-    description: "Normalize and tidy a pasted email list.",
+    ...getToolByPath("/tools/clean-email-list"),
     icon: Sparkles,
   },
   {
-    href: "/tools/remove-duplicate-emails",
-    title: "Remove Duplicate Emails",
-    description: "Keep only unique email values.",
+    ...getToolByPath("/tools/remove-duplicate-emails"),
     icon: CopyX,
   },
   {
-    href: "/tools/remove-duplicate-phone-numbers",
-    title: "Remove Duplicate Phones",
-    description: "Deduplicate phone numbers from raw input.",
+    ...getToolByPath("/tools/remove-duplicate-phone-numbers"),
     icon: Phone,
   },
   {
-    href: "/tools/remove-duplicate-urls",
-    title: "Remove Duplicate URLs",
-    description: "Deduplicate copied links and URL lists.",
+    ...getToolByPath("/tools/remove-duplicate-urls"),
     icon: LinkIcon,
   },
   {
-    href: "/tools/count-words-characters-text",
-    title: "Count Words / Characters",
-    description: "Quick counts for copied text and drafts.",
+    ...getToolByPath("/tools/count-words-characters-text"),
     icon: Type,
   },
-];
+] as const;
 
 export const metadata: Metadata = {
   title: "Lead Cleaning Tools",
@@ -295,8 +264,8 @@ export default function ToolsPage() {
                 const Icon = tool.icon;
                 return (
                   <Link
-                    key={tool.href}
-                    href={tool.href}
+                    key={tool.path}
+                    href={tool.path}
                     aria-label={`Open ${tool.title}`}
                     className="lc-card-interactive group flex flex-col gap-3 p-5"
                   >
@@ -346,7 +315,7 @@ export default function ToolsPage() {
                   {textExtractionTools.map((tool) => {
                     const Icon = tool.icon;
                     return (
-                      <Link key={tool.href} href={tool.href} className="group -mx-4 flex min-h-14 cursor-pointer items-start gap-3 border-b border-[var(--lc-border)] px-4 py-3 transition-colors last:border-0 hover:rounded-lg hover:bg-[var(--lc-bg)]">
+                      <Link key={tool.path} href={tool.path} className="group -mx-4 flex min-h-14 cursor-pointer items-start gap-3 border-b border-[var(--lc-border)] px-4 py-3 transition-colors last:border-0 hover:rounded-lg hover:bg-[var(--lc-bg)]">
                         <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>
@@ -374,7 +343,7 @@ export default function ToolsPage() {
                   {cleanupTools.map((tool) => {
                     const Icon = tool.icon;
                     return (
-                      <Link key={tool.href} href={tool.href} className="group -mx-4 flex min-h-14 cursor-pointer items-start gap-3 border-b border-[var(--lc-border)] px-4 py-3 transition-colors last:border-0 hover:rounded-lg hover:bg-[var(--lc-bg)]">
+                      <Link key={tool.path} href={tool.path} className="group -mx-4 flex min-h-14 cursor-pointer items-start gap-3 border-b border-[var(--lc-border)] px-4 py-3 transition-colors last:border-0 hover:rounded-lg hover:bg-[var(--lc-bg)]">
                         <Icon className="h-[18px] w-[18px] mt-0.5 text-[var(--lc-muted)] transition-colors group-hover:text-[var(--lc-accent)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-sans text-[14px] font-medium text-[var(--lc-ink)]">{tool.title}</h3>

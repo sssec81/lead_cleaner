@@ -2,6 +2,8 @@ import { NextResponse } from "next/server.js";
 import fs from "fs";
 import path from "path";
 
+import { ApiPayloadError, readLimitedJson } from "../../../lib/api-security.ts";
+
 const ipRates = new Map<string, { count: number; resetTime: number }>();
 
 const WAITLIST_ROLES = new Set(["agency", "sales", "recruiting", "marketing", "founder", "other"]);
@@ -146,7 +148,7 @@ export async function POST(request: Request) {
  intendedUse,
  companyWebsite,
  source,
- } = await request.json();
+ } = await readLimitedJson<Record<string, unknown>>(request);
 
  if (sanitizeWaitlistField(companyWebsite, 200)) {
  return NextResponse.json({ ok: true });
@@ -206,7 +208,11 @@ export async function POST(request: Request) {
  }
 
  return NextResponse.json({ ok: true });
- } catch {
- return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
+ } catch (error) {
+ const status = error instanceof ApiPayloadError ? error.status : 400;
+ return NextResponse.json(
+ { ok: false, error: error instanceof ApiPayloadError ? error.message : "Invalid request" },
+ { status },
+ );
  }
 }

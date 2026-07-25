@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { getSiteUrl } from "@/lib/seo";
+import { TOOL_REGISTRY } from "@/lib/tool-registry";
 
 const staticRoutes: Array<{
  route: string;
@@ -9,26 +10,6 @@ const staticRoutes: Array<{
 }> = [
  { route: "", changeFrequency: "weekly", priority: 1.0 },
  { route: "/tools", changeFrequency: "weekly", priority: 0.9 },
- { route: "/tools/csv-lead-cleaner", changeFrequency: "weekly", priority: 0.95 },
- { route: "/tools/hubspot-csv-import-cleaner", changeFrequency: "monthly", priority: 0.88 },
- { route: "/tools/salesforce-csv-import-cleaner", changeFrequency: "monthly", priority: 0.86 },
- { route: "/tools/apollo-csv-import-cleaner", changeFrequency: "monthly", priority: 0.84 },
- { route: "/tools/pipedrive-csv-import-cleaner", changeFrequency: "monthly", priority: 0.82 },
- { route: "/tools/extract-emails-from-csv", changeFrequency: "weekly", priority: 0.9 },
- { route: "/tools/extract-phone-numbers-from-csv", changeFrequency: "weekly", priority: 0.88 },
- { route: "/tools/validate-email-list", changeFrequency: "weekly", priority: 0.88 },
- { route: "/tools/clean-email-list", changeFrequency: "weekly", priority: 0.85 },
- { route: "/tools/remove-duplicate-emails", changeFrequency: "weekly", priority: 0.84 },
- { route: "/tools/merge-csv-files", changeFrequency: "weekly", priority: 0.84 },
- { route: "/tools/split-csv-files", changeFrequency: "weekly", priority: 0.82 },
- { route: "/tools/remove-empty-rows-from-csv", changeFrequency: "weekly", priority: 0.82 },
- { route: "/tools/extract-emails-from-text", changeFrequency: "monthly", priority: 0.8 },
- { route: "/tools/extract-phone-numbers-from-text", changeFrequency: "monthly", priority: 0.78 },
- { route: "/tools/extract-urls-from-text", changeFrequency: "monthly", priority: 0.72 },
- { route: "/tools/extract-domains-from-emails", changeFrequency: "monthly", priority: 0.76 },
- { route: "/tools/remove-duplicate-phone-numbers", changeFrequency: "monthly", priority: 0.72 },
- { route: "/tools/remove-duplicate-urls", changeFrequency: "monthly", priority: 0.7 },
- { route: "/tools/convert-csv-to-json", changeFrequency: "monthly", priority: 0.72 },
  { route: "/pricing", changeFrequency: "monthly", priority: 0.7 },
  { route: "/privacy", changeFrequency: "monthly", priority: 0.5 },
  { route: "/terms", changeFrequency: "monthly", priority: 0.4 },
@@ -38,7 +19,11 @@ const staticRoutes: Array<{
 export default function sitemap(): MetadataRoute.Sitemap {
  const siteUrl = getSiteUrl();
 
- return staticRoutes.map(({ route, changeFrequency, priority }) => ({
+ return [...staticRoutes, ...TOOL_REGISTRY.map((tool) => ({
+ route: tool.path,
+ changeFrequency: tool.changeFrequency,
+ priority: tool.priority,
+ }))].map(({ route, changeFrequency, priority }) => ({
  url: `${siteUrl}${route}`,
  changeFrequency,
  priority,

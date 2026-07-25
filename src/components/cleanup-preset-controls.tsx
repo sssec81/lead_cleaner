@@ -15,6 +15,7 @@ import {
   renameCleanupPreset,
 } from "@/lib/cleanup-presets";
 import { trackToolEvent } from "@/lib/telemetry";
+import { readLocalStorage, writeLocalStorage } from "@/lib/browser-storage";
 
 type EditorMode = "closed" | "save" | "rename";
 
@@ -41,7 +42,7 @@ export function CleanupPresetControls({
     const timeoutId = window.setTimeout(() => {
       try {
         const storedPresets = parseCleanupPresets(
-          window.localStorage.getItem(CLEANUP_PRESETS_STORAGE_KEY),
+          readLocalStorage(CLEANUP_PRESETS_STORAGE_KEY),
         );
         setPresets(storedPresets);
         setSelectedId(storedPresets[0]?.id ?? "");
@@ -60,10 +61,13 @@ export function CleanupPresetControls({
 
   function persist(nextPresets: CleanupPreset[]) {
     try {
-      window.localStorage.setItem(
+      const stored = writeLocalStorage(
         CLEANUP_PRESETS_STORAGE_KEY,
         JSON.stringify(nextPresets),
       );
+      if (!stored) {
+        throw new Error("Storage unavailable");
+      }
       setPresets(nextPresets);
       setError("");
       return true;

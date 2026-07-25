@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 
+import {
+ ApiPayloadError,
+ readLimitedJson,
+ sanitizeTelemetryMetadata,
+} from "../../../../lib/api-security.ts";
+
 type ErrorBody = {
  message?: string;
  stack?: string;
@@ -58,11 +64,12 @@ export async function POST(request: Request) {
  let body: ErrorBody;
 
  try {
- body = (await request.json()) as ErrorBody;
- } catch {
+ body = await readLimitedJson<ErrorBody>(request);
+ } catch (error) {
+ const status = error instanceof ApiPayloadError ? error.status : 400;
  return NextResponse.json(
- { ok: false, error: "Invalid JSON body." },
- { status: 400 },
+ { ok: false, error: error instanceof Error ? error.message : "Invalid JSON body." },
+ { status },
  );
  }
 
@@ -81,10 +88,10 @@ export async function POST(request: Request) {
  }
 
  const payload = {
- source: body.source ?? "client",
+ source: String(body.source ?? "client").slice(0, 120),
  message: body.message.slice(0, 500),
  stack: body.stack?.slice(0, 4000),
- metadata: body.metadata ?? {},
+ metadata: sanitizeTelemetryMetadata(body.metadata),
  receivedAt: new Date().toISOString(),
  };
 

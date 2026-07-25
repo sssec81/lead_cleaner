@@ -106,7 +106,7 @@ Main pages:
 - `/terms`
 - `/contact`
 
-Initial SEO tool pages (17 tools deployed):
+Initial SEO tool pages (21 tools deployed):
 
 - `/tools/csv-lead-cleaner`
 - `/tools/extract-emails-from-csv`
@@ -125,6 +125,10 @@ Initial SEO tool pages (17 tools deployed):
 - `/tools/remove-duplicate-urls`
 - `/tools/validate-email-list`
 - `/tools/count-words-characters-text`
+- `/tools/hubspot-csv-import-cleaner`
+- `/tools/salesforce-csv-import-cleaner`
+- `/tools/apollo-csv-import-cleaner`
+- `/tools/pipedrive-csv-import-cleaner`
 
 ## Build Order
 

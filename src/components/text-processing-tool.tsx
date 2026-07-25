@@ -21,6 +21,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { copyTextToClipboard } from "@/lib/clipboard";
+import { readLocalStorage, writeLocalStorage } from "@/lib/browser-storage";
 import { downloadCsvFile, downloadTextFile } from "@/lib/export";
 import { trackToolEvent } from "@/lib/telemetry";
 import type { CleaningStats } from "@/lib/text-tools";
@@ -145,8 +146,8 @@ export function TextProcessingTool({
  }
 
  const restoreTimer = window.setTimeout(() => {
- const rawState = window.localStorage.getItem(storageKey);
- const savedDensity = window.localStorage.getItem(RESULT_DENSITY_STORAGE_KEY);
+ const rawState = readLocalStorage(storageKey);
+ const savedDensity = readLocalStorage(RESULT_DENSITY_STORAGE_KEY);
 
  if (savedDensity === "comfortable" || savedDensity === "compact") {
  setResultDensity(savedDensity);
@@ -209,7 +210,7 @@ export function TextProcessingTool({
  })),
  };
 
- window.localStorage.setItem(storageKey, JSON.stringify(payload));
+ writeLocalStorage(storageKey, JSON.stringify(payload));
  }, [batchMode, input, isHydrated, storageKey, workspace]);
 
  useEffect(() => {
@@ -217,7 +218,7 @@ export function TextProcessingTool({
  return;
  }
 
- window.localStorage.setItem(RESULT_DENSITY_STORAGE_KEY, resultDensity);
+ writeLocalStorage(RESULT_DENSITY_STORAGE_KEY, resultDensity);
  }, [isHydrated, resultDensity]);
 
  function pushWorkspaceUpdate(nextWorkspace: WorkspaceItem[]) {

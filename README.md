@@ -18,6 +18,13 @@ LeadCleanr is a browser-first Next.js app for cleaning messy lead lists before C
 
 ## Core Tool Set
 
+### CRM import tools
+
+- `HubSpot CSV Import Cleaner`
+- `Salesforce CSV Import Cleaner`
+- `Apollo CSV Import Cleaner`
+- `Pipedrive CSV Import Cleaner`
+
 ### CSV tools
 
 - `CSV Lead Cleaner` for full spreadsheet cleanup

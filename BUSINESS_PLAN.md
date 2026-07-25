@@ -25,7 +25,7 @@ The best initial buyers are professionals doing repeat spreadsheet cleanup work:
 
 **Free (Anonymous allowed)**
 - All text extraction tools
-- CSV cleaning up to **2 MB**
+- CSV cleaning up to **5 MB**
 - Unlimited exports
 - *Credit limit:* 0 verifications.
 

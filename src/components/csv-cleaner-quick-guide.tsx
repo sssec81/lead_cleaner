@@ -3,6 +3,8 @@
 import { FileCheck2, HelpCircle, SlidersHorizontal, Upload, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { readLocalStorage, writeLocalStorage } from "@/lib/browser-storage";
+
 const GUIDE_STORAGE_KEY = "leadcleanr:csv-cleaner:guide-dismissed:v1";
 
 export function CsvCleanerQuickGuide({ onLoadSample }: { onLoadSample: () => void }) {
@@ -13,7 +15,7 @@ export function CsvCleanerQuickGuide({ onLoadSample }: { onLoadSample: () => voi
     const timeoutId = window.setTimeout(() => {
       let dismissed = false;
       try {
-        dismissed = window.localStorage.getItem(GUIDE_STORAGE_KEY) === "1";
+        dismissed = readLocalStorage(GUIDE_STORAGE_KEY) === "1";
       } catch {
         // The guide still works when storage is restricted.
       }
@@ -46,7 +48,7 @@ export function CsvCleanerQuickGuide({ onLoadSample }: { onLoadSample: () => voi
           type="button"
           onClick={() => {
             setOpen(false);
-            try { window.localStorage.setItem(GUIDE_STORAGE_KEY, "1"); } catch { /* Storage is optional. */ }
+            writeLocalStorage(GUIDE_STORAGE_KEY, "1");
           }}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[var(--lc-muted)] hover:bg-white hover:text-[var(--lc-ink)]"
           aria-label="Dismiss quick guide"

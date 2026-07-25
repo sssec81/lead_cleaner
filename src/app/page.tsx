@@ -18,6 +18,8 @@ import {
 import { PageFrame } from "@/components/page-frame";
 import { FaqJsonLd, SiteJsonLd, type FaqItem, getSiteUrl } from "@/lib/seo";
 import { FaqAccordion } from "@/components/faq-accordion";
+import { FREE_CSV_LIMIT_MB } from "@/lib/product-config";
+import { TOOL_COUNT } from "@/lib/tool-registry";
 
 const processSteps = [
   {
@@ -157,7 +159,7 @@ const homepageFaqs: FaqItem[] = [
   },
   {
     question: "What CSV size is supported?",
-    answer: "The free browser workflow supports CSV files up to 5MB.",
+    answer: `The free browser workflow supports CSV files up to ${FREE_CSV_LIMIT_MB} MB.`,
   },
   {
     question: "Can LeadCleanr remove Gmail and Yahoo addresses?",
@@ -221,11 +223,11 @@ export default function HomePage() {
 
             <div className="mt-8 grid max-w-lg grid-cols-3 gap-3 border-t border-[var(--lc-border)] pt-6" aria-label="Product facts">
               <div className="lc-metric">
-                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">17</p>
+                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">{TOOL_COUNT}</p>
                 <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">focused tools</p>
               </div>
               <div className="lc-metric">
-                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">5 MB</p>
+                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">{FREE_CSV_LIMIT_MB} MB</p>
                 <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">free CSV limit</p>
               </div>
               <div className="lc-metric">

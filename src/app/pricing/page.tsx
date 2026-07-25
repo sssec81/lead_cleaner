@@ -5,16 +5,17 @@ import { ArrowRight, CheckCircle2, Zap, Info, Check, ShieldCheck } from "lucide-
 import { PageFrame } from "@/components/page-frame";
 import { ProWaitlistForm } from "@/components/pro-waitlist-form";
 import { getSiteUrl } from "@/lib/seo";
+import { FREE_CSV_LIMIT_MB, PRO_CSV_LIMIT_LABEL } from "@/lib/product-config";
 
 const freePoints = [
  "All text extraction tools stay open",
- "CSV uploads work up to 5 MB",
+ `CSV uploads work up to ${FREE_CSV_LIMIT_MB} MB`,
  "CSV exports stay entirely unlimited",
  "No login required for core workflow",
 ];
 
 const proPoints = [
- "Massive CSV uploads (10MB+ limits)",
+ `Massive CSV uploads (${PRO_CSV_LIMIT_LABEL} limits)`,
  "Built for recruiters, agencies & sales ops",
  "Saved cleanup workflow presets",
  "Direct exports to HubSpot & Apollo",
@@ -42,7 +43,7 @@ const decisionRules = [
  {
  label: "Choose Pro",
  icon: Zap,
- text: "When cleanup is becoming part of your recurring job and the 5 MB file size limit itself starts creating operational friction.",
+ text: `When cleanup is becoming part of your recurring job and the ${FREE_CSV_LIMIT_MB} MB file size limit itself starts creating operational friction.`,
  color: "emerald",
  },
  {
