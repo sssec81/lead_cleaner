@@ -218,7 +218,7 @@ function loadDemoCsv() {
                     <tr key={idx}>
                       <td className="lc-data-table-index">{idx + 1}</td>
                       {headers.slice(0, 5).map(header => (
-                        <td key={header} className="lc-data-table-value max-w-[200px]" title={row[header]}>{row[header] || <span className="text-[var(--lc-hint)]">—</span>}</td>
+                        <td key={header} className="lc-data-table-value max-w-[200px]" title={row[header]}>{row[header] || <span className="text-[var(--lc-hint)]">Empty</span>}</td>
                       ))}
                       {headers.length > 5 && <td className="font-mono text-xs text-[var(--lc-hint)]">+{headers.length - 5}</td>}
                     </tr>

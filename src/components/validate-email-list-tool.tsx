@@ -35,7 +35,7 @@ export function ValidateEmailListTool() {
  copyLabel="Copy valid list"
  primaryActionLabel="Validate emails"
  resultTitle={(count) => count > 0 ? `${count} valid addresses ready` : null}
- resultDescription="Syntax only — no MX, SMTP, or send required. Deliverability checks are coming to Pro."
+ resultDescription="Syntax only. No MX, SMTP, or send required. Deliverability checks are coming to Pro."
  emptyMessage="Paste a list above and valid addresses will appear here."
  inputMinHeightClassName="min-h-[11rem] sm:min-h-[13rem]"
  inputLabel="Email list input"

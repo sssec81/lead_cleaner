@@ -86,7 +86,7 @@ export function ToolJsonLd({
  category = "WebApplication",
 }: ToolMetadataInput) {
  const siteUrl = getSiteUrl();
- const toolName = name ?? title.split("—")[0]?.split("|")[0]?.trim() ?? title;
+ const toolName = name ?? title.split(/[|:]/)[0]?.trim() ?? title;
  const jsonLd = {
  "@context": "https://schema.org",
  "@type": "SoftwareApplication",

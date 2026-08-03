@@ -39,7 +39,6 @@ export default function CleanEmailListPage() {
  eyebrow="Clean Email List"
  title="Clean and normalize an email list online."
  intro="Paste a messy email list from outreach notes, spreadsheet exports, or copied lead sources. This tool trims noise, lowercases the addresses, removes invalid entries, and prepares a cleaner output."
- quote="The difference between a messy list and a usable one is usually ten small fixes repeated hundreds of times."
  tool={<CleanEmailListTool />}
  toolSupportingContent={
   <ToolSeoSections

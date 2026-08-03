@@ -40,7 +40,6 @@ export default function CountWordsCharactersPage() {
  eyebrow="Text Metrics"
  title="Count words and characters instantly."
  intro="Paste your article, essay, or social media post to see real-time statistics. Check if your text meets length requirements without sending your data to a server."
- quote="Hit your exact character limit every time."
  tool={
  <div className="flex flex-col gap-12">
  <CountWordsCharactersTool />

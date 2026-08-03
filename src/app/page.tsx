@@ -19,7 +19,6 @@ import { PageFrame } from "@/components/page-frame";
 import { FaqJsonLd, SiteJsonLd, type FaqItem, getSiteUrl } from "@/lib/seo";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { FREE_CSV_LIMIT_MB } from "@/lib/product-config";
-import { TOOL_COUNT } from "@/lib/tool-registry";
 
 const processSteps = [
   {
@@ -117,12 +116,12 @@ const cleanupGroups = [
 ];
 
 export const metadata: Metadata = {
-  title: { absolute: "LeadCleanr — Clean Lead CSVs Before CRM Import" },
+  title: { absolute: "LeadCleanr: Clean Lead CSVs Before CRM Import" },
   description:
     "Clean lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal addresses locally in your browser. No signup required.",
   alternates: { canonical: `${getSiteUrl()}/` },
   openGraph: {
-    title: "LeadCleanr — Clean Lead CSVs Before CRM Import",
+    title: "LeadCleanr: Clean Lead CSVs Before CRM Import",
     description:
       "Clean lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal addresses locally in your browser.",
     url: `${getSiteUrl()}/`,
@@ -139,7 +138,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "LeadCleanr — Clean Lead CSVs Before CRM Import",
+    title: "LeadCleanr: Clean Lead CSVs Before CRM Import",
     description:
       "Clean lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal addresses locally in your browser.",
     images: [`${getSiteUrl()}/twitter-image`],
@@ -192,8 +191,7 @@ export default function HomePage() {
               Private lead operations, in your browser
             </div>
             <h1 className="font-display text-[38px] font-bold leading-[1.06] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-[50px] lg:text-[60px]">
-              Clean lead CSVs.
-              <span className="mt-1 block text-[var(--lc-accent)]">Import with confidence.</span>
+              Clean lead CSVs before CRM import.
             </h1>
             <p className="mt-5 max-w-xl text-[16px] leading-7 text-[var(--lc-muted)] sm:text-[18px]">
               Clean, map, preflight, and repair HubSpot, Salesforce, Apollo, and Pipedrive imports without uploading sensitive lead information.
@@ -221,22 +219,7 @@ export default function HomePage() {
               <span className="lc-chip"><Check className="h-3 w-3" aria-hidden="true" /> CSV + text tools</span>
             </div>
 
-            <div className="mt-8 grid max-w-lg grid-cols-3 gap-3 border-t border-[var(--lc-border)] pt-6" aria-label="Product facts">
-              <div className="lc-metric">
-                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">{TOOL_COUNT}</p>
-                <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">focused tools</p>
-              </div>
-              <div className="lc-metric">
-                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">{FREE_CSV_LIMIT_MB} MB</p>
-                <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">free CSV limit</p>
-              </div>
-              <div className="lc-metric">
-                <p className="font-display text-lg font-bold text-[var(--lc-ink)]">0</p>
-                <p className="mt-0.5 text-[11px] leading-4 text-[var(--lc-muted)]">uploads needed</p>
-              </div>
-            </div>
-
-            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--lc-muted)]" aria-label="Supported CRM destinations">
+            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-[var(--lc-border)] pt-6 text-xs text-[var(--lc-muted)]" aria-label="Supported CRM destinations">
               <span className="font-semibold text-[var(--lc-ink)]">Ready for</span>
               {["HubSpot", "Salesforce", "Apollo", "Pipedrive"].map((crm) => (
                 <span key={crm} className="font-medium">{crm}</span>
@@ -244,7 +227,7 @@ export default function HomePage() {
             </div>
           </div>
  
-          <div className="lc-hero-panel relative">
+          <div className="relative">
             <div className="lc-workspace-shell">
               {/* App Window Top Bar */}
               <div className="flex items-center justify-between border-b border-[var(--lc-border)] bg-[var(--background-strong)] px-4 py-2">
@@ -253,7 +236,7 @@ export default function HomePage() {
                   <span className="h-2 w-2 rounded-full bg-black/10"></span>
                   <span className="h-2 w-2 rounded-full bg-black/10"></span>
                 </div>
-                <span className="text-[11px] font-medium text-[var(--lc-muted)] font-sans">leadcleanr-demo.csv</span>
+                <span className="text-[11px] font-medium text-[var(--lc-muted)] font-sans">Sample preview</span>
                 <div className="w-10"></div>
               </div>
               <div className="grid lg:grid-cols-2">
@@ -291,11 +274,10 @@ export default function HomePage() {
                       { type: "Clean", value: "jane@acme.com", tone: "bg-emerald-50 text-emerald-700 border border-emerald-100", extra: "business" },
                       { type: "Removed", value: "jane@acme.com", tone: "bg-amber-50 text-amber-700 border border-amber-100", extra: "duplicate" },
                       { type: "Removed", value: "bob@gmail.com", tone: "bg-red-50 text-red-700 border border-red-100", extra: "personal" },
-                    ].map((item, index) => (
+                    ].map((item) => (
                       <div
                         key={item.value + item.extra}
-                        className="homepage-demo-row flex items-center justify-between gap-2 rounded-lg border border-black/5 bg-black/[0.01] px-2.5 py-1.5 last:mb-0"
-                        style={{ animationDelay: `${index * 120}ms` }}
+                        className="flex items-center justify-between gap-2 rounded-lg border border-black/5 bg-black/[0.01] px-2.5 py-1.5 last:mb-0"
                       >
                         <div className="min-w-0">
                           <span className={`rounded px-1.5 py-0.5 font-sans text-[10px] font-medium ${item.tone}`}>
@@ -311,7 +293,7 @@ export default function HomePage() {
                   </div>
                   
                   <div className="mt-4 border-t border-black/5 pt-3 flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-emerald-700">1,145 ready leads</span>
+                    <span className="text-[11px] font-semibold text-[var(--lc-muted)]">Illustrative sample data</span>
                     <Link href="/tools/csv-lead-cleaner" className="lc-button-primary px-3.5 text-xs font-semibold">
                       Open cleaner
                     </Link>
@@ -319,13 +301,8 @@ export default function HomePage() {
                 </div>
               </div>
  
-              {/* Bottom: Slim Stats Strip */}
-              <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface-muted)] px-4 py-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[var(--lc-muted)] font-medium">
-                <span>1,361 total rows</span>
-                <span className="text-black/10">·</span>
-                <span>184 duplicates removed</span>
-                <span className="text-black/10">·</span>
-                <span>32 invalid removed</span>
+              <div className="border-t border-[var(--lc-border)] bg-[var(--lc-surface-muted)] px-4 py-2 text-[11px] font-medium text-[var(--lc-muted)]">
+                Example workflow: review clean, duplicate, and invalid rows before export.
               </div>
             </div>
           </div>
@@ -467,9 +444,7 @@ export default function HomePage() {
               <Shield className="h-6 w-6" />
             </div>
             <h2 className="mt-5 font-display text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--lc-ink)]">
-              Your data never leaves
-              <br />
-              your browser.
+              Raw CSV and pasted text stay on this device.
             </h2>
             <div className="mt-5 space-y-3 text-sm leading-6 text-[var(--lc-muted)]">
               <p className="flex items-start gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[var(--lc-green)]" aria-hidden="true" /> CSV parsing and text cleanup happen locally on this device.</p>

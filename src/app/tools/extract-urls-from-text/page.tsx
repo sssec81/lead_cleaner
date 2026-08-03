@@ -54,7 +54,6 @@ export default function ExtractUrlsFromTextPage() {
  title="Extract URLs from copied text."
  heroVariant="streamlined"
  intro="Paste copied website text, notes, research documents, or lead blocks. This tool isolates URLs, normalizes them into a cleaner shape, removes duplicates, and keeps export simple."
- quote="The first cleanup step is often just separating the links from everything pretending to be useful around them."
  asideContent={
  <TextTransformationPreviewCard
  messyLabel="Messy Input"

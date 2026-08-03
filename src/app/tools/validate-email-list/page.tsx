@@ -40,8 +40,7 @@ export default function ValidateEmailListPage() {
  eyebrow="Email List Validator"
  title="Validate email list syntax before CRM import."
  intro="Paste your email list to find invalid addresses, missing @ symbols, duplicate emails, and formatting errors before sending or importing to your CRM."
- quote="Catch invalid email formats before outreach."
- asideDescription="Checks formatting only. Domain, MX, and mailbox verification are coming to Pro — so you can fix syntax now without worrying about deliverability."
+ asideDescription="Checks formatting only. Domain, MX, and mailbox verification are coming to Pro. You can fix syntax now without treating it as a deliverability check."
  tool={<ValidateEmailListTool />}
  toolSupportingContent={
   <ToolSeoSections

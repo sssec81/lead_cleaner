@@ -29,7 +29,7 @@ export default function RemoveDuplicatePhoneNumbersPage() {
  />
  <ToolJsonLd
  title="Remove Duplicate Phone Numbers"
- description="Paste a list of phone numbers to automatically remove duplicates, filter out invalid formats, and normalize the remaining numbers. 100% free and runs locally in your browser."
+ description="Paste a list of phone numbers to remove duplicates, filter invalid formats, and normalize the remaining numbers locally in your browser."
  path="/tools/remove-duplicate-phone-numbers"
  category="BusinessApplication"
  />
@@ -37,7 +37,6 @@ export default function RemoveDuplicatePhoneNumbersPage() {
  eyebrow="Remove Duplicate Phone Numbers"
  title="Remove duplicate phone numbers from your list."
  intro="Paste a messy list of phone numbers. We'll extract the valid ones, format them consistently, and strip out any duplicates so your call list is clean and ready."
- quote="A clean list saves your sales team from dialing the same number twice."
  tool={<RemoveDuplicatePhonesTool />}
  />
  </>

@@ -441,7 +441,7 @@ export function CsvCleanerWorkspaceView({
                           const isMono = /email|phone|domain/i.test(header);
                           return (
                             <td key={header} className={`max-w-[280px] truncate ${isMono ? "lc-data-table-value" : ""}`} title={String(value || "")}>
-                              {value || <span className="text-[var(--lc-hint)]">—</span>}
+                              {value || <span className="text-[var(--lc-hint)]">Empty</span>}
                             </td>
                           );
                         })}

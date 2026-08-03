@@ -53,7 +53,6 @@ export default function ExtractEmailsFromTextPage() {
  title="Extract email addresses from messy text."
  heroVariant="streamlined"
  intro="Paste copied website text, CRM notes, resumes, or lead blocks. This is the text-first path for the moment before the data becomes a spreadsheet again."
- quote="This is the tool for when the list still looks like a paragraph."
  asideContent={
  <TextTransformationPreviewCard
  messyLabel="Messy Input"

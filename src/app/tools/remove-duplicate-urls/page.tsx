@@ -37,7 +37,6 @@ export default function RemoveDuplicateUrlsPage() {
  eyebrow="URL Deduplicator"
  title="Remove duplicate URLs instantly."
  intro="Paste a messy list of website links. We'll normalize the formatting, strip out the invalid ones, and leave you with a perfectly clean, unique list of URLs."
- quote="Keep your lists clean and save time before export."
  tool={<RemoveDuplicateUrlsTool />}
  />
  </>

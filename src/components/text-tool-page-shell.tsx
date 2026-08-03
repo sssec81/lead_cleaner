@@ -7,7 +7,6 @@ type TextToolPageShellProps = {
   eyebrow: string;
   title: string;
   intro: string;
-  quote: string;
   tool: ReactNode;
   asideDescription?: string;
   asideContent?: ReactNode;
@@ -19,7 +18,6 @@ export function TextToolPageShell({
   eyebrow,
   title,
   intro,
-  quote,
   asideDescription,
   asideContent,
   tool,

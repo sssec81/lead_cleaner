@@ -39,7 +39,6 @@ export default function RemoveDuplicateEmailsPage() {
  eyebrow="Remove Duplicate Emails"
  title="Remove duplicate emails from your list."
  intro="Paste repeated lead lists, newsletter exports, or CRM contact blocks. This tool is for the narrower case where the addresses themselves are mostly fine but the list keeps echoing the same rows."
- quote="Sometimes the list is not broken. It is just louder than it needs to be."
  tool={<RemoveDuplicateEmailsTool />}
  toolSupportingContent={
   <ToolSeoSections

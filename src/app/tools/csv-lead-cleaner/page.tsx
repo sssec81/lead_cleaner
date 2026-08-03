@@ -48,7 +48,7 @@ export default function CsvLeadCleanerPage() {
               </h1>
               <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--lc-muted)]">
                 Clean, map, and validate rows for HubSpot, Salesforce, Apollo,
-                or Pipedrive—without uploading sensitive lead data.
+                or Pipedrive without sending sensitive lead data to our server.
               </p>
 
               <div className="trust-chip-row mt-6 justify-center sm:justify-start">

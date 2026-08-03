@@ -15,10 +15,10 @@ const freePoints = [
 ];
 
 const proPoints = [
- `Massive CSV uploads (${PRO_CSV_LIMIT_LABEL} limits)`,
- "Built for recruiters, agencies & sales ops",
- "Saved cleanup workflow presets",
- "Direct exports to HubSpot & Apollo",
+ `Pro file limits are being tested up to ${PRO_CSV_LIMIT_LABEL}`,
+ "No payment or checkout is available today",
+ "Final features and pricing will be shared before launch",
+ "Waitlist feedback will shape the paid workflow",
 ];
 
 const freeUseCases = [
@@ -41,15 +41,15 @@ const decisionRules = [
  color: "blue",
  },
  {
- label: "Choose Pro",
+ label: "Join the waitlist",
  icon: Zap,
- text: `When cleanup is becoming part of your recurring job and the ${FREE_CSV_LIMIT_MB} MB file size limit itself starts creating operational friction.`,
+ text: `Join only if the ${FREE_CSV_LIMIT_MB} MB file limit interrupts recurring work. There is no payment or subscription today.`,
  color: "emerald",
  },
  {
- label: "Do not pay yet",
+ label: "Keep using Free",
  icon: Info,
- text: "If the product has not yet earned a place in your actual workflow. The free tier should prove the case first.",
+ text: "Stay on Free while the current file limit and local tools cover your workflow.",
  color: "slate",
  },
 ];
@@ -71,13 +71,13 @@ export default function PricingPage() {
   </div>
   <div className="mx-auto max-w-4xl text-center">
   <h1 className="mx-auto mb-7 max-w-3xl font-display text-4xl font-bold leading-[1.02] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-6xl">
-  Free should feel useful on purpose.
+  Use every core cleaner for free.
   </h1>
   <p className="mx-auto max-w-3xl text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
-  LeadCleanr is not priced like a trap. The free tier lets you test the product honestly. Pro starts only when spreadsheet work gets heavier and larger files create friction.
+  The free tier supports local CSV cleanup up to {FREE_CSV_LIMIT_MB} MB, with no account or credit card.
   </p>
   <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[var(--lc-hint)]">
-  Most users never need Pro. Pay only when larger files and recurring workflows become part of the job.
+  Pro is still being researched. The waitlist does not start a subscription or collect payment.
   </p>
   </div>
   </div>
@@ -104,7 +104,7 @@ export default function PricingPage() {
   </div>
 
   <p className="mb-8 text-base leading-relaxed text-[var(--lc-muted)]">
-  Free is for the first real pass. Clean what you need, export it, and decide whether the product deserves to stay in your workflow.
+  Clean and export smaller files with the same local workflow available throughout the product.
   </p>
 
   <div className="mb-10 space-y-4">
@@ -148,19 +148,18 @@ export default function PricingPage() {
   <div className="relative flex-1">
   <div className="flex items-center justify-between mb-8">
   <div>
-  <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">Pro</h3>
+  <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">Pro waitlist</h3>
   <div className="mt-4 flex items-baseline gap-2">
-  <span className="text-6xl font-display font-bold tracking-tight text-[var(--lc-surface)]">$12</span>
-  <span className="text-lg text-white/70">/mo</span>
+  <span className="text-5xl font-display font-bold tracking-tight text-[var(--lc-surface)]">Not live</span>
   </div>
   </div>
   <div className="border border-white/25 px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-white/70">
-  Early access
+  Waitlist only
   </div>
   </div>
 
   <p className="mb-8 text-base leading-relaxed text-white/80">
-  Pro is the exact same product, but built for when the cleanup becomes repeat work and file-size boundaries interrupt the job.
+  Tell us what larger or recurring cleanup work you need. We will publish the final limits, features, and price before asking anyone to pay.
   </p>
 
   <div className="mb-10 space-y-4">

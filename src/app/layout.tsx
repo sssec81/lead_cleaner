@@ -32,7 +32,7 @@ export const metadata: Metadata = {
  metadataBase: new URL(siteUrl),
  applicationName: "LeadCleanr",
  title: {
- default: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+ default: "LeadCleanr: Clean Messy Lead CSVs Before CRM Import",
  template: "%s | LeadCleanr",
  },
  description:
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
  : undefined,
  },
  openGraph: {
- title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+ title: "LeadCleanr: Clean Messy Lead CSVs Before CRM Import",
  description:
  "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser.",
  url: siteUrl,
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
  },
  twitter: {
  card: "summary_large_image",
- title: "LeadCleanr — Clean Messy Lead CSVs Before CRM Import",
+ title: "LeadCleanr: Clean Messy Lead CSVs Before CRM Import",
  description:
  "Clean messy lead CSVs before CRM import. Remove duplicates, invalid emails, blank rows, and personal email addresses locally in your browser.",
  images: ["/twitter-image"],
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
  return (
- <html lang="en" data-scroll-behavior="smooth">
+ <html lang="en">
  <body className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable}`}>
  <a href="#main-content" className="skip-link">
  Skip to main content

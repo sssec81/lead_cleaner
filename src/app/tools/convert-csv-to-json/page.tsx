@@ -86,7 +86,7 @@ export default function ConvertCsvToJsonPage() {
           Convert CSV to JSON for any workflow
         </h2>
         <p className="text-base leading-7 text-[var(--lc-muted)] sm:text-lg">
-          Whether you&apos;re building integrations, feeding APIs, or preparing data imports, this converter transforms flat CSV rows into clean, structured JSON—entirely in your browser.
+          Whether you&apos;re building integrations, feeding APIs, or preparing data imports, this converter transforms flat CSV rows into clean, structured JSON in your browser.
         </p>
       </div>
 

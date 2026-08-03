@@ -7,8 +7,8 @@ import { getSiteUrl } from "@/lib/seo";
 const snapshot = [
  {
  icon: ServerOff,
- label: "Zero Server Processing",
- text: "Your core cleanup runs entirely in your browser. No data leaves your machine during the MVP flow.",
+ label: "Local File Processing",
+ text: "Raw CSV and pasted-text cleanup runs in your browser during normal tool use.",
  },
  {
  icon: Database,
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
  return (
  <PageFrame>
-  {/* Hero Section */}
+  {/* Privacy summary */}
   <section className="pb-20 pt-16 lg:pb-24 lg:pt-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
   <div className="mx-auto max-w-4xl text-center">
@@ -73,14 +73,14 @@ export default function PrivacyPage() {
   <span>Trust Boundary</span>
   </div>
   <h1 className="mx-auto mb-7 max-w-3xl font-display text-4xl font-bold leading-[1.03] tracking-[-0.045em] text-[var(--lc-ink)] sm:text-6xl">
-  Your data never leaves your screen.
+  Your raw files stay in your browser.
   </h1>
   <p className="mx-auto max-w-3xl text-lg leading-8 text-[var(--lc-muted)] sm:text-xl">
-  This page answers one question quickly: what happens to your raw data while you use LeadCleanr? The short version: <strong>The cleanup flow runs locally in your browser.</strong>
+  CSV contents and pasted text are processed locally during normal cleanup. Analytics, error reporting, and waitlist submissions are separate and described below.
   </p>
   </div>
 
-  {/* Floating Glassmorphic Cards */}
+  {/* Data handling summary */}
   <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
   {snapshot.map((item) => {
   const Icon = item.icon;
@@ -103,17 +103,17 @@ export default function PrivacyPage() {
   </div>
   </section>
 
-  {/* Dark Mode "The Boundary" Section */}
+  {/* Processing boundary */}
   <section className="relative overflow-hidden bg-[var(--lc-dark-bg)] py-16 sm:py-20">
   <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
   <div>
   <p className="mb-4 text-sm font-bold uppercase tracking-widest text-[var(--lc-surface)]">The Boundary</p>
   <h2 className="mb-6 font-display text-4xl font-semibold tracking-tight text-[var(--lc-surface)] sm:text-5xl">
-  Local cleanup has a clear, physical edge.
+  Raw-file processing stays on your device.
   </h2>
   <p className="text-lg leading-8 text-white/80">
-  The cleanup work stays on your device. Product telemetry and browser storage are separate behaviors, named plainly. We don&apos;t hide behind legal fog.
+  Product telemetry, browser storage, and waitlist submissions are separate behaviors. None of them should include raw CSV contents or pasted lead data.
   </p>
   </div>
   <div className="grid gap-8">
@@ -137,7 +137,7 @@ export default function PrivacyPage() {
   </div>
   </section>
 
-  {/* Modern Accordion/List Section */}
+  {/* Detailed privacy notes */}
   <section className="py-16 sm:py-20">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div className="mx-auto mb-10 max-w-3xl text-center">

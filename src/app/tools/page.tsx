@@ -152,8 +152,7 @@ export default function ToolsPage() {
                 <div className="section-anchor-line h-px flex-1 max-w-28" />
               </div>
               <h1 className="mb-4 font-display text-[clamp(2.5rem,7vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--lc-ink)]">
-                Clean the data you have.
-                <span className="block text-[var(--lc-accent)]">Export what you need.</span>
+                Clean the data you have. Export what you need.
               </h1>
               <p className="font-sans text-[15px] text-[var(--lc-muted)] leading-relaxed max-w-xl">
                 Upload your spreadsheet or paste raw text. LeadCleanr helps you
